@@ -7,8 +7,8 @@ using namespace std;
 template <class T>
 class AudioCollection
 {
-private:
-	multimap<string,T> audioFiles;
+protected:
+	multimap<string,T> audio_files;
 public:
 	virtual void Play() = 0;
 };
