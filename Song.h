@@ -30,6 +30,7 @@ public:
 	Song(string song_name, string file_path, string album="",
 		string artist="", string genre="", int release_date=0);
 	void Play(); //plays a song
+	void get_name(); // get the name of the song
 };
 
 #endif
