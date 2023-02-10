@@ -130,11 +130,13 @@
     <ClInclude Include="AudioCollection.h" />
     <ClInclude Include="Library.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Playlist.h" />
     <ClInclude Include="Playlists.h" />
     <ClInclude Include="Song.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Library.cpp" />
+    <ClCompile Include="Playlist.cpp" />
     <ClCompile Include="Playlists.cpp" />
     <ClCompile Include="Song.cpp" />
   </ItemGroup>

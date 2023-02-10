@@ -1,21 +1,23 @@
 
 #include "AudioCollection.h"
 #include "Song.h"
-#include <unordered_map>
+#include <map>
+#include "Playlist.h"
 
-
-class Playlists : AudioCollection<Song>
+class Playlists
 {
 private:
-	string m_name;
-	static unordered_map<string, bool> playlist_names; // hash table for the names of the playlist- to check if a name exists
-													   // static: in order to control the name thorough every plalist we create
+	Playlist* m_favorites;
+	Playlist* m_daily_mix;
+	Playlist* m_recent;
+	Playlist* m_deleted;
+	map<Playlist*, bool> playlist_names; // hash table for the names of the playlist- to check if a name exists
+										// static: in order to control the name through every playlist we create
 public:
-	Playlists(string name);
-	void add_playlist(string name);
-	void delete_playlist(string name);
+	Playlists(Playlist* playlist);
+	void Add(Playlist* playlist);
+	void Delete(Playlist* playlist);
 	void Play();
-	
 };
 
 /*

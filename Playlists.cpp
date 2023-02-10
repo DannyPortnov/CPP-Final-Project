@@ -1,13 +1,20 @@
 #include "Playlists.h"
 
 // todo: improve implementation, this one is super basic.
-Playlists::Playlists(string name) {
-	if (playlist_names.count(name) != 0) {
-		std::cout << "Key " << name << " is already exists!" << endl; // todo: change to try, throw
+Playlists::Playlists(Playlist* playlist) {
+	Add(playlist);
+}
+
+// add a new playlist
+void Playlists::Add(Playlist* playlist) {
+	if (playlist_names.count(playlist) != 0) {
+		cout << "A playlist with the name: " << playlist->get_name() << " is already exists!" << endl; // todo: change to try, throw
 	}
 	else {
-		m_name = name;
-		playlist_names[name] = true;
+		playlist_names[playlist] = true;
 	}
+}
 
+void Playlists::Delete(Playlist* playlist) {
+	playlist_names.erase(playlist);
 }
