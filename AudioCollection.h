@@ -8,7 +8,7 @@ template <class T>
 class AudioCollection
 {
 protected:
-	multimap<string,T> audio_files;
+	multimap<string,T*> audio_files;
 public:
 	virtual void Play() = 0;
 };
