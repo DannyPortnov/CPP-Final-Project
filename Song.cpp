@@ -7,3 +7,8 @@ Song::Song(string song_name, string file_path, string album,
 {
 	//to add duration calculation
 }
+
+void Song::Play()
+{
+	m_player.play(m_file_path);
+}
