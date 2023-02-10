@@ -11,14 +11,13 @@
 //using namespace std::chrono;
 using namespace std;
 
-
 int Song::id_code = 0;
 
 class Song
 {
 private:
 	string m_song_name;
-	string m_singer;
+	string m_artist;
 	string m_album;
 	string m_genre;
 	string m_file_path;
@@ -29,7 +28,7 @@ private:
 	Player m_player;
 public:
 	Song(string song_name, string file_path, string album="",
-		string singer="", string genre="", int release_date=0);
+		string artist="", string genre="", int release_date=0);
 	void Play(); //plays a song
 };
 
