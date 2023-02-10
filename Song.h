@@ -11,8 +11,8 @@
 //using namespace std::chrono;
 using namespace std;
 
-int Song::id_code = 0;
 
+//int Song::id_code = 0;
 class Song
 {
 private:

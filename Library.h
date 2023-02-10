@@ -13,16 +13,14 @@ class Library
 {
 private:
 	map<int,Song> m_songs_by_id;
-	map<string,Song> m_songs_by_name;
+	multimap<string,Song> m_songs_by_name;
 	map<string, Playlists> m_playlists;
-
 public:
-	Library(); 
-	//Song find_by_name(string name);
-	//Song find_by_singer(string singer);
-	//Song find_by_album(string singer);
-	//Song find_by_genre(string singer);
-	//what are the Update methods?
+	//Library(); //what are the Update methods?
+	//Adds a song to the library
+	/*void Add(string path, string song_name, string artist = "", string album = "",
+		string genre = "", string duration = "", int release_date =0);*/
+	void Add(string song_name);
 	void Delete(int id);
 	void Delete(string song_name);
 	void PrintSong(int id);

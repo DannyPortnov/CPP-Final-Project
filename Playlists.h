@@ -1,3 +1,6 @@
+#ifndef PLAYLISTS_H
+#define PLAYLISTS_H
+
 
 #include "AudioCollection.h"
 #include "Song.h"
@@ -9,4 +12,5 @@ private:
 public:
 	void Play();
 };
+#endif
 
