@@ -2,19 +2,24 @@
 #define LIBRARY_H
 #include <string>
 #include "Song.h"
+#include "Playlists.h"
+#include <map>
+#include <array>
 using namespace std;
 
 class Library
 {
 private:
-	//vector or array of all songs
-	//vector of playlists
+	map<int,Song> m_songs_by_id;
+	map<string,Song> m_songs_by_name;
+	map<string, Playlists> m_playlists;
+
 public:
 	Library(); 
-	Song find_by_name(string name);
-	Song find_by_singer(string singer);
-	Song find_by_album(string singer);
-	Song find_by_genre(string singer);
+	//Song find_by_name(string name);
+	//Song find_by_singer(string singer);
+	//Song find_by_album(string singer);
+	//Song find_by_genre(string singer);
 	//what are the Update methods?
 	void Delete(int id);
 	void Delete(string song_name);
