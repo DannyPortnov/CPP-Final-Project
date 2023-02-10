@@ -5,6 +5,8 @@
 #include "Playlists.h"
 #include <map>
 #include <array>
+#include "Server.h"
+
 using namespace std;
 
 class Library
