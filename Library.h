@@ -12,9 +12,9 @@ using namespace std;
 class Library
 {
 private:
-	map<int,Song> m_songs_by_id;
-	multimap<string,Song> m_songs_by_name;
-	map<string, Playlists> m_playlists;
+	map<int,Song>* m_songs_by_id;
+	multimap<string,Song>* m_songs_by_name;
+	map<string, Playlists>* m_playlists;
 public:
 	//Library(); //what are the Update methods?
 	//Adds a song to the library
