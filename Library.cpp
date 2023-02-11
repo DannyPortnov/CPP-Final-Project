@@ -1,11 +1,13 @@
 #include "Library.h"
 #include <set>
 #include <vector>
+#include <algorithm>
 
-//Library::Library()
-//{
-//
-//}
+Library::Library() : m_songs_by_name(Server::get_songs_by_name())
+{
+	//m_playlists
+}
+
 
 void Library::PrintSong(int id)
 {
@@ -36,8 +38,9 @@ void Library::Add(string song_name)
 	//    multimap<string, Song>::iterator itr = m_songs_by_name.find(song_name);
 	//    
 	//}
-	auto songs_pointer = Server::get_songs_by_name();
-	auto itr = songs_pointer->find(song_name); //iterator for any/all songs with that name
+	auto all_songs = Server::get_songs_by_name();
+	auto start_of_songs_set = all_songs->begin(); //iterator for any/all songs with that name
+	auto end_of_songs_set = all_songs->begin(); //iterator for any/all songs with that name
 	//auto pair = songs_pointer->equal_range(song_name); //break the code appearntly?
 	//auto& start_of_range = pair.first;
 	//auto& end_of_range = pair.second;
@@ -45,7 +48,10 @@ void Library::Add(string song_name)
 	//    m_songs_by_name.insert(pair<string, Song>(song_name, itr->second));
 	//    return;
 	//}
-	int number_of_songs = songs_pointer->count(song_name);
+	auto predicate = [&](Song song) { return song.get_name() == song_name; }; //filter songs which have the desired name
+	auto first_wanted_song = lower_bound(start_of_songs_set, end_of_songs_set, predicate);
+	auto last_wanted_song = upper_bound(start_of_songs_set, end_of_songs_set, predicate);
+	int number_of_songs = count_if(start_of_songs_set, end_of_songs_set, predicate); //count songs with "song_name" name
 	switch (number_of_songs)
 	{
 	case 0: {
@@ -53,7 +59,7 @@ void Library::Add(string song_name)
 		return;
 	}
 	case 1: {
-		m_songs_by_name->insert(pair<string, Song>(song_name, itr->second));
+		m_songs_by_name->insert(*first_wanted_song); //or *last doesn't matter
 		return;
 	}
 	default:
@@ -61,13 +67,17 @@ void Library::Add(string song_name)
 	}
 	cout << "More than one song named " << song_name << ", choose which one you want to add" << endl;
 	Song** filtered_songs = new Song * [number_of_songs]; //dynamic array of pointers
-	for (int i = 1; itr != songs_pointer->end(); itr++, i++) {
+	for (int i = 0; first_wanted_song != last_wanted_song; first_wanted_song++,i++)
+	{
+		filtered_songs[i] = *start_of_songs_set;
+	}
+	for (int i = 0; i< number_of_songs;  i++) {
 		//filtered_songs.push_back(itr->second);
-		cout << i << " - " << itr->second << endl;
+		cout << i + 1 << " - " << filtered_songs[i] << endl;
 	}
 	int answer;
-	cin >> answer;
-	m_songs_by_name->insert(pair<string, Song>(song_name, *filtered_songs[answer - 1]));
+	std::cin >> answer;
+	m_songs_by_name->insert(filtered_songs[answer - 1]);
 	//int i = 1;
 	//for (auto filtered_songs_itr = filtered_songs.begin(); filtered_songs_itr != filtered_songs.end(); filtered_songs_itr++) {
 	//    if (i == answer) {
@@ -78,6 +88,10 @@ void Library::Add(string song_name)
 	//}
 }
 
+void Library::Delete(string song_name)
+{
+
+}
 void Library::Delete(int id)
 {
 
@@ -89,7 +103,7 @@ ostream& Library::print(ostream& os, int begin, int end) const
 	for (int i = 0; i < begin && itr != m_songs_by_name->end(); i++, itr++) {} //if begin!=0, inc itr untill reached begin
 	for (int i = begin; i < end && itr != m_songs_by_name->end(); i++, itr++)
 	{
-		cout << itr->second << endl;
+		cout << *itr << endl;
 	}
 	if (itr == m_songs_by_name->end()) {
 		os << "No more songs :(" << endl;

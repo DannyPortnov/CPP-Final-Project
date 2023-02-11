@@ -14,18 +14,19 @@ class Library
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
 	static const int num_of_songs_to_print = 10;
-	map<int,Song>* m_songs_by_id;
-	multimap<string,Song>* m_songs_by_name;
-	map<string, Playlists>* m_playlists;
+	//set<int,Song>* m_songs_by_id;
+	multiset<Song*>* m_songs_by_name;
+	set<Playlists*>* m_playlists; 
 	ostream& print(ostream& os, int begin, int end) const;
-
 public:
-	//Library(); //what are the Update methods?
-	//Adds a song to the library
+	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 		string genre = "", string duration = "", int release_date =0);*/
+	//Adds a song to the library
 	void Add(string song_name);
+	//Deletes a song from the library
 	void Delete(int id);
+	//Deletes a song from the library
 	void Delete(string song_name);
 	void PrintSong(int id);
 	void PrintSong(string song_name);

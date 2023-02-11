@@ -3,27 +3,26 @@
 #include <string>
 #include "Song.h"
 #include "Playlists.h"
-#include <map>
-#include <array>
+#include <set>
 using namespace std;
 
 class Server {
 private:
-	static map<int, Song>* m_all_songs_by_id;
-	static multimap<string, Song>* m_all_songs_by_artist;
-	static multimap<string, Song>* m_all_songs_by_name;
-	static multimap<string, Song>* m_all_songs_by_album;
-	static multimap<string, Song>* m_all_songs_by_genre;
+	static set<Song*>* m_all_songs_by_id;
+	static multiset<Song*>* m_all_songs_by_artist;
+	static multiset<Song*>* m_all_songs_by_name;
+	static multiset<Song*>* m_all_songs_by_album;
+	static multiset<Song*>* m_all_songs_by_genre;
 public:
 	Server();
-	static multimap<string, Song>* get_songs_by_name();
-	static map<int, Song>*  get_songs_by_id();
-	static multimap<string, Song>*  get_songs_by_artist();
-	static multimap<string, Song>*  get_songs_by_album();
-	static multimap<string, Song>*  get_songs_by_genre();
-	static multimap<string, Song>* find_by_name(string name);
-	static multimap<string, Song>* find_by_singer(string singer);
-	static multimap<string, Song>* find_by_album(string album);
-	static multimap<string, Song>* find_by_genre(string genre);
+	static multiset<Song*>* get_songs_by_name(); //default comparison (by name)
+	static set<Song*>*  get_songs_by_id();
+	static multiset<Song*>*  get_songs_by_artist();
+	static multiset<Song*>* get_songs_by_album();
+	static multiset<Song*>* get_songs_by_genre();
+	static multiset<Song*>* find_by_name(string name);
+	static multiset<Song*>* find_by_singer(string singer);
+	static multiset<Song*>* find_by_album(string album);
+	static multiset<Song*>* find_by_genre(string genre);
 };
 #endif
