@@ -5,7 +5,7 @@
 Playlist::Playlist(string name) : m_name(name) {}
 
 Playlist::~Playlist() {
-	audio_files.clear();
+	delete_playlist();
 }
 
 // play the songs in alphabetical order
@@ -46,7 +46,7 @@ void Playlist::Play_Random() {
 void Playlist::Print() {
 	set<Song*>::iterator it;
 	int i = 1;
-	cout << "Playlist- " << m_name << ". Songs:";
+	cout << "List Of Songs In " << m_name << " Playlist:" << endl;
 	for (it = audio_files.begin(); it != audio_files.end(); it++) {
 		cout << "(" << i << "). " << (*it)->get_name() << endl; 
 		i++;
@@ -61,19 +61,22 @@ void Playlist::add_song(Song* song) {
 // remove a song to the playlist. audio files is a multiset
 void Playlist::remove_song(Song* song) {
 	audio_files.erase(song);
-
 }
 
-
-
-
+// remove a song to the playlist. audio files is a multiset
+void Playlist::delete_playlist() {
+	audio_files.clear();
+}
 
 //returns true if the playlists name are in the right order.
 bool operator<(const Playlist& a, const Playlist& b) {
 	return (a.get_name() < b.get_name());
-
 }
 
+////compare playlists.
+//bool operator!=(const Playlist& a, const Playlist& b) {
+//	return (a.get_name() != b.get_name());
+//}
 
 ////returns true if the playlists name are in the right order.
 //bool operator<(Playlist* a, Playlist* b) {

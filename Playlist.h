@@ -19,6 +19,7 @@ public:
 	~Playlist();
 	void add_song(Song* song);
 	void remove_song(Song* song);
+	void delete_playlist();
 	string get_name() const { return m_name; }
 	void Play();
 	void Play_Random();
@@ -27,6 +28,7 @@ public:
 //friend bool operator<(Playlist* a, Playlist* b);
 
 friend bool operator<(const Playlist& a, const Playlist& b);
+//friend bool operator!=(const Playlist& a, const Playlist& b);
 
 
 };
@@ -34,6 +36,7 @@ friend bool operator<(const Playlist& a, const Playlist& b);
 // todo: implement operator < in order set stl will be able to sort
 //bool operator<(Playlist* a, Playlist* b);
 bool operator<(const Playlist& a, const Playlist& b);
+//bool operator!=(const Playlist& a, const Playlist& b);
 
 
 #endif// PLAYER_H
