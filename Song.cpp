@@ -34,17 +34,6 @@ bool operator<(const Song& a, const Song& b) {
 }
 
 
-
-//Song& Song::operator=(const Song& exisiting_song) {
-//	return;
-//}
-//
-//bool operator!=(const Song& a, const Song& b) {
-//	return (a.get_id() != b.get_id());
-//
-//}
-
-
 ostream& operator<<(ostream& os, const Song& song)
 {
 	os << song.m_song_name;
@@ -58,7 +47,7 @@ ostream& operator<<(ostream& os, const Song& song)
 		os << " " << song.m_genre << "genre";
 	}
 	if (song.m_release_date != 0) {
-		os << " was released in " << song.m_release_date;
+		os << " release date: " << song.m_release_date;
 	}
 	return os;
 }
