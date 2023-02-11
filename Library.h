@@ -11,10 +11,14 @@ using namespace std;
 
 class Library
 {
+	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
+	static const int num_of_songs_to_print = 10;
 	map<int,Song>* m_songs_by_id;
 	multimap<string,Song>* m_songs_by_name;
 	map<string, Playlists>* m_playlists;
+	ostream& print(ostream& os, int begin, int end) const;
+
 public:
 	//Library(); //what are the Update methods?
 	//Adds a song to the library
