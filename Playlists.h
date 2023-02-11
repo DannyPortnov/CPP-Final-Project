@@ -1,7 +1,8 @@
-
+#ifndef PLAYLISTS_H
+#define PLAYLISTS_H
 #include "AudioCollection.h"
 #include "Song.h"
-#include <map>
+#include <set>
 #include "Playlist.h"
 
 class Playlists
@@ -11,38 +12,43 @@ private:
 	Playlist* m_daily_mix;
 	Playlist* m_recent;
 	Playlist* m_deleted;
-	map<Playlist*, bool> playlist_names; // hash table for the names of the playlist- to check if a name exists
-										// static: in order to control the name through every playlist we create
+	set<Playlist*> playlist_names; // check if a name exists in order to control the name through every playlist we create
 public:
 	Playlists(Playlist* playlist);
 	void Add(Playlist* playlist);
 	void Delete(Playlist* playlist);
 	void Play();
+
+
 };
+#endif// PLAYER_H
+
+
+
 
 /*
-If you want to use a hash table in C++ to search for the keys only and not the values,
-you can use the count method of the unordered_map class.
-The count method returns the number of elements in the map with the specified key,
-so if the count is not zero, that means the key is present in the map.
-*/
-//#include <iostream>
-//#include <string>
-//
-//int main() {
-//	std::unordered_map<std::string, int> map;
-//	map["apple"] = 1;
-//	map["banana"] = 2;
-//	map["cherry"] = 3;
-//
-//	std::string key = "banana";
-//	if (map.count(key) != 0) {
-//		std::cout << "Key " << key << " is present in the map" << std::endl;
-//	}
-//	else {
-//		std::cout << "Key " << key << " is not present in the map" << std::endl;
-//	}
-//
-//	return 0;
-//}
+The std::set class in the Standard Template Library (STL) in C++ is implemented as a balanced binary search tree.
+It provides logarithmic time complexity for insertion, deletion, and search operations,
+making it a good choice for situations where you need to maintain a sorted set of elements 
+and need to perform these operations frequently.
+Here's a summary of the time complexity for the operations provided by the std::set class:
+Insertion: O(log n)
+Deletion: O(log n)
+Search: O(log n)
+Access (i.e., iteration through the elements): O(n)
 
+Note that n is the number of elements in the set.
+In terms of the underlying data structure, the std::set class uses a balanced binary search tree,
+such as a red-black tree, to store the elements. This allows the set to maintain the elements in sorted order while
+providing efficient access to the elements.
+*/
+
+
+/*
+* Hash table is not needed here, since we need the elements to be in alphabetically order.
+The implementation described here:
+A hash table can be implemented using the std::unordered_set class in the Standard Template Library (STL) in C++.
+The std::unordered_set class is similar to the std::set class, 
+but it is implemented as a hash table instead of a balanced binary search tree, 
+which allows for faster insertion, deletion, and search operations.
+*/
