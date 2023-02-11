@@ -14,9 +14,9 @@ class Library
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
 	static const int num_of_songs_to_print = 10;
-	//set<int,Song>* m_songs_by_id;
+	map<int,Song*>* m_songs_by_id;
 	multiset<Song*>* m_songs_by_name;
-	set<Playlists*>* m_playlists; 
+	Playlists* m_playlists; 
 	ostream& print(ostream& os, int begin, int end) const;
 public:
 	Library(); //what are the Update methods?
