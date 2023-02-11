@@ -33,10 +33,11 @@ void Playlist::Play_Random() {
 		m_player.play((*it)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 	}
 
+	// todo: check if necessary
 	// Free the dynamically allocated objects
-	for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
+	/*for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
 		delete* it;
-	}
+	}*/
 
 }
 

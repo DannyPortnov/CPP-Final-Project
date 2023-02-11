@@ -15,7 +15,6 @@ using namespace std;
 //int Song::id_code = 0;
 class Song
 {
-	friend ostream& operator<<(ostream& os, const Song& song);
 private:
 	string m_song_name;
 	string m_artist;
