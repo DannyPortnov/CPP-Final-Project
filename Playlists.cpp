@@ -5,6 +5,10 @@ Playlists::Playlists(Playlist* playlist) {
 	Add(playlist);
 }
 
+Playlists::Playlists()
+{
+}
+
 // add a new playlist
 void Playlists::Add(Playlist* playlist) {
 	if (playlist_names.count(playlist) != 0) {	// the count method returns 0 if ther's in no such element in the set.

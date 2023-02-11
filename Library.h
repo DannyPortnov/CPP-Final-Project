@@ -2,21 +2,31 @@
 #define LIBRARY_H
 #include <string>
 #include "Song.h"
+#include "Playlists.h"
+#include <map>
+#include <array>
+#include "Server.h"
+
 using namespace std;
 
 class Library
 {
+	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
-	//vector or array of all songs
-	//vector of playlists
+	static const int num_of_songs_to_print = 10;
+	//set<int,Song>* m_songs_by_id;
+	multiset<Song*>* m_songs_by_name;
+	set<Playlists*>* m_playlists; 
+	ostream& print(ostream& os, int begin, int end) const;
 public:
-	Library(); 
-	Song find_by_name(string name);
-	Song find_by_singer(string singer);
-	Song find_by_album(string singer);
-	Song find_by_genre(string singer);
-	//what are the Update methods?
+	Library(); //what are the Update methods?
+	/*void Add(string path, string song_name, string artist = "", string album = "",
+		string genre = "", string duration = "", int release_date =0);*/
+	//Adds a song to the library
+	void Add(string song_name);
+	//Deletes a song from the library
 	void Delete(int id);
+	//Deletes a song from the library
 	void Delete(string song_name);
 	void PrintSong(int id);
 	void PrintSong(string song_name);

@@ -4,17 +4,18 @@
 #include "Player.h"
 //#include <Phonon/MediaSource>
 //#include <Phonon/MediaObject>
-//#include <iostream>
+#include <iostream>
 //#include <Qstring>
 //#include <ctime>
 //#include <chrono>
 //using namespace std::chrono;
 using namespace std;
 
-int Song::id_code = 0;
 
+//int Song::id_code = 0;
 class Song
 {
+	friend ostream& operator<<(ostream& os, const Song& song);
 private:
 	string m_song_name;
 	string m_artist;

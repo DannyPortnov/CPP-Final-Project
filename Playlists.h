@@ -15,6 +15,7 @@ private:
 	set<Playlist*> playlist_names; // check if a name exists in order to control the name through every playlist we create
 public:
 	Playlists(Playlist* playlist);
+	Playlists();
 	void Add(Playlist* playlist);
 	void Delete(Playlist* playlist);
 	void Play();
