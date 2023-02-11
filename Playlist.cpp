@@ -2,8 +2,10 @@
 
 
 
-Playlist::Playlist(string name) :m_name(name) {
+Playlist::Playlist(string name) : m_name(name) {}
 
+Playlist::~Playlist() {
+	audio_files.clear();
 }
 
 // play the songs in alphabetical order

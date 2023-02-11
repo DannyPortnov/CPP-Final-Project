@@ -16,6 +16,7 @@ private:
 
 public:
 	Playlist(string name);
+	~Playlist();
 	void add_song(Song* song);
 	void remove_song(Song* song);
 	string get_name() const { return m_name; }
