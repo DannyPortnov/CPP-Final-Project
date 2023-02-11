@@ -67,9 +67,9 @@ void Playlists::Print() {
 	cout << "(" << i << "). " << m_deleted->get_name() << endl;
 }
 
-//set<Playlist*> Playlists::get_custom_playlists()
-//{
-//	return playlist_names;
-//}
+set<Playlist*>* Playlists::get_user_playlists()
+{
+	return &user_playlists;
+}
 
 

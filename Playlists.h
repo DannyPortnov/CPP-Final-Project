@@ -14,7 +14,7 @@ private:
 	Playlist* m_most_played;
 	Playlist* m_deleted;
 	set<string> playlist_names; // check if a name exists in order to control the name through every playlist we create
-	set<Playlist*> user_playlists; // store the actual playlists
+	set<Playlist*> user_playlists; // store the user playlists
 
 public:
 	//Playlists(Playlist* playlist);
@@ -28,7 +28,7 @@ public:
 	Playlist* get_deleted();
 	void Play();
 	void Print();
-	set<Playlist*> get_custom_playlists();
+	set<Playlist*>* get_user_playlists();
 
 };
 #endif// PLAYER_H
