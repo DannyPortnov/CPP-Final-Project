@@ -30,7 +30,21 @@ public:
 	Song(string song_name, string file_path, string album="",
 		string artist="", string genre="", int release_date=0);
 	void Play(); //plays a song
-	void get_name(); // get the name of the song
+	const string& get_name() const; // get the name of the song
+	const string& get_path() const; // get the name of the song
+
+	const int get_id() const; // get the name of the song
+
+	//Song& operator=(const Song& exisiting_song);
+	
+friend bool operator<(const Song& a, const Song& b);
+friend ostream& operator<<(ostream& os, const Song& song);
+//friend bool operator!=(const Song& a, const Song& b);
 };
+
+bool operator<(const Song& a, const Song& b);
+ostream& operator<<(ostream& os, const Song& song);
+
+//bool operator!=(const Song& a, const Song& b);
 
 #endif
