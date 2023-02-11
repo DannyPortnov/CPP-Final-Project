@@ -12,3 +12,21 @@ void Song::Play()
 {
 	m_player.play(m_file_path);
 }
+
+ostream& operator<<(ostream& os, const Song& song)
+{
+	os << song.m_song_name;
+	if (song.m_album != "") {
+		os<< ", from " << song.m_album;
+	}
+	if (song.m_artist != "") {
+		os<< ", by " << song.m_artist;
+	}
+	if (song.m_genre != "") {
+		os << " " << song.m_genre << "genre";
+	}
+	if (song.m_release_date != 0) {
+		os << " was released in " << song.m_release_date;
+	}
+	return os;
+}

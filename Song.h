@@ -4,7 +4,7 @@
 #include "Player.h"
 //#include <Phonon/MediaSource>
 //#include <Phonon/MediaObject>
-//#include <iostream>
+#include <iostream>
 //#include <Qstring>
 //#include <ctime>
 //#include <chrono>
@@ -15,6 +15,7 @@ using namespace std;
 //int Song::id_code = 0;
 class Song
 {
+	friend ostream& operator<<(ostream& os, const Song& song);
 private:
 	string m_song_name;
 	string m_artist;
@@ -31,6 +32,7 @@ public:
 		string artist="", string genre="", int release_date=0);
 	void Play(); //plays a song
 	void get_name(); // get the name of the song
+
 };
 
 #endif
