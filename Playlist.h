@@ -23,7 +23,7 @@ public:
 	void Play();
 	void Play_Random();
 	void Print();
-
+	multiset<Song*> Get_Songs() const;
 //friend bool operator<(Playlist* a, Playlist* b);
 
 friend bool operator<(const Playlist& a, const Playlist& b);

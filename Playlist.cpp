@@ -53,6 +53,11 @@ void Playlist::Print() {
 	}
 }
 
+//returns the songs in the playlist
+multiset<Song*> Playlist::Get_Songs() const {
+	return audio_files;
+}
+
 // add a song to the playlist. audio files is a multiset
 void Playlist::add_song(Song* song) {
 	audio_files.insert(song);
