@@ -5,6 +5,7 @@
 #include <set>
 #include "Playlist.h"
 
+//todo: make this class static
 class Playlists
 {
 private:

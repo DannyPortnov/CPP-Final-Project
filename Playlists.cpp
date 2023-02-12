@@ -3,7 +3,7 @@
 // todo: improve implementation, this one is super basic.
 Playlists::Playlists() : m_favorites(new Playlist("favorites")), m_daily_mix(new Playlist("daily mix")),
 m_deleted(new Playlist("deleted")) , m_recent(new Playlist("recent")), m_most_played(new Playlist("most played")) {}
-
+//todo: add getters for each playlists
 Playlists::~Playlists() {
 	delete m_daily_mix;
 	delete m_deleted;

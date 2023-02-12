@@ -25,7 +25,7 @@ private:
 	string m_duration; //m:ss format
 	static int id_code;
 	int m_id_code;
-	Player m_player;
+	Player m_player; //todo: add a counter to plays
 public:
 	Song(string song_name, string file_path, string album="",
 		string artist="", string genre="", int release_date=0);

@@ -25,6 +25,7 @@ const int Song::get_id() const {
 void Song::Play()
 {
 	m_player.play(m_file_path);
+	//todo: add the song to Recent 
 }
 
 // returns true if the song names are in the right order.

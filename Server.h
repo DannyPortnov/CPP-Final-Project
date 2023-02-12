@@ -12,7 +12,7 @@ private:
 	static multiset<Song*>* m_all_songs_by_artist;
 	static multiset<Song*>* m_all_songs_by_name;
 	static multiset<Song*>* m_all_songs_by_album;
-	static multiset<Song*>* m_all_songs_by_genre;
+	static multiset<Song*>* m_all_songs_by_genre; //change to unordered_map for O(1) find/access functionality
 public:
 	Server();
 	static multiset<Song*>* get_songs_by_name(); //default comparison (by name)

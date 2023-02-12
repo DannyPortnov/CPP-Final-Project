@@ -13,3 +13,23 @@ set<Song*>* Server::get_songs_by_id()
     return m_all_songs_by_id;
 
 }
+
+multiset<Song*>* Server::get_songs_by_artist()
+{
+    return nullptr;
+}
+
+multiset<Song*>* Server::get_songs_by_album()
+{
+    return nullptr;
+}
+
+multiset<Song*>* Server::get_songs_by_genre()
+{
+    return nullptr;
+}
+
+multiset<Song*>* Server::find_by_name(string name)
+{
+    return nullptr;
+}
