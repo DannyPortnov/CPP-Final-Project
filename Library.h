@@ -17,10 +17,12 @@ private:
 	map<int,Song*>* m_songs_by_id;
 	multiset<Song*>* m_songs_by_name;
 	Playlists* m_playlists;  //maybe static
+	map<string, Playlist*>* m_playlists_map;
 	ostream& print(ostream& os, int begin, int end) const;
 	int Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 		multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const;
 	Song* Pick_Song(int number_of_songs, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end);
+	void Update_Playlists_Map();
 public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",

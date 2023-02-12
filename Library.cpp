@@ -6,6 +6,7 @@
 Library::Library() : m_songs_by_name(Server::get_songs_by_name()), m_playlists()
 {
 	// = new set<Song*>*; //is initialization needed here?
+	//m_playlists_map= &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
 }
 
 
@@ -21,8 +22,8 @@ void Library::PrintPL()
 
 void Library::RemoveFromPL(string song_name, string playlist_name)
 {
-	map<string, Playlist*> playlists(m_playlists->get_custom_playlists()->begin(), m_playlists->get_custom_playlists()->end()); //map of playlists
-	auto songs_by_names = playlists.at(playlist_name)->Get_Songs();
+	Update_Playlists_Map();
+	auto songs_by_names = m_playlists_map->at(playlist_name)->Get_Songs();
 	multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	multiset<Song*>::iterator end_of_songs_set;
 	multiset<Song*>::iterator first_wanted_song;
@@ -35,34 +36,21 @@ void Library::RemoveFromPL(string song_name, string playlist_name)
 			return;
 		}
 		case 1: {
-			playlists.at(playlist_name)->remove_song(*first_wanted_song); //or *last doesn't matter
+			m_playlists_map->at(playlist_name)->remove_song(*first_wanted_song); //or *last doesn't matter
 			return;
 		}
 		default:
 			break;
 	}
 	cout << "More than one song named " << song_name << ", choose which one you want to remove" << endl;
-	playlists.at(playlist_name)->remove_song(Pick_Song(number_of_songs, &first_wanted_song, &last_wanted_song)); //removes the selected song
-	//playlists.at(playlist_name)->remove_song(songs_by_names.)
-	//for (int i = 0; i < m_playlists->get_custom_playlists()->size(); i++)
-	//{
-
-	//}
+	m_playlists_map->at(playlist_name)->remove_song(Pick_Song(number_of_songs, &first_wanted_song, &last_wanted_song)); //removes the selected song
 }
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, string playlist_name)
 {
-	auto begin = m_playlists->get_custom_playlists()->begin();
-	auto end = m_playlists->get_custom_playlists()->end();
-	auto predicate = [&](Playlist pl) { return pl.get_name() == playlist_name; }; //filter songs which have the desired name
-	auto itr_to_wanted_playlist = find(begin, end, predicate); //first element that satisfies condition
-	if (itr_to_wanted_playlist == end && (*end)->get_name() != playlist_name) { //if playlist doesn't exist
-		auto new_pl = new Playlist(playlist_name); //create a new one (ptr to playlist)
-		new_pl->add_song(m_songs_by_id->at(id)); //(add the song)
-		m_playlists->Add(new_pl);
-		return;
-	}
-	(*itr_to_wanted_playlist)->add_song(m_songs_by_id->at(id)); //
+	m_playlists->Add(playlist_name); //add new playlist if doesn't exist
+	Update_Playlists_Map();
+	m_playlists_map->at(playlist_name)->add_song(m_songs_by_id->at(id)); //(add the song)
 }
 
 
@@ -104,6 +92,11 @@ Song* Library::Pick_Song(int number_of_songs, multiset<Song*>::iterator* start, 
 	int answer;
 	std::cin >> answer;
 	return filtered_songs[answer - 1];
+}
+
+void Library::Update_Playlists_Map()
+{
+	m_playlists_map = &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
 }
 
 
