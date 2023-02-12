@@ -11,15 +11,24 @@ private:
 	Playlist* m_favorites;
 	Playlist* m_daily_mix;
 	Playlist* m_recent;
+	Playlist* m_most_played;
 	Playlist* m_deleted;
-	set<Playlist*>* playlist_names; // check if a name exists in order to control the name through every playlist we create
+	set<string> playlist_names; // check if a name exists in order to control the name through every playlist we create
+	set<Playlist*> user_playlists; // store the user playlists
+
 public:
-	Playlists(Playlist* playlist);
+	//Playlists(Playlist* playlist);
 	Playlists();
-	void Add(Playlist* playlist);
+	~Playlists();
+	void Add(const string& playlist);
 	void Delete(Playlist* playlist);
+	Playlist* get_favorites();
+	Playlist* get_daily_mix();
+	Playlist* get_recent();
+	Playlist* get_deleted();
 	void Play();
-	set<Playlist*>* get_custom_playlists();
+	void Print();
+	set<Playlist*>* get_user_playlists();
 
 };
 #endif// PLAYER_H
