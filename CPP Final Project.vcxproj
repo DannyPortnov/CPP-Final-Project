@@ -128,17 +128,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioCollection.h" />
+    <ClInclude Include="AudioFile.h" />
     <ClInclude Include="Library.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Playlist.h" />
     <ClInclude Include="Playlists.h" />
+    <ClInclude Include="Podcast.h" />
+    <ClInclude Include="Podcasts.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="Song.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioFile.cpp" />
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="Playlist.cpp" />
     <ClCompile Include="Playlists.cpp" />
+    <ClCompile Include="Podcast.cpp" />
+    <ClCompile Include="Podcasts.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Song.cpp" />
   </ItemGroup>
