@@ -29,7 +29,7 @@ private:
 public:
 	Song(string song_name, string file_path, string album="",
 		string artist="", string genre="", int release_date=0);
-	void Play(); //plays a song
+	void Play(); //plays a song // todo: maybe to move to an abstract class: audioFile
 	const string& get_name() const; // get the name of the song
 	const string& get_path() const; // get the name of the song
 
