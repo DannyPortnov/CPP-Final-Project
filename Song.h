@@ -16,16 +16,16 @@ using namespace std;
 class Song
 {
 private:
-	string m_song_name;
+	string m_song_name; // todo: maybe to move to an abstract class: audioFile
 	string m_artist;
 	string m_album;
 	string m_genre;
-	string m_file_path;
-	int m_release_date;
+	string m_file_path; // todo: maybe to move to an abstract class: audioFile
+	int m_release_date; // todo: maybe to move to an abstract class: audioFile
 	string m_duration; //m:ss format
-	static int id_code;
-	int m_id_code;
-	Player m_player; //todo: add a counter to plays
+	static int id_code; // todo: maybe to move to an abstract class: audioFile
+	int m_id_code; // todo: maybe to move to an abstract class: audioFile
+	Player m_player; //todo: add a counter to plays // todo: maybe to move to an abstract class: audioFile
 public:
 	Song(string song_name, string file_path, string album="",
 		string artist="", string genre="", int release_date=0);
