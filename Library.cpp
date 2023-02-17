@@ -43,7 +43,7 @@ void Library::RemoveFromPL(string song_name, string playlist_name)
 			break;
 	}
 	cout << "More than one song named " << song_name << ", choose which one you want to remove" << endl;
-	m_playlists_map->at(playlist_name)->remove_song(Pick_Song(number_of_songs, &first_wanted_song, &last_wanted_song)); //removes the selected song
+	m_playlists_map->at(playlist_name)->remove_song(Pick_Song(number_of_songs, )); //removes the selected song
 }
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, string playlist_name)
@@ -54,44 +54,51 @@ void Library::Add2PL(int id, string playlist_name)
 }
 
 
-
-void Library::Add(string song_name)
+//called from the interface ("main")
+void Library::Add(string song_name, string file_path, string artist = "",
+	string album = "", string genre = "", string duration = "", int release_Date = 0)
 {
-	auto all_songs = Server::get_songs_by_name();
-	multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
-	multiset<Song*>::iterator end_of_songs_set;
-	multiset<Song*>::iterator first_wanted_song;
-	multiset<Song*>::iterator last_wanted_song;
-	int number_of_songs = Count_Songs(all_songs, song_name, &start_of_songs_set, &end_of_songs_set, &first_wanted_song, &last_wanted_song);
-	switch (number_of_songs)
-	{
-		case 0: {
-			cout << "No songs named " << song_name << " currently in the server. Please download it first and place it in the folder" << endl;
-			return;
-		}
-		case 1: {
-			m_songs_by_name->insert(*first_wanted_song); //or *last doesn't matter
-			return;
-		}
-		default:
-			break;
-	}
-	cout << "More than one song named " << song_name << ", choose which one you want to add" << endl;
-	m_songs_by_name->insert(Pick_Song(number_of_songs, &first_wanted_song, &last_wanted_song));
+	Server::upload_song(new Song(song_name, file_path, album, artist, genre, release_Date));
+
+	#pragma region Algorithm to find all songs by that name and choosing specific one
+	//auto all_songs = Server::get_songs_by_name();
+	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
+	//multiset<Song*>::iterator end_of_songs_set;
+	//multiset<Song*>::iterator first_wanted_song;
+	//multiset<Song*>::iterator last_wanted_song;
+	//int number_of_songs = Count_Songs(all_songs, song_name, &start_of_songs_set, &end_of_songs_set, &first_wanted_song, &last_wanted_song);
+	//switch (number_of_songs)
+	//{
+	//case 0: {
+	//	cout << "No songs named " << song_name << " currently in the server. Please download it first and place it in the folder" << endl;
+	//	return;
+	//}
+	//case 1: {
+	//	m_songs_by_name->insert(*first_wanted_song); //or *last doesn't matter
+	//	return;
+	//}
+	//default:
+	//	break;
+	//}
+	//cout << "More than one song named " << song_name << ", choose which one you want to add" << endl;
+	//m_songs_by_name->insert(Pick_Song(number_of_songs, &first_wanted_song, &last_wanted_song));  
+#pragma endregion
 }
 
-Song* Library::Pick_Song(int number_of_songs, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end) {
-	Song** filtered_songs = new Song * [number_of_songs]; //dynamic array of pointers
-	for (int i = 0; start != end; start++, i++)
-	{
-		filtered_songs[i] = **start;
-	}
-	for (int i = 0; i < number_of_songs; i++) {
-		cout << i + 1 << " - " << filtered_songs[i] << endl;
-	}
+Song* Library::Pick_Song(int number_of_songs, pair<unordered_multimap<string, Song*>::iterator, unordered_multimap<string, Song*>::iterator> songs_to_delete) {
+	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
+	for (auto& iterator = songs_to_delete.first; iterator != songs_to_delete.second; ++iterator, ++i) {//loops over all songs to delete
+		cout << i << " - " << iterator->second << endl;//prints numbered songs
+	} 
 	int answer;
 	std::cin >> answer;
-	return filtered_songs[answer - 1];
+	while (answer < 1 || answer > number_of_songs) {
+		cout << "Invalid choice. Please choose a number between 1 and " << number_of_songs << endl;
+		cin >> answer;
+	}
+	auto& iterator = songs_to_delete.first;
+	advance(iterator, answer - 1);
+	return iterator->second;
 }
 
 void Library::Update_Playlists_Map()
@@ -111,7 +118,19 @@ int Library::Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song
 
 void Library::Delete(string song_name)
 {
-	//m_playlists << 
+	auto all_songs = Server::get_songs_by_name();
+	auto songs_to_delete = all_songs.equal_range(song_name);
+	int number_of_songs = all_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
+	if (number_of_songs == 0) {
+		cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
+		return;
+	}
+	if (number_of_songs == 1) {
+		Server::permanent_delete_song(songs_to_delete.first->second);
+		return;
+	}
+	cout << "More than one song named " << song_name << ", choose which one you want to delete" << endl;
+	Server::permanent_delete_song(Pick_Song(number_of_songs, songs_to_delete));
 }
 void Library::Delete(int id)
 {

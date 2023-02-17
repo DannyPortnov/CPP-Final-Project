@@ -8,32 +8,6 @@ Server::Server()
     set<int, decltype(compare_by_id)> songs_by_id; //insert here all the songs!
 }
 
-set<Song*>* Server::get_songs_by_id()
-{
-    return m_all_songs_by_id;
-
-}
-
-multiset<Song*>* Server::get_songs_by_artist()
-{
-    return nullptr;
-}
-
-multiset<Song*>* Server::get_songs_by_album()
-{
-    return nullptr;
-}
-
-multiset<Song*>* Server::get_songs_by_genre()
-{
-    return nullptr;
-}
-
-multiset<Song*>* Server::find_by_name(string name)
-{
-    return nullptr;
-}
-
 void Server::upload_podcast_episode(Episode* episode)
 {
     //search for the podcast's name in m_all_podcasts. if exists: add the episode

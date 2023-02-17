@@ -21,14 +21,14 @@ private:
 	ostream& print(ostream& os, int begin, int end) const;
 	int Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 		multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const;
-	Song* Pick_Song(int number_of_songs, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end);
+	Song* Pick_Song(int number_of_songs, pair<unordered_multimap<string, Song*>::iterator, unordered_multimap<string, Song*>::iterator> songs_to_delete);
 	void Update_Playlists_Map();
 public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 		string genre = "", string duration = "", int release_date =0);*/
 	//Adds a song to the library. Maybe asks to which playlist, and allows to create a new playlist? 
-	void Add(string song_name);
+	void Add(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
 	//Deletes a song from the library
 	void Delete(int id);
 	//Deletes a song from the library
