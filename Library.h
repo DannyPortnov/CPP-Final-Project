@@ -18,10 +18,10 @@ private:
 	multiset<Song*>* m_songs_by_name;
 	Playlists* m_playlists;  //maybe static
 	map<string, Playlist*>* m_playlists_map;
-	ostream& print(ostream& os, int begin, int end) const;
+	ostream& Print(ostream& os, int begin, int end) const;
 	int Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 		multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const;
-	Song* Pick_Song(int number_of_songs, pair<unordered_multimap<string, Song*>::iterator, unordered_multimap<string, Song*>::iterator> songs_to_delete);
+	Song* Pick_Song(string song_name);
 	void Update_Playlists_Map();
 public:
 	Library(); //what are the Update methods?
@@ -38,6 +38,10 @@ public:
 	void Add2PL(int id, string playlist_name);
 	void RemoveFromPL(string song_name, string playlist_name); //what if there's more than one song called like this?
 	void PrintPL();
+	void Update(string song_name, string new_name = "", string artist = "", string album = ""
+		, string genre = "", string duration = "");
+	void Update(int song_id, string new_name = "", string artist = "", string album = ""
+		, string genre = "", string duration = "");
 	//gets the data structure from Server!
 	void Play(string song_name);
 	//gets the data structure from Server!

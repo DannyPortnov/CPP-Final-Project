@@ -28,7 +28,7 @@ public:
 	//getters
 	static unordered_multimap<string, Song*> get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*> get_sorted_by_alphabet_songs(); //default comparison (by name)
-	static unordered_map<int, Song*>  get_song_by_id();
+	static unordered_map<int, Song*>  get_songs_by_id();
 	static unordered_multimap<string, Song*>  get_songs_by_artist();
 	static unordered_multimap<string, Song*> get_songs_by_album();
 	static unordered_multimap<string, Song*> get_songs_by_genre();
@@ -41,16 +41,16 @@ public:
 	static unordered_multiset<Song*> find_by_genre(string genre);
 
 	//adds the new song to each data structure
-	static void upload_song(Song* song);
-	static void upload_podcast_episode(Episode* episode);
+	static void Upload_Song(Song* song);
+	static void Upload_Podcast_Episode(Episode* episode);
 
 	//updates an existing song
-	static void update(string song_name, string new_name = "", string artist = "", string album = ""
+	static void Update(string song_name, string new_name = "", string artist = "", string album = ""
 		, string genre = "", string duration = "");
 
 	//permanently deletes a song from the database COMPLETETLY
-	static void permanent_delete_song(Song* song);
-	static void permanent_delete_podcast_episode(Episode* episode);
+	static void Permanent_Delete_Song(Song* song);
+	static void Permanent_Delete_Podcast_Episode(Episode* episode);
 	static void permanent_delete_podcast(Podcast* podcast);
 };
 #endif

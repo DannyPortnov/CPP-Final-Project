@@ -9,7 +9,7 @@ Server::Server()
 }
 
 //adds to all data structures
-void Server::upload_song(Song* song)
+void Server::Upload_Song(Song* song)
 {
     const auto& name = song->get_name(); //avoids unnecessary copies of string objects
     const auto& album = song->get_album();
@@ -29,8 +29,13 @@ void Server::upload_song(Song* song)
     }
 }
 
-void Server::upload_podcast_episode(Episode* episode)
+void Server::Upload_Podcast_Episode(Episode* episode)
 {
     //search for the podcast's name in m_all_podcasts. if exists: add the episode
     //else: create new podcast and add it to m_all_podcasts
+}
+
+void Server::Update(string song_name, string new_name, string artist, string album, string genre, string duration)
+{
+
 }
