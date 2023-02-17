@@ -28,11 +28,12 @@ public:
 	//getters
 	static unordered_multimap<string, Song*> get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*> get_sorted_by_alphabet_songs(); //default comparison (by name)
-	static unordered_map<int, Song*>  get_song_by_id();
 	static unordered_multimap<string, Song*>  get_songs_by_artist();
 	static unordered_multimap<string, Song*> get_songs_by_album();
 	static unordered_multimap<string, Song*> get_songs_by_genre();
 	static unordered_multimap<string, Podcast*> get_podcasts_by_name();
+
+	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 
 	//search the data structures based on a parameter
 	static unordered_multiset<Song*> find_by_name(string name);
