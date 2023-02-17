@@ -32,13 +32,13 @@ public:
 	//getters
 	static unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*>* get_sorted_by_alphabet_songs(); //default comparison (by name)
-	static unordered_map<int, Song*>*  get_songs_by_id();
 	static unordered_multimap<string, Song*>*  get_songs_by_artist();
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
 	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
 
 	//search the data structures based on a parameter
+	static Song* find_song_by_id(int id);
 	static unordered_multiset<Song*>* find_by_name(string& name);
 	static unordered_multiset<Song*>* find_by_artist(string& singer);
 	static unordered_multiset<Song*>* find_by_album(string& album);

@@ -51,7 +51,7 @@ void Server::Permanent_Delete_Song(Song* song)
 	//}  
 	#pragma endregion
 
-	remove_song_from_collection(m_all_songs_by_album, song);
+	remove_song_from_collection(m_all_songs_by_album, song); //check that that works
 	remove_song_from_collection(m_all_songs_by_genre, song);
 	remove_song_from_collection(m_all_songs_by_artist, song);
 	remove_song_from_collection(m_all_songs_by_name, song);
@@ -61,7 +61,7 @@ void Server::Permanent_Delete_Song(Song* song)
 
 template <typename T>
 void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
-	auto it = songs_by_field.find(song->get_field());
+	auto it = songs_by_field.find(song); 
 	if (it != songs_by_field.end() && it->second == song) {
 		songs_by_field.erase(it);
 	}
@@ -72,6 +72,11 @@ void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
 //
 //}
 
+//Returns a unique song based on its id
+Song* Server::find_song_by_id(int id)
+{
+	return m_all_songs_by_id[id];
+}
 
 unordered_multiset<Song*>* Server::find_by_name(string& name)
 {

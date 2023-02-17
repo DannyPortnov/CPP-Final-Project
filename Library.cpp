@@ -45,7 +45,7 @@ void Library::Update(string song_name, string new_name, string artist,
 //Find choosen song and updates according to the parameters recieved
 void Library::Update(int song_id, string new_name, string artist, string album, string genre, string duration)
 {
-	auto picked_song = Server::get_songs_by_id()[song_id];
+	auto picked_song = Server::find_song_by_id(song_id);
 	if (!new_name.empty()) {
 		picked_song->set_name(new_name);
 	}
@@ -130,12 +130,12 @@ void Library::Add(string song_name, string file_path, string artist = "",
 
 //Returns the choosen song. If wrong name returns nullptr!
 Song* Library::Pick_Song(string song_name) {
-	unordered_multimap<string, Song*> all_songs = Server::get_songs_by_name();
+	unordered_multimap<string, Song*> all_songs = *Server::get_songs_by_name();
 	auto filtered_songs = all_songs.equal_range(song_name);
 	int number_of_songs = all_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
 	if (number_of_songs == 0) {
 		cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
-		return; //what does that do?? 
+		return nullptr; 
 	}
 	if (number_of_songs == 1) {
 		return filtered_songs.first->second;
@@ -182,7 +182,7 @@ void Library::Delete(string song_name)
 }
 void Library::Delete(int id)
 {
-	Server::Permanent_Delete_Song(Server::get_songs_by_id()[id]);
+	Server::Permanent_Delete_Song(Server::find_song_by_id(id));
 }
 
 ostream& Library::Print(ostream& os, int begin, int end) const
