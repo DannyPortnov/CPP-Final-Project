@@ -32,6 +32,9 @@ public:
 	void Play(); //plays a song // todo: maybe to move to an abstract class: audioFile
 	const string& get_name() const; // get the name of the song
 	const string& get_path() const; // get the name of the song
+	const string& get_album() const; // get the name of the song
+	const string& get_genre() const; // get the name of the song
+	const string& get_artist() const; // get the name of the song
 
 	const int get_id() const; // get the name of the song
 

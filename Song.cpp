@@ -17,6 +17,21 @@ const string& Song::get_path() const {
 	return m_file_path;
 }
 
+const string& Song::get_album() const
+{
+	return m_album;
+}
+
+const string& Song::get_genre() const
+{
+	return m_genre;
+}
+
+const string& Song::get_artist() const
+{
+	return m_artist;
+}
+
 // get the id of the song
 const int Song::get_id() const { 
 	return m_id_code;
