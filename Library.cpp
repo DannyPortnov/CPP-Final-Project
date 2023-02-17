@@ -134,7 +134,7 @@ void Library::Delete(string song_name)
 }
 void Library::Delete(int id)
 {
-
+	Server::permanent_delete_song(Server::get_song_by_id()[id]);
 }
 
 ostream& Library::print(ostream& os, int begin, int end) const
