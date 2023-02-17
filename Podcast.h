@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include "Player.h"
 #include "AudioFile.h"
+#include "Episode.h"
 using namespace std;
 
 /*
@@ -21,20 +22,17 @@ Questions:
    (If the last one is the right way to do it, dosen't it lose the whole point and meaning of a podcast?)
 */
 
-class Podcast : AudioFile
+//each podcast is a collection of episodes!
+class Podcast 
 {
 private:
-	unordered_set<AudioFile> podcast; // podcast is a playlist of episodes (no need to be ordered)
-
+	unordered_set<Episode*> podcast; // podcast is a playlist of episodes (no need to be ordered)
 
 public:
 	Podcast();
 	~Podcast();
-
-	unordered_set<AudioFile>* get_podcast() { return &podcast; } // getter
-	// todo: check if a setter is needed (podcast should be set only by admin and not by user)
-
-
+	unordered_set<Episode*> get_podcast() { return &podcast; } // getter
+	//todo: check if a setter is needed (podcast should be set only by admin and not by user)
 };
 
 

@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="AudioCollection.h" />
     <ClInclude Include="AudioFile.h" />
+    <ClInclude Include="Episode.h" />
     <ClInclude Include="Library.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Playlist.h" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioFile.cpp" />
+    <ClCompile Include="Episode.cpp" />
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="Playlist.cpp" />
     <ClCompile Include="Playlists.cpp" />

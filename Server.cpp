@@ -33,3 +33,9 @@ multiset<Song*>* Server::find_by_name(string name)
 {
     return nullptr;
 }
+
+void Server::upload_podcast_episode(Episode* episode)
+{
+    //search for the podcast's name in m_all_podcasts. if exists: add the episode
+    //else: create new podcast and add it to m_all_podcasts
+}

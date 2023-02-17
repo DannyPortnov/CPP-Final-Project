@@ -4,25 +4,53 @@
 #include "Song.h"
 #include "Playlists.h"
 #include <set>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include "Podcast.h"
 using namespace std;
 
 class Server {
 private:
-	static set<Song*>* m_all_songs_by_id;
-	static multiset<Song*>* m_all_songs_by_artist;
-	static multiset<Song*>* m_all_songs_by_name;
-	static multiset<Song*>* m_all_songs_by_album;
-	static multiset<Song*>* m_all_songs_by_genre; //change to unordered_map for O(1) find/access functionality
+	//sorting - O(log n) - FOR PRINTING
+	static multimap<string, Song*> m_songs_by_alphabet_order;
+	static multimap<string, Podcast*> m_podcasts_by_alphabet_order;
+
+	//search - O(1), insertion - O(1), deletion - O(1) - FOR EVERYTHING ELSE
+	static unordered_map<int,Song*> m_all_songs_by_id;
+	static unordered_multimap<string,Song*> m_all_songs_by_artist;
+	static unordered_multimap<string,Song*> m_all_songs_by_name;
+	static unordered_multimap<string, Song*> m_all_songs_by_album;
+	static unordered_multimap<string, Song*> m_all_songs_by_genre;
+	static unordered_multimap<string, Podcast*> m_all_podcasts; 
 public:
 	Server();
-	static multiset<Song*>* get_songs_by_name(); //default comparison (by name)
-	static set<Song*>*  get_songs_by_id();
-	static multiset<Song*>*  get_songs_by_artist();
-	static multiset<Song*>* get_songs_by_album();
-	static multiset<Song*>* get_songs_by_genre();
-	static multiset<Song*>* find_by_name(string name);
-	static multiset<Song*>* find_by_singer(string singer);
-	static multiset<Song*>* find_by_album(string album);
-	static multiset<Song*>* find_by_genre(string genre);
+	//getters
+	static unordered_multimap<string, Song*> get_songs_by_name(); //default comparison (by name)
+	static multimap<string, Song*> get_sorted_by_alphabet_songs(); //default comparison (by name)
+	static unordered_map<int, Song*>  get_song_by_id();
+	static unordered_multimap<string, Song*>  get_songs_by_artist();
+	static unordered_multimap<string, Song*> get_songs_by_album();
+	static unordered_multimap<string, Song*> get_songs_by_genre();
+	static unordered_multimap<string, Podcast*> get_podcasts_by_name();
+
+	//search the data structures based on a parameter
+	static unordered_multiset<Song*> find_by_name(string name);
+	static unordered_multiset<Song*> find_by_singer(string singer);
+	static unordered_multiset<Song*> find_by_album(string album);
+	static unordered_multiset<Song*> find_by_genre(string genre);
+
+	//adds the new song to each data structure
+	static void upload_song(Song* song);
+	static void upload_podcast_episode(Episode* episode);
+
+	//updates an existing song
+	static void update(string song_name, string new_name = "", string artist = "", string album = ""
+		, string genre = "", string duration = "");
+
+	//permanently deletes a song from the database COMPLETETLY
+	static void permanent_delete_song(Song* song);
+	static void permanent_delete_podcast_episode(Episode* episode);
+	static void permanent_delete_podcast(Podcast* podcast);
 };
 #endif

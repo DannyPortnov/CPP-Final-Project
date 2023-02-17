@@ -27,7 +27,7 @@ public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 		string genre = "", string duration = "", int release_date =0);*/
-	//Adds a song to the library
+	//Adds a song to the library. Maybe asks to which playlist, and allows to create a new playlist? 
 	void Add(string song_name);
 	//Deletes a song from the library
 	void Delete(int id);
@@ -38,7 +38,10 @@ public:
 	void Add2PL(int id, string playlist_name);
 	void RemoveFromPL(string song_name, string playlist_name); //what if there's more than one song called like this?
 	void PrintPL();
-
+	//gets the data structure from Server!
+	void Play(string song_name);
+	//gets the data structure from Server!
+	void Play(int id);
 	
 };
 
