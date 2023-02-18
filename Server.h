@@ -48,7 +48,8 @@ public:
 
 	//adds the new song to each data structure
 	static void Upload_Song(Song* song);
-	static void Upload_Podcast_Episode(Episode* episode);
+	//Uploads a NEW podcast
+	static void Upload_Podcast_Series(Podcast* episode);
 
 	//updates an existing song - did that in Library
 	//static void Update(string song_name, string new_name = "", string artist = "", string album = ""

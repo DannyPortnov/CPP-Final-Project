@@ -30,10 +30,11 @@ void Server::Upload_Song(Song* song)
 	}
 }
 
-void Server::Upload_Podcast_Episode(Episode* episode)
+void Server::Upload_Podcast_Series(Podcast* podcast)
 {
-	//search for the podcast's name in m_all_podcasts. if exists: add the episode
-	//else: create new podcast and add it to m_all_podcasts
+	auto podcast_to_upload = pair<string, Podcast*>(podcast->Get_Podcast_Name(), podcast);
+	m_all_podcasts.insert(podcast_to_upload);
+	m_podcasts_by_alphabet_order.insert(podcast_to_upload);
 }
 
 void Server::Permanent_Delete_Song(Song* song)
