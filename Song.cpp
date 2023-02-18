@@ -8,6 +8,11 @@ Song::Song(string song_name, string file_path, string album,
 	//to add duration calculation
 }
 
+//Song::Song(const Song& song) // ctor
+//	: m_song_name(song.get_name()), m_file_path(song.get_path()), m_album(song.get_album()),
+//	m_artist(song.get_artist()), m_genre(song.get_genre()), m_release_date(song.m_release_date) {}
+
+
 const string& Song::get_name() const { // get the name of the song
 	return m_song_name;
 }
@@ -48,6 +53,7 @@ bool operator<(const Song& a, const Song& b) {
 	return (a.get_name() < b.get_name());
 
 }
+
 
 
 ostream& operator<<(ostream& os, const Song& song)

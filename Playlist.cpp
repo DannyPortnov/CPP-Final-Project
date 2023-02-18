@@ -82,9 +82,14 @@ void Playlist::add_song_to_playlist(Song* song) {
 }
 
 // remove a song from the playlist. m_songs is a multimap
-void Playlist::remove_song_from_playlist(Song* song) {
-	m_songs.erase(song->get_name());
+//void Playlist::remove_song_from_playlist(Song* song) {
+//	m_songs.erase(song->get_name());
+//}
+
+void Playlist::remove_song_from_playlist(const string& song_name) {
+	m_songs.erase(song_name);
 }
+
 
 // remove all songs from the playlist. m_songs is a multimap
 void Playlist::clear_all_playlist() {
@@ -109,13 +114,19 @@ bool Playlist::check_if_songs_have_same_names(const string& song_name) {
 
 
 Song* Playlist::get_song_by_name(string song_name) {
-	if (check_if_songs_have_same_names(song_name) == false) {
-		
+	if (check_if_song_exist_in_playlist(song_name)) {
+		if (check_if_songs_have_same_names(song_name) == false) {
+			return m_songs.find(song_name)->second; // return the song that was found
+		}
+	}
+	else {
+		return nullptr;
 	}
 }
 
+
 unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const string& song_name) {
-	if (check_if_songs_have_same_names(song_name)) {
+	if (check_if_song_exist_in_playlist(song_name) && check_if_songs_have_same_names(song_name)) {
 		unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
 		multimap<string, Song*>::iterator it;
 		for (it = m_songs.begin(); it != m_songs.end(); ++it) {
@@ -124,6 +135,9 @@ unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const stri
 			}
 		}
 		return same_name_songs;
+	}
+	else {
+		return nullptr;
 	}
 	
 }
