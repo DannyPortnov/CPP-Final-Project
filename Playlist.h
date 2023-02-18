@@ -34,7 +34,8 @@ public:
 	unordered_multimap<string, Song*>* get_songs_with_same_name(const string& song_name);
 
 	bool check_if_songs_have_same_names(const string& song_name);
-	bool check_if_song_exist_in_playlist(int id);
+	bool check_if_song_exist_in_playlist_by_id(int id);
+	bool check_if_song_exist_in_playlist_by_name(const string& song_name);
 	Song* get_song_by_name(string song_name);
 //friend bool operator<(Playlist* a, Playlist* b);
 
