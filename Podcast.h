@@ -26,15 +26,18 @@ Questions:
 class Podcast 
 {
 private:
-	unordered_set<Episode*> m_podcast; // podcast is a playlist of episodes (no need to be ordered)
-
+	unordered_set<Episode*> m_podcast_episodes; // podcast is a playlist of episodes (no need to be ordered)
+	unordered_set<string> m_episodes_file_paths; // all file paths to episodes to check uniqueness 
+	string m_podcast_name;
 public:
-	//Podcast();
-	//~Podcast();
+	Podcast(string podcast_name);
+	~Podcast();
 	//Adds a UNIQUE episode to the podcast
 	void Add_Episode(Episode* episode);
-	string& Get_Podcast_Name();
-	unordered_set<Episode*>* get_podcast() { return &m_podcast; } // getter
+	const string& Get_Podcast_Name();
+	bool Is_Episode_In_Podcast(const string& file_path);
+	void Set_Podcast_Name(const string& new_name);
+	unordered_set<Episode*>* get_podcast() { return &m_podcast_episodes; } // getter
 	//todo: check if a setter is needed (podcast should be set only by admin and not by user)
 };
 

@@ -6,7 +6,6 @@
 #include "Player.h"
 using namespace std;
 
-//todo: add Podcast class, will inherit from AudioCollection
 //todo: add more meat here
 //todo: podcasts will be like playlists
 
@@ -30,6 +29,7 @@ public:
 
 	virtual void set_name(string& name);
 	virtual void set_duration(string& duration);
+	virtual void set_release_date(int release_date);
 };
 
 #endif	// AUDIOFILE_H
