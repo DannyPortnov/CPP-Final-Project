@@ -68,6 +68,26 @@ void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
 		songs_by_field.erase(it);
 	}
 }
+//todo: implement methods:
+static unordered_multimap<string, Song*>* get_songs_by_name() { //default comparison (by name)
+
+}
+static multimap<string, Song*>* get_songs_sorted_by_alphabet() { //default comparison (by name)
+
+}
+static unordered_multimap<string, Song*>* get_songs_by_artist() {
+
+}
+static unordered_multimap<string, Song*>* get_songs_by_album() {
+
+}
+static unordered_multimap<string, Song*>* get_songs_by_genre() {
+
+}
+static unordered_multimap<string, Podcast*>* get_podcasts_by_name() {
+
+}
+
 
 //void Server::Update(string song_name, string new_name, string artist, string album, string genre, string duration)
 //{
