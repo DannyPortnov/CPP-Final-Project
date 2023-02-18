@@ -284,6 +284,78 @@ void Library::Play(int id)
 	song_to_play->Play();
 }
 
+bool Library::check_if_continue_playing() {
+	bool invalid_char = true;
+	while (invalid_char) {
+		cout << "Would you like to continue playing? y/n: ";
+		char answer;
+		cin >> answer; cout << endl;
+		if (answer == 'n') {
+			cout << "Stopped playing" << endl;
+			invalid_char = false;
+			return false;
+		}
+		else if (answer == 'y') {
+			cout << "Continue playing" << endl;
+			invalid_char = false;
+			return true;
+		}
+		else {
+			cout << "Invalid character entered, try again: " << endl;
+		}
+	}
+}
+
+// Play all of the songs in the library
+void Library::PlayAll() {
+	auto songs_to_play = Server::get_songs_sorted_by_alphabet();
+	if (songs_to_play->size() == 0) {
+		cout << "There are no songs in the library." << endl;
+		return;
+	}
+	cout << "Playing all library songs: " << endl;
+	multimap<string, Song*>::iterator it;
+	for (it = songs_to_play->begin(); it != songs_to_play->end(); it++) {
+		cout << "Now playing: " << *it->second << endl;
+		int id = it->second->get_id();
+		Play(id);
+		if (check_if_continue_playing() == false)
+			return;
+	}
+	cout << "Finished playing all songs in the library." << endl;
+}
+
+// Play all of the songs in the library, shuffled
+void Library::PlayRandom() {
+	auto songs_to_play = Server::get_songs_sorted_by_alphabet();
+	if (songs_to_play->size() == 0) {
+		cout << "There are no songs in the library." << endl;
+		return;
+	}
+	// Create a vector of iterators to the elements in the multimap
+	vector<multimap<string, Song*>::iterator> songs_vector;
+	for (auto it = songs_to_play->begin(); it != songs_to_play->end(); ++it) {
+		songs_vector.push_back(it);
+	}
+	// Shuffle the keys of the multimap randomly
+	random_device rd;
+	mt19937 generator(rd());
+	shuffle(songs_vector.begin(), songs_vector.end(), generator);
+	
+	cout << "Playing all library songs, shuffled: " << endl; 
+
+	// Play the songs of the multimap in the shuffled order
+	for (auto const& song : songs_vector) {
+		cout << "Now playing: " << *(song->second) << endl; 
+		int id = song->second->get_id();
+		Play(id);
+		if (check_if_continue_playing() == false)
+			return;
+	}
+
+}
+
+
 #pragma region Old implementation of RemoveFromPL
 //void Library::RemoveFromPL(string& song_name, const string& playlist_name)
 //{

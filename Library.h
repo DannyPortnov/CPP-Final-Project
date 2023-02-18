@@ -37,6 +37,7 @@ private:
 	void ask_user_to_remove_song(Song* song, Playlist* playlist);
 	bool check_if_user_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
+	bool check_if_continue_playing();
 
 public:
 	Library(); //what are the Update methods?
@@ -64,6 +65,10 @@ public:
 	void Play(string song_name);
 	//gets the data structure from Server!
 	void Play(int id);
+	//gets the data structure from Server!
+	void PlayAll();
+	//gets the data structure from Server!
+	void PlayRandom();
 
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist
