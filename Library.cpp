@@ -61,7 +61,8 @@ void Library::create_playlist(const string& playlist_name) {
 	if (check_if_playlist_exist(playlist_name)) {	
 		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
 	}
-	else { //todo: check that the name is legal
+	else if (check_if_playlist_can_be_edited(playlist_name)) { //todo: check that the name is legal
+
 		m_user_playlist_names.insert(playlist_name);
 		Playlist* new_playlist = new Playlist(playlist_name);
 	//	m_user_playlists.insert(make_pair(playlist_name, new_playlist));
@@ -144,77 +145,49 @@ void Library::Add2PL(int id, const string& playlist_name)
 	}
 }
 
-// double checks with the user if the song should be deleted.
-char Library::ask_user_to_remove_song(int id, const string& playlist_name) {
+// double checks with the user if the song should be deleted, if yes- removes the song.
+void Library::ask_user_to_remove_song(Song* song, Playlist* playlist) {
 	cout << "You chose to remove the song: " << endl;
-	PrintSong(id);
-	cout << "Are you sure you want to remove this song from: " << playlist_name << "?" << endl;
+	PrintSong(song->get_id());
+	cout << "Are you sure you want to remove this song from: " << playlist->get_name() << "?" << endl;
 	cout << "Press y/n: " << endl;
 	char answer;
 	cin >> answer;
-	return answer;
+	if (answer == 'y') {
+		playlist->remove_song_from_playlist(song->get_name());
+		cout << "Song Was Successfully Removed From Playlist!" << endl;
+	}
+	else
+		cout << "The Song Wasn't Removed!" << endl;
 }
 
 // remove a song from the playlist by song's name.
-void Library::RemoveFromPL(string& song_name, const string& playlist_name)
-{
-	if (check_if_playlist_can_be_edited(playlist_name)) { // return true if can be edited
+void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
+	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
 		if (check_if_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
-			if (m_user_playlists.find(playlist_name)->second->check_if_song_exist_in_playlist(song_name)) {
-				if (m_user_playlists.find(playlist_name)->second->check_if_songs_have_same_names(song_name)) {
-					unordered_multimap<string, Song*>* same_name_songs =
-						m_user_playlists.find(playlist_name)->second->get_songs_with_same_name(song_name);
+			auto playlist = m_user_playlists.find(playlist_name)->second;
+			if (playlist->check_if_song_exist_in_playlist(song_name)) {
+				if (playlist->check_if_songs_have_same_names(song_name)) {
+					unordered_multimap<string, Song*>* same_name_songs = playlist->get_songs_with_same_name(song_name);
 					cout << "There are few songs with the same name:" << endl;
-					unordered_multimap<string, Song*>::iterator it;
-					int i = 1;
-					for (it = (*same_name_songs).begin(); it != (*same_name_songs).end(); it++) {
-						cout << "(" << i << "). " << *(it->second) << endl; // it->second contains Song*
-						i++;
-					}
 					cout << "Which song do you want to remove from " << playlist_name << "?" << endl;
-					cout << "Type the id of the song you would like to remove: ";
-					bool id_not_found = true;
-					//unordered_multimap<string, Song*>::iterator it;
-					while (id_not_found) {
-						int chosen_id;
-						cin >> chosen_id;
-						for (it = (*same_name_songs).begin(); it != (*same_name_songs).end(); it++) {
-							if (it->second->get_id() == chosen_id) {
-								id_not_found = false;
-								if ((ask_user_to_remove_song(chosen_id, playlist_name)) == 'y') {
-									m_user_playlists.find(playlist_name)->second->remove_song_from_playlist(it->first);
-									cout << "Song Was Successfully Removed From Playlist!" << endl;
-								}
-								else
-									cout << "The Song Wasn't Removed!" << endl;
-							}
-						}
-						if (id_not_found)
-							cout << "ID not found! please enter id again: " << endl;
-					}
+					auto song_to_remove = Pick_Media(song_name, same_name_songs);
+					ask_user_to_remove_song(song_to_remove, playlist);
 					delete same_name_songs; // maybe we need to delete here 
 				}
 				else {
-					int song_id = m_user_playlists.find(playlist_name)->second->get_song_by_name(song_name)->get_id();
-					if ((ask_user_to_remove_song(song_id, playlist_name)) == 'y') {
-						m_user_playlists.find(playlist_name)->second->remove_song_from_playlist(song_name);
-						cout << "Song Was Successfully Removed From Playlist!" << endl;
-					}
-					else
-						cout << "The Song Wasn't Removed!" << endl;
+					auto song_to_remove = playlist->get_song_by_name(song_name);
+					ask_user_to_remove_song(song_to_remove, playlist);
 				}
 			}
-			else {
+			else
 				cout << "The song" << song_name << "is not in the playlist: " << playlist_name << "!" << endl;
-			}
 		}
-		else {
+		else
 			cout << "This Playlist Does Not Exist!" << endl;
-		}
 	}
-	else {
+	else
 		cout << "This Playlist Cannot Be Edited!" << endl;
-	}
 }
 
 

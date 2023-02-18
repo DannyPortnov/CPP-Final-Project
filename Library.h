@@ -33,7 +33,7 @@ private:
 	//Returns the choosen song. If wrong name returns nullptr!
 	template<class T>
 	T* Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search);
-	char ask_user_to_remove_song(int id, const string& playlist_name);
+	void ask_user_to_remove_song(Song* song, Playlist* playlist);
 	bool check_if_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
 
