@@ -125,3 +125,12 @@ unordered_multimap<string, Song*>* Server::find(string& key, unordered_multimap<
 	}
 	return filtered_songs;
 }
+
+
+void Server::update_recently_played(int id) {
+	auto song = find_song_by_id(id);
+	if (m_recently_played.size() == max_recents) {
+		m_recently_played.pop_front();
+	}
+	m_recently_played.push_back(song);
+}

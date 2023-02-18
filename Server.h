@@ -5,10 +5,14 @@
 #include "Playlists.h"
 #include <set>
 #include <map>
+#include <list>
 #include <unordered_map>
 #include <unordered_set>
 #include "Podcast.h"
 using namespace std;
+
+#define max_recents 10
+
 
 class Server {
 private:
@@ -23,6 +27,8 @@ private:
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
 	static unordered_multimap<string, Song*> m_all_songs_by_genre;
 	static unordered_multimap<string, Podcast*> m_all_podcasts;
+	static list<Song*> m_recently_played; // good complexity for insertion/deletion O(1)
+
 	static unordered_multimap<string, Song*>* find(string& key, unordered_multimap<string, Song*>& collection);
 
 	template<typename T>
@@ -36,7 +42,6 @@ public:
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
 	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
-
 	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 
 	//search the data structures based on a parameter
@@ -54,6 +59,10 @@ public:
 	//updates an existing song - did that in Library
 	//static void Update(string song_name, string new_name = "", string artist = "", string album = ""
 	//	, string genre = "", string duration = "");
+
+	// update recently played by song id
+	static void update_recently_played(int id);
+
 
 	//permanently deletes a song from the database COMPLETETLY
 	static void Permanent_Delete_Song(Song* song);
