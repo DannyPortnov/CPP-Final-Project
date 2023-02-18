@@ -44,7 +44,12 @@ void Library::PrintSong(int id)
 
 void Library::PrintSong(string song_name)
 {
-	//niv
+	auto songs = Server::find_by_name(song_name);
+	if (->count() > 1) {
+		return;
+	}
+	return ;
+	cout << Server::find_by_name(song_name) << endl;
 }
 
 // return true if playlist exist, false if not.
