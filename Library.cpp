@@ -178,13 +178,12 @@ void Library::ask_user_to_remove_song(Song* song, Playlist* playlist) {
 		cout << "The Song Wasn't Removed!" << endl;
 }
 
-//todo: maybe to move the checks of if the song is in a playlist to the remove from playlist method in playlsits.
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
 		if (check_if_user_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
 			auto playlist = m_user_playlists.find(playlist_name)->second;
-			if (playlist->check_if_song_exist_in_playlist(song_name)) {
+			if (playlist->check_if_song_exist_in_playlist_by_name(song_name)) {
 				if (playlist->check_if_songs_have_same_names(song_name)) {
 					unordered_multimap<string, Song*>* same_name_songs = playlist->get_songs_with_same_name(song_name);
 					cout << "There are few songs with the same name:" << endl;
