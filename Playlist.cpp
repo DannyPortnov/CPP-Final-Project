@@ -8,11 +8,42 @@ Playlist::~Playlist() {
 	clear_all_playlist();
 }
 
+
+bool Playlist::check_if_continue_playing() {
+	bool invalid_char = true;
+	while (invalid_char) {
+		cout << "Would you like to continue playing " << m_playlist_name << "? y/n: ";
+		char answer;
+		cin >> answer; cout << endl;
+		if (answer == 'n') {
+			cout << "Stopped playing " << m_playlist_name << endl;
+			invalid_char = false;
+			return false;
+		}
+		else if (answer == 'y') {
+			cout << "Continue playing " << m_playlist_name << endl;
+			invalid_char = false;
+			return true;
+		}
+		else {
+			cout << "Invalid character entered, try again: " << endl;
+		}
+	}
+}
+
 // play the songs in alphabetical order
 void Playlist::Play() {
+	if (m_songs.size() == 0) {
+		cout << "There are no songs in the this playlist." << endl;
+		return;
+	}
+	cout << "Playing" << m_playlist_name << ":" << endl;
 	multimap<string, Song*>::iterator it;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+		cout << "Now playing: " << *it->second << endl;
 		m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+		if (check_if_continue_playing() == false)
+			return;
 	}
 }
 
@@ -29,34 +60,34 @@ void Playlist::Play_Random() {
 	mt19937 generator(rd());
 	shuffle(songs_vector.begin(), songs_vector.end(), generator);
 
+	cout << "Playing" << m_playlist_name << ", shuffled: " << endl;
+	
 	// Play the songs of the multimap in the shuffled order
 	for (auto const& song : songs_vector) {
+		cout << "Now playing: " << *(song->second) << endl; //todo: ask if the user want to stop playing after each iteration.
 		m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+		if (check_if_continue_playing() == false)
+			return;
 	}
-
-	// probably don't needed, another implementation:
-
-	//// Convert the set to a vector for shuffling
-	//std::vector<string> songs_vector(m_songs.begin(), m_songs.end());
-
-	//// Seed the random number generator with the current time
-	//std::mt19937 generator(time(nullptr));
-
-	//// Shuffle the vector
-	//std::shuffle(songs_vector.begin(), songs_vector.end(), generator);
-
-	//// Print the shuffled elements using an iterator
-	//std::vector<Song*>::iterator it;
-	//for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
-	//	m_player.play((*it)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
-	//}
-
-	// todo: check if necessary
-	// Free the dynamically allocated objects
-	/*for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
+	/*
+	 probably don't needed, another implementation:
+	// Convert the set to a vector for shuffling
+	std::vector<string> songs_vector(m_songs.begin(), m_songs.end());
+	// Seed the random number generator with the current time
+	std::mt19937 generator(time(nullptr));
+	// Shuffle the vector
+	std::shuffle(songs_vector.begin(), songs_vector.end(), generator);
+	// Print the shuffled elements using an iterator
+	std::vector<Song*>::iterator it;
+	for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
+		m_player.play((*it)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+	}
+	 todo: check if necessary
+	 Free the dynamically allocated objects
+	/.for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
 		delete* it;
-	}*/
-
+	}
+	*/
 }
 
 

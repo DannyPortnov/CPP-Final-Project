@@ -17,6 +17,7 @@ private:
 	multimap<string, Song*> m_songs; // uses to store all songs in the playlist in alphabetical order. 
 	string m_playlist_name;
 	Player m_player;
+	bool check_if_continue_playing();
 
 public:
 	Playlist(string name);
