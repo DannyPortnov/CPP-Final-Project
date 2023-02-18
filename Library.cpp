@@ -630,6 +630,9 @@ void Library::Delete_Song(string song_name)
 	{
 		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
 		if (picked_song != nullptr) {
+			// int id = picked_song->get_id();
+			// m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
+
 			Server::Permanent_Delete_Song(picked_song);
 			return;
 		}
@@ -652,6 +655,7 @@ void Library::Delete_Song(int id)
 {
 	try
 	{
+		// m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
 		Server::Permanent_Delete_Song(Server::find_song_by_id(id));
 	}
 	catch (const std::exception&)
