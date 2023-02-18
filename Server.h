@@ -27,10 +27,15 @@ private:
 	static unordered_multimap<string, Podcast*> m_all_podcasts;
 	static unordered_multiset<Song*>* find(string& key, unordered_multimap<string, Song*>& collection);
 
-	template<typename T>
+	template<class T>
 	static void remove_song_from_collection(T& songs_by_field, Song* song);
+	template <class T>
+	void Destory_Allocations(T& collection);
 public:
 	//Server();
+	//todo: check if destroyer is needed
+	~Server();
+
 	//getters
 	static unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*>* get_sorted_by_alphabet_songs(); //default comparison (by name)
@@ -53,10 +58,12 @@ public:
 	//Checks if episode was already added to server
 	static bool Does_Episode_Exist(const string& file_path);
 
-	//adds the new song to each data structure
-	static void Upload_Song(Song* song);
-	//Uploads a NEW podcast
-	static void Upload_Podcast_Series(Podcast* episode);
+	//Allocates memory for the new song and adds to each data structure
+	static void Upload_Song(string song_name, string file_path, string artist = "",
+		string album = "", string genre = "", string duration = "", int release_Date = 0);
+	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
+	static void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
+		string duration, int release_Date);
 
 	//updates an existing song - did that in Library
 	//static void Update(string song_name, string new_name = "", string artist = "", string album = ""

@@ -8,9 +8,11 @@
 //	set<int, decltype(compare_by_id)> songs_by_id; //insert here all the songs!
 //}
 
-//adds to all data structures
-void Server::Upload_Song(Song* song)
+//Song is unique!
+void Server::Upload_Song(string song_name, string file_path, string artist = "",
+	string album = "", string genre = "", string duration = "", int release_Date = 0)
 {
+	auto song = new Song(song_name, file_path, album, artist, genre, release_Date);
 	const auto& name = song->get_name(); //avoids unnecessary copies of string objects
 	const auto& album = song->get_album();
 	const auto& artist = song->get_artist();
@@ -31,8 +33,15 @@ void Server::Upload_Song(Song* song)
 	}
 }
 
-void Server::Upload_Podcast_Series(Podcast* podcast)
+void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
+	string duration, int release_Date)
 {
+	auto new_episode = new Episode(file_path, episode_name, release_Date, duration); //deleted in Podcast
+	if (podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
+		podcast = new Podcast(podcast_name); //deleted in Server
+	}
+	podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
+
 	auto podcast_to_upload = pair<string, Podcast*>(podcast->Get_Podcast_Name(), podcast);
 	m_all_podcasts.insert(podcast_to_upload);
 	m_podcasts_by_alphabet_order.insert(podcast_to_upload);
@@ -69,11 +78,20 @@ void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
 		songs_by_field.erase(it);
 	}
 }
+// A template function that takes an unordered map/multimap 
+// and deletes all the values 
+template<class T>
+void Server::Destory_Allocations(T& collection)
+{
+	// Iterate over the key-value pairs in the collection.
+	for (auto& pair : collection) {
+		// Delete the value associated with the key.
+		delete pair.second;
+	}
+	// Clear the collection.
+	collection.clear();
+}
 
-//void Server::Update(string song_name, string new_name, string artist, string album, string genre, string duration)
-//{
-//
-//}
 
 //Returns a unique song based on its id
 Song* Server::find_song_by_id(int id)
@@ -121,3 +139,10 @@ unordered_multiset<Song*>* Server::find(string& key, unordered_multimap<string, 
 	}
 	return filtered_songs;
 }
+
+Server::~Server()
+{
+	Destory_Allocations(m_all_podcasts);
+	Destory_Allocations(m_all_songs_by_id);
+}
+
