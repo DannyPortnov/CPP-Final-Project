@@ -137,7 +137,7 @@ unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const stri
 		return same_name_songs;
 	}
 	else {
-		return nullptr;
+		return nullptr; //todo: check if safe to delete nullptr, if not then return same_name_songs
 	}
 	
 }

@@ -33,12 +33,16 @@ private:
 	//Returns the choosen song. If wrong name returns nullptr!
 	template<class T>
 	T* Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search);
+	char ask_user_to_remove_song(int id, const string& playlist_name);
+	bool check_if_playlist_exist(const string& playlist_name);
+	bool check_if_playlist_can_be_edited(const string& playlist_name);
+
 public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 		string genre = "", string duration = "", int release_date =0);*/
 	//Adds a song to the library. Maybe asks to which playlist, and allows to create a new playlist? 
-	void Add(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
+	void AddSong(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
 	//Adds a episode to its podcast. If podcast doesn't exist creates one
 	void Add_Podcast_Episode(Episode* episode);
 	//Deletes a song from the library
@@ -60,14 +64,10 @@ public:
 	//gets the data structure from Server!
 	void Play(int id);
 
-	void print_all_playlists(); // print all playlists in library
+	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist
 	void delete_playlist(Playlist* playlist); // delete a playlist
-	bool check_if_playlist_exist(const string& playlist_name);
-	bool check_if_playlist_can_be_edited(const string& playlist_name);
-	char ask_user_to_remove_song(int id, const string& playlist_name);
-
-
+	
 
 
 

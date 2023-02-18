@@ -33,6 +33,12 @@ void Library::PrintSong(int id)
 	cout << Server::find_song_by_id(id)<< endl;
 }
 
+
+void Library::PrintSong(string song_name)
+{
+	//niv
+}
+
 // return true if playlist exist, false if not.
 bool Library::check_if_playlist_exist(const string& playlist_name) {
 	if (m_user_playlists.find(playlist_name) != m_user_playlists.end()) { // if not found, find method returns '.end()' element
@@ -55,7 +61,7 @@ void Library::create_playlist(const string& playlist_name) {
 	if (check_if_playlist_exist(playlist_name)) {	
 		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
 	}
-	else {
+	else { //todo: check that the name is legal
 		m_user_playlist_names.insert(playlist_name);
 		Playlist* new_playlist = new Playlist(playlist_name);
 	//	m_user_playlists.insert(make_pair(playlist_name, new_playlist));
@@ -73,12 +79,10 @@ void Library::delete_playlist(Playlist* playlist) {
 		cout << "Playlist Was Successfully Deleted!" << endl;
 	}
 	// if m_deleted was selected, we need to empty this playlist.
-	//todo: need to delete all songs from the server.
 	else if (playlist->get_name() == m_deleted->get_name()) {
 		multimap<string, Song*>::iterator it;
 		for (it = playlist->get_songs().begin(); it != playlist->get_songs().end(); it++) {
-			Server::Permanent_Delete_Song(it->second); //todo: implement in server class
-													//todo: check if it is better for library to inherit from server
+			Server::Permanent_Delete_Song(it->second); 									
 		}
 		playlist->clear_all_playlist();
 	}
@@ -128,7 +132,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 			cout << "Song Was Successfully Added!" << endl;
 		}
 	}
-	else if (check_if_playlist_can_be_edited(playlist_name)) {
+	else if (check_if_playlist_can_be_edited(playlist_name)) { //todo: check if creating a new playlist is nessecary
 		if (playlist_name != m_favorites->get_name()) {
 			create_playlist(playlist_name);
 		}
@@ -188,7 +192,7 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name)
 						if (id_not_found)
 							cout << "ID not found! please enter id again: " << endl;
 					}
-					delete same_name_songs; // maybe we need to delete here
+					delete same_name_songs; // maybe we need to delete here 
 				}
 				else {
 					int song_id = m_user_playlists.find(playlist_name)->second->get_song_by_name(song_name)->get_id();
@@ -240,6 +244,7 @@ void Library::Update(string song_name, string new_name, string artist,
 //Find choosen song and updates according to the parameters recieved
 void Library::Update(int song_id, string new_name, string artist, string album, string genre, string duration)
 {
+	//todo: add check to see if id exists
 	auto picked_song = Server::find_song_by_id(song_id);
 	if (!new_name.empty()) {
 		picked_song->set_name(new_name);
@@ -256,6 +261,16 @@ void Library::Update(int song_id, string new_name, string artist, string album, 
 	if (!duration.empty()) {
 		picked_song->set_duration(duration);
 	}
+}
+
+void Library::Play(string song_name)
+{
+	//todo: niv
+}
+
+void Library::Play(int id)
+{
+	//todo: niv
 }
 
 #pragma region Old implementation of RemoveFromPL
@@ -288,12 +303,15 @@ void Library::Update(int song_id, string new_name, string artist, string album, 
 
 
 //called from the interface ("main")
-void Library::Add(string song_name, string file_path, string artist = "",
+void Library::AddSong(string song_name, string file_path, string artist = "",
 	string album = "", string genre = "", string duration = "", int release_Date = 0)
 {
+	//todo: check if song exists already
+	//todo: move new to server
 	Server::Upload_Song(new Song(song_name, file_path, album, artist, genre, release_Date));
+	//is deleted in Server::Permanent_Delete_Song
 
-#pragma region Algorithm to find all songs by that name and choosing specific one
+	#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
 	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	//multiset<Song*>::iterator end_of_songs_set;
@@ -351,9 +369,9 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 	do {
 		cout << "Please choose a number between 1 and " << number_of_media_items << " (0 to cancel): ";
 		cin >> answer;
-	} while (answer < 0 || answer > number_of_media_items);
+	} while (answer < 0 || answer > number_of_media_items); //todo: check string input
 	if (answer == 0) {
-		return nullptr;
+		return nullptr; //todo: differentiate between not finding and canceling
 	}
 	auto& iterator = filtered_media.first;
 	advance(iterator, answer - 1);
@@ -428,15 +446,16 @@ int Library::Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song
 
 void Library::Delete(string song_name)
 {
-	auto picked_song = Pick_Media<Song>(song_name, Server::get_songs_by_name());
+	auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
 	if (picked_song != nullptr) {
 		Server::Permanent_Delete_Song(picked_song);
 		return;
 	}
-	cout <<  song_name << " isn't present in the server." << endl;
+	cout <<  song_name << " isn't present in the server." << endl; 
 }
-void Library::Delete(int id)
+void Library::Delete(int id) 
 {
+	//todo: after inherting from server, avoid calling Pick_Media when Delete(string song_name) is called from Delete(int id) 
 	Server::Permanent_Delete_Song(Server::find_song_by_id(id));
 }
 

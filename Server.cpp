@@ -58,6 +58,7 @@ void Server::Permanent_Delete_Song(Song* song)
 	remove_song_from_collection(m_all_songs_by_name, song);
 	remove_song_from_collection(m_songs_by_alphabet_order, song);
 	remove_song_from_collection(m_all_songs_by_id, song);
+	delete song; //???
 }
 
 template <typename T>

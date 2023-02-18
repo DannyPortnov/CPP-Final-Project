@@ -12,7 +12,7 @@ using namespace std;
 
 
 //int Song::id_code = 0;
-class Song : AudioFile
+class Song : public AudioFile
 {
 private:
 	string m_artist;
@@ -27,7 +27,6 @@ public:
 	const string& get_album() const; 
 	const string& get_genre() const;
 	const string& get_artist() const; 
-
 
 	void set_artist(string& artist);
 	void set_album(string& album);

@@ -31,7 +31,7 @@ private:
 public:
 	//Podcast();
 	//~Podcast();
-	//Adds an episode to the podcast
+	//Adds a UNIQUE episode to the podcast
 	void Add_Episode(Episode* episode);
 	string& Get_Podcast_Name();
 	unordered_set<Episode*>* get_podcast() { return &m_podcast; } // getter

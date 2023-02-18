@@ -24,9 +24,8 @@ protected:
 public:
 
 	virtual void Play() = 0;
-	virtual void set_duration(string& duration);
-	virtual const string& get_name() const; // get the name of the song
-	virtual const string& get_path() const; // get the name of the song
+	const string& get_name() const; // get the name of the song
+	const string& get_path() const; // get the name of the song
 	const int get_id() const;
 
 	virtual void set_name(string& name);
