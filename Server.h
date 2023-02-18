@@ -42,6 +42,8 @@ public:
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
 	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
+	static list<Song*>* get_recently_played();
+
 	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 
 	//search the data structures based on a parameter

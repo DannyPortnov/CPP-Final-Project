@@ -544,6 +544,22 @@ void Library::Delete(int id)
 	Server::Permanent_Delete_Song(Server::find_song_by_id(id));
 }
 
+// update by using song id
+void Library::update_recent(int id) {
+	Server::update_recently_played(id);
+	auto recently_played = Server::get_recently_played();
+	m_recent->clear_all_playlist();
+	// Create an iterator for the list
+	list<Song*>::iterator it;
+	// Traverse through the list using the iterator
+	for (it = recently_played->begin(); it != recently_played->end(); it++) {
+		m_recent->add_song_to_playlist(*it); // add to recent the updated recently_played linked_list
+	}
+}
+
+
+
+
 ostream& Library::Print(ostream& os, int begin, int end) const
 {
 	auto itr = Server::get_songs_by_name()->begin();

@@ -70,6 +70,9 @@ public:
 	//gets the data structure from Server!
 	void PlayRandom();
 
+	//update recent songs playlist by using song id
+	void update_recent(int id);
+	
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist
 	void delete_playlist(Playlist* playlist); // delete a playlist
