@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EPISODE_H
+#define EPISODE_H
 #include "AudioFile.h"
 
 class Episode :
@@ -15,4 +16,5 @@ public:
     //Plays the episode
     void Play();
 };
+#endif
 
