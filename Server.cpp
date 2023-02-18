@@ -82,19 +82,19 @@ Song* Server::find_song_by_id(int id)
 
 unordered_multiset<Song*>* Server::find_by_name(string& name)
 {
-	find(name, m_all_songs_by_name);
+	return find(name, m_all_songs_by_name);
 }
 unordered_multiset<Song*>* Server::find_by_artist(string& singer)
 {
-	find(singer, m_all_songs_by_artist);
+	return find(singer, m_all_songs_by_artist);
 }
 unordered_multiset<Song*>* Server::find_by_album(string& album)
 {
-	find(album, m_all_songs_by_album);
+	return find(album, m_all_songs_by_album);
 }
 unordered_multiset<Song*>* Server::find_by_genre(string& genre)
 {
-	find(genre, m_all_songs_by_genre);
+	return find(genre, m_all_songs_by_genre);
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
 unordered_multiset<Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection) {

@@ -40,11 +40,11 @@ public:
 	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 
 	//search the data structures based on a parameter
-	static Song* find_song_by_id(int id);
 	static unordered_multiset<Song*>* find_by_name(string& name);
 	static unordered_multiset<Song*>* find_by_artist(string& singer);
 	static unordered_multiset<Song*>* find_by_album(string& album);
 	static unordered_multiset<Song*>* find_by_genre(string& genre);
+
 
 	//adds the new song to each data structure
 	static void Upload_Song(Song* song);
