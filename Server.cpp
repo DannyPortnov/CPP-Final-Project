@@ -1,12 +1,12 @@
 #include "Server.h"
 
-Server::Server()
-{
-	auto compare_by_id = [](Song* a, Song* b) { //lambda function
-		return a->get_id() < b->get_id();
-	};
-	set<int, decltype(compare_by_id)> songs_by_id; //insert here all the songs!
-}
+//Server::Server()
+//{
+//	auto compare_by_id = [](Song* a, Song* b) { //lambda function
+//		return a->get_id() < b->get_id();
+//	};
+//	set<int, decltype(compare_by_id)> songs_by_id; //insert here all the songs!
+//}
 
 //adds to all data structures
 void Server::Upload_Song(Song* song)
@@ -95,35 +95,7 @@ unordered_multiset<Song*>* Server::find_by_genre(string& genre)
 	find(genre, m_all_songs_by_genre);
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
-unordered_multiset<Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection)
-//set<Song*>* Server::get_songs_by_id()
-//{
-//    return m_all_songs_by_id;
-//
-//}
-//
-//multiset<Song*>* Server::get_songs_by_artist()
-//{
-//    return nullptr;
-//}
-//
-//multiset<Song*>* Server::get_songs_by_album()
-//{
-//    return nullptr;
-//}
-//
-//multiset<Song*>* Server::get_songs_by_genre()
-//{
-//    return nullptr;
-//}
-//
-//multiset<Song*>* Server::find_by_name(string name)
-//{
-//    return nullptr;
-//}
-
-void Server::upload_podcast_episode(Episode* episode)
-{
+unordered_multiset<Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection) {
 	auto range = collection.equal_range(key); // range of values that match the given name
 	unordered_multiset<Song*>* filtered_songs = new unordered_multiset<Song*>;
 	for (auto& it = range.first; it != range.second; ++it) {
@@ -131,4 +103,3 @@ void Server::upload_podcast_episode(Episode* episode)
 	}
 	return filtered_songs;
 }
-

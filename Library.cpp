@@ -30,7 +30,7 @@ Library::~Library() {
 
 void Library::PrintSong(int id)
 {
-	cout << m_songs_by_id->at(id) << endl;
+	cout << Server::find_song_by_id(id)<< endl;
 }
 
 // return true if playlist exist, false if not.
@@ -77,7 +77,7 @@ void Library::delete_playlist(Playlist* playlist) {
 	else if (playlist->get_name() == m_deleted->get_name()) {
 		multimap<string, Song*>::iterator it;
 		for (it = playlist->get_songs().begin(); it != playlist->get_songs().end(); it++) {
-			Server::permanent_delete_song(it->second); //todo: implement in server class
+			Server::Permanent_Delete_Song(it->second); //todo: implement in server class
 													//todo: check if it is better for library to inherit from server
 		}
 		playlist->clear_all_playlist();
@@ -116,9 +116,6 @@ void Library::print_all_playlists() {
 //}
 
 
-
-
-
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name)
 {
@@ -148,7 +145,7 @@ char Library::ask_user_to_remove_song(Song* song, const string& playlist_name) {
 }
 
 
-void Library::RemoveFromPL(string song_name, const string& playlist_name)
+void Library::RemoveFromPL(string& song_name, const string& playlist_name)
 {
 	if (check_if_playlist_can_be_edited(playlist_name) == false) { // return true if can be edited
 		cout << "This Playlist Cannot Be Edited!" << endl;
@@ -197,13 +194,13 @@ void Library::RemoveFromPL(string song_name, const string& playlist_name)
 			}
 			else {
 				cout << "You chose to remove the song: " << endl;
-				cout << (m_user_playlists.find(playlist_name)->second->) << endl; //todo: check if print is ok
+				cout << (m_user_playlists.find(playlist_name)->second) << endl; //todo: check if print is ok
 				cout << "Are you sure you want to remove this song from: " << playlist_name << "?" << endl;
 				cout << "Press y/n: " << endl;
 				char answer;
 				cin >> answer;
 				if (answer == 'y') {
-					m_user_playlists.find(playlist_name)->second->remove_song_from_playlist();
+					m_user_playlists.find(playlist_name)->second->remove_song_from_playlist(); //??
 					cout << "Song Was Successfully Removed From Playlist!" << endl;
 				}
 				else
@@ -211,6 +208,9 @@ void Library::RemoveFromPL(string song_name, const string& playlist_name)
 
 			}
 		}
+	}
+}
+
 //Asks the user which song he meant and updates the choosen one.
 void Library::Update(string song_name, string new_name, string artist,
 	string album, string genre, string duration)
@@ -219,9 +219,7 @@ void Library::Update(string song_name, string new_name, string artist,
 	if (picked_song != nullptr) {
 		Update(picked_song->get_id(), new_name, artist, album, genre, duration);
 	}
-
-
-#pragma region deleting than adding
+	#pragma region deleting than adding
 	//if (new_name.empty() && artist.empty() && album.empty()
 //	&& genre.empty() && genre.empty() && duration.empty()) {
 //	cout << "No information to update" << endl;
@@ -254,40 +252,38 @@ void Library::Update(int song_id, string new_name, string artist, string album, 
 	}
 }
 
-void Library::RemoveFromPL(string song_name, string playlist_name)
-{
-	Update_Playlists_Map();
-	auto songs_by_names = m_playlists_map->at(playlist_name)->Get_Songs();
-	multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
-	multiset<Song*>::iterator end_of_songs_set;
-	multiset<Song*>::iterator first_wanted_song;
-	multiset<Song*>::iterator last_wanted_song;
-	int number_of_songs = Count_Songs(&songs_by_names, song_name, &start_of_songs_set, &end_of_songs_set, &first_wanted_song, &last_wanted_song);
-	switch (number_of_songs)
-	{
-	case 0: {
-		cout << "No songs named " << song_name << " currently in " << playlist_name << "." << endl;
-		return;
-	}
-	case 1: {
-		m_playlists_map->at(playlist_name)->remove_song(*first_wanted_song); //or *last doesn't matter
-		return;
-	}
-	default:
-		break;
-	}
-	cout << "More than one song named " << song_name << ", choose which one you want to remove" << endl;
-	//m_playlists_map->at(playlist_name)->remove_song(Pick_Song( )); //removes the selected song
-}
-
-
-
+#pragma region Old implementation of RemoveFromPL
+//void Library::RemoveFromPL(string& song_name, const string& playlist_name)
+//{
+//	Update_Playlists_Map();
+//	auto songs_by_names = m_playlists_map->at(playlist_name)->Get_Songs();
+//	multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
+//	multiset<Song*>::iterator end_of_songs_set;
+//	multiset<Song*>::iterator first_wanted_song;
+//	multiset<Song*>::iterator last_wanted_song;
+//	int number_of_songs = Count_Songs(&songs_by_names, song_name, &start_of_songs_set, &end_of_songs_set, &first_wanted_song, &last_wanted_song);
+//	switch (number_of_songs)
+//	{
+//	case 0: {
+//		cout << "No songs named " << song_name << " currently in " << playlist_name << "." << endl;
+//		return;
+//	}
+//	case 1: {
+//		m_playlists_map->at(playlist_name)->remove_song(*first_wanted_song); //or *last doesn't matter
+//		return;
+//	}
+//	default:
+//		break;
+//	}
+//	cout << "More than one song named " << song_name << ", choose which one you want to remove" << endl;
+//	//m_playlists_map->at(playlist_name)->remove_song(Pick_Song( )); //removes the selected song
+//}  
+#pragma endregion
 
 void Library::PrintPL()
 {
 
 }
-
 
 //called from the interface ("main")
 void Library::Add(string song_name, string file_path, string artist = "",
@@ -349,12 +345,6 @@ Song* Library::Pick_Song(string song_name) {
 	return iterator->second;
 }
 
-void Library::Update_Playlists_Map()
-{
-	m_playlists_map = &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
-}
-
-
 
 int Library::Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 	multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const {
@@ -379,13 +369,13 @@ void Library::Delete(int id)
 
 ostream& Library::Print(ostream& os, int begin, int end) const
 {
-	auto itr = m_songs_by_name->begin();
-	for (int i = 0; i < begin && itr != m_songs_by_name->end(); i++, itr++) {} //if begin!=0, inc itr untill reached begin
-	for (int i = begin; i < end && itr != m_songs_by_name->end(); i++, itr++)
+	auto itr = Server::get_songs_by_name()->begin();
+	for (int i = 0; i < begin && itr != Server::get_songs_by_name()->end(); i++, itr++) {} //if begin!=0, inc itr untill reached begin
+	for (int i = begin; i < end && itr != Server::get_songs_by_name()->end(); i++, itr++)
 	{
-		cout << *itr << endl;
+		cout << itr->second << endl;
 	}
-	if (itr == m_songs_by_name->end()) {
+	if (itr == Server::get_songs_by_name()->end()) {
 		os << "No more songs :(" << endl;
 	}
 	return os;

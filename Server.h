@@ -28,7 +28,7 @@ private:
 	template<typename T>
 	static void remove_song_from_collection(T& songs_by_field, Song* song);
 public:
-	Server();
+	//Server();
 	//getters
 	static unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*>* get_sorted_by_alphabet_songs(); //default comparison (by name)

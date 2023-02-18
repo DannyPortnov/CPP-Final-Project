@@ -22,21 +22,13 @@ private:
 	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
 	unordered_map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlist.
 													   // better comlexity when using un_ordered_map.
-	//map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlist
-
-
-
+	//map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlis
 
 	static const int num_of_songs_to_print = 10;
 	ostream& print(ostream& os, int begin, int end) const;
 	int Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 		multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const;
 	Song* Pick_Song(string song_name);
-	void Update_Playlists_Map();
-
-
-
-
 
 public:
 	Library(); //what are the Update methods?
@@ -46,12 +38,13 @@ public:
 	void Add(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
 	//Deletes a song from the library
 	void Delete(int id);
+	ostream& Print(ostream& os, int begin, int end) const;
 	//Deletes a song from the library
 	void Delete(string song_name);
 	void PrintSong(int id);
 	void PrintSong(string song_name);
 	void Add2PL(int id, const string& playlist_name);
-	void RemoveFromPL(string song_name, const string& playlist_name); //what if there's more than one song called like this?
+	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
 	void PrintPL();
 	void Update(string song_name, string new_name = "", string artist = "", string album = ""
 		, string genre = "", string duration = "");
