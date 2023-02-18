@@ -88,6 +88,8 @@ public:
 	void update_most_recent(int id);
 	//update most played songs playlist
 	void update_most_played();
+	//update deleted songs playlist
+	void update_deleted_songs();
 
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist

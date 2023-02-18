@@ -355,7 +355,7 @@ void Library::Print_No_Input_Parameters_Error()
 //since PlayAll and PlayAllRandom uses Play(id), we don't need to worry about the update of most_played, most_recent
 void Library::play_song(Song* song) {
 	cout << "Now playing: " << *song << endl;
-	song->Play();
+	song->Play(); // here plays_counter updates
 	update_most_played();
 	update_most_recent(song->get_id());
 }
@@ -622,6 +622,8 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 //}  
 #pragma endregion
 
+//todo: fix implementation, a deleted song needs to go to deleted playlist, not to be permanantly deleted! 
+//need to add this song to m_deleted playlist
 void Library::Delete_Song(string song_name)
 {
 	try
@@ -638,10 +640,14 @@ void Library::Delete_Song(string song_name)
 		return;
 	}
 }
+
 void Library::Print_Not_Found_By_Name_Error(std::string& song_name)
 {
 	cout << song_name << " isn't present in the server." << endl;
 }
+
+//todo: fix implementation, a deleted song needs to go to deleted playlist, not to be permanantly deleted! 
+//need to add this song to m_deleted playlist
 void Library::Delete_Song(int id)
 {
 	try
