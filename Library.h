@@ -82,9 +82,10 @@ public:
 	void PlayAll();
 	//gets the data structure from Server!
 	void PlayRandom();
-
+	//play song and update song data
+	void play_song(Song* song);
 	//update recent songs playlist by using song id
-	void update_recent(int id);
+	void update_most_recent(int id);
 	//update most played songs playlist
 	void update_most_played();
 

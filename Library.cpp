@@ -143,12 +143,13 @@ void Library::PrintPL() {
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name)
 {
+	auto playlist = m_user_playlists.find(playlist_name)->second;
 	if (check_if_user_playlist_exist(playlist_name)) {
-		if (m_user_playlists.find(playlist_name)->second->check_if_song_exist_in_playlist(Server::find_song_by_id(id)->get_name())) {
+		if (playlist->check_if_song_exist_in_playlist(Server::find_song_by_id(id)->get_name())) {
 			cout << "This Song Is Already In The Playlist!" << endl;
 		}
 		else {
-			m_user_playlists.find(playlist_name)->second->add_song_to_playlist(Server::find_song_by_id(id));
+			playlist->add_song_to_playlist(Server::find_song_by_id(id));
 			cout << "Song Was Successfully Added!" << endl;
 		}
 	}
@@ -158,7 +159,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 			cout << "A Playlist With The Name: " << playlist_name << " Was Created!" << endl;
 			create_playlist(playlist_name); // creates the playlist automatically
 		}
-		m_user_playlists.find(playlist_name)->second->add_song_to_playlist(Server::find_song_by_id(id));
+		playlist->add_song_to_playlist(Server::find_song_by_id(id));
 		cout << "Song Was Successfully Added!" << endl;
 	}
 	else {
@@ -357,6 +358,16 @@ void Library::Print_No_Input_Parameters_Error()
 	cout << "No paramters to updated" << endl;
 }
 
+//this method plays a song, updates most_played, most_recent stats 
+//can be found in Play(song_name), Play(id). 
+//since PlayAll and PlayAllRandom uses Play(id), we don't need to worry about the update of most_played, most_recent
+void Library::play_song(Song* song) {
+	cout << "Now playing: " << *song << endl;
+	song->Play();
+	update_most_played();
+	update_most_recent(song->get_id());
+}
+
 void Library::Play(string song_name)
 {
 	auto song = Server::find_by_name(song_name);
@@ -371,16 +382,14 @@ void Library::Play(string song_name)
 		cout << "You didn't choose a specific song to play." << endl;
 		return;
 	}
-	cout << "Now playing: " << *song_to_play << endl;
-	song_to_play->Play();
+	play_song(song_to_play);
 
 }
 
 void Library::Play(int id)
 {
 	auto song_to_play = Server::find_song_by_id(id);
-	cout << "Now playing: " << *song_to_play << endl;
-	song_to_play->Play();
+	play_song(song_to_play);
 }
 
 bool Library::check_if_continue_playing() {
@@ -654,7 +663,7 @@ void Library::Delete_Song(int id)
 }
 
 // update by using song id
-void Library::update_recent(int id) {
+void Library::update_most_recent(int id) {
 	Server::update_recently_played(id);
 	auto recently_played = Server::get_recently_played();
 	m_recent->clear_all_playlist();
@@ -677,8 +686,6 @@ void Library::update_most_played() { // need to be called after playing a song a
 		m_most_played->add_song_to_playlist(it->second);
 	}
 }
-
-
 
 
 ostream& Library::Print(ostream& os, int begin, int end) const
