@@ -1,7 +1,6 @@
 #ifndef SONG_H
 #define SONG_H
-#include <string>
-#include "Player.h"
+#include "AudioFile.h"
 //#include <Phonon/MediaSource>
 //#include <Phonon/MediaObject>
 #include <iostream>
@@ -13,37 +12,27 @@ using namespace std;
 
 
 //int Song::id_code = 0;
-class Song
+class Song : AudioFile
 {
 private:
-	string m_song_name; // todo: maybe to move to an abstract class: audioFile
 	string m_artist;
 	string m_album;
 	string m_genre;
-	string m_file_path; // todo: maybe to move to an abstract class: audioFile
-	int m_release_date; // todo: maybe to move to an abstract class: audioFile
-	string m_duration; //m:ss format
-	static int id_code; // todo: maybe to move to an abstract class: audioFile
-	int m_id_code; // todo: maybe to move to an abstract class: audioFile
-	Player m_player; //todo: add a counter to plays // todo: maybe to move to an abstract class: audioFile
 public:
-	Song(string song_name, string file_path, string album="",
-		string artist="", string genre="", int release_date=0);
+	Song(string song_name, string file_path,
+	string album="",string artist="", string genre="", int release_date=0, string duration = "");
 	void Play(); //plays a song // todo: maybe to move to an abstract class: audioFile
 
-	const string& get_name() const; // get the name of the song
-	const string& get_path() const; // get the name of the song
-	const string& get_album() const; // get the name of the song
-	const string& get_genre() const; // get the name of the song
-	const string& get_artist() const; // get the name of the song
-	const int get_id() const; // get the name of the song
+	
+	const string& get_album() const; 
+	const string& get_genre() const;
+	const string& get_artist() const; 
 
-	void set_id(int id);
-	void set_name(string& name);
+
 	void set_artist(string& artist);
 	void set_album(string& album);
 	void set_genre(string& genre);
-	void set_duration(string& duration);
+
 
 	//Song& operator=(const Song& exisiting_song);
 	
