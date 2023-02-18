@@ -32,8 +32,7 @@ void Song::Play()
 {
 	update_plays_counter();
 	m_player.play(m_file_path);
-	//Library::update_recent(m_id);
-	//todo: add the song to Recent 
+	//the most_played, and most_recent update is made in Library and Server
 }
 
 // update when a song is played
