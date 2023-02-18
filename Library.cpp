@@ -223,12 +223,19 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name)
 void Library::Update_Song(string song_name, string new_name, string artist,
 	string album, string genre, string duration)
 {
-	auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
-	if (picked_song != nullptr) {
-		Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
+	try
+	{
+		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
+		if (picked_song != nullptr) {
+			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
+			return;
+		}
+		cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
+	}
+	catch (const std::exception&) //if caught, user canceled picking the song
+	{
 		return;
 	}
-	cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
 #pragma region deleting than adding
 	//if (new_name.empty() && artist.empty() && album.empty()
 //	&& genre.empty() && genre.empty() && duration.empty()) {
@@ -344,8 +351,15 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name, stri
 		cout << "Episode was already added." << endl;
 		return;
 	}
-	auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
-	Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
+	try
+	{
+		auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
+		Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
+	}
+	catch (const std::exception&) //if caught, return to main.
+	{
+		return;
+	}
 
 }
 template <class T>
@@ -368,7 +382,7 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 		cin >> answer;
 	} while (answer < 0 || answer > number_of_media_items); //todo: check string input
 	if (answer == 0) {
-		return nullptr; //todo: differentiate between not finding and canceling
+		throw exception();
 	}
 	auto& iterator = filtered_media.first;
 	advance(iterator, answer - 1);
@@ -434,12 +448,19 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 
 void Library::Delete(string song_name)
 {
-	auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
-	if (picked_song != nullptr) {
-		Server::Permanent_Delete_Song(picked_song);
+	try
+	{
+		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
+		if (picked_song != nullptr) {
+			Server::Permanent_Delete_Song(picked_song);
+			return;
+		}
+		cout << song_name << " isn't present in the server." << endl;
+	}
+	catch (const std::exception&)
+	{
 		return;
 	}
-	cout << song_name << " isn't present in the server." << endl;
 }
 void Library::Delete(int id)
 {
