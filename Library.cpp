@@ -203,13 +203,15 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 }
 
 
-
 //Asks the user which song he meant and updates the choosen one.
-void Library::Update_Song(string song_name, string new_name, string artist,
-	string album, string genre, string duration)
+void Library::Update_Song(string song_name, string new_name,
+ string artist, string album, string genre, string duration, int release_date)
 {
 	try
 	{
+		if (Are_All_Parameters_Empty(artist, album, genre, duration, new_name) && release_date == 0) {
+			Print_No_Input_Parameters_Error();
+		}
 		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
 		if (picked_song != nullptr) {
 			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
@@ -221,17 +223,52 @@ void Library::Update_Song(string song_name, string new_name, string artist,
 	{
 		return;
 	}
-
 }
+
+////Asks the user which song he meant and updates the choosen one.
+//void Library::Update_Episode(string episode_name, string new_name, string duration, int release_date)
+//{
+//	try
+//	{
+//		if (Are_All_Parameters_Empty(new_name, duration) && release_date == 0) {
+//			Print_No_Input_Parameters_Error();
+//		}
+//		auto picked_episode = Pick_Media(episode_name, Server::get_());
+//		if (picked_song != nullptr) {
+//			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
+//			return;
+//		}
+//		Print_Not_Found_By_Name_Error(song_name);
+//	}
+//	catch (const std::exception&) //if caught, user canceled picking the song
+//	{
+//		return;
+//	}
+//}
+
+
+bool Library::Are_All_Parameters_Empty(const string & param1,
+ const string & param2, const string & param3 = "", const string & param4 = "", const string & param5 = "")
+{
+	return param1.empty() && param2.empty() && param3.empty() && param4.empty();
+}
+
+//void Library::Are_All_Parameters_Empty(std::string& artist, std::string& album, std::string& genre, std::string& duration)
+//{
+//	std::vector<std::string> params = { artist, album, genre,duration };
+//	bool allEmpty = std::all_of(std::begin(params),
+//		std::end(params),
+//		[](const std::string& str) {
+//			return str.empty();
+//		});
+//}
+
 //Find choosen song and updates according to the parameters recieved
-void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration)
+void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration, int release_date)
 {
 	try
 	{
-		auto picked_song = Server::find_song_by_id(song_id);
-		if (!new_name.empty()) {
-			picked_song->set_name(new_name);
-		}
+		auto picked_song= Update_Media_By_Id(song_id, Server::find_song_by_id, new_name, duration, release_date);
 		if (!artist.empty()) {
 			picked_song->set_artist(artist);
 		}
@@ -241,19 +278,72 @@ void Library::Update_Song(int song_id, string new_name, string artist, string al
 		if (!genre.empty()) {
 			picked_song->set_album(genre);
 		}
-		if (!duration.empty()) {
-			picked_song->set_duration(duration);
-		}
 	}
 	catch (const std::exception&)
 	{
-		Print_Not_Found_By_Id_Error(song_id);
+		Print_Not_Found_By_Id_Error(song_id, typeid(Song).name());
 	}
 }
 
-void Library::Print_Not_Found_By_Id_Error(int song_id)
+void Library::UpdatePodcast(string podcast_name, string new_name)
 {
-	cout << "Song with id " << song_id << " doesn't exist in server. Please add it first" << endl;
+	try
+	{
+		if (new_name.empty()) {
+			Print_No_Input_Parameters_Error();
+		}
+		auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
+		if (picked_podcast != nullptr) {
+			picked_podcast->Set_Podcast_Name(new_name); //not empty!
+			return;
+		}
+		Print_Not_Found_By_Name_Error(podcast_name);
+	}
+	catch (const std::exception&) //if caught, user canceled picking the song
+	{
+		return;
+	}
+}
+
+void Library::UpdateEpisode(int episode_id, string new_name, string duration, int release_date)
+{
+	try
+	{
+		Update_Media_By_Id(episode_id, Server::find_episode_by_id, new_name, duration, release_date);
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Id_Error(episode_id, typeid(Episode).name());
+	}
+	
+}
+
+template <class T>
+T* Library::Update_Media_By_Id(int media_id, T* (*find_media_by_id)(int), string new_name, string duration, int release_date)
+{
+	//Here if all paramters are empty it does nothing
+	auto picked_media = find_media_by_id(media_id);
+	if (!new_name.empty()) {
+		picked_media->set_name(new_name);
+	}
+	if (!duration.empty()) {
+		picked_media->set_duration(duration);
+	}
+	if (release_date != 0) {
+		picked_media->set_release_date(release_date);
+	}
+	return picked_media;
+}
+
+
+void Library::Print_Not_Found_By_Id_Error(int item_id, string item_type)
+{
+	cout << item_type << " with id " << item_id << " doesn't exist in server. Please add it first" << endl;
+}
+
+void Library::Print_No_Input_Parameters_Error()
+{
+	cout << "No paramters to updated" << endl;
 }
 
 void Library::Play(string song_name)
@@ -432,7 +522,7 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 //}  
 #pragma endregion
 
-void Library::Delete(string song_name)
+void Library::Delete_Song(string song_name)
 {
 	try
 	{
@@ -452,7 +542,7 @@ void Library::Print_Not_Found_By_Name_Error(std::string& song_name)
 {
 	cout << song_name << " isn't present in the server." << endl;
 }
-void Library::Delete(int id)
+void Library::Delete_Song(int id)
 {
 	try
 	{
@@ -460,7 +550,7 @@ void Library::Delete(int id)
 	}
 	catch (const std::exception&)
 	{
-		Print_Not_Found_By_Id_Error(id);
+		Print_Not_Found_By_Id_Error(id, typeid(Song).name());
 	}
 }
 

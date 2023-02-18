@@ -27,6 +27,10 @@ private:
 
 	static const int num_of_songs_to_print = 10;
 	ostream& print(ostream& os, int begin, int end) const;
+
+	template<class T>
+	T* Update_Media_By_Id(int episode_id, T*(*f)(int), string new_name, string duration, int release_date);
+
 	//Song* Pick_Song(string song_name);
 	//Podcast* Pick_Podcast(string episode_name);
 	//Returns the choosen song. If wrong name returns nullptr!
@@ -35,7 +39,9 @@ private:
 	void ask_user_to_remove_song(Song* song, Playlist* playlist);
 	bool check_if_user_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
-	void Print_Not_Found_By_Id_Error(int song_id);
+	void Print_Not_Found_By_Id_Error(int song_id, string item_type);
+	void Print_No_Input_Parameters_Error();
+	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
 public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
@@ -46,27 +52,24 @@ public:
 	void Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
 		string duration = "", int release_Date = 0);
 	//Deletes a song from the library
-	void Delete(int id);
+	void Delete_Song(int id);
 	ostream& Print(ostream& os, int begin, int end) const;
 	//Deletes a song from the library
-	void Delete(string song_name);
+	void Delete_Song(string song_name);
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
 	void PrintSong(int id);
 	void PrintSong(string song_name);
 	void Add2PL(int id, const string& playlist_name);
 	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
 	void PrintPL();
-	void Update_Song(string song_name, string new_name = "", string artist = "", string album = ""
-		, string genre = "", string duration = "");
-	void Update_Song(int song_id, string new_name = "", string artist = "", string album = ""
-		, string genre = "", string duration = "");
-	
-	void UpdatePodcast(string song_name, string new_name = "", string artist = "", string album = ""
-		, string genre = "", string duration = "");
-	void UpdateEpisode(int song_id, string new_name = "", string artist = "", string album = ""
-		, string genre = "", string duration = "");
-	void UpdateEpisode(string song_name, string new_name = "", string artist = "", string album = ""
-		, string genre = "", string duration = "");
+	void Update_Song(string song_name, string new_name = "", string artist = "",
+ string album = "", string genre = "", string duration = "", int release_date = 0);
+	void Update_Song(int song_id, string new_name = "", string artist = "",
+ string album = "", string genre = "", string duration = "", int release_date = 0);
+	//Update podcast's name
+	void UpdatePodcast(string podcast_name, string new_name = "");
+	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", int release_date=0);
+	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0);
 	//gets the data structure from Server!
 	void Play(string song_name);
 	//gets the data structure from Server!
