@@ -4,6 +4,7 @@
 #include "Song.h"
 #include "Playlists.h"
 #include <map>
+#include <unordered_map>
 #include <array>
 #include "Server.h"
 
@@ -13,16 +14,30 @@ class Library
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
+	Playlist* m_favorites;
+	Playlist* m_daily_mix;
+	Playlist* m_recent;
+	Playlist* m_most_played;
+	Playlist* m_deleted;
+	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
+	unordered_map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlist.
+													   // better comlexity when using un_ordered_map.
+	//map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlist
+
+
+
+
 	static const int num_of_songs_to_print = 10;
-	map<int,Song*>* m_songs_by_id;
-	multiset<Song*>* m_songs_by_name;
-	Playlists* m_playlists;  //maybe static
-	map<string, Playlist*>* m_playlists_map;
 	ostream& print(ostream& os, int begin, int end) const;
 	int Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 		multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const;
 	Song* Pick_Song(int number_of_songs, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end);
 	void Update_Playlists_Map();
+
+
+
+
+
 public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
@@ -35,14 +50,21 @@ public:
 	void Delete(string song_name);
 	void PrintSong(int id);
 	void PrintSong(string song_name);
-	void Add2PL(int id, string playlist_name);
-	void RemoveFromPL(string song_name, string playlist_name); //what if there's more than one song called like this?
+	void Add2PL(int id, const string& playlist_name);
+	void RemoveFromPL(string song_name, const string& playlist_name); //what if there's more than one song called like this?
 	void PrintPL();
 	//gets the data structure from Server!
 	void Play(string song_name);
 	//gets the data structure from Server!
 	void Play(int id);
-	
+
+	void print_all_playlists(); // print all playlists in library
+	void create_playlist(const string& playlist_name); // create a new playlist
+	void delete_playlist(Playlist* playlist); // delete a playlist
+	bool check_if_playlist_exist(const string& playlist_name);
+	bool check_if_playlist_can_be_edited(const string& playlist_name);
+	char ask_user_to_remove_song(Song* song, const string& playlist_name);
+
 };
 
 #endif

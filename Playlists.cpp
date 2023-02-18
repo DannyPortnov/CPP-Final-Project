@@ -32,6 +32,7 @@ void Playlists::Add(const string& playlist_name) {
 	}
 }
 
+//delete a playlist
 void Playlists::Delete(Playlist* playlist) {
 	if (playlist_names.count(playlist->get_name()) != 0) {
 		playlist_names.erase(playlist->get_name());
@@ -49,7 +50,7 @@ void Playlists::Delete(Playlist* playlist) {
 	}	
 }
 
-
+// print all of the playlists exist.
 void Playlists::Print() {
 	int i = 1;
 	cout << "List Of Playlists:" << endl;

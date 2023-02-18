@@ -16,6 +16,7 @@ private:
 	Playlist* m_deleted;
 	set<string> playlist_names; // check if a name exists in order to control the name through every playlist we create
 	set<Playlist*> user_playlists; // store the user playlists
+	//map<string, Playlist*> m_user_playlists; // store the user playlists
 
 public:
 	//Playlists(Playlist* playlist);
