@@ -145,13 +145,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 {
 	auto playlist = m_user_playlists.find(playlist_name)->second;
 	if (check_if_user_playlist_exist(playlist_name)) {
-		if (playlist->check_if_song_exist_in_playlist(Server::find_song_by_id(id)->get_name())) {
-			cout << "This Song Is Already In The Playlist!" << endl;
-		}
-		else {
-			playlist->add_song_to_playlist(Server::find_song_by_id(id));
-			cout << "Song Was Successfully Added!" << endl;
-		}
+		playlist->add_song_to_playlist(Server::find_song_by_id(id)); // we check if a song exist in playlist in add_song_to_playlist
 	}
 	else if (check_if_playlist_can_be_edited(playlist_name)) { 
 		if (playlist_name != m_favorites->get_name()) {
