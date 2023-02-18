@@ -215,10 +215,12 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name)
 void Library::Update(string song_name, string new_name, string artist,
 	string album, string genre, string duration)
 {
-	auto picked_song = Pick_Song(song_name);
+	auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
 	if (picked_song != nullptr) {
 		Update(picked_song->get_id(), new_name, artist, album, genre, duration);
+		return;
 	}
+	cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
 	#pragma region deleting than adding
 	//if (new_name.empty() && artist.empty() && album.empty()
 //	&& genre.empty() && genre.empty() && duration.empty()) {
@@ -316,35 +318,104 @@ void Library::Add(string song_name, string file_path, string artist = "",
 #pragma endregion
 }
 
-//Returns the choosen song. If wrong name returns nullptr!
-Song* Library::Pick_Song(string song_name) {
-	unordered_multimap<string, Song*> all_songs = *Server::get_songs_by_name();
-	auto filtered_songs = all_songs.equal_range(song_name);
-	int number_of_songs = all_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
-	if (number_of_songs == 0) {
-		cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
-		return nullptr; 
+void Library::Add_Podcast_Episode(Episode* episode)
+{
+	auto picked_podcast = Pick_Media(episode->get_series_name(), Server::get_podcasts_by_name());
+	if (picked_podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
+		picked_podcast = new Podcast();
+		picked_podcast->Add_Episode(episode);
+		Server::Upload_Podcast_Series(picked_podcast);
+		return;
 	}
-	if (number_of_songs == 1) {
-		return filtered_songs.first->second;
+	if (picked_podcast->get_podcast()->count(episode) > 0) { //check that the episode is unique
+		cout << "Episode already exists in the choosen podcast" << endl;
+		return;
+	}
+	picked_podcast->Add_Episode(episode); //Adds a UNIQUE episode to an EXISTING podcast
+}
+template <class T>
+T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {
+	auto filtered_media = collection_to_search.equal_range(media_name);
+	int number_of_media_items = collection_to_search.count(media_name); //O(log n), distance is O(n). overall doesn't matter
+	if (number_of_media_items == 0) {
+		return nullptr;
+	}
+	if (number_of_media_items == 1) {
+		return filtered_media.first->second;
 	}
 	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
-	for (auto& iterator = filtered_songs.first; iterator != filtered_songs.second; ++iterator, ++i) {//loops over all songs to delete
+	for (auto& iterator = filtered_media.first; iterator != filtered_media.second; ++iterator, ++i) {//loops over all podcasts
 		cout << i << " - " << iterator->second << endl;//prints numbered songs
 	}
 	int answer;
 	do {
-		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
+		cout << "Please choose a number between 1 and " << number_of_media_items << " (0 to cancel): ";
 		cin >> answer;
-	} while (answer < 0 || answer > number_of_songs);
+	} while (answer < 0 || answer > number_of_media_items);
 	if (answer == 0) {
 		return nullptr;
 	}
-	auto& iterator = filtered_songs.first;
+	auto& iterator = filtered_media.first;
 	advance(iterator, answer - 1);
 	return iterator->second;
 }
+#pragma region Previous implementation of pick_podcast and pick_song
 
+//Podcast* Library::Pick_Podcast(string podcast_name) {
+//	auto& all_podcasts = *Server::get_podcasts_by_name();
+//	auto filtered_podcasts = all_podcasts.equal_range(podcast_name);
+//	int number_of_songs = all_podcasts.count(podcast_name); //O(log n), distance is O(n). overall doesn't matter
+//	if (number_of_songs == 0) {
+//		return nullptr;
+//	}
+//	if (number_of_songs == 1) {
+//		return filtered_podcasts.first->second;
+//	}
+//	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
+//	for (auto& iterator = filtered_podcasts.first; iterator != filtered_podcasts.second; ++iterator, ++i) {//loops over all podcasts
+//		cout << i << " - " << iterator->second << endl;//prints numbered songs
+//	}
+//	int answer;
+//	do {
+//		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
+//		cin >> answer;
+//	} while (answer < 0 || answer > number_of_songs);
+//	if (answer == 0) {
+//		return nullptr;
+//	}
+//	auto& iterator = filtered_podcasts.first;
+//	advance(iterator, answer - 1);
+//	return iterator->second;
+//}
+//
+//
+//Song* Library::Pick_Song(string song_name) {
+//	unordered_multimap<string, Song*> all_songs = *Server::get_songs_by_name();
+//	auto filtered_songs = all_songs.equal_range(song_name);
+//	int number_of_songs = all_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
+//	if (number_of_songs == 0) {
+//		return nullptr; 
+//	}
+//	if (number_of_songs == 1) {
+//		return filtered_songs.first->second;
+//	}
+//	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
+//	for (auto& iterator = filtered_songs.first; iterator != filtered_songs.second; ++iterator, ++i) {//loops over all songs to delete
+//		cout << i << " - " << iterator->second << endl;//prints numbered songs
+//	}
+//	int answer;
+//	do {
+//		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
+//		cin >> answer;
+//	} while (answer < 0 || answer > number_of_songs);
+//	if (answer == 0) {
+//		return nullptr;
+//	}
+//	auto& iterator = filtered_songs.first;
+//	advance(iterator, answer - 1);
+//	return iterator->second;
+//}  
+#pragma endregion
 
 int Library::Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
 	multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const {
@@ -357,10 +428,12 @@ int Library::Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song
 
 void Library::Delete(string song_name)
 {
-	auto picked_song = Pick_Song(song_name);
+	auto picked_song = Pick_Media<Song>(song_name, Server::get_songs_by_name());
 	if (picked_song != nullptr) {
 		Server::Permanent_Delete_Song(picked_song);
+		return;
 	}
+	cout <<  song_name << " isn't present in the server." << endl;
 }
 void Library::Delete(int id)
 {
