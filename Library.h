@@ -8,6 +8,8 @@
 #include <array>
 #include "Server.h"
 
+#define max_most_played 10
+
 using namespace std;
 
 class Library
@@ -83,7 +85,9 @@ public:
 
 	//update recent songs playlist by using song id
 	void update_recent(int id);
-	
+	//update most played songs playlist
+	void update_most_played();
+
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist
 	void delete_playlist(Playlist* playlist); // delete a playlist

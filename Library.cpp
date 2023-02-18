@@ -666,6 +666,18 @@ void Library::update_recent(int id) {
 	}
 }
 
+// update most played song using the server method.
+void Library::update_most_played() { // need to be called after playing a song and after the m_plays_counter is updated!
+	Server::update_most_played();
+	auto most_played = Server::get_most_played();
+	m_most_played->clear_all_playlist();
+	multimap<int, Song*>::iterator it = most_played->end();
+	for (int i = 0; i < max_most_played; i++) {
+		it--;
+		m_most_played->add_song_to_playlist(it->second);
+	}
+}
+
 
 
 
