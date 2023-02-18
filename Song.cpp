@@ -25,7 +25,9 @@ const string& Song::get_artist() const
 
 void Song::Play()
 {
+	update_plays_counter();
 	m_player.play(m_file_path);
+	//Library::update_recent(m_id);
 	//todo: add the song to Recent 
 }
 

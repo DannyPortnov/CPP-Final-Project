@@ -1,6 +1,7 @@
 #ifndef SONG_H
 #define SONG_H
 #include "AudioFile.h"
+#include "Library.h"
 //#include <Phonon/MediaSource>
 //#include <Phonon/MediaObject>
 #include <iostream>
