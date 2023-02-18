@@ -139,7 +139,6 @@ void Library::PrintPL() {
 //	return &user_playlists;
 //}
 
-//todo: maybe to move the checks of if the song is in a playlist to the add_to playlist method in playlsits.
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name)
 {
