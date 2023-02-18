@@ -49,18 +49,18 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 
 void Server::Permanent_Delete_Song(Song* song)
 {
-	#pragma region loop for m_songs_by_alphabet_order 
-		//// Find the range of songs with the same name as the given song
-	//auto range = m_songs_by_alphabet_order.equal_range(song->get_name());
+#pragma region loop for m_songs_by_alphabet_order 
+	//// Find the range of songs with the same name as the given song
+//auto range = m_songs_by_alphabet_order.equal_range(song->get_name());
 
-	//// Loop through relevant songs in m_songs_by_alphabet_order 
-	//for (auto& iterator = range.first; iterator != range.second; ++iterator) {
-	//	if (iterator->second == song) {  // Check if the song pointer matches
-	//		m_songs_by_alphabet_order.erase(iterator);  // Erase the song from the multimap
-	//		break;  // Exit the loop once the song is found and removed
-	//	}
-	//}  
-	#pragma endregion
+//// Loop through relevant songs in m_songs_by_alphabet_order 
+//for (auto& iterator = range.first; iterator != range.second; ++iterator) {
+//	if (iterator->second == song) {  // Check if the song pointer matches
+//		m_songs_by_alphabet_order.erase(iterator);  // Erase the song from the multimap
+//		break;  // Exit the loop once the song is found and removed
+//	}
+//}  
+#pragma endregion
 
 	remove_song_from_collection(m_all_songs_by_album, song); //check that that works
 	remove_song_from_collection(m_all_songs_by_genre, song);
@@ -73,7 +73,7 @@ void Server::Permanent_Delete_Song(Song* song)
 
 template <typename T>
 void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
-	auto it = songs_by_field.find(song); 
+	auto it = songs_by_field.find(song);
 	if (it != songs_by_field.end() && it->second == song) {
 		songs_by_field.erase(it);
 	}
@@ -93,10 +93,13 @@ void Server::Destory_Allocations(T& collection)
 }
 
 
-//Returns a unique song based on its id
+//Returns a unique song based on its id. If doesn't exists throws exception
 Song* Server::find_song_by_id(int id)
 {
-	return m_all_songs_by_id[id];
+	if (m_all_songs_by_id.count(id) > 0) {
+		return m_all_songs_by_id[id];
+	}
+	throw exception();
 }
 
 unordered_multiset<Song*>* Server::find_by_name(string& name)

@@ -230,44 +230,45 @@ void Library::Update_Song(string song_name, string new_name, string artist,
 			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
 			return;
 		}
-		cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
+		Print_Not_Found_By_Name_Error(song_name);
 	}
 	catch (const std::exception&) //if caught, user canceled picking the song
 	{
 		return;
 	}
-#pragma region deleting than adding
-	//if (new_name.empty() && artist.empty() && album.empty()
-//	&& genre.empty() && genre.empty() && duration.empty()) {
-//	cout << "No information to update" << endl;
-//	return;
-//}
-//auto& file_path_of_song = Pick_Song(song_name)->get_path();
-//Delete(song_name);
-//Add(new_name, file_path_of_song, artist, album, genre, duration);  
-#pragma endregion
 
 }
 //Find choosen song and updates according to the parameters recieved
 void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration)
 {
-	//todo: add check to see if id exists
-	auto picked_song = Server::find_song_by_id(song_id);
-	if (!new_name.empty()) {
-		picked_song->set_name(new_name);
+	try
+	{
+		auto picked_song = Server::find_song_by_id(song_id);
+		if (!new_name.empty()) {
+			picked_song->set_name(new_name);
+		}
+		if (!artist.empty()) {
+			picked_song->set_artist(artist);
+		}
+		if (!album.empty()) {
+			picked_song->set_album(artist);
+		}
+		if (!genre.empty()) {
+			picked_song->set_album(genre);
+		}
+		if (!duration.empty()) {
+			picked_song->set_duration(duration);
+		}
 	}
-	if (!artist.empty()) {
-		picked_song->set_artist(artist);
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Id_Error(song_id);
 	}
-	if (!album.empty()) {
-		picked_song->set_album(artist);
-	}
-	if (!genre.empty()) {
-		picked_song->set_album(genre);
-	}
-	if (!duration.empty()) {
-		picked_song->set_duration(duration);
-	}
+}
+
+void Library::Print_Not_Found_By_Id_Error(int song_id)
+{
+	cout << "Song with id " << song_id << " doesn't exist in server. Please add it first" << endl;
 }
 
 void Library::Play(string song_name)
@@ -455,17 +456,27 @@ void Library::Delete(string song_name)
 			Server::Permanent_Delete_Song(picked_song);
 			return;
 		}
-		cout << song_name << " isn't present in the server." << endl;
+		Print_Not_Found_By_Name_Error(song_name);
 	}
 	catch (const std::exception&)
 	{
 		return;
 	}
 }
+void Library::Print_Not_Found_By_Name_Error(std::string& song_name)
+{
+	cout << song_name << " isn't present in the server." << endl;
+}
 void Library::Delete(int id)
 {
-	//todo: after inherting from server, avoid calling Pick_Media when Delete(string song_name) is called from Delete(int id) 
-	Server::Permanent_Delete_Song(Server::find_song_by_id(id));
+	try
+	{
+		Server::Permanent_Delete_Song(Server::find_song_by_id(id));
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Id_Error(id);
+	}
 }
 
 ostream& Library::Print(ostream& os, int begin, int end) const

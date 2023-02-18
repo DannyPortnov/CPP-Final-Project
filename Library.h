@@ -34,7 +34,7 @@ private:
 	char ask_user_to_remove_song(int id, const string& playlist_name);
 	bool check_if_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
-
+	void Print_Not_Found_By_Id_Error(int song_id);
 public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
@@ -49,6 +49,7 @@ public:
 	ostream& Print(ostream& os, int begin, int end) const;
 	//Deletes a song from the library
 	void Delete(string song_name);
+	void Print_Not_Found_By_Name_Error(std::string& song_name);
 	void PrintSong(int id);
 	void PrintSong(string song_name);
 	void Add2PL(int id, const string& playlist_name);
@@ -58,6 +59,7 @@ public:
 		, string genre = "", string duration = "");
 	void Update_Song(int song_id, string new_name = "", string artist = "", string album = ""
 		, string genre = "", string duration = "");
+	
 	void UpdatePodcast(string song_name, string new_name = "", string artist = "", string album = ""
 		, string genre = "", string duration = "");
 	void UpdateEpisode(int song_id, string new_name = "", string artist = "", string album = ""
