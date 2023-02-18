@@ -2,7 +2,7 @@
 
 Song::Song(string song_name, string file_path,
 	string album,string singer, string genre, int release_date, string duration)
-	: AudioFile(song_name, file_path, duration), m_album(album), m_artist(singer), m_genre(genre)
+	: AudioFile(song_name, file_path, duration), m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(0)
 {
 	//to add duration calculation
 }
@@ -28,6 +28,12 @@ void Song::Play()
 	m_player.play(m_file_path);
 	//todo: add the song to Recent 
 }
+
+// update when a song is played
+void Song::update_plays_counter() {
+	m_plays_counter += 1;
+}
+
 
 // returns true if the song names are in the right order.
 bool operator<(const Song& a, const Song& b) {

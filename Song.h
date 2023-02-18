@@ -18,6 +18,7 @@ private:
 	string m_artist;
 	string m_album;
 	string m_genre;
+	int m_plays_counter; // counter for the amount of times the song was played
 public:
 	Song(string song_name, string file_path,
 	string album="",string artist="", string genre="", int release_date=0, string duration = "");
@@ -31,7 +32,7 @@ public:
 	void set_artist(string& artist);
 	void set_album(string& album);
 	void set_genre(string& genre);
-
+	void update_plays_counter();
 
 	//Song& operator=(const Song& exisiting_song);
 	
