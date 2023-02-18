@@ -22,7 +22,8 @@ public:
 	Playlist(string name);
 	~Playlist();
 	void add_song_to_playlist(Song* song);
-	void remove_song_from_playlist(Song* song);
+	void remove_song_from_playlist(const string& song_name);
+	//void remove_song_from_playlist_by_name(const string& song_name);
 	void clear_all_playlist();
 	string get_name() const { return m_playlist_name; }
 	void Play();

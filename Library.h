@@ -65,7 +65,7 @@ public:
 	void delete_playlist(Playlist* playlist); // delete a playlist
 	bool check_if_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
-	char ask_user_to_remove_song(Song* song, const string& playlist_name);
+	char ask_user_to_remove_song(int id, const string& playlist_name);
 
 
 
