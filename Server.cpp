@@ -95,6 +95,8 @@ static unordered_multimap<string, Song*>* get_songs_by_genre() {
 
 }
 static unordered_multimap<string, Podcast*>* get_podcasts_by_name() {
+
+}
 // A template function that takes an unordered map/multimap 
 // and deletes all the values 
 template<class T>
@@ -172,6 +174,11 @@ list<Song*>* Server::get_recently_played() {
 	return &m_recently_played;	
 }
 
+ multimap<int, Song*>* Server::get_most_played() {
+	 return &m_most_played;
+}
+
+
 
 // updates recently played songs
 void Server::update_recently_played(int id) {
@@ -180,6 +187,15 @@ void Server::update_recently_played(int id) {
 		m_recently_played.pop_front();
 	}
 	m_recently_played.push_back(song);
+}
+
+// update the multimap that holds the songs by the order of the last played.
+void Server::update_most_played() {
+	m_most_played.clear(); // clear most played and than add to multimap after, plays_count updated.
+	unordered_map<int, Song*>::iterator it;
+	for (it = m_all_songs_by_id.begin(); it != m_all_songs_by_id.end(); it++) {
+		m_most_played.insert(make_pair(it->second->get_plays_count(), it->second));
+	}
 }
 
 Server::~Server()

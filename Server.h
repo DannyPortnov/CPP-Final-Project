@@ -30,7 +30,9 @@ private:
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
 	static unordered_multimap<string, Song*> m_all_songs_by_genre;
 	static unordered_multimap<string, Podcast*> m_all_podcasts;
+
 	static list<Song*> m_recently_played; // good complexity for insertion/deletion O(1)
+	static multimap<int, Song*> m_most_played; // songs in an oreder from least played to most played
 
 	static unordered_multimap<string, Song*>* find(string& key, unordered_multimap<string, Song*>& collection);
 
@@ -50,7 +52,9 @@ public:
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
 	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
+	
 	static list<Song*>* get_recently_played();
+	static multimap<int, Song*>* get_most_played();
 
 	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 	static Episode* find_episode_by_id(int id); // returns 1 episode, there is a unique ID for every episode
@@ -80,7 +84,8 @@ public:
 
 	// update recently played by song id
 	static void update_recently_played(int id);
-
+	// update most played by checking the amount of times a song was played
+	static void update_most_played();
 
 	//permanently deletes a song from the database COMPLETETLY
 	static void Permanent_Delete_Song(Song* song);
