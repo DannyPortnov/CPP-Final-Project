@@ -38,18 +38,28 @@ Library::~Library() {
 
 void Library::PrintSong(int id)
 {
+	cout << "The song details are:" << endl;
 	cout << Server::find_song_by_id(id)<< endl;
 }
 
-
+// print all songs with this name.
 void Library::PrintSong(string song_name)
 {
 	auto songs = Server::find_by_name(song_name);
-	if (->count() > 1) {
+	auto count = songs->count(song_name);
+	if (count == 0) {
+		cout << "Song wasn't found in the database!" << endl;
 		return;
 	}
-	return ;
-	cout << Server::find_by_name(song_name) << endl;
+	if (count > 1) {
+		cout << "Few songs with the name: " << song_name << " were found: ";
+	}
+	unordered_multimap<string, Song*>::iterator it;
+	int i = 1;
+	for (it = songs->begin(); it != songs->end(); it++) {
+		cout << "(" << i << "). " << *(it->second) << endl; // it->second contains Song*
+		i++;
+	}
 }
 
 // return true if playlist exist, false if not.
@@ -152,7 +162,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 		cout << "Song Was Successfully Added!" << endl;
 	}
 	else {
-		cout << "This Playlist Can Not Be Edited!" << endl;
+		cout << "This Playlist Cannot Be Edited!" << endl;
 	}
 }
 
@@ -250,12 +260,28 @@ void Library::Update(int song_id, string new_name, string artist, string album, 
 
 void Library::Play(string song_name)
 {
-	//todo: niv
+	auto song = Server::find_by_name(song_name);
+	auto count = song->count(song_name);
+	PrintSong(song_name);
+	if (count == 0) {
+		cout << "Song could not be played." << endl;
+		return;
+	}
+	auto song_to_play = Pick_Media(song_name, song);
+	if (song_to_play == nullptr) {
+		cout << "You didn't choose a specific song to play." << endl;
+		return;
+	}
+	cout << "Now playing: " << *song_to_play << endl;
+	song_to_play->Play();
+
 }
 
 void Library::Play(int id)
 {
-	//todo: niv
+	auto song_to_play = Server::find_song_by_id(id);
+	cout << "Now playing: " << *song_to_play << endl;
+	song_to_play->Play();
 }
 
 #pragma region Old implementation of RemoveFromPL
@@ -336,6 +362,8 @@ void Library::Add_Podcast_Episode(Episode* episode)
 	}
 	picked_podcast->Add_Episode(episode); //Adds a UNIQUE episode to an EXISTING podcast
 }
+
+
 template <class T>
 T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {
 	auto filtered_media = collection_to_search.equal_range(media_name);
