@@ -23,6 +23,11 @@ const string& Song::get_artist() const
 	return m_artist;
 }
 
+const int Song::get_plays_count() const {
+	return m_plays_counter;
+}
+
+
 void Song::Play()
 {
 	update_plays_counter();

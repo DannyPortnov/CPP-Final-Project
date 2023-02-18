@@ -29,6 +29,7 @@ public:
 	const string& get_album() const; 
 	const string& get_genre() const;
 	const string& get_artist() const; 
+	const int get_plays_count() const;
 
 	void set_artist(string& artist);
 	void set_album(string& album);
