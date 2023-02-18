@@ -41,10 +41,10 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 		podcast = new Podcast(podcast_name); //deleted in Server
 	}
 	podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
-
-	auto podcast_to_upload = pair<string, Podcast*>(podcast->Get_Podcast_Name(), podcast);
-	m_all_podcasts.insert(podcast_to_upload);
-	m_podcasts_by_alphabet_order.insert(podcast_to_upload);
+	auto& podcast_name = podcast->Get_Podcast_Name();
+	m_all_podcasts.emplace(podcast_name, podcast);
+	m_all_episodes_by_id.emplace(new_episode->get_id(), new_episode);
+	m_podcasts_by_alphabet_order.emplace(podcast_name, podcast);
 }
 
 void Server::Permanent_Delete_Song(Song* song)
@@ -98,6 +98,14 @@ Song* Server::find_song_by_id(int id)
 {
 	if (m_all_songs_by_id.count(id) > 0) {
 		return m_all_songs_by_id[id];
+	}
+	throw exception();
+}
+
+Episode* Server::find_episode_by_id(int id)
+{
+	if (m_all_episodes_by_id.count(id) > 0) {
+		return m_all_episodes_by_id[id];
 	}
 	throw exception();
 }

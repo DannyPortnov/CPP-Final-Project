@@ -18,8 +18,9 @@ private:
 
 	//search - O(1), insertion - O(1), deletion - O(1) - FOR EVERYTHING ELSE
 	static unordered_map<int, Song*> m_all_songs_by_id;
-	static unordered_set<string> m_songs_file_paths;
-	static unordered_set<string> m_episodes_by_file_paths;
+	static unordered_map<int, Episode*> m_all_episodes_by_id;
+	static unordered_set<string> m_songs_file_paths;  //maybe removed this
+	static unordered_set<string> m_episodes_by_file_paths; //maybe removed this
 	static unordered_multimap<string, Song*> m_all_songs_by_artist;
 	static unordered_multimap<string, Song*> m_all_songs_by_name;
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
@@ -45,6 +46,7 @@ public:
 	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
 
 	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
+	static Episode* find_episode_by_id(int id); // returns 1 episode, there is a unique ID for every episode
 
 	//search the data structures based on a parameter
 	static unordered_multimap<string, Song*>* find_by_name(string& name);
