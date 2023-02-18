@@ -30,3 +30,8 @@ void AudioFile::set_duration(string& duration)
 {
 	//todo: add check for format m:ss
 }
+
+void AudioFile::set_release_date(int release_date)
+{
+	m_release_date = release_date;
+}
