@@ -26,8 +26,6 @@ private:
 
 	static const int num_of_songs_to_print = 10;
 	ostream& print(ostream& os, int begin, int end) const;
-	int Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
-		multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const;
 	//Song* Pick_Song(string song_name);
 	//Podcast* Pick_Podcast(string episode_name);
 	//Returns the choosen song. If wrong name returns nullptr!

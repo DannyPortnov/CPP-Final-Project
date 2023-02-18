@@ -30,7 +30,7 @@ Library::~Library() {
 
 void Library::PrintSong(int id)
 {
-	cout << Server::find_song_by_id(id)<< endl;
+	cout << Server::find_song_by_id(id) << endl;
 }
 
 
@@ -58,13 +58,13 @@ bool Library::check_if_playlist_can_be_edited(const string& playlist_name) {
 
 // create a new playlist
 void Library::create_playlist(const string& playlist_name) {
-	if (check_if_playlist_exist(playlist_name)) {	
+	if (check_if_playlist_exist(playlist_name)) {
 		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
 	}
 	else { //todo: check that the name is legal
 		m_user_playlist_names.insert(playlist_name);
 		Playlist* new_playlist = new Playlist(playlist_name);
-	//	m_user_playlists.insert(make_pair(playlist_name, new_playlist));
+		//	m_user_playlists.insert(make_pair(playlist_name, new_playlist));
 		m_user_playlists[playlist_name] = new_playlist;
 	}
 }
@@ -82,7 +82,7 @@ void Library::delete_playlist(Playlist* playlist) {
 	else if (playlist->get_name() == m_deleted->get_name()) {
 		multimap<string, Song*>::iterator it;
 		for (it = playlist->get_songs().begin(); it != playlist->get_songs().end(); it++) {
-			Server::Permanent_Delete_Song(it->second); 									
+			Server::Permanent_Delete_Song(it->second);
 		}
 		playlist->clear_all_playlist();
 	}
@@ -229,7 +229,7 @@ void Library::Update_Song(string song_name, string new_name, string artist,
 		return;
 	}
 	cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
-	#pragma region deleting than adding
+#pragma region deleting than adding
 	//if (new_name.empty() && artist.empty() && album.empty()
 //	&& genre.empty() && genre.empty() && duration.empty()) {
 //	cout << "No information to update" << endl;
@@ -306,12 +306,13 @@ void Library::Play(int id)
 void Library::Add_Song(string song_name, string file_path, string artist = "",
 	string album = "", string genre = "", string duration = "", int release_Date = 0)
 {
-	//todo: check if song exists already
-	//todo: move new to server
-	Server::Upload_Song(new Song(song_name, file_path, album, artist, genre, release_Date));
-	//is deleted in Server::Permanent_Delete_Song
+	if (Server::Does_Song_Exist(file_path)) { //checks uniqueness
+		cout << "Song was already added" << endl;
+		return;
+	}
+	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_Date);
 
-	#pragma region Algorithm to find all songs by that name and choosing specific one
+#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
 	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	//multiset<Song*>::iterator end_of_songs_set;
@@ -337,19 +338,15 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 }
 
 void Library::Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
-	string duration, int release_Date )
+	string duration, int release_Date)
 {
 	if (Server::Does_Episode_Exist(file_path)) { //checks uniqueness
-		cout << "Episode was already added" << endl;
+		cout << "Episode was already added." << endl;
 		return;
 	}
-	auto new_episode = new Episode(file_path, episode_name, release_Date, duration);
 	auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
-	if (picked_podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
-		picked_podcast = new Podcast(podcast_name);
-		Server::Upload_Podcast_Series(picked_podcast);//Upload the new podcast
-	}
-	picked_podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
+	Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
+
 }
 template <class T>
 T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {
@@ -435,15 +432,6 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 //}  
 #pragma endregion
 
-int Library::Count_Songs(multiset<Song*>* songs, string song_name, multiset<Song*>::iterator* start, multiset<Song*>::iterator* end,
-	multiset<Song*>::iterator* first_wanted_song, multiset<Song*>::iterator* last_wanted_song) const {
-
-	auto predicate = [&](const Song* song) { return song->get_name() == song_name; }; //filter songs which have the desired name
-	first_wanted_song = lower_bound(start, end, predicate);
-	last_wanted_song = upper_bound(start, end, predicate);
-	return count_if(start, end, predicate); //count songs with "song_name" name
-}
-
 void Library::Delete(string song_name)
 {
 	auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
@@ -451,9 +439,9 @@ void Library::Delete(string song_name)
 		Server::Permanent_Delete_Song(picked_song);
 		return;
 	}
-	cout <<  song_name << " isn't present in the server." << endl; 
+	cout << song_name << " isn't present in the server." << endl;
 }
-void Library::Delete(int id) 
+void Library::Delete(int id)
 {
 	//todo: after inherting from server, avoid calling Pick_Media when Delete(string song_name) is called from Delete(int id) 
 	Server::Permanent_Delete_Song(Server::find_song_by_id(id));
