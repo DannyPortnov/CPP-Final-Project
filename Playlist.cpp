@@ -126,20 +126,16 @@ Song* Playlist::get_song_by_name(string song_name) {
 
 
 unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const string& song_name) {
+	unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
 	if (check_if_song_exist_in_playlist(song_name) && check_if_songs_have_same_names(song_name)) {
-		unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
 		multimap<string, Song*>::iterator it;
 		for (it = m_songs.begin(); it != m_songs.end(); ++it) {
 			if (it->first == song_name) {
 				same_name_songs->insert(make_pair(it->first, it->second));
 			}
 		}
-		return same_name_songs;
 	}
-	else {
-		return nullptr; //todo: check if safe to delete nullptr, if not then return same_name_songs
-	}
-	
+	return same_name_songs; // delete after finishing using it!
 }
 
 

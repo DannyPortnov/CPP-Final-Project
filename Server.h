@@ -25,7 +25,7 @@ private:
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
 	static unordered_multimap<string, Song*> m_all_songs_by_genre;
 	static unordered_multimap<string, Podcast*> m_all_podcasts;
-	static unordered_multiset<Song*>* find(string& key, unordered_multimap<string, Song*>& collection);
+	static unordered_multimap<string, Song*>* find(string& key, unordered_multimap<string, Song*>& collection);
 
 	template<class T>
 	static void remove_song_from_collection(T& songs_by_field, Song* song);
@@ -47,11 +47,11 @@ public:
 	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 
 	//search the data structures based on a parameter
-	static Song* find_song_by_id(int id);
-	static unordered_multiset<Song*>* find_by_name(string& name);
-	static unordered_multiset<Song*>* find_by_artist(string& singer);
-	static unordered_multiset<Song*>* find_by_album(string& album);
-	static unordered_multiset<Song*>* find_by_genre(string& genre);
+	static unordered_multimap<string, Song*>* find_by_name(string& name);
+	static unordered_multimap<string, Song*>* find_by_artist(string& singer);
+	static unordered_multimap<string, Song*>* find_by_album(string& album);
+	static unordered_multimap<string, Song*>* find_by_genre(string& genre);
+
 
 	//Checks if song was already added to server
 	static bool Does_Song_Exist(const string& file_path);

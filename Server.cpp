@@ -102,21 +102,21 @@ Song* Server::find_song_by_id(int id)
 	throw exception();
 }
 
-unordered_multiset<Song*>* Server::find_by_name(string& name)
+unordered_multimap<string, Song*>* Server::find_by_name(string& name)
 {
-	find(name, m_all_songs_by_name);
+	return find(name, m_all_songs_by_name);
 }
-unordered_multiset<Song*>* Server::find_by_artist(string& singer)
+unordered_multimap<string, Song*>* Server::find_by_artist(string& singer)
 {
-	find(singer, m_all_songs_by_artist);
+	return find(singer, m_all_songs_by_artist);
 }
-unordered_multiset<Song*>* Server::find_by_album(string& album)
+unordered_multimap<string, Song*>* Server::find_by_album(string& album)
 {
-	find(album, m_all_songs_by_album);
+	return find(album, m_all_songs_by_album);
 }
-unordered_multiset<Song*>* Server::find_by_genre(string& genre)
+unordered_multimap<string, Song*>* Server::find_by_genre(string& genre)
 {
-	find(genre, m_all_songs_by_genre);
+	return find(genre, m_all_songs_by_genre);
 }
 bool Server::Does_Song_Exist(const string& file_path)
 {
@@ -134,11 +134,11 @@ bool Server::Does_Episode_Exist(const string& file_path)
 	return false;
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
-unordered_multiset<Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection) {
+unordered_multimap<string, Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection) {
 	auto range = collection.equal_range(key); // range of values that match the given name
-	unordered_multiset<Song*>* filtered_songs = new unordered_multiset<Song*>;
+	unordered_multimap<string, Song*>* filtered_songs = new unordered_multimap<string, Song*>;
 	for (auto& it = range.first; it != range.second; ++it) {
-		filtered_songs->insert(it->second); //inserts each value into the filtered set.
+		filtered_songs->insert(make_pair(it->first, it->second)); //inserts each value into the filtered set.
 	}
 	return filtered_songs;
 }
