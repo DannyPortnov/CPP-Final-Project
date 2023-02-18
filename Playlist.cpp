@@ -112,7 +112,13 @@ multimap<string, Song*> Playlist::get_songs() {
 //todo: need to check if a song is already in the playlist
 // add a song to the playlist. m_songs is a multimap
 void Playlist::add_song_to_playlist(Song* song) {
-	m_songs.insert(make_pair(song->get_name(), song));
+	if (check_if_song_exist_in_playlist(song->get_id())) {
+		cout << "This Song Is Already In The Playlist!" << endl;
+	}
+	else {
+		m_songs.insert(make_pair(song->get_name(), song));
+		cout << "Song Was Successfully Added!" << endl;
+	}
 }
 
 // remove a song from the playlist. m_songs is a multimap
@@ -132,9 +138,10 @@ void Playlist::clear_all_playlist() {
 }
 
 //todo: change to checking by id
-// check if a song exist in the playlist
-bool Playlist::check_if_song_exist_in_playlist(const string& song_name) {
-	if (m_songs.find(song_name) != m_songs.end()) { // if not found, find method returns '.end()' element
+// check if a song exist in the playlist, return true if exist
+bool Playlist::check_if_song_exist_in_playlist(int id) {
+	auto song = Server::find_song_by_id(id);
+	if (m_songs.find(song->get_name()) != m_songs.end()) { // if not found, find method returns '.end()' element
 		return true;
 	}
 	return false;
@@ -150,6 +157,7 @@ bool Playlist::check_if_songs_have_same_names(const string& song_name) {
 
 
 Song* Playlist::get_song_by_name(string song_name) {
+
 	if (check_if_song_exist_in_playlist(song_name)) {
 		if (check_if_songs_have_same_names(song_name) == false) {
 			return m_songs.find(song_name)->second; // return the song that was found
