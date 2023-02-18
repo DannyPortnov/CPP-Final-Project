@@ -17,7 +17,16 @@ const string& AudioFile::get_path() const {
 	return m_file_path;
 }
 
-// get the id of the song
 const int AudioFile::get_id() const {
 	return m_id_code;
+}
+
+void AudioFile::set_name(string& name)
+{
+	m_file_name = name;
+}
+
+void AudioFile::set_duration(string& duration)
+{
+	//todo: add check for format m:ss
 }

@@ -6,7 +6,6 @@
 #include "Player.h"
 using namespace std;
 
-//todo: add Podcast class, will inherit from AudioCollection
 //todo: add more meat here
 //todo: podcasts will be like playlists
 
