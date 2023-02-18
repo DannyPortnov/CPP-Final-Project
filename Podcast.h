@@ -26,12 +26,14 @@ Questions:
 class Podcast 
 {
 private:
-	unordered_set<Episode*> podcast; // podcast is a playlist of episodes (no need to be ordered)
+	unordered_set<Episode*> m_podcast; // podcast is a playlist of episodes (no need to be ordered)
 
 public:
-	Podcast();
-	~Podcast();
-	unordered_set<Episode*> get_podcast() { return &podcast; } // getter
+	//Podcast();
+	//~Podcast();
+	//Adds an episode to the podcast
+	void Add_Episode(Episode* episode);
+	unordered_set<Episode*>* get_podcast() { return &m_podcast; } // getter
 	//todo: check if a setter is needed (podcast should be set only by admin and not by user)
 };
 
