@@ -41,6 +41,7 @@ void Playlist::Play() {
 	multimap<string, Song*>::iterator it;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		cout << "Now playing: " << *it->second << endl;
+		it->second->update_plays_counter();
 		m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
@@ -65,6 +66,7 @@ void Playlist::Play_Random() {
 	// Play the songs of the multimap in the shuffled order
 	for (auto const& song : songs_vector) {
 		cout << "Now playing: " << *(song->second) << endl; //todo: ask if the user want to stop playing after each iteration.
+		song->second->update_plays_counter();
 		m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
@@ -107,6 +109,7 @@ multimap<string, Song*> Playlist::get_songs() {
 	return m_songs;
 }
 
+//todo: need to check if a song is already in the playlist
 // add a song to the playlist. m_songs is a multimap
 void Playlist::add_song_to_playlist(Song* song) {
 	m_songs.insert(make_pair(song->get_name(), song));
@@ -117,6 +120,7 @@ void Playlist::add_song_to_playlist(Song* song) {
 //	m_songs.erase(song->get_name());
 //}
 
+//todo: need to check if a song is already in the playlist
 void Playlist::remove_song_from_playlist(const string& song_name) {
 	m_songs.erase(song_name);
 }
@@ -127,6 +131,7 @@ void Playlist::clear_all_playlist() {
 	m_songs.clear();
 }
 
+//todo: change to checking by id
 // check if a song exist in the playlist
 bool Playlist::check_if_song_exist_in_playlist(const string& song_name) {
 	if (m_songs.find(song_name) != m_songs.end()) { // if not found, find method returns '.end()' element

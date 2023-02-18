@@ -139,7 +139,7 @@ void Library::PrintPL() {
 //	return &user_playlists;
 //}
 
-
+//todo: maybe to move the checks of if the song is in a playlist to the add_to playlist method in playlsits.
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name)
 {
@@ -183,6 +183,7 @@ void Library::ask_user_to_remove_song(Song* song, Playlist* playlist) {
 		cout << "The Song Wasn't Removed!" << endl;
 }
 
+//todo: maybe to move the checks of if the song is in a playlist to the remove from playlist method in playlsits.
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
