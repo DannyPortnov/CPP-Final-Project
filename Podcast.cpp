@@ -2,6 +2,18 @@
 
 Podcast::Podcast(string podcast_name) : m_podcast_name(podcast_name), m_podcast_episodes() {}
 
+Podcast::~Podcast()
+{
+	// Iterate over all episodes in the podcast
+	for (auto& episode : m_podcast_episodes) {
+		delete episode;
+	}
+	// Clear the collection.
+	m_podcast_episodes.clear();
+}
+
+
+
 
 void Podcast::Add_Episode(Episode* episode)
 {

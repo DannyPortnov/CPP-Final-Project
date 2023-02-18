@@ -31,7 +31,7 @@ private:
 	string m_podcast_name;
 public:
 	Podcast(string podcast_name);
-	//~Podcast();
+	~Podcast();
 	//Adds a UNIQUE episode to the podcast
 	void Add_Episode(Episode* episode);
 	const string& Get_Podcast_Name();
