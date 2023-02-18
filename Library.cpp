@@ -220,12 +220,12 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name)
 
 
 //Asks the user which song he meant and updates the choosen one.
-void Library::Update(string song_name, string new_name, string artist,
+void Library::Update_Song(string song_name, string new_name, string artist,
 	string album, string genre, string duration)
 {
 	auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
 	if (picked_song != nullptr) {
-		Update(picked_song->get_id(), new_name, artist, album, genre, duration);
+		Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
 		return;
 	}
 	cout << "No songs named " << song_name << " currently in the server. Please add it first" << endl;
@@ -242,7 +242,7 @@ void Library::Update(string song_name, string new_name, string artist,
 
 }
 //Find choosen song and updates according to the parameters recieved
-void Library::Update(int song_id, string new_name, string artist, string album, string genre, string duration)
+void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration)
 {
 	//todo: add check to see if id exists
 	auto picked_song = Server::find_song_by_id(song_id);
@@ -303,7 +303,7 @@ void Library::Play(int id)
 
 
 //called from the interface ("main")
-void Library::AddSong(string song_name, string file_path, string artist = "",
+void Library::Add_Song(string song_name, string file_path, string artist = "",
 	string album = "", string genre = "", string duration = "", int release_Date = 0)
 {
 	//todo: check if song exists already
@@ -336,20 +336,20 @@ void Library::AddSong(string song_name, string file_path, string artist = "",
 #pragma endregion
 }
 
-void Library::Add_Podcast_Episode(Episode* episode)
+void Library::Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
+	string duration, int release_Date )
 {
-	auto picked_podcast = Pick_Media(episode->get_series_name(), Server::get_podcasts_by_name());
+	if (Server::Does_Episode_Exist(file_path)) { //checks uniqueness
+		cout << "Episode was already added" << endl;
+		return;
+	}
+	auto new_episode = new Episode(file_path, episode_name, release_Date, duration);
+	auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
 	if (picked_podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
-		picked_podcast = new Podcast();
-		picked_podcast->Add_Episode(episode);
-		Server::Upload_Podcast_Series(picked_podcast);
-		return;
+		picked_podcast = new Podcast(podcast_name);
+		Server::Upload_Podcast_Series(picked_podcast);//Upload the new podcast
 	}
-	if (picked_podcast->get_podcast()->count(episode) > 0) { //check that the episode is unique
-		cout << "Episode already exists in the choosen podcast" << endl;
-		return;
-	}
-	picked_podcast->Add_Episode(episode); //Adds a UNIQUE episode to an EXISTING podcast
+	picked_podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
 }
 template <class T>
 T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {

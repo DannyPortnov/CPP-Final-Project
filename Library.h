@@ -41,10 +41,11 @@ public:
 	Library(); //what are the Update methods?
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 		string genre = "", string duration = "", int release_date =0);*/
-	//Adds a song to the library. Maybe asks to which playlist, and allows to create a new playlist? 
-	void AddSong(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
-	//Adds a episode to its podcast. If podcast doesn't exist creates one
-	void Add_Podcast_Episode(Episode* episode);
+	//Creates a song and adds it to the library.
+	void Add_Song(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
+	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
+	void Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
+		string duration = "", int release_Date = 0);
 	//Deletes a song from the library
 	void Delete(int id);
 	ostream& Print(ostream& os, int begin, int end) const;
@@ -55,9 +56,15 @@ public:
 	void Add2PL(int id, const string& playlist_name);
 	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
 	void PrintPL();
-	void Update(string song_name, string new_name = "", string artist = "", string album = ""
+	void Update_Song(string song_name, string new_name = "", string artist = "", string album = ""
 		, string genre = "", string duration = "");
-	void Update(int song_id, string new_name = "", string artist = "", string album = ""
+	void Update_Song(int song_id, string new_name = "", string artist = "", string album = ""
+		, string genre = "", string duration = "");
+	void UpdatePodcast(string song_name, string new_name = "", string artist = "", string album = ""
+		, string genre = "", string duration = "");
+	void UpdateEpisode(int song_id, string new_name = "", string artist = "", string album = ""
+		, string genre = "", string duration = "");
+	void UpdateEpisode(string song_name, string new_name = "", string artist = "", string album = ""
 		, string genre = "", string duration = "");
 	//gets the data structure from Server!
 	void Play(string song_name);
