@@ -18,6 +18,7 @@ void Server::Upload_Song(Song* song)
 
 	m_songs_by_alphabet_order.emplace(name, song); //constructs the element directly in place
 	m_all_songs_by_name.emplace(name, song); //constructs the element directly in place
+	m_songs_file_paths.emplace(song->get_path());
 	m_all_songs_by_id.emplace(song->get_id(), song);
 	if (!album.empty()) {
 		m_all_songs_by_album.emplace(album, song);
@@ -95,6 +96,21 @@ unordered_multiset<Song*>* Server::find_by_album(string& album)
 unordered_multiset<Song*>* Server::find_by_genre(string& genre)
 {
 	find(genre, m_all_songs_by_genre);
+}
+bool Server::Does_Song_Exist(const string& file_path)
+{
+	return m_songs_file_paths.count(file_path) > 0;
+}
+bool Server::Does_Episode_Exist(const string& file_path)
+{
+	for (auto itr = m_all_podcasts.begin(); itr != m_all_podcasts.end(); itr++)
+	{
+		auto temp = itr->second;
+		if (temp->Is_Episode_In_Podcast(file_path)) {
+			return true;
+		}
+	}
+	return false;
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
 unordered_multiset<Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection) {

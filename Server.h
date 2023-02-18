@@ -18,6 +18,8 @@ private:
 
 	//search - O(1), insertion - O(1), deletion - O(1) - FOR EVERYTHING ELSE
 	static unordered_map<int, Song*> m_all_songs_by_id;
+	static unordered_set<string> m_songs_file_paths;
+	static unordered_set<string> m_episodes_by_file_paths;
 	static unordered_multimap<string, Song*> m_all_songs_by_artist;
 	static unordered_multimap<string, Song*> m_all_songs_by_name;
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
@@ -45,6 +47,11 @@ public:
 	static unordered_multiset<Song*>* find_by_artist(string& singer);
 	static unordered_multiset<Song*>* find_by_album(string& album);
 	static unordered_multiset<Song*>* find_by_genre(string& genre);
+
+	//Checks if song was already added to server
+	static bool Does_Song_Exist(const string& file_path);
+	//Checks if episode was already added to server
+	static bool Does_Episode_Exist(const string& file_path);
 
 	//adds the new song to each data structure
 	static void Upload_Song(Song* song);
