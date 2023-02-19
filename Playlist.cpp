@@ -97,7 +97,7 @@ void Playlist::Play_Random() {
 void Playlist::Print() {
 	multimap<string, Song*>::iterator it;
 	int i = 1;
-	cout << "List Of Songs In " << m_playlist_name << " Playlist:" << endl;
+	cout << "List of songs in " << m_playlist_name << " playlist:" << endl;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		cout << "(" << i << "). " << *(it->second) << endl; // it->second contains Song*
 		i++;
@@ -112,18 +112,13 @@ multimap<string, Song*> Playlist::get_songs() {
 // add a song to the playlist. m_songs is a multimap
 void Playlist::add_song_to_playlist(Song* song) {
 	if (check_if_song_exist_in_playlist_by_id(song->get_id())) {
-		cout << "This Song Is Already In The Playlist!" << endl;
+		cout << "This song is already in the playlist!" << endl;
 	}
 	else {
 		m_songs.insert(make_pair(song->get_name(), song));
-		cout << "Song Was Successfully Added!" << endl;
+		cout << "Song was successfully added to " << m_playlist_name << "!" << endl;
 	}
 }
-
-// remove a song from the playlist. m_songs is a multimap
-//void Playlist::remove_song_from_playlist(Song* song) {
-//	m_songs.erase(song->get_name());
-//}
 
 // double checks with the user if the song should be deleted, if yes- returns true.
 bool Playlist::make_sure_to_remove_song(Song* song) {
