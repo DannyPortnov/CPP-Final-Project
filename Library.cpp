@@ -160,44 +160,19 @@ void Library::Add2PL(int id, const string& playlist_name)
 	}
 }
 
-// double checks with the user if the song should be deleted, if yes- removes the song.
-void Library::ask_user_to_remove_song(Song* song, Playlist* playlist) {
-	cout << "You chose to remove the song: " << endl;
-	PrintSong(song->get_id());
-	cout << "Are you sure you want to remove this song from: " << playlist->get_name() << "?" << endl;
-	cout << "Press y/n: ";
-	char answer;
-	cin >> answer;
-	cout << endl;
-	if (answer == 'y') {
-		playlist->remove_song_from_playlist(song->get_name());
-		cout << "Song Was Successfully Removed From Playlist!" << endl;
-	}
-	else
-		cout << "The Song Wasn't Removed!" << endl;
-}
 
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
 		if (check_if_user_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
 			auto playlist = m_user_playlists.find(playlist_name)->second;
-			if (playlist->check_if_song_exist_in_playlist_by_name(song_name)) {
-				if (playlist->check_if_songs_have_same_names(song_name)) {
-					unordered_multimap<string, Song*>* same_name_songs = playlist->get_songs_with_same_name(song_name);
-					cout << "There are few songs with the same name:" << endl;
-					cout << "Which song do you want to remove from " << playlist_name << "?" << endl;
-					auto song_to_remove = Pick_Media(song_name, same_name_songs);
-					ask_user_to_remove_song(song_to_remove, playlist);
-					delete same_name_songs; // maybe we need to delete here 
-				}
-				else {
-					auto song_to_remove = playlist->get_song_by_name(song_name);
-					ask_user_to_remove_song(song_to_remove, playlist);
-				}
+			auto song_to_remove = playlist->get_song_by_name(song_name); // this method check if a song exist in the playlist
+			if (song_to_remove == nullptr) {
+				cout << "The song" << song_name << "is not in the playlist: " << playlist_name << "!" << endl;
+				return;
 			}
 			else
-				cout << "The song" << song_name << "is not in the playlist: " << playlist_name << "!" << endl;
+				playlist->remove_song_from_playlist(song_to_remove); // al the checking 
 		}
 		else
 			cout << "This Playlist Does Not Exist!" << endl;
@@ -708,3 +683,30 @@ ostream& operator<<(ostream& os, const Library& lib)
 {
 	return lib.Print(os, 0, Library::num_of_songs_to_print);
 }
+
+
+
+
+
+
+//************************************************************************************************************************
+//********************************************* Methods That May Not Be Needed********************************************
+//************************************************************************************************************************ 
+
+
+//// double checks with the user if the song should be deleted, if yes- removes the song.
+//void Library::ask_user_to_remove_song(Song* song, Playlist* playlist) {
+//	cout << "You chose to remove the song: " << endl;
+//	PrintSong(song->get_id());
+//	cout << "Are you sure you want to remove this song from: " << playlist->get_name() << "?" << endl;
+//	cout << "Press y/n: ";
+//	char answer;
+//	cin >> answer;
+//	cout << endl;
+//	if (answer == 'y') {
+//		playlist->remove_song_from_playlist(song->get_name());
+//		cout << "Song Was Successfully Removed From Playlist!" << endl;
+//	}
+//	else
+//		cout << "The Song Wasn't Removed!" << endl;
+//}
