@@ -125,9 +125,35 @@ void Playlist::add_song_to_playlist(Song* song) {
 //	m_songs.erase(song->get_name());
 //}
 
+// double checks with the user if the song should be deleted, if yes- returns true.
+bool Playlist::make_sure_to_remove_song(Song* song) {
+	cout << "You chose to remove the song: " << endl;
+	cout << "The song details are:" << endl;
+	cout << *song << endl;
+	bool invalid_char = true;
+	while (invalid_char) {
+		cout << "Are you sure you want to remove this song from: " << m_playlist_name << "?" << endl;
+		cout << "Press y/n: ";
+		char answer;
+		cin >> answer;
+		cout << endl;
+		if (answer == 'y') {
+			return true;
+		}
+		if (answer == 'n') {
+			return false;
+		}
+		cout << "Invalid answer! try again." << endl;
+	}
+}
+
 // removes a song from playlist, the checking is done in RemoveFromPL in Library
-void Playlist::remove_song_from_playlist(const string& song_name) {
-	m_songs.erase(song_name);
+void Playlist::remove_song_from_playlist(Song* song) {
+	if (make_sure_to_remove_song(song)) {
+		m_songs.erase(song->get_name());
+		cout << "Song was successfully removed from playlist: " << m_playlist_name << "!" << endl;
+	}
+	cout << "The song wasn't removed from playlist: " << m_playlist_name << "!" << endl;
 }
 
 
@@ -139,60 +165,115 @@ void Playlist::clear_all_playlist() {
 // check if a song exist in the playlist by id, return true if exist
 bool Playlist::check_if_song_exist_in_playlist_by_id(int id) {
 	auto song = Server::find_song_by_id(id);
-	if (m_songs.find(song->get_name()) != m_songs.end()) { // if not found, find method returns '.end()' element
+	if (m_songs.find(song->get_name()) != m_songs.end()) { //if not found, find method returns '.end()', comlexity: O(log(n))
 		return true;
 	}
 	return false;
 }
 
-// check if a song exist in the playlist by name, return true if exist
-bool Playlist::check_if_song_exist_in_playlist_by_name(const string& song_name) {
-	if (m_songs.find(song_name) != m_songs.end()) { // if not found, find method returns '.end()' element
-		return true;
-	}
-	return false;
-}
-
-// check if multiple songs in the playlist have the same name
-bool Playlist::check_if_songs_have_same_names(const string& song_name) {
-	if (m_songs.count(song_name) > 1) { 
-		return true;
-	}
-	return false;
+// get how many songs have the same name
+int Playlist::count_song_name_appearences(string song_name) {
+	return m_songs.count(song_name);
 }
 
 
-Song* Playlist::get_song_by_name(string song_name) {
-
-	if (check_if_song_exist_in_playlist_by_name(song_name)) {
-		if (check_if_songs_have_same_names(song_name) == false) {
-			return m_songs.find(song_name)->second; // return the song that was found
-		}
-	}
-	else {
+// get a specific song, even if there are few songs with the same name
+Song* Playlist::get_song_by_name(string song_name)
+{
+	int appearences_number = count_song_name_appearences(song_name); //O(log n), distance is O(n). overall doesn't matter
+	if (appearences_number == 0) {
 		return nullptr;
 	}
-}
-
-
-unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const string& song_name) {
-	unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
-	if (check_if_songs_have_same_names(song_name)) {
-		multimap<string, Song*>::iterator it;
-		for (it = m_songs.begin(); it != m_songs.end(); ++it) {
-			if (it->first == song_name) {
-				same_name_songs->insert(make_pair(it->first, it->second));
-			}
+	if (appearences_number == 1) {
+		return m_songs.find(song_name)->second;
+	}
+	cout << "There is more than one song with this name: " << endl;
+	unordered_map<int, Song*> same_name_songs; // unordered_map (hash_table) to store same name songs, search: O(1) in the avg case
+	int i = 1;
+	multimap<string, Song*>::iterator it;
+	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+		if (it->first == song_name) {
+			same_name_songs.insert(make_pair(it->second->get_id(), it->second)); // unordered_map key: id, value: song.
+			cout << "(" << i << "). " << *(it->second) << endl; // it->second contains Song*
+			i++;
 		}
 	}
-	return same_name_songs; // delete after finishing using it!
+	bool invalid_id = true;
+	while (invalid_id) {
+		int answer;
+		cout << "Please Choose a song." << endl;
+		cout << "Enter the id of the chosen song: ";
+		cin >> answer;
+		cout << endl;
+		auto song_found = same_name_songs.find(answer);
+		if (song_found != same_name_songs.end()) {
+			return song_found->second;
+		}
+		cout << "Invalid id! try again." << endl;
+	}
 }
-
 
 //returns true if the playlists name are in the right order.
 bool operator<(const Playlist& a, const Playlist& b) {
 	return (a.get_name() < b.get_name());
 }
+
+
+
+
+
+
+
+//************************************************************************************************************************
+//********************************************* Methods That May Not Be Needed********************************************
+//************************************************************************************************************************ 
+
+
+
+//// check if a song exist in the playlist by name, return true if exist
+//bool Playlist::check_if_song_exist_in_playlist_by_name(const string& song_name) {
+//	if (m_songs.find(song_name) != m_songs.end()) { // if not found, find method returns '.end()', comlexity: O(log(n))
+//		return true;
+//	}
+//	return false;
+//}
+//
+//// check if multiple songs in the playlist have the same name
+//bool Playlist::check_if_songs_have_same_names(const string& song_name) {
+//	if (m_songs.count(song_name) > 1) { 
+//		return true;
+//	}
+//	return false;
+//}
+
+
+//Song* Playlist::get_song_by_name(string song_name) {
+//
+//	if (check_if_song_exist_in_playlist_by_name(song_name)) {
+//		if (check_if_songs_have_same_names(song_name) == false) {
+//			return m_songs.find(song_name)->second; // return the song that was found
+//		}
+//	}
+//	else {
+//		return nullptr;
+//	}
+//}
+
+
+//unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const string& song_name) {
+//	unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
+//	if (check_if_songs_have_same_names(song_name)) {
+//		multimap<string, Song*>::iterator it;
+//		for (it = m_songs.begin(); it != m_songs.end(); ++it) {
+//			if (it->first == song_name) {
+//				same_name_songs->insert(make_pair(it->first, it->second));
+//			}
+//		}
+//	}
+//	return same_name_songs; // delete after finishing using it!
+//}
+
+
 
 ////compare playlists.
 //bool operator!=(const Playlist& a, const Playlist& b) {
