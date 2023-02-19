@@ -8,13 +8,14 @@
 
 class DailyMix {
 private:
-	static unordered_multimap<string, Song*> daily_mix;
+	static unordered_multimap<int, Song*> m_daily_mix; //first: id, second: song
 
 
 public:
+	DailyMix();
 	void Play();
 	void Play_Random();
-
+	void generate_daily_mix(); // generate a random mix of 10 songs from the library/server
 
 
 };
