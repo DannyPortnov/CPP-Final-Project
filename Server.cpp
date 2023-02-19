@@ -194,7 +194,7 @@ void Server::update_most_played() {
 	m_most_played.clear(); // clear most played and than add to multimap after, plays_count updated.
 	unordered_map<int, Song*>::iterator it;
 	for (it = m_all_songs_by_id.begin(); it != m_all_songs_by_id.end(); it++) {
-		m_most_played.insert(make_pair(it->second->get_plays_count(), it->second));
+		m_most_played.insert(make_pair(it->second->get_plays_count(), it->second)); // start:least played, end: most played
 	}
 }
 
