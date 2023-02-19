@@ -65,6 +65,7 @@ public:
 	void PrintSong(string song_name);
 	void Add2PL(int id, const string& playlist_name);
 	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
+	void add_to_favorites(Song* song);
 	void PrintPL();
 	void Update_Song(string song_name, string new_name = "", string artist = "",
  string album = "", string genre = "", string duration = "", int release_date = 0);

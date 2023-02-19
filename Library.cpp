@@ -139,25 +139,31 @@ void Library::PrintPL() {
 //	return &user_playlists;
 //}
 
+void Library::add_to_favorites(Song* song) {
+	m_favorites->add_song_to_playlist(song);
+}
+
+
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name)
 {
 	auto playlist = m_user_playlists.find(playlist_name)->second;
+	auto song_to_add = Server::find_song_by_id(id);
 	if (check_if_user_playlist_exist(playlist_name)) {
-		playlist->add_song_to_playlist(Server::find_song_by_id(id)); // we check if a song exist in playlist in add_song_to_playlist
+		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
+		return;
 	}
-	else if (check_if_playlist_can_be_edited(playlist_name)) { 
-		if (playlist_name != m_favorites->get_name()) {
-			cout << "No Such Playlist Was Found!" << endl;
-			cout << "A Playlist With The Name: " << playlist_name << " Was Created!" << endl;
-			create_playlist(playlist_name); // creates the playlist automatically
+	if (check_if_playlist_can_be_edited(playlist_name)) {
+		if (playlist_name == m_favorites->get_name()) {
+			add_to_favorites(song_to_add);
 		}
-		playlist->add_song_to_playlist(Server::find_song_by_id(id));
-		cout << "Song Was Successfully Added!" << endl;
+		cout << "No such playlist was found!" << endl;
+		cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
+		create_playlist(playlist_name); // creates the playlist automatically
+		playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
 	}
-	else {
+	else
 		cout << "This Playlist Cannot Be Edited!" << endl;
-	}
 }
 
 
