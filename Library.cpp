@@ -139,6 +139,7 @@ void Library::PrintPL() {
 //	return &user_playlists;
 //}
 
+// add a song to favorits
 void Library::add_to_favorites(Song* song) {
 	m_favorites->add_song_to_playlist(song);
 }
