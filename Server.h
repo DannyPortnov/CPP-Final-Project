@@ -46,13 +46,14 @@ public:
 	~Server();
 
 	//getters
+	static unordered_map<int, Song*>* get_songs_by_id();
 	static unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*>* get_songs_sorted_by_alphabet(); //default comparison (by name)
 	static unordered_multimap<string, Song*>*  get_songs_by_artist();
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
 	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
-	
+
 	static list<Song*>* get_recently_played();
 	static multimap<int, Song*>* get_most_played();
 

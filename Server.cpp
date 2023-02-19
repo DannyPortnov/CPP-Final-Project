@@ -97,6 +97,11 @@ static unordered_multimap<string, Song*>* get_songs_by_genre() {
 static unordered_multimap<string, Podcast*>* get_podcasts_by_name() {
 
 }
+
+static unordered_map<int, Song*>* get_songs_by_id() {
+
+}
+
 // A template function that takes an unordered map/multimap 
 // and deletes all the values 
 template<class T>
