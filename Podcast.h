@@ -27,7 +27,8 @@ class Podcast
 {
 private:
 	unordered_set<Episode*> m_podcast_episodes; // podcast is a playlist of episodes (no need to be ordered)
-	unordered_set<string> m_episodes_file_paths; // all file paths to episodes to check uniqueness 
+	//unordered_set<string> m_episode_names; 
+	//unordered_set<string> m_episodes_file_paths; // all file paths to episodes to check uniqueness 
 	string m_podcast_name;
 public:
 	Podcast(string podcast_name);
@@ -37,7 +38,7 @@ public:
 	//Removes an episode from Podcast and frees memory (if doesn't exist does nothing)
 	void Delete_Episode(Episode* episode);
 	const string& Get_Podcast_Name();
-	bool Is_Episode_In_Podcast(const string& file_path);
+	//bool Is_Episode_In_Podcast(const string& episode_name);
 	void Set_Podcast_Name(const string& new_name);
 	unordered_set<Episode*>* get_podcast() { return &m_podcast_episodes; } // getter
 	//todo: check if a setter is needed (podcast should be set only by admin and not by user)

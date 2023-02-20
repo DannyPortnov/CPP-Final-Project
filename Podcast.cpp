@@ -18,7 +18,7 @@ void Podcast::Add_Episode(Episode* episode)
 	//	m_podcast_name = episode->get_series_name(); //sets the podcast's name
 	//}
 	m_podcast_episodes.insert(episode);
-	m_episodes_file_paths.insert(episode->get_path());
+	//m_episodes_file_paths.insert(episode->get_path());
 }
 
 void Podcast::Delete_Episode(Episode* episode)
@@ -35,10 +35,10 @@ const string& Podcast::Get_Podcast_Name()
 {
 	return m_podcast_name;
 }
-bool Podcast::Is_Episode_In_Podcast(const string& file_path)
-{
-	return m_episodes_file_paths.count(file_path) > 0;
-}
+//bool Podcast::Is_Episode_In_Podcast(const string& episode_name)
+//{
+//	return m_episode_names.count(episode_name) > 0;
+//}
 //Updates for each episode the series name
 void Podcast::Set_Podcast_Name(const string& new_name)
 {
