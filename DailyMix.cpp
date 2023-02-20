@@ -5,6 +5,7 @@ DailyMix::DailyMix() {
 		generate_daily_mix();
 	}
 	//todo: here we need to upload using serialization- m_daily_mix needs to be exactly the same in a certain date
+	// m_daily_mix= ...
 }
 
 // checks if the date has changed. if yes: returns true, else: returns false.
