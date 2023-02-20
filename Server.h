@@ -85,10 +85,6 @@ public:
 	static void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
 		string duration, int release_Date);
 
-	//updates an existing song - did that in Library
-	//static void Update(string song_name, string new_name = "", string artist = "", string album = ""
-	//	, string genre = "", string duration = "");
-
 	// update recently played by song id
 	static void update_recently_played(int id);
 	// update most played by checking the amount of times a song was played
@@ -100,6 +96,10 @@ public:
 	static void Permanent_Delete_Podcast_Episode(Episode* episode);
 	//Deletes a podcast and each episode in it
 	static void Permanent_Delete_Podcast(Podcast* podcast);
+
+	//updates an existing song - did that in Library
+//static void Update(string song_name, string new_name = "", string artist = "", string album = ""
+//	, string genre = "", string duration = "");
 };
 #endif
 

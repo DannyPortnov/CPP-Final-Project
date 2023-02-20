@@ -222,3 +222,33 @@ Server::~Server()
 	Destory_Allocations(m_all_songs_by_id);
 }
 
+unordered_map<int, Song*>* Server::get_songs_by_id()
+{
+	return &m_all_songs_by_id;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_name()
+{
+	return &m_all_songs_by_name;
+}
+
+multimap<string, Song*>* Server::get_songs_sorted_by_alphabet()
+{
+	return &m_songs_by_alphabet_order;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_artist()
+{
+	return &m_all_songs_by_artist;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_album()
+{
+	return &m_all_songs_by_album;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_genre()
+{
+	return &m_all_songs_by_genre;
+}
+
