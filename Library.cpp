@@ -187,29 +187,6 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 		cout << "This Playlist Cannot Be Edited!" << endl;
 }
 
-
-//Asks the user which song he meant and updates the choosen one.
-void Library::Update_Song(string song_name, string new_name,
- string artist, string album, string genre, string duration, int release_date)
-{
-	try
-	{
-		if (Are_All_Parameters_Empty(artist, album, genre, duration, new_name) && release_date == 0) {
-			Print_No_Input_Parameters_Error();
-		}
-		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
-		if (picked_song != nullptr) {
-			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
-			return;
-		}
-		Print_Not_Found_By_Name_Error(song_name);
-	}
-	catch (const std::exception&) //if caught, user canceled picking the song
-	{
-		return;
-	}
-}
-
 ////Asks the user which song he meant and updates the choosen one.
 //void Library::Update_Episode(string episode_name, string new_name, string duration, int release_date)
 //{
@@ -247,6 +224,29 @@ bool Library::Are_All_Parameters_Empty(const string & param1,
 //			return str.empty();
 //		});
 //}
+//Asks the user which song he meant and updates the choosen one.
+void Library::Update_Song(string song_name, string new_name,
+ string artist, string album, string genre, string duration, int release_date)
+{
+	if (Are_All_Parameters_Empty(artist, album, genre, duration, new_name) && release_date == 0) {
+		Print_No_Input_Parameters_Error();
+		return;
+	}
+	try
+	{
+
+		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
+		if (picked_song != nullptr) {
+			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
+			return;
+		}
+		Print_Not_Found_By_Name_Error(song_name);
+	}
+	catch (const std::exception&) //if caught, user canceled picking the song
+	{
+		return;
+	}
+}
 
 //Find choosen song and updates according to the parameters recieved
 void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration, int release_date)
@@ -273,19 +273,24 @@ void Library::Update_Song(int song_id, string new_name, string artist, string al
 
 void Library::UpdatePodcast(string podcast_name, string new_name)
 {
+	if (new_name.empty()) {
+		Print_No_Input_Parameters_Error();
+		return;
+	}
+	if (Server::Does_Podcast_Exist(new_name)) {
+		Print_Media_Exists_Error(new_name, typeid(Podcast).name());
+		return;
+	}
 	try
 	{
-		if (new_name.empty()) {
-			Print_No_Input_Parameters_Error();
-		}
-		auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
+		auto picked_podcast = Server::find_podcast_by_name(podcast_name); //throws exception
 		if (picked_podcast != nullptr) {
 			picked_podcast->Set_Podcast_Name(new_name); //not empty!
 			return;
 		}
 		Print_Not_Found_By_Name_Error(podcast_name);
 	}
-	catch (const std::exception&) //if caught, user canceled picking the song
+	catch (const std::exception&)
 	{
 		return;
 	}
@@ -293,6 +298,10 @@ void Library::UpdatePodcast(string podcast_name, string new_name)
 
 void Library::UpdateEpisode(int episode_id, string new_name, string duration, int release_date)
 {
+	if (Server::Does_Episode_Exist(new_name)) {
+		Print_Media_Exists_Error(new_name, typeid(Episode).name());
+		return;
+	}
 	try
 	{
 		Update_Media_By_Id(episode_id, Server::find_episode_by_id, new_name, duration, release_date);
@@ -302,6 +311,11 @@ void Library::UpdateEpisode(int episode_id, string new_name, string duration, in
 		Print_Not_Found_By_Id_Error(episode_id, typeid(Episode).name());
 	}
 	
+}
+
+void Library::Print_Media_Exists_Error(std::string& new_name, const string & media_type)
+{
+	cout << media_type <<" with name " << new_name << " already exists, please choose a unique name" << endl;
 }
 
 template <class T>
@@ -505,19 +519,13 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 void Library::Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
 	string duration, int release_Date)
 {
-	if (Server::Does_Episode_Exist(file_path)) { //checks uniqueness
+	if (Server::Does_Episode_Exist(episode_name)) { //checks uniqueness
 		cout << "Episode was already added." << endl;
 		return;
 	}
-	try
-	{
-		auto picked_podcast = Pick_Media(podcast_name, Server::get_podcasts_by_name());
-		Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
-	}
-	catch (const std::exception&) //if caught, return to main.
-	{
-		return;
-	}
+
+	auto picked_podcast = Server::find_podcast_by_name(podcast_name);
+	Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
 
 }
 

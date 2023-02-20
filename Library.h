@@ -41,6 +41,7 @@ private:
 	void Print_Not_Found_By_Id_Error(int song_id, string item_type);
 	void Print_No_Input_Parameters_Error();
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
+	void Print_Media_Exists_Error(std::string& new_name, const string & media_type);
 
 	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
 
@@ -80,7 +81,7 @@ public:
 	void Update_Song(int song_id, string new_name = "", string artist = "",
 		string album = "", string genre = "", string duration = "", int release_date = 0);
 	//Update podcast's name
-	void UpdatePodcast(string podcast_name, string new_name = "");
+	void UpdatePodcast(string podcast_name, string new_name);
 	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", int release_date=0);
 	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
 	//update recent songs playlist by using song id
