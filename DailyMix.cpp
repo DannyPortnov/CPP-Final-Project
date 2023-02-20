@@ -1,7 +1,18 @@
 #include "DailyMix.h"
 
 DailyMix::DailyMix() {
+	if(check_if_date_changed() == true) {
+		generate_daily_mix();
+	}
+	//todo: here we need to upload using serialization- m_daily_mix needs to be exactly the same in a certain date
+}
 
+// checks if the date has changed. if yes: returns true, else: returns false.
+bool DailyMix::check_if_date_changed() {
+	Date new_date;
+	if (m_saved_date < new_date)
+		return true;
+	return false;
 }
 
 // generate a random mix of 10 songs from the library/server
