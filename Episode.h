@@ -14,7 +14,7 @@ public:
     //const string& get_series_name() const;
     //void set_series_name(const string& podcast_name);
     //Update the podcast's song
-    Episode(string file_path, string episode_name, Podcast* podcast, int release_date = 0, string duration = "");
+    Episode(string file_path, string episode_name, Podcast* podcast, string release_date = "", string duration = "");
     Podcast* Get_Podcast() const;
     //Plays the episode
     void Play();

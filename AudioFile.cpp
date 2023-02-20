@@ -3,7 +3,7 @@
 
 int AudioFile::id_code = 1;
 
-AudioFile::AudioFile(string file_name, string file_path, string duration, int release_date)
+AudioFile::AudioFile(string file_name, string file_path, string duration, string release_date)
 	: m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
 {
 	m_id_code = id_code;
