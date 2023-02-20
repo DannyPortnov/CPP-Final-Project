@@ -2,11 +2,6 @@
 #include <set>
 #include <vector>
 #include <algorithm>
-//Library::Library() : m_songs_by_name(Server::get_songs_by_name()), m_playlists()
-//{
-//	// = new set<Song*>*; //is initialization needed here?
-//	//m_playlists_map= &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
-//}
 
 Library::Library() : m_favorites(new Playlist("favorites")), m_daily_mix(new Playlist("daily mix")),
 m_deleted(new Playlist("deleted")), m_recent(new Playlist("recent")), m_most_played(new Playlist("most played")) 
@@ -168,7 +163,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 }
  
 // remove a song from the playlist by song's name.
-void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
+void Library::RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
 		if (check_if_user_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
 			auto playlist = m_user_playlists.find(playlist_name)->second;
@@ -178,7 +173,7 @@ void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 				return;
 			}
 			else
-				playlist->remove_song_from_playlist(song_to_remove); // al the checking 
+				playlist->remove_song_from_playlist(song_to_remove, make_sure); // all the checking is in playlist 
 		}
 		else
 			cout << "This Playlist Does Not Exist!" << endl;
@@ -402,8 +397,28 @@ bool Library::check_if_continue_playing() {
 	}
 }
 
+//todo: check if this function works
 // Play all of the songs in the library
-void Library::PlayAll() { //todo: niv
+template <template<typename, typename> class MapType>
+void Library::PlayAll(MapType<string, Song*>* songs_to_play) {
+	if (songs_to_play->size() == 0) {
+		cout << "There are no songs in the library." << endl;
+		return;
+	}
+	cout << "Playing all library songs: " << endl;
+	MapType<string, Song*>::iterator it;
+	for (it = songs_to_play->begin(); it != songs_to_play->end(); it++) {
+		cout << "Now playing: " << *it->second << endl;
+		int id = it->second->get_id();
+		Play(id);
+		if (check_if_continue_playing() == false)
+			return;
+	}
+	cout << "Finished playing all songs in the library." << endl;
+}
+
+// PlayAll with no function template
+void Library::PlayAll() {
 	auto songs_to_play = Server::get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		cout << "There are no songs in the library." << endl;
@@ -613,16 +628,68 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 //}  
 #pragma endregion
 
+//todo: we have a method like this in library, check if needed here also.
+// double checks with the user if the song should be deleted, if yes- returns true.
+bool Library::make_sure_to_delete_song(Song* song) {
+	cout << "You chose to delete the song: " << endl;
+	cout << "The song details are:" << endl;
+	cout << *song << endl;
+	while (true) { // when the user enter y/n, there is a return
+		cout << "Are you sure you want to remove this song from library?" << endl;
+		cout << "Press y/n: ";
+		char answer;
+		cin >> answer; cout << endl;
+		if (answer == 'y') {
+			return true;
+		}
+		if (answer == 'n') {
+			return false;
+		}
+		cout << "Invalid answer! try again." << endl;
+	}
+}
 
 //Adds song to m_deleted playlist
+// method removes a specific song, used by the two Delete_Song methods
+void Library::delete_song(Song* song_to_delete) {
+	if (make_sure_to_delete_song(song_to_delete)) { //check again if the user wants to delete the song
+		auto playlist_appearances = song_to_delete->get_playlist_appearances();
+		if (playlist_appearances->size() > 0) {
+			auto it = playlist_appearances->begin();
+			for (auto it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
+				RemoveFromPL(song_to_delete->get_name(), *it, false);
+				// false- don't need to make sure with the user if he wants to delete from this playlist
+			}
+		}
+		m_deleted->add_song_to_playlist(song_to_delete);
+		cout << "Song was successfully removed from the library and all of it's playlists!" << endl;
+	}
+	cout << "The song wasn't removed from the library!" << endl;
+}
+
+//delete song by id
+void Library::Delete_Song(int id)
+{
+	try
+	{
+		auto song_to_delete = Server::find_song_by_id(id);
+		delete_song(song_to_delete);
+		//Server::Permanent_Delete_Song(Server::find_song_by_id(id));
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Id_Error(id, typeid(Song).name());
+	}
+}
+
+//delete song by name
 void Library::Delete_Song(string song_name)
 {
 	try
 	{
-		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
-		if (picked_song != nullptr) {
-			 int id = picked_song->get_id();
-			 m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
+		auto song_to_delete = Pick_Media(song_name, Server::get_songs_by_name());
+		if (song_to_delete != nullptr) {
+			delete_song(song_to_delete);
 			//Server::Permanent_Delete_Song(picked_song);
 			return;
 		}
@@ -674,21 +741,6 @@ void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
 {
 	cout << media_name << " isn't present in the server." << endl;
 }
-
-//Adds song to m_deleted playlist
-void Library::Delete_Song(int id)
-{
-	try
-	{
-		m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
-		//Server::Permanent_Delete_Song(Server::find_song_by_id(id));
-	}
-	catch (const std::exception&)
-	{
-		Print_Not_Found_By_Id_Error(id, typeid(Song).name());
-	}
-}
-
 // update by using song id
 void Library::update_most_recent(int id) {
 	Server::update_recently_played(id);
@@ -706,11 +758,11 @@ void Library::update_most_recent(int id) {
 void Library::update_most_played() { // need to be called after playing a song and after the m_plays_counter is updated!
 	Server::update_most_played();
 	auto most_played = Server::get_most_played();
-	m_most_played->clear_all_playlist();
+	m_most_played->clear_all_playlist();  
 	multimap<int, Song*>::iterator it = most_played->end();
 	for (int i = 0; i < max_most_played; i++) {
 		it--;
-		m_most_played->add_song_to_playlist(it->second);
+		m_most_played->add_song_to_playlist(it->second); 
 	}
 }
 
@@ -744,6 +796,26 @@ ostream& operator<<(ostream& os, const Library& lib)
 //********************************************* Methods That May Not Be Needed********************************************
 //************************************************************************************************************************ 
 
+////Asks the user which song he meant and updates the choosen one.
+//void Library::Update_Episode(string episode_name, string new_name, string duration, int release_date)
+//{
+//	try
+//	{
+//		if (Are_All_Parameters_Empty(new_name, duration) && release_date == 0) {
+//			Print_No_Input_Parameters_Error();
+//		}
+//		auto picked_episode = Pick_Media(episode_name, Server::get_());
+//		if (picked_song != nullptr) {
+//			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
+//			return;
+//		}
+//		Print_Not_Found_By_Name_Error(song_name);
+//	}
+//	catch (const std::exception&) //if caught, user canceled picking the song
+//	{
+//		return;
+//	}
+//}
 
 //// double checks with the user if the song should be deleted, if yes- removes the song.
 //void Library::ask_user_to_remove_song(Song* song, Playlist* playlist) {
@@ -760,4 +832,20 @@ ostream& operator<<(ostream& os, const Library& lib)
 //	}
 //	else
 //		cout << "The Song Wasn't Removed!" << endl;
+//}
+
+//Library::Library() : m_songs_by_name(Server::get_songs_by_name()), m_playlists()
+//{
+//	// = new set<Song*>*; //is initialization needed here?
+//	//m_playlists_map= &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
+//}
+
+//void Library::Are_All_Parameters_Empty(std::string& artist, std::string& album, std::string& genre, std::string& duration)
+//{
+//	std::vector<std::string> params = { artist, album, genre,duration };
+//	bool allEmpty = std::all_of(std::begin(params),
+//		std::end(params),
+//		[](const std::string& str) {
+//			return str.empty();
+//		});
 //}

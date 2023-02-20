@@ -116,15 +116,20 @@ void Playlist::add_song_to_playlist(Song* song) {
 	}
 	else {
 		m_songs.insert(make_pair(song->get_name(), song));
-		cout << "Song was successfully added to " << m_playlist_name << "!" << endl;
+		song->set_playlist_appearances(m_playlist_name);
+		if (m_playlist_name != "deleted")
+			cout << "Song was successfully added to " << m_playlist_name << "!" << endl;
 	}
 }
 
 // double checks with the user if the song should be deleted, if yes- returns true.
-bool Playlist::make_sure_to_remove_song(Song* song) {
+bool Playlist::make_sure_to_remove_song(Song* song, bool make_sure = true) {
 	cout << "You chose to remove the song: " << endl;
 	cout << "The song details are:" << endl;
 	cout << *song << endl;
+	if (make_sure == false) {
+		return true;
+	}
 	bool invalid_char = true;
 	while (invalid_char) {
 		cout << "Are you sure you want to remove this song from: " << m_playlist_name << "?" << endl;
@@ -142,19 +147,26 @@ bool Playlist::make_sure_to_remove_song(Song* song) {
 	}
 }
 
-// removes a song from playlist, the checking is done in RemoveFromPL in Library
-void Playlist::remove_song_from_playlist(Song* song) {
-	if (make_sure_to_remove_song(song)) {
+// removes a song from playlist
+// if doesn't need to make_sure, the song will be deleted (returns true)
+void Playlist::remove_song_from_playlist(Song* song, bool make_sure = true) {
+	if (make_sure_to_remove_song(song, make_sure)) {
 		m_songs.erase(song->get_name());
+		song->remove_from_playlist(m_playlist_name);
 		cout << "Song was successfully removed from playlist: " << m_playlist_name << "!" << endl;
 	}
 	cout << "The song wasn't removed from playlist: " << m_playlist_name << "!" << endl;
+
 }
 
 
-// remove all songs from the playlist. m_songs is a multimap
+// remove all songs from the playlist.
 void Playlist::clear_all_playlist() {
-	m_songs.clear();
+	multimap<string, Song*>::iterator it; // go over all songs in the playlist
+	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+		it->second->remove_from_playlist(m_playlist_name);// removes the playlist name from Song's m_playlist_appearences
+	}
+	m_songs.clear(); // remove all songs from the playlist itself
 }
 
 // check if a song exist in the playlist by id, return true if exist

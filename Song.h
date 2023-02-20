@@ -20,6 +20,7 @@ private:
 	string m_album;
 	string m_genre;
 	int m_plays_counter; // counter for the amount of times the song was played
+	unordered_set<string> m_playlist_appearances; // stores the names of the playlists that have this song
 public:
 	Song(string song_name, string file_path,
 	string album="",string artist="", string genre="", int release_date=0, string duration = "");
@@ -28,14 +29,20 @@ public:
 	
 	const string& get_album() const; 
 	const string& get_genre() const;
-	const string& get_artist() const; 
+	const string& get_artist() const;
 	const int get_plays_count() const;
+	unordered_set<string>* get_playlist_appearances();
 
 	void set_artist(string& artist);
 	void set_album(string& album);
 	void set_genre(string& genre);
+	void set_playlist_appearances(const string& playlist);
+	void remove_from_playlist(const string& playlist);
+	void clear_from_all_playlists();
+
 	void update_plays_counter();
 
+	void print_playlists() const;
 	//Song& operator=(const Song& exisiting_song);
 	
 friend bool operator<(const Song& a, const Song& b);
