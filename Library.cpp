@@ -650,6 +650,18 @@ void Library::Delete_Episode(string episode_name)
 	}
 }
 
+void Library::Delete_Podcast(string podcast_name)
+{
+	try
+	{
+		Server::permanent_delete_podcast(Server::get_podcast_by_name(podcast_name)); //if podcast doesn't exist, throws exception
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Name_Error(podcast_name);
+	}
+}
+
 void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
 {
 	cout << media_name << " isn't present in the server." << endl;

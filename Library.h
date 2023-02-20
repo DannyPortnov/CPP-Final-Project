@@ -63,6 +63,8 @@ public:
 	void Delete_Episode(int id);
 	//Deletes an episode from the library
 	void Delete_Episode(string episode_name);
+	//Deletes a podcast from the library
+	void Delete_Podcast(string podcast_name);
 
 	void Add2PL(int id, const string& playlist_name);
 	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
