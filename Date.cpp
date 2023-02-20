@@ -11,7 +11,7 @@ Date::Date() {
 
 //constructor that creates an instance by string
 Date::Date(string date) : m_date(date) {
-    extract_date_from_string(date);
+    set_date_from_string(date);
 }
 
 // set the date
@@ -23,9 +23,11 @@ Date& Date::init(int d, int m, int y) {
 // extract date in format: "d/m/yyyy" to day, month, year
 void Date::set_date_from_string(string date) {
     stringstream ss(date);
-    char delimiter; // we do not need to explicitly define the delimiter variable as "/" 
-                    // because it is the default delimiter used by the '>>' operator.
-    ss >> m_day >> delimiter >> m_month >> delimiter >> m_year;
+    int day, month, year;
+    char delimiter = '/'; // we do not need to explicitly define the delimiter variable as "/" 
+                          // because it is the default delimiter used by the '>>' operator.
+    ss >> day >> delimiter >> month >> delimiter >> year;
+    init(day, month, year);
 }
 
 // change date, return true if date was changed successfully
@@ -41,7 +43,7 @@ bool Date::change_date() {
             return true;
         }
         else {
-            bool invalid_char;
+            bool invalid_char = true;
             while (invalid_char) {
                 cout << "Still want to change date? y/n: ";
                 char answer; cin >> answer; cout << endl;
