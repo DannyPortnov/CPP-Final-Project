@@ -147,6 +147,7 @@
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Episode.cpp" />
     <ClCompile Include="Library.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Playlist.cpp" />
     <ClCompile Include="Playlists.cpp" />
     <ClCompile Include="Podcast.cpp" />

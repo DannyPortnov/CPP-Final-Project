@@ -9,8 +9,9 @@
 //}
 
 //Song is unique!
-void Server::Upload_Song(string song_name, string file_path, string artist = "",
-	string album = "", string genre = "", string duration = "", int release_Date = 0)
+void Server::Upload_Song(string song_name, string file_path,
+ string artist = "",
+	string album = "", string genre = "", string duration = "", string release_Date = "")
 {
 	auto song = new Song(song_name, file_path, album, artist, genre, release_Date);
 	const auto& name = song->get_name(); //avoids unnecessary copies of string objects

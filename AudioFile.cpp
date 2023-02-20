@@ -1,13 +1,13 @@
 #include "AudioFile.h"
 
 
-int AudioFile::id_code = 1;
+//int AudioFile::id_code = 1;
 
-AudioFile::AudioFile(string file_name, string file_path, string duration, int release_date)
+AudioFile::AudioFile(string file_name, string file_path, string duration, string release_date)
 	: m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
 {
-	m_id_code = id_code;
-	id_code++;
+	//m_id_code = id_code;
+	//id_code++;
     set_duration(duration);
 }
 
@@ -21,6 +21,16 @@ const string& AudioFile::get_path() const {
 
 const int AudioFile::get_id() const {
 	return m_id_code;
+}
+
+const Date& AudioFile::get_release_date() const
+{
+    return m_release_date;
+}
+
+const string& AudioFile::get_duration() const
+{
+    return m_duration;
 }
 
 void AudioFile::set_name(string& name)

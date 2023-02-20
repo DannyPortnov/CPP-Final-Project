@@ -1,10 +1,14 @@
 #include "Song.h"
 
+int Song::song_id = 1;
+
 Song::Song(string song_name, string file_path,
-	string album,string singer, string genre, int release_date, string duration)
-	: AudioFile(song_name, file_path, duration), m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(0)
+	string album, string singer, string genre, string release_date, string duration)
+	: AudioFile(song_name, file_path, duration, release_date), m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(0)
 {
 	//to add duration calculation
+	m_id_code = song_id;
+	song_id++;
 }
 
 void Song::set_artist(string& artist) {

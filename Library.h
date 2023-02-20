@@ -52,7 +52,7 @@ private:
 public:
 	Library();
 	//Creates a song and adds it to the library.
-	void Add_Song(string song_name, string file_path, string artist, string album, string genre, string duration, int release_Date);
+	static void Add_Song(string song_name, string file_path, string artist, string album, string genre, string duration, string release_date);
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
 	void Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
 		string duration = "", int release_Date = 0);
