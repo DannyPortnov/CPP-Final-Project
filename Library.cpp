@@ -642,7 +642,7 @@ void Library::Delete_Episode(string episode_name)
 {
 	try
 	{
-		Server::Permanent_Delete_Podcast_Episode(Server::get_episode_by_name(episode_name)); //if episode doesn't exist, throws exception
+		Server::Permanent_Delete_Podcast_Episode(Server::find_episode_by_name(episode_name)); //if episode doesn't exist, throws exception
 	}
 	catch (const std::exception&)
 	{
@@ -654,7 +654,7 @@ void Library::Delete_Podcast(string podcast_name)
 {
 	try
 	{
-		Server::permanent_delete_podcast(Server::get_podcast_by_name(podcast_name)); //if podcast doesn't exist, throws exception
+		Server::Permanent_Delete_Podcast(Server::find_podcast_by_name(podcast_name)); //if podcast doesn't exist, throws exception
 	}
 	catch (const std::exception&)
 	{
