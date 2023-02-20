@@ -35,12 +35,16 @@ private:
 	static list<Song*> m_recently_played; // good complexity for insertion/deletion O(1)
 	static multimap<int, Song*> m_most_played; // songs in an oreder from least played to most played
 
-	static unordered_multimap<string, Song*>* find(string& key, unordered_multimap<string, Song*>& collection);
+	static unordered_multimap<string, Song*>* find_all(string& key, unordered_multimap<string, Song*>& collection);
 
 	template<class T>
 	static void remove_song_from_collection(T& songs_by_field, Song* song);
 	template <class T>
 	void Destory_Allocations(T& collection);
+	//Finds a unique element in an unordered_map with the given key parameter.
+	//Throws an exception if the TKey is not present in the unordered_map.
+	template<class TKey, class TValue>
+	static TValue* Find_Unique(TKey param, unordered_map<TKey, TValue*> coolection_to_Search);
 public:
 	//Server();
 	~Server();
