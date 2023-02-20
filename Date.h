@@ -14,6 +14,7 @@ private:
 	Date& init(char d, char m, int y); // set the date
 public:
 	Date(); //constructor that creates an instance with the current day
+	Date(string date); //constructor that creates an instance by string
 	Date& operator=(const Date& otherDate); // assign one date to another
 };
 

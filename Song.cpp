@@ -7,6 +7,15 @@ Song::Song(string song_name, string file_path,
 	//to add duration calculation
 }
 
+void Song::set_artist(string& artist) {
+	m_artist = artist;
+}
+void Song::set_album(string& album) {
+	m_album = album;
+}
+void Song::set_genre(string& genre) {
+	m_genre = genre;
+}
 
 const string& Song::get_album() const
 {
