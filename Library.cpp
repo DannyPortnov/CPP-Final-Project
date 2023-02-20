@@ -3,14 +3,17 @@
 #include <vector>
 #include <algorithm>
 
-Library::Library() : m_favorites(new Playlist("favorites")), m_daily_mix(new Playlist("daily mix")),
-m_deleted(new Playlist("deleted")), m_recent(new Playlist("recent")), m_most_played(new Playlist("most played")) 
+Playlist* Library::m_favorites = new Playlist("favorites");
+Playlist* Library::m_deleted = new Playlist("deleted");
+Playlist* Library::m_recent = new Playlist("recent");
+Playlist* Library::m_most_played = new Playlist("most played");
+
+Library::Library() //todo: maybe to convert to static, and than needs to be changed
 {
-	m_saved_playlist_names.insert("favorites");
-	m_saved_playlist_names.insert("daily mix");
-	m_saved_playlist_names.insert("deleted");
-	m_saved_playlist_names.insert("recent");
-	m_saved_playlist_names.insert("most played");
+	m_saved_playlist_names.insert(make_pair("favorites", m_favorites));
+	m_saved_playlist_names.insert(make_pair("deleted", m_deleted));
+	m_saved_playlist_names.insert(make_pair("recent", m_recent));
+	m_saved_playlist_names.insert(make_pair("most played", m_most_played));
 
 }
 
@@ -466,6 +469,36 @@ void Library::PlayRandom() {
 	}
 
 }
+
+//return the playlist that needs to be played. return nullptr if no playlist was found
+Playlist* Library::get_playlist_to_play(string playlist_name) {
+	if (check_if_user_playlist_exist(playlist_name)) {
+		auto playlist = m_user_playlists.find(playlist_name);
+		return playlist->second;
+	}
+	auto playlist = m_saved_playlist_names.find(playlist_name);
+	if (playlist != m_saved_playlist_names.end()) {
+		return playlist->second;
+	}
+	return nullptr;
+}
+
+//play a playlist by its name 
+void Library::PlayPlaylist(string playlist_name) {
+	auto playlist_to_play = get_playlist_to_play(playlist_name);
+	if (playlist_to_play == nullptr)
+		cout << "There is no playlist with that name!" << endl;
+	playlist_to_play->Play();
+}
+
+//play a playlist shuffled by its name 
+void Library::PlayPlaylistShuffled(string playlist_name) {
+	auto playlist_to_play = get_playlist_to_play(playlist_name);
+	if (playlist_to_play == nullptr)
+		cout << "There is no playlist with that name!" << endl;
+	playlist_to_play->Play_Random();
+}
+
 
 //called from the interface ("main")
 void Library::Add_Song(string song_name, string file_path, string artist = "",

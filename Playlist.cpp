@@ -42,7 +42,8 @@ void Playlist::Play() {
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		cout << "Now playing: " << *it->second << endl;
 		it->second->update_plays_counter();
-		m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+		Library::play_song(it->second); //todo: check if works
+		//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
 	}
@@ -67,7 +68,8 @@ void Playlist::Play_Random() {
 	for (auto const& song : songs_vector) {
 		cout << "Now playing: " << *(song->second) << endl;
 		song->second->update_plays_counter();
-		m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+		Library::play_song(song->second); //todo: check if works
+		//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
 	}

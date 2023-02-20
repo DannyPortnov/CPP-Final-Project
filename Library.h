@@ -16,12 +16,12 @@ class Library
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
-	Playlist* m_favorites;
-	Playlist* m_daily_mix; //todo: make as a separate class
-	Playlist* m_recent;
-	Playlist* m_most_played;
-	Playlist* m_deleted;
-	unordered_set<string> m_saved_playlist_names;
+	static Playlist* m_favorites;
+	static Playlist* m_daily_mix; //todo: make as a separate class
+	static Playlist* m_recent;
+	static Playlist* m_most_played;
+	static Playlist* m_deleted;
+	unordered_map<string, Playlist*> m_saved_playlist_names;
 	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
 	unordered_map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlist.
 													   // better comlexity when using un_ordered_map.
@@ -89,9 +89,17 @@ public:
 	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", int release_date=0);
 	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
 	//update recent songs playlist by using song id
-	void update_most_recent(int id);
+	static void update_most_recent(int id);
 	//update most played songs playlist
-	void update_most_played();
+	static void update_most_played();
+	
+	//return the playlist that needs to be played
+	Playlist* get_playlist_to_play(string playlist_name);
+	//play a playlist by its name 
+	void PlayPlaylist(string playlist_name);
+	//play a playlist shuffled by its name 
+	void PlayPlaylistShuffled(string playlist_name);
+
 
 	//gets the data structure from Server!
 	void Play(string song_name);
@@ -104,7 +112,7 @@ public:
 	//gets the data structure from Server!
 	void PlayRandom();
 	//play song and update song data
-	void play_song(Song* song);
+	static void play_song(Song* song);
 
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist
