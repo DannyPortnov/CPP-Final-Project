@@ -15,7 +15,6 @@ protected:
 	string m_file_path; 
 	string m_duration; //m:ss format
 	Date m_release_date; //todo: make Date
-	static int id_code;	// in this class we will be able to give id to every music file
 	int m_id_code;
 	Player m_player;
 	AudioFile(string file_name, string file_path, string duration="", string release_date = "");

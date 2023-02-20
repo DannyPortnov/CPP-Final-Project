@@ -79,8 +79,9 @@ public:
 	static bool Does_Podcast_Exist(string& podcast_name);
 
 	//Allocates memory for the new song and adds to each data structure
-	static void Upload_Song(string song_name, string file_path, string artist = "",
-		string album = "", string genre = "", string duration = "", int release_Date = 0);
+	static void Upload_Song(string song_name, string file_path,
+ string artist = "",
+		string album = "", string genre = "", string duration = "", string release_Date);
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
 	static void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
 		string duration, int release_Date);

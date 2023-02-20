@@ -516,13 +516,13 @@ void Library::PlayPlaylistShuffled(string playlist_name) {
 
 //called from the interface ("main")
 void Library::Add_Song(string song_name, string file_path, string artist = "",
-	string album = "", string genre = "", string duration = "", int release_Date = 0)
+	 string album = "", string genre = "", string duration = "", string release_date = "")
 {
 	if (Server::Does_Song_Exist(file_path)) { //checks uniqueness
 		cout << "Song was already added" << endl;
 		return;
 	}
-	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_Date);
+	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_date);
 
 	#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();

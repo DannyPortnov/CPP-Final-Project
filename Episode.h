@@ -7,6 +7,7 @@ class Episode :
     public AudioFile
 {
 private:
+    static int episode_code;
     //The podcast to which the episode belongs
     Podcast* m_podcast;
 public:

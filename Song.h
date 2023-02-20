@@ -19,6 +19,8 @@ private:
 	string m_artist;
 	string m_album;
 	string m_genre;
+	static int song_id;
+	//int m_song_id;
 	int m_plays_counter; // counter for the amount of times the song was played
 	unordered_set<string> m_playlist_appearances; // stores the names of the playlists that have this song
 public:
