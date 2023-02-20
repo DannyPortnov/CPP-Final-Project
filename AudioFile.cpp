@@ -23,6 +23,16 @@ const int AudioFile::get_id() const {
 	return m_id_code;
 }
 
+const Date& AudioFile::get_release_date() const
+{
+    return m_release_date;
+}
+
+const string& AudioFile::get_duration() const
+{
+    return m_duration;
+}
+
 void AudioFile::set_name(string& name)
 {
 	m_file_name = name;

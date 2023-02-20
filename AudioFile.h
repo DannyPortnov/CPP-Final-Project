@@ -24,6 +24,8 @@ public:
 	const string& get_name() const; // get the name of the song
 	const string& get_path() const; // get the name of the song
 	const int get_id() const;
+	const Date& get_release_date() const;
+	const string& get_duration() const;
 
 	virtual void set_name(string& name);
 	virtual void set_duration(string& duration);
