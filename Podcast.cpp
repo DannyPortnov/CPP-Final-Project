@@ -48,3 +48,16 @@ void Podcast::Set_Podcast_Name(const string& new_name)
 	//	(*itr)->set_series_name(new_name);
 	//}
 }
+
+void Podcast::Play()
+{
+	for (auto episode : m_podcast_episodes) {
+		episode->Play();
+		cout << "Would you like to continue playing " << m_podcast_name << "? y if yes, anything else no ";
+		char answer;
+		cin >> answer;
+		if (answer != 'y') {
+			return;
+		}
+	}
+}
