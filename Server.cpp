@@ -36,14 +36,15 @@ void Server::Upload_Song(string song_name, string file_path, string artist = "",
 void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
 	string duration, int release_Date)
 {
-	auto new_episode = new Episode(file_path, episode_name, release_Date, duration); //deleted in Podcast
 	if (podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
 		podcast = new Podcast(podcast_name); //deleted in Server
 	}
+	auto new_episode = new Episode(file_path, episode_name,podcast, release_Date, duration); //deleted in Podcast
 	podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
 	auto& podcast_name = podcast->Get_Podcast_Name();
 	m_all_podcasts.emplace(podcast_name, podcast);
 	m_all_episodes_by_id.emplace(new_episode->get_id(), new_episode);
+	m_all_episodes_by_name.emplace(new_episode->get_name(), new_episode);
 	m_podcasts_by_alphabet_order.emplace(podcast_name, podcast);
 }
 
@@ -71,6 +72,32 @@ void Server::Permanent_Delete_Song(Song* song)
 	delete song; //???
 }
 
+void Server::Permanent_Delete_Podcast_Episode(Episode* episode)
+{
+	 m_all_episodes_by_id.erase(episode->get_id());
+	 m_all_episodes_by_name.erase(episode->get_name());
+	 Podcast* temp = episode->Get_Podcast();
+	 temp->Delete_Episode(episode);
+}
+
+void Server::Permanent_Delete_Podcast(Podcast* podcast)
+{
+	for (auto& name_podcast_pair : m_podcasts_by_alphabet_order) {
+		m_podcasts_by_alphabet_order.erase(name_podcast_pair.first); //removes listing of podcast
+	}
+
+	//Go over each podcast in the collection
+	for (auto& name_podcast_pair : m_all_podcasts) { //deleting a nullptr is fine; has no effect.
+		auto all_episodes = name_podcast_pair.second->get_podcast();
+		for (auto itr = all_episodes->begin(); itr != all_episodes->end(); itr++) {
+			Permanent_Delete_Podcast_Episode(*itr);
+		}
+		m_all_podcasts.erase(name_podcast_pair.first);//removes listing of podcast
+
+		delete name_podcast_pair.second; //deletes a podcast, then inside deletes the episodes
+	}
+}
+
 template <typename T>
 void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
 	auto it = songs_by_field.find(song);
@@ -79,24 +106,7 @@ void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
 	}
 }
 //todo: implement methods:
-static unordered_multimap<string, Song*>* get_songs_by_name() { //default comparison (by name)
 
-}
-static multimap<string, Song*>* get_songs_sorted_by_alphabet() { //default comparison (by name)
-
-}
-static unordered_multimap<string, Song*>* get_songs_by_artist() {
-
-}
-static unordered_multimap<string, Song*>* get_songs_by_album() {
-
-}
-static unordered_multimap<string, Song*>* get_songs_by_genre() {
-
-}
-static unordered_multimap<string, Podcast*>* get_podcasts_by_name() {
-
-}
 
 static unordered_map<int, Song*>* get_songs_by_id() {
 
@@ -173,6 +183,14 @@ unordered_multimap<string, Song*>* Server::find(string& key, unordered_multimap<
 		filtered_songs->insert(make_pair(it->first, it->second)); //inserts each value into the filtered set.
 	}
 	return filtered_songs;
+}
+
+Podcast* Server::find_podcast_by_name(string name)
+{
+	if (m_all_podcasts.count(name) > 0) {
+		return m_all_podcasts[name];
+	}
+	throw exception();
 }
 
 list<Song*>* Server::get_recently_played() {

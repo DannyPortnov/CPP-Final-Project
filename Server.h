@@ -18,18 +18,19 @@ class Server {
 private:
 	//sorting - O(log n) - FOR PRINTING
 	static multimap<string, Song*> m_songs_by_alphabet_order;
-	static multimap<string, Podcast*> m_podcasts_by_alphabet_order;
+	static map<string, Podcast*> m_podcasts_by_alphabet_order;
 
 	//search - O(1), insertion - O(1), deletion - O(1) - FOR EVERYTHING ELSE
 	static unordered_map<int, Song*> m_all_songs_by_id;
 	static unordered_map<int, Episode*> m_all_episodes_by_id;
+	static unordered_map<string, Episode*> m_all_episodes_by_name;
 	static unordered_set<string> m_songs_file_paths;  //maybe removed this
 	static unordered_set<string> m_episodes_by_file_paths; //maybe removed this
 	static unordered_multimap<string, Song*> m_all_songs_by_artist;
 	static unordered_multimap<string, Song*> m_all_songs_by_name;
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
 	static unordered_multimap<string, Song*> m_all_songs_by_genre;
-	static unordered_multimap<string, Podcast*> m_all_podcasts;
+	static unordered_map<string, Podcast*> m_all_podcasts;
 
 	static list<Song*> m_recently_played; // good complexity for insertion/deletion O(1)
 	static multimap<int, Song*> m_most_played; // songs in an oreder from least played to most played
@@ -47,18 +48,19 @@ public:
 	//getters
 	static unordered_map<int, Song*>* get_songs_by_id(); //todo: implement
 	static unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
+	//Returns the unique episode with given name
 	static multimap<string, Song*>* get_songs_sorted_by_alphabet(); //default comparison (by name)
 	static unordered_multimap<string, Song*>*  get_songs_by_artist();
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
-	static unordered_multimap<string, Podcast*>* get_podcasts_by_name();
 
 	static list<Song*>* get_recently_played();
 	static multimap<int, Song*>* get_most_played();
 
-	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 	static Episode* find_episode_by_id(int id); // returns 1 episode, there is a unique ID for every episode
-
+	static Episode* find_episode_by_name(string name);
+	static Podcast* find_podcast_by_name(string name);
+	static Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 	//search the data structures based on a parameter
 	static unordered_multimap<string, Song*>* find_by_name(string& name);
 	static unordered_multimap<string, Song*>* find_by_artist(string& singer);
@@ -89,8 +91,10 @@ public:
 
 	//permanently deletes a song from the database COMPLETETLY
 	static void Permanent_Delete_Song(Song* song);
+	//Removes the episode from all listings and from its podcast
 	static void Permanent_Delete_Podcast_Episode(Episode* episode);
-	static void permanent_delete_podcast(Podcast* podcast);
+	//Deletes a podcast and each episode in it
+	static void Permanent_Delete_Podcast(Podcast* podcast);
 };
 #endif
 
