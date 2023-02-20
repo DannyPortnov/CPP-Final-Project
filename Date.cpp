@@ -8,6 +8,11 @@ Date::Date() {
 	init(newtime.tm_mday, newtime.tm_mon + 1, newtime.tm_year + 1900);
 }
 
+//constructor that creates an instance by string
+Date::Date(string date) {
+
+}
+
 // set the date
 Date& Date::init(char d, char m, int y) {
 	m_day = d; m_month = m; m_year = y;
