@@ -40,12 +40,12 @@ void Song::update_plays_counter() {
 	m_plays_counter += 1;
 }
 
-void Song::set_playlist_appearences(Playlist* playlist) {
-	m_playlist_appearences.insert(make_pair(playlist->get_name(), playlist));
+void Song::set_playlist_appearences(const string& playlist) {
+	m_playlist_appearences.insert(playlist);
 }
 
-void Song::remove_from_playlist(Playlist* playlist) {
-	m_playlist_appearences.erase(playlist->get_name());
+void Song::remove_from_playlist(const string& playlist) {
+	m_playlist_appearences.erase(playlist);
 }
 
 // returns true if the song names are in the right order.
@@ -70,5 +70,6 @@ ostream& operator<<(ostream& os, const Song& song)
 	if (song.m_release_date != 0) {
 		os << " release date: " << song.m_release_date;
 	}
+	if(song.)
 	return os;
 }
