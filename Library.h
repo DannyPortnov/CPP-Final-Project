@@ -33,11 +33,12 @@ private:
 	//Returns the choosen song. If wrong name returns nullptr!
 	template<class T>
 	T* Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search);
+	
 
 	bool check_if_user_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
 	bool check_if_continue_playing();
-
+	bool make_sure_to_delete_song(Song* song);
 	void Print_Not_Found_By_Id_Error(int song_id, string item_type);
 	void Print_No_Input_Parameters_Error();
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
@@ -59,9 +60,12 @@ public:
 	void Delete_Song(int id);
 	//Deletes a song from the library
 	void Delete_Song(string song_name);
+	// method removes a specific song, used by the two Delete_Song methods
+	void delete_song(Song* song_to_delete);
+
 
 	void Add2PL(int id, const string& playlist_name);
-	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
+	void RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
 	void add_to_favorites(Song* song);
 
 	ostream& Print(ostream& os, int begin, int end) const;
@@ -88,6 +92,8 @@ public:
 	void Play(int id);
 	//gets the data structure from Server!
 	void PlayAll();
+	template <template<typename, typename> class MapType>
+	void PlayAll(MapType<string, Song*>*);
 	//gets the data structure from Server!
 	void PlayRandom();
 	//play song and update song data

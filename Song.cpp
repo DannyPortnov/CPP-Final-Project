@@ -30,12 +30,12 @@ const int Song::get_plays_count() const {
 
 void Song::print_playlists() const {
 	cout << "Playlists: ";
-	if (m_playlist_appearences.size() == 0) {
+	if (m_playlist_appearances.size() == 0) {
 		cout << " None.";
 		return;
 	}
 	unordered_set<string>::iterator it;
-	for (it = m_playlist_appearences.begin(); it != m_playlist_appearences.end(); it++) {
+	for (it = m_playlist_appearances.begin(); it != m_playlist_appearances.end(); it++) {
 		cout << *it << ", ";
 	}
 	cout << endl;
@@ -53,12 +53,23 @@ void Song::update_plays_counter() {
 	m_plays_counter += 1;
 }
 
-void Song::set_playlist_appearences(const string& playlist) {
-	m_playlist_appearences.insert(playlist);
+void Song::set_playlist_appearances(const string& playlist) {
+	if (playlist != "recent" || playlist != "most played") //todo: names need to match exactly to m_recent & m_most_played playlist
+		m_playlist_appearances.insert(playlist);
 }
 
 void Song::remove_from_playlist(const string& playlist) {
-	m_playlist_appearences.erase(playlist);
+	if (playlist != "recent" || playlist != "most played") //todo: names need to match exactly to m_recent & m_most_played playlist
+		m_playlist_appearances.erase(playlist);
+}
+
+// used when trying to delete a song in library
+void Song::clear_from_all_playlists() {
+	m_playlist_appearances.clear();
+}
+
+unordered_set<string>* Song::get_playlist_appearances() {
+	return &m_playlist_appearances;
 }
 
 // returns true if the song names are in the right order.
