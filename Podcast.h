@@ -41,6 +41,7 @@ public:
 	//bool Is_Episode_In_Podcast(const string& episode_name);
 	void Set_Podcast_Name(const string& new_name);
 	unordered_set<Episode*>* get_podcast() { return &m_podcast_episodes; } // getter
+	//todo: add play podcast
 	//todo: check if a setter is needed (podcast should be set only by admin and not by user)
 };
 

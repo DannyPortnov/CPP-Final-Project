@@ -76,8 +76,7 @@ void Server::Permanent_Delete_Podcast_Episode(Episode* episode)
 {
 	 m_all_episodes_by_id.erase(episode->get_id());
 	 m_all_episodes_by_name.erase(episode->get_name());
-	 Podcast* temp = episode->Get_Podcast();
-	 temp->Delete_Episode(episode);
+	 episode->Get_Podcast()->Delete_Episode(episode);
 }
 
 void Server::Permanent_Delete_Podcast(Podcast* podcast)
@@ -195,8 +194,6 @@ list<Song*>* Server::get_recently_played() {
  multimap<int, Song*>* Server::get_most_played() {
 	 return &m_most_played;
 }
-
-
 
 // updates recently played songs
 void Server::update_recently_played(int id) {

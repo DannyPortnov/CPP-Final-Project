@@ -353,6 +353,7 @@ void Library::play_song(Song* song) {
 
 void Library::Play(string song_name)
 {
+	//todo: niv - add play playlist to library
 	auto song = Server::find_by_name(song_name);
 	auto count = song->count(song_name);
 	PrintSong(song_name);
@@ -466,36 +467,6 @@ void Library::PlayRandom() {
 
 }
 
-
-#pragma region Old implementation of RemoveFromPL
-//void Library::RemoveFromPL(string& song_name, const string& playlist_name)
-//{
-//	Update_Playlists_Map();
-//	auto songs_by_names = m_playlists_map->at(playlist_name)->Get_Songs();
-//	multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
-//	multiset<Song*>::iterator end_of_songs_set;
-//	multiset<Song*>::iterator first_wanted_song;
-//	multiset<Song*>::iterator last_wanted_song;
-//	int number_of_songs = Count_Songs(&songs_by_names, song_name, &start_of_songs_set, &end_of_songs_set, &first_wanted_song, &last_wanted_song);
-//	switch (number_of_songs)
-//	{
-//	case 0: {
-//		cout << "No songs named " << song_name << " currently in " << playlist_name << "." << endl;
-//		return;
-//	}
-//	case 1: {
-//		m_playlists_map->at(playlist_name)->remove_song(*first_wanted_song); //or *last doesn't matter
-//		return;
-//	}
-//	default:
-//		break;
-//	}
-//	cout << "More than one song named " << song_name << ", choose which one you want to remove" << endl;
-//	//m_playlists_map->at(playlist_name)->remove_song(Pick_Song( )); //removes the selected song
-//}  
-#pragma endregion
-
-
 //called from the interface ("main")
 void Library::Add_Song(string song_name, string file_path, string artist = "",
 	string album = "", string genre = "", string duration = "", int release_Date = 0)
@@ -506,7 +477,7 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 	}
 	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_Date);
 
-#pragma region Algorithm to find all songs by that name and choosing specific one
+	#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
 	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	//multiset<Song*>::iterator end_of_songs_set;
@@ -570,63 +541,6 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 	advance(iterator, answer - 1);
 	return iterator->second;
 }
-#pragma region Previous implementation of pick_podcast and pick_song
-
-//Podcast* Library::Pick_Podcast(string podcast_name) {
-//	auto& all_podcasts = *Server::get_podcasts_by_name();
-//	auto filtered_podcasts = all_podcasts.equal_range(podcast_name);
-//	int number_of_songs = all_podcasts.count(podcast_name); //O(log n), distance is O(n). overall doesn't matter
-//	if (number_of_songs == 0) {
-//		return nullptr;
-//	}
-//	if (number_of_songs == 1) {
-//		return filtered_podcasts.first->second;
-//	}
-//	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
-//	for (auto& iterator = filtered_podcasts.first; iterator != filtered_podcasts.second; ++iterator, ++i) {//loops over all podcasts
-//		cout << i << " - " << iterator->second << endl;//prints numbered songs
-//	}
-//	int answer;
-//	do {
-//		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
-//		cin >> answer;
-//	} while (answer < 0 || answer > number_of_songs);
-//	if (answer == 0) {
-//		return nullptr;
-//	}
-//	auto& iterator = filtered_podcasts.first;
-//	advance(iterator, answer - 1);
-//	return iterator->second;
-//}
-//
-//
-//Song* Library::Pick_Song(string song_name) {
-//	unordered_multimap<string, Song*> all_songs = *Server::get_songs_by_name();
-//	auto filtered_songs = all_songs.equal_range(song_name);
-//	int number_of_songs = all_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
-//	if (number_of_songs == 0) {
-//		return nullptr; 
-//	}
-//	if (number_of_songs == 1) {
-//		return filtered_songs.first->second;
-//	}
-//	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
-//	for (auto& iterator = filtered_songs.first; iterator != filtered_songs.second; ++iterator, ++i) {//loops over all songs to delete
-//		cout << i << " - " << iterator->second << endl;//prints numbered songs
-//	}
-//	int answer;
-//	do {
-//		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
-//		cin >> answer;
-//	} while (answer < 0 || answer > number_of_songs);
-//	if (answer == 0) {
-//		return nullptr;
-//	}
-//	auto& iterator = filtered_songs.first;
-//	advance(iterator, answer - 1);
-//	return iterator->second;
-//}  
-#pragma endregion
 
 //todo: we have a method like this in library, check if needed here also.
 // double checks with the user if the song should be deleted, if yes- returns true.
@@ -705,6 +619,7 @@ void Library::Delete_Episode(int id)
 {
 	try
 	{
+		//todo: add check before delete
 		Server::Permanent_Delete_Podcast_Episode(Server::find_episode_by_id(id));
 	}
 	catch (const std::exception&)
@@ -849,3 +764,88 @@ ostream& operator<<(ostream& os, const Library& lib)
 //			return str.empty();
 //		});
 //}
+#pragma region Previous implementation of pick_podcast and pick_song
+
+//Podcast* Library::Pick_Podcast(string podcast_name) {
+//	auto& all_podcasts = *Server::get_podcasts_by_name();
+//	auto filtered_podcasts = all_podcasts.equal_range(podcast_name);
+//	int number_of_songs = all_podcasts.count(podcast_name); //O(log n), distance is O(n). overall doesn't matter
+//	if (number_of_songs == 0) {
+//		return nullptr;
+//	}
+//	if (number_of_songs == 1) {
+//		return filtered_podcasts.first->second;
+//	}
+//	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
+//	for (auto& iterator = filtered_podcasts.first; iterator != filtered_podcasts.second; ++iterator, ++i) {//loops over all podcasts
+//		cout << i << " - " << iterator->second << endl;//prints numbered songs
+//	}
+//	int answer;
+//	do {
+//		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
+//		cin >> answer;
+//	} while (answer < 0 || answer > number_of_songs);
+//	if (answer == 0) {
+//		return nullptr;
+//	}
+//	auto& iterator = filtered_podcasts.first;
+//	advance(iterator, answer - 1);
+//	return iterator->second;
+//}
+//
+//
+//Song* Library::Pick_Song(string song_name) {
+//	unordered_multimap<string, Song*> all_songs = *Server::get_songs_by_name();
+//	auto filtered_songs = all_songs.equal_range(song_name);
+//	int number_of_songs = all_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
+//	if (number_of_songs == 0) {
+//		return nullptr; 
+//	}
+//	if (number_of_songs == 1) {
+//		return filtered_songs.first->second;
+//	}
+//	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
+//	for (auto& iterator = filtered_songs.first; iterator != filtered_songs.second; ++iterator, ++i) {//loops over all songs to delete
+//		cout << i << " - " << iterator->second << endl;//prints numbered songs
+//	}
+//	int answer;
+//	do {
+//		cout << "Please choose a number between 1 and " << number_of_songs << " (0 to cancel): ";
+//		cin >> answer;
+//	} while (answer < 0 || answer > number_of_songs);
+//	if (answer == 0) {
+//		return nullptr;
+//	}
+//	auto& iterator = filtered_songs.first;
+//	advance(iterator, answer - 1);
+//	return iterator->second;
+//}  
+#pragma endregion
+
+#pragma region Old implementation of RemoveFromPL
+//void Library::RemoveFromPL(string& song_name, const string& playlist_name)
+//{
+//	Update_Playlists_Map();
+//	auto songs_by_names = m_playlists_map->at(playlist_name)->Get_Songs();
+//	multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
+//	multiset<Song*>::iterator end_of_songs_set;
+//	multiset<Song*>::iterator first_wanted_song;
+//	multiset<Song*>::iterator last_wanted_song;
+//	int number_of_songs = Count_Songs(&songs_by_names, song_name, &start_of_songs_set, &end_of_songs_set, &first_wanted_song, &last_wanted_song);
+//	switch (number_of_songs)
+//	{
+//	case 0: {
+//		cout << "No songs named " << song_name << " currently in " << playlist_name << "." << endl;
+//		return;
+//	}
+//	case 1: {
+//		m_playlists_map->at(playlist_name)->remove_song(*first_wanted_song); //or *last doesn't matter
+//		return;
+//	}
+//	default:
+//		break;
+//	}
+//	cout << "More than one song named " << song_name << ", choose which one you want to remove" << endl;
+//	//m_playlists_map->at(playlist_name)->remove_song(Pick_Song( )); //removes the selected song
+//}  
+#pragma endregion
