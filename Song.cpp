@@ -41,7 +41,11 @@ void Song::update_plays_counter() {
 }
 
 void Song::set_playlist_appearences(Playlist* playlist) {
-	m_playlist_appearences.insert(playlist);
+	m_playlist_appearences.insert(make_pair(playlist->get_name(), playlist));
+}
+
+void Song::remove_from_playlist(Playlist* playlist) {
+	m_playlist_appearences.erase(playlist->get_name());
 }
 
 // returns true if the song names are in the right order.
