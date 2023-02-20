@@ -41,7 +41,7 @@ private:
 	bool make_sure_to_delete_song(Song* song);
 	void Print_Not_Found_By_Id_Error(int song_id, string item_type);
 	void Print_No_Input_Parameters_Error();
-	void Print_Not_Found_By_Name_Error(std::string& song_name);
+	static void Print_Not_Found_By_Name_Error(std::string& song_name);
 	void Print_Media_Exists_Error(std::string& new_name, const string & media_type);
 
 	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
@@ -105,6 +105,7 @@ public:
 	void PlayRandom();
 	//play song and update song data
 	void play_song(Song* song);
+	static void Play_Podcast(string podcast_name);
 
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist

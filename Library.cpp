@@ -351,6 +351,18 @@ void Library::play_song(Song* song) {
 	update_most_recent(song->get_id());
 }
 
+void Library::Play_Podcast(string podcast_name)
+{
+	try
+	{
+		Server::find_podcast_by_name(podcast_name)->Play(); //throws exception if not found
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Name_Error(podcast_name);
+	}
+}
+
 void Library::Play(string song_name)
 {
 	//todo: niv - add play playlist to library
@@ -375,6 +387,8 @@ void Library::Play(int id)
 	auto song_to_play = Server::find_song_by_id(id);
 	play_song(song_to_play);
 }
+
+
 
 bool Library::check_if_continue_playing() {
 	bool invalid_char = true;
