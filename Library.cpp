@@ -10,10 +10,10 @@ Playlist* Library::m_most_played = new Playlist("most played");
 
 Library::Library() //todo: maybe to convert to static, and than needs to be changed
 {
-	m_saved_playlist_names.insert(make_pair("favorites", m_favorites));
-	m_saved_playlist_names.insert(make_pair("deleted", m_deleted));
-	m_saved_playlist_names.insert(make_pair("recent", m_recent));
-	m_saved_playlist_names.insert(make_pair("most played", m_most_played));
+	m_saved_playlist_names.insert(make_pair(m_favorites->get_name(), m_favorites));
+	m_saved_playlist_names.insert(make_pair(m_deleted->get_name(), m_deleted));
+	m_saved_playlist_names.insert(make_pair(m_recent->get_name(), m_recent));
+	m_saved_playlist_names.insert(make_pair(m_most_played->get_name(), m_most_played));
 
 }
 
@@ -71,7 +71,7 @@ bool Library::check_if_user_playlist_exist(const string& playlist_name) {
 // return true if playlist can be edited, false if not (user can edit favorites) 
 bool Library::check_if_playlist_can_be_edited(const string& playlist_name) {
 	if (playlist_name == m_recent->get_name() || playlist_name == m_daily_mix->get_name() ||
-		playlist_name == m_most_played->get_name()) {
+		playlist_name == m_most_played->get_name()) { //todo: if daily mix is a different class, needs to change implementation
 		return false;
 	}
 	return true;
