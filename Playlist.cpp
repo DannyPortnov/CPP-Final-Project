@@ -116,6 +116,7 @@ void Playlist::add_song_to_playlist(Song* song) {
 	}
 	else {
 		m_songs.insert(make_pair(song->get_name(), song));
+		song->set_playlist_appearences(m_playlist_name);
 		cout << "Song was successfully added to " << m_playlist_name << "!" << endl;
 	}
 }
@@ -146,6 +147,7 @@ bool Playlist::make_sure_to_remove_song(Song* song) {
 void Playlist::remove_song_from_playlist(Song* song) {
 	if (make_sure_to_remove_song(song)) {
 		m_songs.erase(song->get_name());
+		song->remove_from_playlist(m_playlist_name);
 		cout << "Song was successfully removed from playlist: " << m_playlist_name << "!" << endl;
 	}
 	cout << "The song wasn't removed from playlist: " << m_playlist_name << "!" << endl;
