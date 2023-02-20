@@ -520,6 +520,7 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name, stri
 	}
 
 }
+
 template <class T>
 T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {
 	auto filtered_media = collection_to_search.equal_range(media_name);
@@ -625,9 +626,33 @@ void Library::Delete_Song(string song_name)
 	}
 }
 
-void Library::Print_Not_Found_By_Name_Error(std::string& song_name)
+void Library::Delete_Episode(int id)
 {
-	cout << song_name << " isn't present in the server." << endl;
+	try
+	{
+		Server::Permanent_Delete_Podcast_Episode(Server::find_episode_by_id(id));
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Id_Error(id, typeid(Song).name());
+	}
+}
+
+void Library::Delete_Episode(string episode_name)
+{
+	try
+	{
+		Server::Permanent_Delete_Podcast_Episode(Server::get_episode_by_name(episode_name)); //if episode doesn't exist, throws exception
+	}
+	catch (const std::exception&)
+	{
+		Print_Not_Found_By_Name_Error(episode_name);
+	}
+}
+
+void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
+{
+	cout << media_name << " isn't present in the server." << endl;
 }
 
 //Adds song to m_deleted playlist

@@ -59,6 +59,10 @@ public:
 	void Delete_Song(int id);
 	//Deletes a song from the library
 	void Delete_Song(string song_name);
+	//Deletes an episode from the library
+	void Delete_Episode(int id);
+	//Deletes an episode from the library
+	void Delete_Episode(string episode_name);
 
 	void Add2PL(int id, const string& playlist_name);
 	void RemoveFromPL(string& song_name, const string& playlist_name); //what if there's more than one song called like this?
@@ -76,7 +80,7 @@ public:
 	//Update podcast's name
 	void UpdatePodcast(string podcast_name, string new_name = "");
 	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", int release_date=0);
-	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0);
+	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
 	//update recent songs playlist by using song id
 	void update_most_recent(int id);
 	//update most played songs playlist
