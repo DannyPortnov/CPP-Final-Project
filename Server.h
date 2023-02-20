@@ -21,16 +21,16 @@ private:
 	static map<string, Podcast*> m_podcasts_by_alphabet_order;
 
 	//search - O(1), insertion - O(1), deletion - O(1) - FOR EVERYTHING ELSE
-	static unordered_map<int, Song*> m_all_songs_by_id;
 	static unordered_map<int, Episode*> m_all_episodes_by_id;
 	static unordered_map<string, Episode*> m_all_episodes_by_name;
-	static unordered_set<string> m_songs_file_paths;  //maybe removed this
-	static unordered_set<string> m_episodes_by_file_paths; //maybe removed this
+	static unordered_map<string, Podcast*> m_all_podcasts;
+
+	static unordered_map<int, Song*> m_all_songs_by_id;
+	static unordered_set<string> m_songs_file_paths;  //Nessecary to check songs uniqueness in the server (can't add same song twice)
 	static unordered_multimap<string, Song*> m_all_songs_by_artist;
 	static unordered_multimap<string, Song*> m_all_songs_by_name;
 	static unordered_multimap<string, Song*> m_all_songs_by_album;
 	static unordered_multimap<string, Song*> m_all_songs_by_genre;
-	static unordered_map<string, Podcast*> m_all_podcasts;
 
 	static list<Song*> m_recently_played; // good complexity for insertion/deletion O(1)
 	static multimap<int, Song*> m_most_played; // songs in an oreder from least played to most played
@@ -75,7 +75,8 @@ public:
 	//Checks if song was already added to server
 	static bool Does_Song_Exist(const string& file_path);
 	//Checks if episode was already added to server
-	static bool Does_Episode_Exist(const string& file_path);
+	static bool Does_Episode_Exist(string& episode_name);
+	static bool Does_Podcast_Exist(string& podcast_name);
 
 	//Allocates memory for the new song and adds to each data structure
 	static void Upload_Song(string song_name, string file_path, string artist = "",

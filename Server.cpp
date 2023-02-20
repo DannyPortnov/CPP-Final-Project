@@ -170,16 +170,13 @@ bool Server::Does_Song_Exist(const string& file_path)
 {
 	return m_songs_file_paths.count(file_path) > 0;
 }
-bool Server::Does_Episode_Exist(const string& file_path)
+bool Server::Does_Episode_Exist(string& episode_name)
 {
-	for (auto itr = m_all_podcasts.begin(); itr != m_all_podcasts.end(); itr++)
-	{
-		auto temp = itr->second;
-		if (temp->Is_Episode_In_Podcast(file_path)) {
-			return true;
-		}
-	}
-	return false;
+	return m_all_episodes_by_name.count(episode_name) > 0;
+}
+bool Server::Does_Podcast_Exist(string& podcast_name)
+{
+	return m_all_podcasts.count(podcast_name) > 0;
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
 unordered_multimap<string, Song*>* Server::find_all(string& key, unordered_multimap<string, Song*>& collection) {
