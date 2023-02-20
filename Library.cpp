@@ -556,8 +556,15 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name, stri
 		cout << "Episode was already added." << endl;
 		return;
 	}
-
-	auto picked_podcast = Server::find_podcast_by_name(podcast_name);
+	Podcast* picked_podcast;
+	try
+	{
+		picked_podcast = Server::find_podcast_by_name(podcast_name);
+	}
+	catch (const std::exception&)
+	{
+		picked_podcast = nullptr;
+	}
 	Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
 
 }
