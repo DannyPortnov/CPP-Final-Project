@@ -40,6 +40,9 @@ void Song::update_plays_counter() {
 	m_plays_counter += 1;
 }
 
+void Song::set_playlist_appearences(Playlist* playlist) {
+	m_playlist_appearences.insert(playlist);
+}
 
 // returns true if the song names are in the right order.
 bool operator<(const Song& a, const Song& b) {
