@@ -28,6 +28,19 @@ const int Song::get_plays_count() const {
 }
 
 
+void Song::print_playlists() const {
+	cout << "Playlists: ";
+	if (m_playlist_appearences.size() == 0) {
+		cout << " None.";
+		return;
+	}
+	unordered_set<string>::iterator it;
+	for (it = m_playlist_appearences.begin(); it != m_playlist_appearences.end(); it++) {
+		cout << *it << ", ";
+	}
+	cout << endl;
+}
+
 void Song::Play()
 {
 	update_plays_counter();
@@ -70,6 +83,6 @@ ostream& operator<<(ostream& os, const Song& song)
 	if (song.m_release_date != 0) {
 		os << " release date: " << song.m_release_date;
 	}
-	if(song.)
+	song.print_playlists();
 	return os;
 }

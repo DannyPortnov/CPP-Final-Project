@@ -29,7 +29,7 @@ public:
 	
 	const string& get_album() const; 
 	const string& get_genre() const;
-	const string& get_artist() const; 
+	const string& get_artist() const;
 	const int get_plays_count() const;
 
 	void set_artist(string& artist);
@@ -39,6 +39,7 @@ public:
 	void remove_from_playlist(const string& playlist);
 	void update_plays_counter();
 
+	void print_playlists() const;
 	//Song& operator=(const Song& exisiting_song);
 	
 friend bool operator<(const Song& a, const Song& b);
