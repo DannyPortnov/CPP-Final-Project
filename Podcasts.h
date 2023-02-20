@@ -20,12 +20,12 @@ Questions:
 class Podcasts {
 
 private:
-	unordered_set<Podcast*> Podcasts; //todo: maybe it should be a part of the library? maybe a part of the server?
+	unordered_set<Podcast*> Podcasts; 
 
 
 public:
 
-	void delete_podcast(); //todo: delete from library? i don't think we can delete from the server..
+	void delete_podcast(); 
 	void play(); // play podcast // todo: add a feature that the user will be able to choose an episode
 								 // (just like picking a song from a playlist) 
 	

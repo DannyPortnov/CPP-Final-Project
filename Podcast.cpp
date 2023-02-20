@@ -12,9 +12,6 @@ Podcast::~Podcast()
 	m_podcast_episodes.clear();
 }
 
-
-
-
 void Podcast::Add_Episode(Episode* episode)
 {
 	//if (m_podcast_episodes.empty()) {

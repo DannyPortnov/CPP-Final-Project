@@ -65,7 +65,7 @@ void Playlist::Play_Random() {
 	
 	// Play the songs of the multimap in the shuffled order
 	for (auto const& song : songs_vector) {
-		cout << "Now playing: " << *(song->second) << endl; //todo: ask if the user want to stop playing after each iteration.
+		cout << "Now playing: " << *(song->second) << endl;
 		song->second->update_plays_counter();
 		m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)

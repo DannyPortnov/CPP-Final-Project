@@ -42,11 +42,10 @@ private:
 	void Destory_Allocations(T& collection);
 public:
 	//Server();
-	//todo: check if destroyer is needed
 	~Server();
 
 	//getters
-	static unordered_map<int, Song*>* get_songs_by_id();
+	static unordered_map<int, Song*>* get_songs_by_id(); //todo: implement
 	static unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
 	static multimap<string, Song*>* get_songs_sorted_by_alphabet(); //default comparison (by name)
 	static unordered_multimap<string, Song*>*  get_songs_by_artist();

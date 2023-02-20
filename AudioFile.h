@@ -6,9 +6,6 @@
 #include "Player.h"
 using namespace std;
 
-//todo: add more meat here
-//todo: podcasts will be like playlists
-
 class AudioFile
 {
 protected:
@@ -18,7 +15,7 @@ protected:
 	int m_release_date;
 	static int id_code;	// in this class we will be able to give id to every music file
 	int m_id_code;
-	Player m_player; //todo: add a counter to plays 
+	Player m_player;
 	AudioFile(string file_name, string file_path, string duration="", int release_date = 0);
 public:
 

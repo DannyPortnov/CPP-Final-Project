@@ -166,8 +166,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 	else
 		cout << "This Playlist Cannot Be Edited!" << endl;
 }
-
-
+ 
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(string& song_name, const string& playlist_name) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
@@ -254,6 +253,7 @@ void Library::Update_Song(int song_id, string new_name, string artist, string al
 {
 	try
 	{
+		//move updating to Song
 		auto picked_song= Update_Media_By_Id(song_id, Server::find_song_by_id, new_name, duration, release_date);
 		if (!artist.empty()) {
 			picked_song->set_artist(artist);
@@ -389,7 +389,7 @@ bool Library::check_if_continue_playing() {
 }
 
 // Play all of the songs in the library
-void Library::PlayAll() {
+void Library::PlayAll() { //todo: niv
 	auto songs_to_play = Server::get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		cout << "There are no songs in the library." << endl;
@@ -604,18 +604,17 @@ T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collec
 //}  
 #pragma endregion
 
-//todo: fix implementation, a deleted song needs to go to deleted playlist, not to be permanantly deleted! 
-//need to add this song to m_deleted playlist
+
+//Adds song to m_deleted playlist
 void Library::Delete_Song(string song_name)
 {
 	try
 	{
 		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
 		if (picked_song != nullptr) {
-			// int id = picked_song->get_id();
-			// m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
-
-			Server::Permanent_Delete_Song(picked_song);
+			 int id = picked_song->get_id();
+			 m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
+			//Server::Permanent_Delete_Song(picked_song);
 			return;
 		}
 		Print_Not_Found_By_Name_Error(song_name);
@@ -631,14 +630,13 @@ void Library::Print_Not_Found_By_Name_Error(std::string& song_name)
 	cout << song_name << " isn't present in the server." << endl;
 }
 
-//todo: fix implementation, a deleted song needs to go to deleted playlist, not to be permanantly deleted! 
-//need to add this song to m_deleted playlist
+//Adds song to m_deleted playlist
 void Library::Delete_Song(int id)
 {
 	try
 	{
-		// m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
-		Server::Permanent_Delete_Song(Server::find_song_by_id(id));
+		m_deleted->add_song_to_playlist(Server::find_song_by_id(id));
+		//Server::Permanent_Delete_Song(Server::find_song_by_id(id));
 	}
 	catch (const std::exception&)
 	{
@@ -675,7 +673,8 @@ void Library::update_most_played() { // need to be called after playing a song a
 ostream& Library::Print(ostream& os, int begin, int end) const
 {
 	auto itr = Server::get_songs_by_name()->begin();
-	for (int i = 0; i < begin && itr != Server::get_songs_by_name()->end(); i++, itr++) {} //if begin!=0, inc itr untill reached begin
+	advance(itr, begin);//if begin!=0, inc itr untill reached begin
+	//for (int i = 0; i < begin && itr != Server::get_songs_by_name()->end(); i++, itr++) {} 
 	for (int i = begin; i < end && itr != Server::get_songs_by_name()->end(); i++, itr++)
 	{
 		cout << itr->second << endl;
