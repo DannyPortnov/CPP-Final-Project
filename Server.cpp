@@ -36,14 +36,15 @@ void Server::Upload_Song(string song_name, string file_path, string artist = "",
 void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
 	string duration, int release_Date)
 {
-	auto new_episode = new Episode(file_path, episode_name, release_Date, duration); //deleted in Podcast
 	if (podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
 		podcast = new Podcast(podcast_name); //deleted in Server
 	}
+	auto new_episode = new Episode(file_path, episode_name,podcast, release_Date, duration); //deleted in Podcast
 	podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
 	auto& podcast_name = podcast->Get_Podcast_Name();
 	m_all_podcasts.emplace(podcast_name, podcast);
 	m_all_episodes_by_id.emplace(new_episode->get_id(), new_episode);
+	m_all_episodes_by_name.emplace(new_episode->get_name(), new_episode);
 	m_podcasts_by_alphabet_order.emplace(podcast_name, podcast);
 }
 
@@ -71,35 +72,38 @@ void Server::Permanent_Delete_Song(Song* song)
 	delete song; //???
 }
 
+void Server::Permanent_Delete_Podcast_Episode(Episode* episode)
+{
+	 m_all_episodes_by_id.erase(episode->get_id());
+	 m_all_episodes_by_name.erase(episode->get_name());
+	 Podcast* temp = episode->Get_Podcast();
+	 temp->Delete_Episode(episode);
+}
+
+void Server::Permanent_Delete_Podcast(Podcast* podcast)
+{
+	for (auto& name_podcast_pair : m_podcasts_by_alphabet_order) {
+		m_podcasts_by_alphabet_order.erase(name_podcast_pair.first); //removes listing of podcast
+	}
+
+	//Go over each podcast in the collection
+	for (auto& name_podcast_pair : m_all_podcasts) { //deleting a nullptr is fine; has no effect.
+		auto all_episodes = name_podcast_pair.second->get_podcast();
+		for (auto itr = all_episodes->begin(); itr != all_episodes->end(); itr++) {
+			Permanent_Delete_Podcast_Episode(*itr);
+		}
+		m_all_podcasts.erase(name_podcast_pair.first);//removes listing of podcast
+
+		delete name_podcast_pair.second; //deletes a podcast, then inside deletes the episodes
+	}
+}
+
 template <typename T>
 void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
 	auto it = songs_by_field.find(song);
 	if (it != songs_by_field.end() && it->second == song) {
 		songs_by_field.erase(it);
 	}
-}
-//todo: implement methods:
-static unordered_multimap<string, Song*>* get_songs_by_name() { //default comparison (by name)
-
-}
-static multimap<string, Song*>* get_songs_sorted_by_alphabet() { //default comparison (by name)
-
-}
-static unordered_multimap<string, Song*>* get_songs_by_artist() {
-
-}
-static unordered_multimap<string, Song*>* get_songs_by_album() {
-
-}
-static unordered_multimap<string, Song*>* get_songs_by_genre() {
-
-}
-static unordered_multimap<string, Podcast*>* get_podcasts_by_name() {
-
-}
-
-static unordered_map<int, Song*>* get_songs_by_id() {
-
 }
 
 // A template function that takes an unordered map/multimap 
@@ -120,53 +124,62 @@ void Server::Destory_Allocations(T& collection)
 //Returns a unique song based on its id. If doesn't exists throws exception
 Song* Server::find_song_by_id(int id)
 {
-	if (m_all_songs_by_id.count(id) > 0) {
-		return m_all_songs_by_id[id];
-	}
-	throw exception();
+	return Find_Unique(id, m_all_songs_by_id);
 }
 
 Episode* Server::find_episode_by_id(int id)
 {
-	if (m_all_episodes_by_id.count(id) > 0) {
-		return m_all_episodes_by_id[id];
+	return Find_Unique(id, m_all_episodes_by_id);
+}
+
+Episode* Server::find_episode_by_name(string name)
+{
+	return Find_Unique(name, m_all_episodes_by_name);
+}
+
+Podcast* Server::find_podcast_by_name(string name)
+{
+	return Find_Unique(name, m_all_podcasts);
+}
+
+template < class TKey, class TValue>
+TValue* Server::Find_Unique(TKey param, unordered_map<TKey, TValue*> coolection_to_Search) {
+	if (coolection_to_Search.count(param) > 0) {
+		return coolection_to_Search[param];
 	}
 	throw exception();
 }
 
 unordered_multimap<string, Song*>* Server::find_by_name(string& name)
 {
-	return find(name, m_all_songs_by_name);
+	return find_all(name, m_all_songs_by_name);
 }
 unordered_multimap<string, Song*>* Server::find_by_artist(string& singer)
 {
-	return find(singer, m_all_songs_by_artist);
+	return find_all(singer, m_all_songs_by_artist);
 }
 unordered_multimap<string, Song*>* Server::find_by_album(string& album)
 {
-	return find(album, m_all_songs_by_album);
+	return find_all(album, m_all_songs_by_album);
 }
 unordered_multimap<string, Song*>* Server::find_by_genre(string& genre)
 {
-	return find(genre, m_all_songs_by_genre);
+	return find_all(genre, m_all_songs_by_genre);
 }
 bool Server::Does_Song_Exist(const string& file_path)
 {
 	return m_songs_file_paths.count(file_path) > 0;
 }
-bool Server::Does_Episode_Exist(const string& file_path)
+bool Server::Does_Episode_Exist(string& episode_name)
 {
-	for (auto itr = m_all_podcasts.begin(); itr != m_all_podcasts.end(); itr++)
-	{
-		auto temp = itr->second;
-		if (temp->Is_Episode_In_Podcast(file_path)) {
-			return true;
-		}
-	}
-	return false;
+	return m_all_episodes_by_name.count(episode_name) > 0;
+}
+bool Server::Does_Podcast_Exist(string& podcast_name)
+{
+	return m_all_podcasts.count(podcast_name) > 0;
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
-unordered_multimap<string, Song*>* Server::find(string& key, unordered_multimap<string, Song*>& collection) {
+unordered_multimap<string, Song*>* Server::find_all(string& key, unordered_multimap<string, Song*>& collection) {
 	auto range = collection.equal_range(key); // range of values that match the given name
 	unordered_multimap<string, Song*>* filtered_songs = new unordered_multimap<string, Song*>;
 	for (auto& it = range.first; it != range.second; ++it) {
@@ -207,5 +220,35 @@ Server::~Server()
 {
 	Destory_Allocations(m_all_podcasts);
 	Destory_Allocations(m_all_songs_by_id);
+}
+
+unordered_map<int, Song*>* Server::get_songs_by_id()
+{
+	return &m_all_songs_by_id;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_name()
+{
+	return &m_all_songs_by_name;
+}
+
+multimap<string, Song*>* Server::get_songs_sorted_by_alphabet()
+{
+	return &m_songs_by_alphabet_order;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_artist()
+{
+	return &m_all_songs_by_artist;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_album()
+{
+	return &m_all_songs_by_album;
+}
+
+unordered_multimap<string, Song*>* Server::get_songs_by_genre()
+{
+	return &m_all_songs_by_genre;
 }
 
