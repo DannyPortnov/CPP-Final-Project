@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "Player.h"
+#include <sstream> 
 using namespace std;
 
 class AudioFile

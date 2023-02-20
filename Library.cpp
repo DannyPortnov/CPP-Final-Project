@@ -326,7 +326,7 @@ T* Library::Update_Media_By_Id(int media_id, T* (*find_media_by_id)(int), string
 	if (!new_name.empty()) {
 		picked_media->set_name(new_name);
 	}
-	if (!duration.empty()) {
+	if (!duration.empty()) { //Might throw exception, has to be caught by the main loop!
 		picked_media->set_duration(duration);
 	}
 	if (release_date != 0) {
