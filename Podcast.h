@@ -34,6 +34,8 @@ public:
 	~Podcast();
 	//Adds a UNIQUE episode to the podcast
 	void Add_Episode(Episode* episode);
+	//Removes an episode from Podcast and frees memory (if doesn't exist does nothing)
+	void Delete_Episode(Episode* episode);
 	const string& Get_Podcast_Name();
 	bool Is_Episode_In_Podcast(const string& file_path);
 	void Set_Podcast_Name(const string& new_name);

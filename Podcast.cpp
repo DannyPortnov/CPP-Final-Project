@@ -21,6 +21,15 @@ void Podcast::Add_Episode(Episode* episode)
 	m_episodes_file_paths.insert(episode->get_path());
 }
 
+void Podcast::Delete_Episode(Episode* episode)
+{
+	//if (m_podcast_episodes.count(episode) == 0) {
+	//	throw exception();
+	//}
+	m_podcast_episodes.erase(episode);
+	delete episode;
+}
+
 //Chooses the first episode and returns the podcast's name from that
 const string& Podcast::Get_Podcast_Name()
 {
