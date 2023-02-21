@@ -18,6 +18,8 @@ public:
 	void generate_daily_mix(); // generate a random mix of 10 songs from the library/server
 	void set_date(); // sets the date- checks if day was changed.
 	static void remove_song_from_mix(int id);
+	void restore_dailymix();
+
 };
 
 

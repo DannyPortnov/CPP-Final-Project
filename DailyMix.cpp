@@ -24,6 +24,12 @@ void DailyMix::remove_song_from_mix(int id) {
 	m_daily_mix.erase(id);
 }
 
+// after initiallizing the system, if the date did not change: the same mix that was first created in that date
+// needs to be presented to the user.
+void DailyMix::restore_dailymix() {
+
+}
+
 // generate a random mix of 10 songs from the library/server
 //todo: maybe add a feature to let the user to remix the daily mix.
 void DailyMix::generate_daily_mix() {
