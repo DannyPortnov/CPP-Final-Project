@@ -35,7 +35,7 @@ void Server::Upload_Song(string song_name, string file_path,
 }
 
 void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
-	string duration, int release_Date)
+	string duration, string release_Date)
 {
 	if (podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
 		podcast = new Podcast(podcast_name); //deleted in Server
@@ -49,6 +49,7 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 	m_podcasts_by_alphabet_order.emplace(podcast_name, podcast);
 }
 
+//todo: delete from all off the collections
 void Server::Permanent_Delete_Song(Song* song)
 {
 #pragma region loop for m_songs_by_alphabet_order 
@@ -70,6 +71,7 @@ void Server::Permanent_Delete_Song(Song* song)
 	remove_song_from_collection(m_all_songs_by_name, song);
 	remove_song_from_collection(m_songs_by_alphabet_order, song);
 	remove_song_from_collection(m_all_songs_by_id, song);
+	//todo: mabye move remove_from_recently_played to here (move from delete_playlist in Library)
 	delete song; //???
 }
 
@@ -196,17 +198,54 @@ list<Song*>* Server::get_recently_played() {
 	 return &m_most_played;
 }
 
-// updates recently played songs
-void Server::update_recently_played(int id) {
+
+ // updates recently played songs
+//save all songs by a certain oreder. the last song that was played will be the first in the list.
+// if a song is already in recents, and needs to be in the front, we'll remove it first and than push in front
+// there will be no limit of elements in this list.
+ void Server::add_to_recently_played(int id) {
+	 auto song = find_song_by_id(id);
+	 if (m_recently_played_by_id.find(id) != m_recently_played_by_id.end()) { 
+		 remove_from_recently_played(id);
+	 }
+	 m_recently_played.push_front(song); // the most recent song will be at the front
+	 m_recently_played_by_id.emplace(id, song);
+ }
+
+// remove a song from recently played songs data structure
+void Server::remove_from_recently_played(int id) {
 	auto song = find_song_by_id(id);
-	if (m_recently_played.size() == max_recents) {
-		m_recently_played.pop_front();
-	}
-	m_recently_played.push_back(song);
+	m_recently_played.remove(song); // removes the song from the list
+	m_recently_played_by_id.erase(id);
+	/*list<Song*>::iterator it;
+	for (it = m_recently_played.begin(); it != m_recently_played.end(); it++) {
+		if (*it == song) {
+			m_recently_played.erase(it);
+		}
+	}*/ // to use if m_recently_played.remove(song) doesn't work
 }
 
-// update the multimap that holds the songs by the order of the last played.
-void Server::update_most_played() {
+ /*
+void Server::update_recently_played(int id) {
+	auto song = find_song_by_id(id);
+	if (m_recently_played_by_id.find(id) != m_recently_played_by_id.end()) { //if a song is already in recents, needs to be in the front
+		remove_from_recently_played(id);
+	}
+	else if (m_recently_played.size() == max_recents) {
+		auto less_recent = m_recently_played.back();
+		m_recently_played_by_id.erase(less_recent->get_id());
+		m_recently_played.pop_back();
+	}
+	m_recently_played.push_front(song); // the most recent song will be at the front
+	m_recently_played_by_id.emplace(id, song);
+}
+*/
+
+
+
+// update the multimap that holds the songs by the order of the last played (search O(1)).
+// when a song is deleted from server, we can just call this method and update the data structure
+void Server::update_most_played_songs() {
 	m_most_played.clear(); // clear most played and than add to multimap after, plays_count updated.
 	unordered_map<int, Song*>::iterator it;
 	for (it = m_all_songs_by_id.begin(); it != m_all_songs_by_id.end(); it++) {

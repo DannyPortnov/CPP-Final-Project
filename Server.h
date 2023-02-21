@@ -11,7 +11,7 @@
 #include "Podcast.h"
 using namespace std;
 
-#define max_recents 10
+#define max_recents 30 // 30 and not 10 because we want to save some spare songs
 
 
 class Server {
@@ -33,6 +33,8 @@ private:
 	static unordered_multimap<string, Song*> m_all_songs_by_genre;
 
 	static list<Song*> m_recently_played; // good complexity for insertion/deletion O(1)
+	static unordered_map<int, Song*> m_recently_played_by_id; // good complexity for searching song in playlist O(1) (search by id)
+
 	static multimap<int, Song*> m_most_played; // songs in an oreder from least played to most played
 
 	static unordered_multimap<string, Song*>* find_all(string& key, unordered_multimap<string, Song*>& collection);
@@ -79,17 +81,20 @@ public:
 	static bool Does_Podcast_Exist(string& podcast_name);
 
 	//Allocates memory for the new song and adds to each data structure
-	static void Upload_Song(string song_name, string file_path,
- string artist = "",
-		string album = "", string genre = "", string duration = "", string release_Date);
+	static void Upload_Song(string song_name, string file_path, string artist = "",
+		string album = "", string genre = "", string duration = "", string release_Date = "");
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
 	static void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
-		string duration, int release_Date);
+		string duration, string release_Date);
 
-	// update recently played by song id
-	static void update_recently_played(int id);
+	// add song to recently played by song id
+	static void add_to_recently_played(int id);
+	// remove a song from recently played data structure
+	static void remove_from_recently_played(int id);
+	//static void update_recently_played(int id);
+
 	// update most played by checking the amount of times a song was played
-	static void update_most_played();
+	static void update_most_played_songs();
 
 	//permanently deletes a song from the database COMPLETETLY
 	static void Permanent_Delete_Song(Song* song);
