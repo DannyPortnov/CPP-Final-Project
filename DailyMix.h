@@ -1,6 +1,7 @@
 #ifndef DAILYMIX_H
 #define DAILYMIX_H
 #include "Server.h"
+#include <time.h>
 #include "Date.h"
 #define max_songs 10
 
