@@ -9,6 +9,7 @@
 #include "Server.h"
 
 #define max_most_played 10
+#define max_recents 10
 
 using namespace std;
 
@@ -34,7 +35,6 @@ private:
 	template<class T>
 	T* Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search);
 	
-
 	bool check_if_user_playlist_exist(const string& playlist_name);
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
 	bool check_if_continue_playing();
@@ -46,9 +46,12 @@ private:
 
 	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
 
+
+	
 	// void ask_user_to_remove_song(Song* song, Playlist* playlist); // was implemented in playlist instead
 	//Song* Pick_Song(string song_name);
 	//Podcast* Pick_Podcast(string episode_name);
+
 public:
 	Library();
 	//Creates a song and adds it to the library.
@@ -88,10 +91,16 @@ public:
 	void UpdatePodcast(string podcast_name, string new_name);
 	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", int release_date=0);
 	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
-	//update recent songs playlist by using song id
-	static void update_most_recent(int id);
-	//update most played songs playlist
-	static void update_most_played();
+	
+	//remove a song from recents by using song id
+	static void remove_from_most_recent(int id);
+	//add a song to recents by using song id
+	static void add_to_most_recent(int id);
+	//todo: maybe move to private, no one needs to use this methods
+	static void update_most_recent();	//update recent songs playlist 
+	// the update of most recent happans in remove_from_most_recent() method.
+
+	static void update_most_played(); 	//update most played songs playlist
 	
 	//return the playlist that needs to be played
 	Playlist* get_playlist_to_play(string playlist_name);
@@ -123,5 +132,7 @@ public:
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 	string genre = "", string duration = "", int release_date =0);*/
 };
+
+
 
 #endif

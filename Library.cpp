@@ -101,13 +101,18 @@ void Library::delete_playlist(Playlist* playlist) {
 		delete playlist;
 		cout << "Playlist Was Successfully Deleted!" << endl;
 	}
-	// if m_deleted was selected, we need to empty this playlist.
+	// if m_deleted was selected, we need to empty this playlist. all songs need to be permanently deleted!
 	else if (playlist->get_name() == m_deleted->get_name()) {
 		multimap<string, Song*>::iterator it;
 		for (it = playlist->get_songs().begin(); it != playlist->get_songs().end(); it++) {
 			Server::Permanent_Delete_Song(it->second);
+
+		//now when a song was permanently deleted, it needs to be removed from recents and most played playlists
+			remove_from_most_recent(it->second->get_id()); //todo: maybe to move to Permanent_Delete_Song in Server
+			// the update of most recent happans in remove_from_most_recent() method.
 		}
-		playlist->clear_all_playlist();
+		update_most_played(); // update most_played after deleting songs //todo: maybe to move to Permanent_Delete_Song in Server
+		playlist->clear_all_playlist(); 
 	}
 	else 
 		cout << "This Playlist Cannot Be Deleted!" << endl;
@@ -629,6 +634,7 @@ void Library::delete_song(Song* song_to_delete) {
 				// false- don't need to make sure with the user if he wants to delete from this playlist
 			}
 		}
+		// a song will stay in the playlists: most played, recents until it will be permanently deleted
 		m_deleted->add_song_to_playlist(song_to_delete);
 		cout << "Song was successfully removed from the library and all of it's playlists!" << endl;
 	}
@@ -710,28 +716,46 @@ void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
 {
 	cout << media_name << " isn't present in the server." << endl;
 }
+
+void Library::add_to_most_recent(int id) {
+	Server::add_to_recently_played(id);
+	update_most_recent();
+}
+
 // update by using song id
-void Library::update_most_recent(int id) {
-	Server::update_recently_played(id);
+void Library::update_most_recent() {
 	auto recently_played = Server::get_recently_played();
+	int recents_size = recently_played->size();
 	m_recent->clear_all_playlist();
+	int minimum = min(recents_size, max_most_played); // using c++ algorithm
 	// Create an iterator for the list
-	list<Song*>::iterator it;
+	list<Song*>::iterator it = recently_played->begin();
 	// Traverse through the list using the iterator
-	for (it = recently_played->begin(); it != recently_played->end(); it++) {
+	for (int i = 0; i < minimum; i++) {
+		it++;
 		m_recent->add_song_to_playlist(*it); // add to recent the updated recently_played linked_list
 	}
 }
 
+void Library::remove_from_most_recent(int id) {
+	auto song_to_remove = Server::find_song_by_id(id);
+	m_recent->remove_song_from_playlist(song_to_remove, false); // removes from playlist, don't make sure to delete songs from PL
+	Server::remove_from_recently_played(id); // removes from the data structure
+	update_most_recent();
+}
+
+
 // update most played song using the server method.
 void Library::update_most_played() { // need to be called after playing a song and after the m_plays_counter is updated!
-	Server::update_most_played();
+	Server::update_most_played_songs();
 	auto most_played = Server::get_most_played();
+	int most_played_size = most_played->size();
 	m_most_played->clear_all_playlist();  
+	int minimum = min(most_played_size , max_most_played); // using c++ algorithm
 	multimap<int, Song*>::iterator it = most_played->end();
-	for (int i = 0; i < max_most_played; i++) {
+	for (int i = 0; i < minimum; i++) {
 		it--;
-		m_most_played->add_song_to_playlist(it->second); 
+		m_most_played->add_song_to_playlist(it->second);
 	}
 }
 
