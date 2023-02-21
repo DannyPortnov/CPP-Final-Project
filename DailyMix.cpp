@@ -11,12 +11,21 @@ DailyMix::DailyMix() {
 // checks if the date has changed. if yes: returns true, else: returns false.
 bool DailyMix::check_if_date_changed() {
 	Date new_date;
-	if (m_saved_date < new_date)
+	if (m_last_date_saved < new_date)
 		return true;
 	return false;
 }
 
+//todo: need to delete a song from here when we delete from library.
+// removes a song from the mix if it was deleted from the libarary.
+// the mix stays with less songs until the next day
+//todo: maybe add a feature that lets the user to remix the playlist after removing a song.
+void DailyMix::remove_song_from_mix(int id) {
+	m_daily_mix.erase(id);
+}
+
 // generate a random mix of 10 songs from the library/server
+//todo: maybe add a feature to let the user to remix the daily mix.
 void DailyMix::generate_daily_mix() {
 	auto songs_to_shuffle = Server::get_songs_by_id();
 	// Create a vector of iterators to the elements in the multimap
