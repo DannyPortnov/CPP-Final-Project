@@ -14,6 +14,11 @@ void Server::Upload_Song(string song_name, string file_path,
 	string album = "", string genre = "", string duration = "", string release_Date = "")
 {
 	auto song = new Song(song_name, file_path, album, artist, genre, release_Date);
+	Add_Song_To_Collections(song);
+}
+
+void Server::Add_Song_To_Collections(Song*& song)
+{
 	const auto& name = song->get_name(); //avoids unnecessary copies of string objects
 	const auto& album = song->get_album();
 	const auto& artist = song->get_artist();
@@ -47,6 +52,77 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 	m_all_episodes_by_id.emplace(new_episode->get_id(), new_episode);
 	m_all_episodes_by_name.emplace(new_episode->get_name(), new_episode);
 	m_podcasts_by_alphabet_order.emplace(podcast_name, podcast);
+}
+
+void Server::Restore_Songs()
+{
+	fstream read("c:\\temp\\songs.dat", ios::in);
+	if (!read) {
+		cout << "Couldn't open file for serialization" << endl;
+		return;
+	}
+	while (!read.eof()) {
+		string song_name, artist, album, genre, duration, release_date, file_path;
+		int id, plays_count;
+		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
+		vector<string> params = { song_name, artist, album,genre };
+		Replace_All(params, '_', ' ');// replace all '_' to ' '
+		auto song = new Song(id, song_name, file_path, album, artist, genre, release_date, duration, plays_count);
+		Add_Song_To_Collections(song);
+		char c1 = read.get(); //Skips the \n at the end of line
+		char c2 = read.peek(); //Peeks at the start of the next line
+		if (c2 == '\n') //if the next line is also \n, quit
+		{
+			break;
+		}
+	}
+}
+
+void Server::Restore_Most_Recent()
+{
+	fstream read("c:\\temp\\most_recent.dat", ios::in);
+	if (!read) {
+		cout << "Couldn't open file for serialization" << endl;
+		return;
+	}
+	while (!read.eof()) {
+		int song_id;
+		read >> song_id;
+		add_to_recently_played(song_id);
+		char c1 = read.get(); //Skips the \n at the end of line
+		char c2 = read.peek(); //Peeks at the start of the next line
+		if (c2 == '\n') //if the next line is also \n, quit
+		{
+			break;
+		}
+	}
+}
+
+void Server::Restore_Most_Played()
+{
+	//same as most recent..
+}
+
+void Server::Replace_All(vector<string> params, char charToRemove, char charToReplaceWith) {
+	for (auto& param : params) {
+		replace(params.begin(), params.end(), charToRemove, charToReplaceWith);
+	}
+}
+
+void Server::Save_Songs()
+{
+	fstream write("c:\\temp\\songs.dat", ios::out);
+	unordered_map<int, Song*>::iterator itr;
+	for (itr = Server::get_songs_by_id()->begin(); itr != Server::get_songs_by_id()->end(); itr++)
+	{
+		auto song = itr->second;
+		replace(song->get_name().begin(), song->get_name().end(), ' ', '_'); // replace all ' ' to '_'
+		replace(song->get_artist().begin(), song->get_artist().end(), '_', ' ');
+		replace(song->get_album().begin(), song->get_album().end(), '_', ' ');
+		replace(song->get_genre().begin(), song->get_genre().end(), '_', ' ');
+		write << song->get_name() << " " << song->get_path() << " " << song->get_artist() << " " << song->get_album()
+			<< " " << song->get_genre() << " " << song->get_duration() << " " << song->get_release_date() << endl;
+	}
 }
 
 //todo: delete from all off the collections

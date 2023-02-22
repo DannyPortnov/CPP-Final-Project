@@ -15,6 +15,7 @@ using namespace std;
 
 
 class Server {
+	
 private:
 	//sorting - O(log n) - FOR PRINTING
 	static multimap<string, Song*> m_songs_by_alphabet_order;
@@ -47,6 +48,7 @@ private:
 	//Throws an exception if the TKey is not present in the unordered_map.
 	template<class TKey, class TValue>
 	static TValue* Find_Unique(TKey param, unordered_map<TKey, TValue*> coolection_to_Search);
+	static void Add_Song_To_Collections(Song*& song);
 public:
 	//Server();
 	~Server();
@@ -86,6 +88,15 @@ public:
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
 	static void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
 		string duration, string release_Date);
+	//Loads all songs saved on file (serialization)
+	static void Restore_Songs();
+	static void Restore_Most_Recent();
+	static void Restore_Most_Played();
+
+	static void Replace_All(vector<string> params, char charToRemove, char charToReplaceWith);
+
+	//Saves all songs into a file (deserialization)
+	static void Save_Songs();
 
 	// add song to recently played by song id
 	static void add_to_recently_played(int id);
