@@ -127,13 +127,15 @@ void Server::Save_Songs()
 	for (itr = Server::get_songs_by_id()->begin(); itr != Server::get_songs_by_id()->end(); itr++)
 	{
 		auto song = itr->second;
-		//todo: later
-		//replace(song->get_name().begin(), song->get_name().end(), ' ', '_'); // replace all ' ' to '_'
-		//replace(song->get_artist().begin(), song->get_artist().end(), '_', ' ');
-		//replace(song->get_album().begin(), song->get_album().end(), '_', ' ');
-		//replace(song->get_genre().begin(), song->get_genre().end(), '_', ' ');
-		write << song->get_name() << " " << song->get_path() << " " << song->get_artist() << " " << song->get_album()
-			<< " " << song->get_genre() << " " << song->get_duration() << " " << song->get_release_date() << endl;
+		string song_name, artist, album, genre;
+		song_name = song->get_name();
+		artist = song->get_artist();
+		album = song->get_album();
+		genre = song->get_genre();
+		vector<string> params = { song_name, artist, album, genre };
+		Utilities::Replace_All(&params);// replace all '_' to ' '
+		write << song_name << " " << song->get_path() << " " << artist << " " << album
+			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << endl;
 	}
 }
 

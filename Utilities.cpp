@@ -9,8 +9,7 @@ void Utilities::Replace_All(vector<string>* params)
 		charToReplaceWith = '_';
 	}
 	for (string& param : *params) {
-		//string tempString = "temporary";
-		//std::replace(tempString.begin(), tempString.end(), charToRemove, charToReplaceWith);
+		std::replace(param.begin(), param.end(), charToRemove, charToReplaceWith);
 	}
 }
 
