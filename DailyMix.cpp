@@ -11,8 +11,10 @@ DailyMix::DailyMix() {
 // checks if the date has changed. if yes: returns true, else: returns false.
 bool DailyMix::check_if_date_changed() {
 	Date new_date;
-	if (m_last_date_saved < new_date)
+	if (m_last_date_saved < new_date) {
+		m_last_date_saved = new_date;
 		return true;
+	}
 	return false;
 }
 
