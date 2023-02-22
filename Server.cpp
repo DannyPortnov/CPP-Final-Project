@@ -66,7 +66,7 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 
 void Server::Restore_Songs()
 {
-	fstream read("c:\\temp\\songs.dat", ios::in);
+	ifstream read("c:\\temp\\songs.dat", ios::in);
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
@@ -82,17 +82,17 @@ void Server::Restore_Songs()
 			break;
 		}
 	}
+	read.close();
 }
 
 void Server::Restore_Podcasts() {
-	fstream read("c:\\temp\\podcasts.dat", ios::in);
+	ifstream read("c:\\temp\\podcasts.dat", ios::in);
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
 	while (!read.eof()) {
 		string episode_name,podcast_name, duration, release_date, file_path;
-		int id, plays_count;
-		read >> id >> episode_name >> podcast_name >> file_path >> duration >> release_date;
+		read >> episode_name >> podcast_name >> file_path >> duration >> release_date;
 		vector<string> params = { episode_name,podcast_name };
 		Utilities::Replace_All(&params);// replace all '_' to ' '
 		Upload_Episode_To_Podcast(nullptr, episode_name, podcast_name, file_path, duration, release_date);
@@ -100,12 +100,12 @@ void Server::Restore_Podcasts() {
 			break;
 		}
 	}
-
+	read.close();
 }
 
 void Server::Restore_Most_Recent()
 {
-	fstream read("c:\\temp\\most_recent.dat", ios::in);
+	ifstream read("c:\\temp\\most_recent.dat", ios::in);
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
@@ -117,12 +117,13 @@ void Server::Restore_Most_Recent()
 			break;
 		}
 	}
+	read.close();
 }
 
 
 void Server::Save_Songs()
 {
-	fstream write("c:\\temp\\songs.dat", ios::out);
+	ofstream write("c:\\temp\\songs.dat", ios::out);
 	unordered_map<int, Song*>::iterator itr;
 	for (itr = Server::get_songs_by_id()->begin(); itr != Server::get_songs_by_id()->end(); itr++)
 	{
@@ -134,9 +135,10 @@ void Server::Save_Songs()
 		genre = song->get_genre();
 		vector<string> params = { song_name, artist, album, genre };
 		Utilities::Replace_All(&params);// replace all '_' to ' '
-		write << song_name << " " << song->get_path() << " " << artist << " " << album
-			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << endl;
+		write << song->get_id() << " " << song_name << " " << song->get_path() << " " << artist << " " << album
+			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << " " << song->get_plays_count() << endl;
 	}
+	write.close();
 }
 
 //todo: delete from all off the collections
@@ -351,6 +353,7 @@ void Server::update_most_played_songs() {
 Server::~Server()
 {
 	Destory_Allocations(m_all_podcasts);
+	//Destory_Allocations(m_all_episodes_by_id);
 	Destory_Allocations(m_all_songs_by_id);
 }
 

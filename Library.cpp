@@ -764,8 +764,8 @@ void Library::update_most_recent() {
 	auto it = recently_played->begin();
 	// Traverse through the list using the iterator
 	for (int i = 0; i < minimum; i++) {
-		it++;
 		m_recent->add_song_to_playlist(*it); // add to recent the updated recently_played linked_list
+		it++;
 	}
 }
 
