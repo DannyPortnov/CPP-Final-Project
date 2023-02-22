@@ -356,7 +356,7 @@ void Library::play_song(Song* song) {
 	cout << "Now playing: " << *song << endl;
 	song->Play(); // here plays_counter updates
 	update_most_played();
-	update_most_recent(song->get_id());
+	add_to_most_recent(song->get_id());
 }
 
 void Library::Play_Podcast(string podcast_name)
@@ -722,14 +722,14 @@ void Library::add_to_most_recent(int id) {
 	update_most_recent();
 }
 
-// update by using song id
+// update recents
 void Library::update_most_recent() {
 	auto recently_played = Server::get_recently_played();
 	int recents_size = recently_played->size();
 	m_recent->clear_all_playlist();
 	int minimum = min(recents_size, max_most_played); // using c++ algorithm
 	// Create an iterator for the list
-	list<Song*>::iterator it = recently_played->begin();
+	auto it = recently_played->begin();
 	// Traverse through the list using the iterator
 	for (int i = 0; i < minimum; i++) {
 		it++;
