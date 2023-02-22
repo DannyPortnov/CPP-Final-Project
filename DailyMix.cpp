@@ -80,8 +80,8 @@ void DailyMix::generate_daily_mix(){
 		shuffled_songs_vector.push_back(it);
 	}
 	// Shuffle the keys of the multimap randomly
-	random_device rd;
-	mt19937 generator(rd());
+	std::random_device rd;
+	std::mt19937 generator(rd());
 	shuffle(shuffled_songs_vector.begin(), shuffled_songs_vector.end(), generator);
 
 	//add 10 songs from shuffled_songs_vector to m_daily_mix 

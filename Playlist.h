@@ -1,15 +1,18 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
+#include "AudioCollection.h"
+#include "Song.h"
+#include "Server.h"
+//#include "Library.h"
 #include <algorithm>
 #include <random>
 #include <ctime>
 #include<map>
 #include<unordered_map>
 #include<unordered_set>
-#include "AudioCollection.h"
-#include "Song.h"
 
 
+class Library;
 class Playlist {
 
 private:

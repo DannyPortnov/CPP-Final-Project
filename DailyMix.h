@@ -1,8 +1,11 @@
 #ifndef DAILYMIX_H
 #define DAILYMIX_H
+#include "Date.h"
 #include "Server.h"
 #include <time.h>
-#include "Date.h"
+#include <random>
+#include <stdbool.h> //?? סבבה דקה
+
 #define max_songs 10
 
 // use time.h, date classes in order to check the current date 

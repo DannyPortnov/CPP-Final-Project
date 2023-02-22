@@ -1,11 +1,11 @@
 #ifndef AUDIOFILE_H
 #define AUDIOFILE_H
+#include "Player.h"
+#include "Date.h"
 #include <set>
 #include <vector>
 #include <string>
-#include "Player.h"
 #include <sstream> 
-#include "Date.h"
 using namespace std;
 
 class AudioFile
@@ -30,7 +30,7 @@ public:
 
 	virtual void set_name(string& name);
 	virtual void set_duration(string& duration);
-	virtual void set_release_date(int release_date);
+	virtual void set_release_date(Date release_date);
 };
 
 #endif	// AUDIOFILE_H

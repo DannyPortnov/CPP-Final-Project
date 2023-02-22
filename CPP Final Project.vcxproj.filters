@@ -24,9 +24,6 @@
     <ClInclude Include="Library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Playlists.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,9 +31,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Podcasts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Podcast.h">
@@ -65,16 +59,10 @@
     <ClCompile Include="Library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Playlists.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Playlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Podcasts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Podcast.cpp">

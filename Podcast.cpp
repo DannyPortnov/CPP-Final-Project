@@ -1,4 +1,5 @@
 #include "Podcast.h"
+#include "Episode.h"
 
 Podcast::Podcast(string podcast_name) : m_podcast_name(podcast_name), m_podcast_episodes() {}
 
@@ -51,7 +52,7 @@ void Podcast::Set_Podcast_Name(const string& new_name)
 
 void Podcast::Play()
 {
-	for (auto episode : m_podcast_episodes) {
+	for (Episode* episode : m_podcast_episodes) {
 		episode->Play();
 		cout << "Would you like to continue playing " << m_podcast_name << "? y if yes, anything else no ";
 		char answer;

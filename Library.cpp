@@ -8,7 +8,7 @@ Playlist* Library::m_deleted = new Playlist("deleted");
 Playlist* Library::m_recent = new Playlist("recent");
 Playlist* Library::m_most_played = new Playlist("most played");
 
-Library::Library() //todo: maybe to convert to static, and than needs to be changed
+Library::Library()
 {
 	m_saved_playlist_names.insert(make_pair(m_favorites->get_name(), m_favorites));
 	m_saved_playlist_names.insert(make_pair(m_deleted->get_name(), m_deleted));
@@ -19,7 +19,7 @@ Library::Library() //todo: maybe to convert to static, and than needs to be chan
 
 //todo: add getters for each playlists
 Library::~Library() {
-	delete m_daily_mix;
+	//delete m_daily_mix;
 	delete m_deleted;
 	delete m_favorites;
 	delete m_most_played;
@@ -70,8 +70,7 @@ bool Library::check_if_user_playlist_exist(const string& playlist_name) {
 
 // return true if playlist can be edited, false if not (user can edit favorites) 
 bool Library::check_if_playlist_can_be_edited(const string& playlist_name) {
-	if (playlist_name == m_recent->get_name() || playlist_name == m_daily_mix->get_name() ||
-		playlist_name == m_most_played->get_name()) { //todo: if daily mix is a different class, needs to change implementation
+	if (playlist_name == m_recent->get_name() || playlist_name == m_most_played->get_name()) { //todo: if daily mix is a different class, needs to change implementation
 		return false;
 	}
 	return true;
@@ -171,7 +170,7 @@ void Library::Add2PL(int id, const string& playlist_name)
 }
  
 // remove a song from the playlist by song's name.
-void Library::RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true) {
+void Library::RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
 		if (check_if_user_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
 			auto playlist = m_user_playlists.find(playlist_name)->second;
@@ -228,10 +227,10 @@ bool Library::Are_All_Parameters_Empty(const string & param1,
 //		});
 //}
 //Asks the user which song he meant and updates the choosen one.
-void Library::Update_Song(string song_name, string new_name,
- string artist, string album, string genre, string duration, int release_date)
+void Library::Update_Song(string song_name,
+ string new_name, string artist, string album, string genre, string duration, string release_date)
 {
-	if (Are_All_Parameters_Empty(artist, album, genre, duration, new_name) && release_date == 0) {
+	if (Are_All_Parameters_Empty(artist, album, genre, duration, new_name) && release_date == "") {
 		Print_No_Input_Parameters_Error();
 		return;
 	}
@@ -252,7 +251,7 @@ void Library::Update_Song(string song_name, string new_name,
 }
 
 //Find choosen song and updates according to the parameters recieved
-void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration, int release_date)
+void Library::Update_Song(int song_id, string new_name, string artist, string album, string genre, string duration, string release_date)
 {
 	try
 	{
@@ -299,7 +298,7 @@ void Library::UpdatePodcast(string podcast_name, string new_name)
 	}
 }
 
-void Library::UpdateEpisode(int episode_id, string new_name, string duration, int release_date)
+void Library::UpdateEpisode(int episode_id, string new_name, string duration, string release_date)
 {
 	if (Server::Does_Episode_Exist(new_name)) {
 		Print_Media_Exists_Error(new_name, typeid(Episode).name());
@@ -322,7 +321,7 @@ void Library::Print_Media_Exists_Error(std::string& new_name, const string & med
 }
 
 template <class T>
-T* Library::Update_Media_By_Id(int media_id, T* (*find_media_by_id)(int), string new_name, string duration, int release_date)
+T* Library::Update_Media_By_Id(int media_id, T* (*find_media_by_id)(int), string new_name, string duration, string release_date)
 {
 	//Here if all paramters are empty it does nothing
 	auto picked_media = find_media_by_id(media_id);
@@ -332,8 +331,8 @@ T* Library::Update_Media_By_Id(int media_id, T* (*find_media_by_id)(int), string
 	if (!duration.empty()) { //Might throw exception, has to be caught by the main loop!
 		picked_media->set_duration(duration);
 	}
-	if (release_date != 0) {
-		picked_media->set_release_date(release_date);
+	if (release_date != "") {
+		picked_media->set_release_date(Date(release_date));
 	}
 	return picked_media;
 }
@@ -429,7 +428,7 @@ void Library::PlayAll(MapType<string, Song*>* songs_to_play) {
 		return;
 	}
 	cout << "Playing all library songs: " << endl;
-	MapType<string, Song*>::iterator it;
+	typename MapType<string, Song*>::iterator it;
 	for (it = songs_to_play->begin(); it != songs_to_play->end(); it++) {
 		cout << "Now playing: " << *it->second << endl;
 		int id = it->second->get_id();
@@ -554,8 +553,8 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 #pragma endregion
 }
 
-void Library::Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
-	string duration, int release_Date)
+void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
+ string file_path, string duration, string release_Date)
 {
 	if (Server::Does_Episode_Exist(episode_name)) { //checks uniqueness
 		cout << "Episode was already added." << endl;
@@ -585,7 +584,8 @@ void Library::Begin_Serialization()
 		string playlist_name;
 		int song_id;
 		read>> playlist_name >> song_id;
-		Utilities::Replace_All({ playlist_name });
+		vector<string> params = { playlist_name };
+		Utilities::Replace_All(&params);
 		Add2PL(song_id, playlist_name);
 		if (Utilities::Is_End_Of_File(read)) {
 			break;
@@ -596,7 +596,7 @@ void Library::Begin_Serialization()
 	Server::update_most_played_songs(); //ALL songs ordered by their plays count
 	update_most_played(); //only top 10
 	Server::Restore_Podcasts();
-	//left to serialize daily mix
+	DailyMix m_daily_mix();
 
 }
 
@@ -605,10 +605,9 @@ void Library::Begin_Deserialization()
 	Server::Save_Songs();
 }
 
-template <class T>
-T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {
-	auto filtered_media = collection_to_search.equal_range(media_name);
-	int number_of_media_items = collection_to_search.count(media_name); //O(log n), distance is O(n). overall doesn't matter
+Song* Library::Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search) {
+	auto filtered_media = collection_to_search->equal_range(media_name);
+	int number_of_media_items = collection_to_search->count(media_name); //O(log n), distance is O(n). overall doesn't matter
 	if (number_of_media_items == 0) {
 		return nullptr;
 	}
@@ -657,10 +656,10 @@ bool Library::make_sure_to_delete_song(Song* song) {
 // method removes a specific song, used by the two Delete_Song methods
 void Library::delete_song(Song* song_to_delete) {
 	if (make_sure_to_delete_song(song_to_delete)) { //check again if the user wants to delete the song
-		auto playlist_appearances = song_to_delete->get_playlist_appearances();
+		auto playlist_appearances = song_to_delete->get_playlist_appearances(); //todo: check this
 		if (playlist_appearances->size() > 0) {
-			auto it = playlist_appearances->begin();
-			for (auto it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
+			unordered_set<string>::iterator it;
+			for (it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
 				RemoveFromPL(song_to_delete->get_name(), *it, false);
 				// false- don't need to make sure with the user if he wants to delete from this playlist
 			}
@@ -808,7 +807,7 @@ ostream& Library::Print(ostream& os, int begin, int end) const
 
 ostream& operator<<(ostream& os, const Library& lib)
 {
-	return lib.Print(os, 0, Library::num_of_songs_to_print);
+	return lib.Print(os, 0, lib.num_of_songs_to_print);
 }
 
 

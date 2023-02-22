@@ -10,8 +10,7 @@
 
 //Song is unique!
 void Server::Upload_Song(string song_name, string file_path,
-	string artist = "",
-	string album = "", string genre = "", string duration = "", string release_Date = "")
+	string artist,string album, string genre, string duration, string release_Date)
 {
 	auto song = new Song(song_name, file_path, album, artist, genre, release_Date);
 	Add_Song_To_Collections(song);
@@ -45,9 +44,8 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 	if (podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
 		podcast = new Podcast(podcast_name); //deleted in Server
 	}
-	auto new_episode = new Episode(file_path, episode_name, podcast, release_Date, duration); //deleted in Podcast
+	Episode* new_episode = new Episode(file_path, episode_name, podcast, release_Date, duration); //deleted in Podcast
 	podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
-	auto& podcast_name = podcast->Get_Podcast_Name();
 	m_all_podcasts.emplace(podcast_name, podcast);
 	m_all_episodes_by_id.emplace(new_episode->get_id(), new_episode);
 	m_all_episodes_by_name.emplace(new_episode->get_name(), new_episode);
@@ -65,7 +63,7 @@ void Server::Restore_Songs()
 		int id, plays_count;
 		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
 		vector<string> params = { song_name, artist, album,genre };
-		Utilities::Replace_All(params);// replace all '_' to ' '
+		Utilities::Replace_All(&params);// replace all '_' to ' '
 		auto song = new Song(id, song_name, file_path, album, artist, genre, release_date, duration, plays_count);
 		Add_Song_To_Collections(song);
 		if (Utilities::Is_End_Of_File(read)) {
@@ -84,7 +82,7 @@ void Server::Restore_Podcasts() {
 		int id, plays_count;
 		read >> id >> episode_name >> podcast_name >> file_path >> duration >> release_date;
 		vector<string> params = { episode_name,podcast_name };
-		Utilities::Replace_All(params);// replace all '_' to ' '
+		Utilities::Replace_All(&params);// replace all '_' to ' '
 		Upload_Episode_To_Podcast(nullptr, episode_name, podcast_name, file_path, duration, release_date);
 		if (Utilities::Is_End_Of_File(read)) {
 			break;
@@ -117,10 +115,11 @@ void Server::Save_Songs()
 	for (itr = Server::get_songs_by_id()->begin(); itr != Server::get_songs_by_id()->end(); itr++)
 	{
 		auto song = itr->second;
-		replace(song->get_name().begin(), song->get_name().end(), ' ', '_'); // replace all ' ' to '_'
-		replace(song->get_artist().begin(), song->get_artist().end(), '_', ' ');
-		replace(song->get_album().begin(), song->get_album().end(), '_', ' ');
-		replace(song->get_genre().begin(), song->get_genre().end(), '_', ' ');
+		//todo: later
+		//replace(song->get_name().begin(), song->get_name().end(), ' ', '_'); // replace all ' ' to '_'
+		//replace(song->get_artist().begin(), song->get_artist().end(), '_', ' ');
+		//replace(song->get_album().begin(), song->get_album().end(), '_', ' ');
+		//replace(song->get_genre().begin(), song->get_genre().end(), '_', ' ');
 		write << song->get_name() << " " << song->get_path() << " " << song->get_artist() << " " << song->get_album()
 			<< " " << song->get_genre() << " " << song->get_duration() << " " << song->get_release_date() << endl;
 	}
@@ -129,7 +128,7 @@ void Server::Save_Songs()
 //todo: delete from all off the collections
 void Server::Permanent_Delete_Song(Song* song)
 {
-#pragma region loop for m_songs_by_alphabet_order 
+	#pragma region loop for m_songs_by_alphabet_order 
 	//// Find the range of songs with the same name as the given song
 //auto range = m_songs_by_alphabet_order.equal_range(song->get_name());
 
@@ -141,7 +140,6 @@ void Server::Permanent_Delete_Song(Song* song)
 //	}
 //}  
 #pragma endregion
-
 	remove_song_from_collection(m_all_songs_by_album, song); //check that that works
 	remove_song_from_collection(m_all_songs_by_genre, song);
 	remove_song_from_collection(m_all_songs_by_artist, song);
@@ -179,9 +177,14 @@ void Server::Permanent_Delete_Podcast(Podcast* podcast)
 
 template <typename T>
 void Server::remove_song_from_collection(T& songs_by_field, Song* song) {
-	auto it = songs_by_field.find(song);
-	if (it != songs_by_field.end() && it->second == song) {
-		songs_by_field.erase(it);
+	//typename T::iterator
+	for (auto iter = songs_by_field.begin(); iter != songs_by_field.end(); ++iter)
+	{
+		if (iter->second == song) {
+			songs_by_field.erase(iter);
+			return;
+		}
+			
 	}
 }
 

@@ -1,15 +1,15 @@
 #ifndef SERVER_H
 #define SERVER_H
-#include <string>
 #include "Song.h"
-#include "Playlists.h"
+#include "Podcast.h"
+#include "Episode.h"
+#include "Utilities.h"
+#include <string>
 #include <set>
 #include <map>
 #include <list>
 #include <unordered_map>
 #include <unordered_set>
-#include "Podcast.h"
-#include "Utilities.h"
 using namespace std;
 
 #define max_recents 30 // 30 and not 10 because we want to save some spare songs
