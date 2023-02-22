@@ -37,7 +37,7 @@ Library::~Library() {
 void Library::PrintSong(int id)
 {
 	cout << "The song details are:" << endl;
-	cout << Server::find_song_by_id(id)<< endl;
+	cout << Server::find_song_by_id(id) << endl;
 }
 
 // print all songs with this name.

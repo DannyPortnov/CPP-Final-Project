@@ -18,10 +18,10 @@ private:
 	bool check_if_date_changed(Date& new_date); // checks if the date has changed.
 	Date& get_date_from_file();
 public:
-	DailyMix();
+	DailyMix(); // Partially tested and works
 	void Play();
 	void Play_Random();
-	void generate_daily_mix(); // generate a random mix of 10 songs from the library/server
+	void generate_daily_mix(); //works // generate a random mix of 10 songs from the library/server
 	void set_date(); // sets the date- checks if day was changed.
 	void remove_song_from_mix(int id);
 	void save_dailymix();

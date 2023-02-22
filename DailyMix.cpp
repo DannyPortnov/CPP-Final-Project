@@ -11,7 +11,7 @@ DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_la
 		m_last_date_saved = new_date;
 		generate_daily_mix();
 		return;
-	}
+	} //Untill here works
 	// if day hasn't changed, reload dailymix data back in to the data structure.
 	while (!m_dailymix_file.eof()) {
 		int song_id;
@@ -23,7 +23,7 @@ DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_la
 		}
 	}
 }
-
+//Works
 Date& DailyMix::get_date_from_file() {
 	Date default_date("");
 	if (!Utilities::Is_File_Valid(m_dailymix_file)) {
@@ -86,7 +86,7 @@ void DailyMix::generate_daily_mix(){
 
 	//add 10 songs from shuffled_songs_vector to m_daily_mix 
 	int i = 1;
-	for (int i = 0; i < max_songs || i < shuffled_songs_vector.size(); i++) { // if library has less than 10 songs, mix them also.
+	for (int i = 0; i < max_songs && i < shuffled_songs_vector.size(); i++) { // if library has less than 10 songs, mix them also.
 		auto song = shuffled_songs_vector[i];
 		int id = song->second->get_id();
 		m_daily_mix.insert(make_pair(id, song->second));

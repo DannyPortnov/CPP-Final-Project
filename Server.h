@@ -49,9 +49,9 @@ private:
 	//Throws an exception if the TKey is not present in the unordered_map.
 	template<class TKey, class TValue>
 	static TValue* Find_Unique(TKey param, unordered_map<TKey, TValue*> coolection_to_Search);
-	static void Add_Song_To_Collections(Song*& song);
+	static void Add_Song_To_Collections(Song*& song); //works
 public:
-	//Server();
+	Server(); //works
 	~Server();
 
 	//getters
@@ -91,7 +91,7 @@ public:
 		string duration, string release_Date);
 
 	//Loads all songs saved on file (serialization)
-	static void Restore_Songs();
+	static void Restore_Songs(); //works
 	static void Restore_Podcasts();
 	static void Restore_Most_Recent();
 

@@ -44,6 +44,7 @@ void AudioFile::set_name(string& name)
 	m_file_name = name;
 }
 
+//works
 void AudioFile::set_duration(string& duration) //only allow m:ss ?
 {
     int minutes, seconds;
@@ -59,6 +60,7 @@ void AudioFile::set_duration(string& duration) //only allow m:ss ?
     if (time_stream.fail() || time_stream.get() != EOF || seconds >= 60) {
         throw exception();
     }
+    m_duration = duration;
 }
 
 void AudioFile::set_release_date(Date release_date)

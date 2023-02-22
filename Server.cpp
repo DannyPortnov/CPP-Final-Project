@@ -15,13 +15,10 @@ unordered_multimap<string, Song*> Server::m_all_songs_by_album = unordered_multi
 unordered_multimap<string, Song*> Server::m_all_songs_by_genre = unordered_multimap<string, Song*>();
 unordered_map<int, Song*>  Server::m_recently_played_by_id = unordered_map<int, Song*>();
 multimap<int, Song*>  Server::m_most_played = multimap<int, Song*>();
-//Server::Server()
-//{
-//	auto compare_by_id = [](Song* a, Song* b) { //lambda function
-//		return a->get_id() < b->get_id();
-//	};
-//	set<int, decltype(compare_by_id)> songs_by_id; //insert here all the songs!
-//}
+Server::Server()
+{
+	Restore_Songs();
+}
 
 //Song is unique!
 void Server::Upload_Song(string song_name, string file_path,
