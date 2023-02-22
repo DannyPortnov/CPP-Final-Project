@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "Podcast.h"
+#include "Utilities.h"
 using namespace std;
 
 #define max_recents 30 // 30 and not 10 because we want to save some spare songs
@@ -88,12 +89,11 @@ public:
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
 	static void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
 		string duration, string release_Date);
+
 	//Loads all songs saved on file (serialization)
 	static void Restore_Songs();
+	static void Restore_Podcasts();
 	static void Restore_Most_Recent();
-	static void Restore_Most_Played();
-
-	static void Replace_All(vector<string> params, char charToRemove, char charToReplaceWith);
 
 	//Saves all songs into a file (deserialization)
 	static void Save_Songs();

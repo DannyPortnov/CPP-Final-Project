@@ -10,7 +10,7 @@
 
 //Song is unique!
 void Server::Upload_Song(string song_name, string file_path,
- string artist = "",
+	string artist = "",
 	string album = "", string genre = "", string duration = "", string release_Date = "")
 {
 	auto song = new Song(song_name, file_path, album, artist, genre, release_Date);
@@ -45,7 +45,7 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 	if (podcast == nullptr) {//if podcast doesn't exist, creates the podcasts and adds the episode
 		podcast = new Podcast(podcast_name); //deleted in Server
 	}
-	auto new_episode = new Episode(file_path, episode_name,podcast, release_Date, duration); //deleted in Podcast
+	auto new_episode = new Episode(file_path, episode_name, podcast, release_Date, duration); //deleted in Podcast
 	podcast->Add_Episode(new_episode); //Adds a UNIQUE episode to an EXISTING podcast
 	auto& podcast_name = podcast->Get_Podcast_Name();
 	m_all_podcasts.emplace(podcast_name, podcast);
@@ -57,8 +57,7 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, st
 void Server::Restore_Songs()
 {
 	fstream read("c:\\temp\\songs.dat", ios::in);
-	if (!read) {
-		cout << "Couldn't open file for serialization" << endl;
+	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
 	while (!read.eof()) {
@@ -66,48 +65,50 @@ void Server::Restore_Songs()
 		int id, plays_count;
 		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
 		vector<string> params = { song_name, artist, album,genre };
-		Replace_All(params, '_', ' ');// replace all '_' to ' '
+		Utilities::Replace_All(params);// replace all '_' to ' '
 		auto song = new Song(id, song_name, file_path, album, artist, genre, release_date, duration, plays_count);
 		Add_Song_To_Collections(song);
-		char c1 = read.get(); //Skips the \n at the end of line
-		char c2 = read.peek(); //Peeks at the start of the next line
-		if (c2 == '\n') //if the next line is also \n, quit
-		{
+		if (Utilities::Is_End_Of_File(read)) {
 			break;
 		}
 	}
 }
 
+void Server::Restore_Podcasts() {
+	fstream read("c:\\temp\\podcasts.dat", ios::in);
+	if (!Utilities::Is_File_Valid(read)) {
+		return;
+	}
+	while (!read.eof()) {
+		string episode_name,podcast_name, duration, release_date, file_path;
+		int id, plays_count;
+		read >> id >> episode_name >> podcast_name >> file_path >> duration >> release_date;
+		vector<string> params = { episode_name,podcast_name };
+		Utilities::Replace_All(params);// replace all '_' to ' '
+		Upload_Episode_To_Podcast(nullptr, episode_name, podcast_name, file_path, duration, release_date);
+		if (Utilities::Is_End_Of_File(read)) {
+			break;
+		}
+	}
+
+}
+
 void Server::Restore_Most_Recent()
 {
 	fstream read("c:\\temp\\most_recent.dat", ios::in);
-	if (!read) {
-		cout << "Couldn't open file for serialization" << endl;
+	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
 	while (!read.eof()) {
 		int song_id;
 		read >> song_id;
 		add_to_recently_played(song_id);
-		char c1 = read.get(); //Skips the \n at the end of line
-		char c2 = read.peek(); //Peeks at the start of the next line
-		if (c2 == '\n') //if the next line is also \n, quit
-		{
+		if (Utilities::Is_End_Of_File(read)) {
 			break;
 		}
 	}
 }
 
-void Server::Restore_Most_Played()
-{
-	//same as most recent..
-}
-
-void Server::Replace_All(vector<string> params, char charToRemove, char charToReplaceWith) {
-	for (auto& param : params) {
-		replace(params.begin(), params.end(), charToRemove, charToReplaceWith);
-	}
-}
 
 void Server::Save_Songs()
 {
@@ -153,9 +154,9 @@ void Server::Permanent_Delete_Song(Song* song)
 
 void Server::Permanent_Delete_Podcast_Episode(Episode* episode)
 {
-	 m_all_episodes_by_id.erase(episode->get_id());
-	 m_all_episodes_by_name.erase(episode->get_name());
-	 episode->Get_Podcast()->Delete_Episode(episode);
+	m_all_episodes_by_id.erase(episode->get_id());
+	m_all_episodes_by_name.erase(episode->get_name());
+	episode->Get_Podcast()->Delete_Episode(episode);
 }
 
 void Server::Permanent_Delete_Podcast(Podcast* podcast)
@@ -267,26 +268,26 @@ unordered_multimap<string, Song*>* Server::find_all(string& key, unordered_multi
 }
 
 list<Song*>* Server::get_recently_played() {
-	return &m_recently_played;	
+	return &m_recently_played;
 }
 
- multimap<int, Song*>* Server::get_most_played() {
-	 return &m_most_played;
+multimap<int, Song*>* Server::get_most_played() {
+	return &m_most_played;
 }
 
 
- // updates recently played songs
+// updates recently played songs
 //save all songs by a certain oreder. the last song that was played will be the first in the list.
 // if a song is already in recents, and needs to be in the front, we'll remove it first and than push in front
 // there will be no limit of elements in this list.
- void Server::add_to_recently_played(int id) {
-	 auto song = find_song_by_id(id);
-	 if (m_recently_played_by_id.find(id) != m_recently_played_by_id.end()) { 
-		 remove_from_recently_played(id);
-	 }
-	 m_recently_played.push_front(song); // the most recent song will be at the front
-	 m_recently_played_by_id.emplace(id, song);
- }
+void Server::add_to_recently_played(int id) {
+	auto song = find_song_by_id(id);
+	if (m_recently_played_by_id.find(id) != m_recently_played_by_id.end()) {
+		remove_from_recently_played(id);
+	}
+	m_recently_played.push_front(song); // the most recent song will be at the front
+	m_recently_played_by_id.emplace(id, song);
+}
 
 // remove a song from recently played songs data structure
 void Server::remove_from_recently_played(int id) {
@@ -302,7 +303,7 @@ void Server::remove_from_recently_played(int id) {
 	}*/ // to use if m_recently_played.remove(song) doesn't work
 }
 
- /*
+/*
 void Server::update_recently_played(int id) {
 	auto song = find_song_by_id(id);
 	if (m_recently_played_by_id.find(id) != m_recently_played_by_id.end()) { //if a song is already in recents, needs to be in the front
