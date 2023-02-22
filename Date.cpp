@@ -9,11 +9,12 @@ Date::Date() {
     create_formated_date_string(m_date);
 }
 
-
+//todo: maybe check if the date that was entered is valid (main or here).
 //constructor that creates an instance by string
 Date::Date(string date) : m_date(date) {
     set_date_from_string(date);
 }
+
 
 // set the date
 Date& Date::init(int d, int m, int y) {
@@ -23,6 +24,11 @@ Date& Date::init(int d, int m, int y) {
 
 // extract date in format: "d/m/yyyy" to day, month, year
 void Date::set_date_from_string(string date) {
+    if (date == "") {
+        init(0, 0, 1900); // if string is empty, the date will be 0,0,1900
+        m_date = "00/00/1900";
+        return;
+    }
     stringstream ss(date);
     int day, month, year;
     char delimiter = '/'; // we do not need to explicitly define the delimiter variable as "/" 
@@ -37,7 +43,7 @@ bool Date::change_date() {
     while (invalid_answer) {
         cout << "Enter the date in the following format- dd/mm/yyyy: ";
         string answer; cin >> answer; cout << endl;
-        if (validate_before_change(answer) == true) {
+        if (is_date_valid(answer) == true) {
             set_date_from_string(answer);
             create_formated_date_string(m_date);
             cout << "Date was successfully changed!" << endl;
@@ -62,7 +68,7 @@ bool Date::change_date() {
 }
 
 //checks if date is valid in order to allow to change it
-bool Date::validate_before_change(string date) {
+bool Date::is_date_valid(string date) {
     stringstream ss(date);
     int day, month, year;
     char delimiter = '/';

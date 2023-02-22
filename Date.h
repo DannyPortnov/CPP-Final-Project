@@ -16,11 +16,11 @@ private:
 	Date& init(int d, int m, int y); // set the date
 	void set_date_from_string(string date);
 	void create_formated_date_string(string& date);
-	bool validate_before_change(string date);
 public:
 	Date(); //constructor that creates an instance with the current day
 	Date(string date); //constructor that creates an instance by string
 	bool change_date(); // changes the date, the user have an option to do so.
+	bool is_date_valid(string date);
 	string& get_date_as_string(); // in order to put date back in serialization.
 	Date& operator=(const Date& otherDate); // assign one date to another
 };
