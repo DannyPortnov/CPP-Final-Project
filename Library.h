@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <array>
 #include "Server.h"
+#include <fstream>
 
 #define max_most_played 10
 #define max_recents 10
@@ -45,7 +46,7 @@ private:
 	void Print_Media_Exists_Error(std::string& new_name, const string & media_type);
 
 	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
-
+	static void Replace_Underscores_With_Space(string& name);
 
 	
 	// void ask_user_to_remove_song(Song* song, Playlist* playlist); // was implemented in playlist instead
@@ -59,6 +60,10 @@ public:
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
 	void Add_Podcast_Episode(string episode_name, string podcast_name, string file_path,
 		string duration = "", int release_Date = 0);
+
+	static void Begin_Serialization();
+	static void Begin_Deserialization();
+
 
 	//Deletes a song from the library
 	void Delete_Song(int id);
@@ -74,7 +79,7 @@ public:
 	void Delete_Podcast(string podcast_name);
 
 
-	void Add2PL(int id, const string& playlist_name);
+	static void Add2PL(int id, const string& playlist_name);
 	void RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
 	void add_to_favorites(Song* song);
 

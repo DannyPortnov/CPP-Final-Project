@@ -574,6 +574,38 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name, stri
 
 }
 
+void Library::Begin_Serialization()
+{
+	Server::Restore_Songs();
+	fstream read("c:\\temp\\playlists.dat", ios::in);
+	if (!read) {
+		cout << "Couldn't open file for serialization" << endl;
+		return;
+	}
+	while (!read.eof()) {
+		string playlist_name;
+		int song_id;
+		read>> playlist_name >> song_id;
+		replace(playlist_name.begin(), playlist_name.end(), '_', ' '); // replace all '_' to ' '
+		Add2PL(song_id, playlist_name);
+		char c1 = read.get(); //Skips the \n at the end of line
+		char c2 = read.peek(); //Peeks at the start of the next line
+		if (c2 == '\n') //if the next line is also \n, quit
+		{
+			break;
+		}
+	}
+	Server::Restore_Most_Recent();
+	update_most_recent();
+	//most played, same
+
+}
+
+void Library::Begin_Deserialization()
+{
+	Server::Save_Songs();
+}
+
 template <class T>
 T* Library::Pick_Media(string media_name, unordered_multimap<string, T*>* collection_to_search) {
 	auto filtered_media = collection_to_search.equal_range(media_name);
