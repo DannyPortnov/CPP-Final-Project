@@ -11,8 +11,18 @@ Date::Date() {
 
 //todo: maybe check if the date that was entered is valid (main or here).
 //constructor that creates an instance by string
-Date::Date(string date) : m_date(date) {
-    set_date_from_string(date);
+Date::Date(string date) {
+    if (date.empty()) {
+        m_date = "00/00/1900";
+        set_date_from_string(m_date);
+        return;
+    }
+    if (is_date_valid(date)) {
+        set_date_from_string(date);
+    }
+    else {
+        set_date();
+    }
 }
 
 
@@ -24,21 +34,16 @@ Date& Date::init(int d, int m, int y) {
 
 // extract date in format: "d/m/yyyy" to day, month, year
 void Date::set_date_from_string(string date) {
-    if (date.empty()) {
-        init(0, 0, 1900); // if string is empty, the date will be 0,0,1900
-        m_date = "00/00/1900";
-        return;
-    }
     stringstream ss(date);
     int day, month, year;
     char delimiter = '/'; // we do not need to explicitly define the delimiter variable as "/" 
-                          // because it is the default delimiter used by the '>>' operator.
+    // because it is the default delimiter used by the '>>' operator.
     ss >> day >> delimiter >> month >> delimiter >> year;
     init(day, month, year);
 }
 
 // change date, return true if date was changed successfully
-bool Date::change_date() {
+void Date::set_date() {
     bool invalid_answer = true;
     while (invalid_answer) {
         cout << "Enter the date in the following format- dd/mm/yyyy: ";
@@ -46,17 +51,17 @@ bool Date::change_date() {
         if (is_date_valid(answer) == true) {
             set_date_from_string(answer);
             create_formated_date_string(m_date);
-            cout << "Date was successfully changed!" << endl;
-            return true;
+            cout << "Date was successfully set!" << endl;
+            return;
         }
         else {
             bool invalid_char = true;
             while (invalid_char) {
-                cout << "Still want to change date? y/n: ";
+                cout << "Still want to set date? y/n: ";
                 char answer; cin >> answer; cout << endl;
                 if (answer == 'n') {
-                    cout << "Date was not changed." << endl;
-                    return false;
+                    cout << "Date was not set." << endl;
+                    return;
                 }
                 else if (answer == 'y') {
                     cout << "Try again. " << endl;
@@ -69,6 +74,12 @@ bool Date::change_date() {
 
 //checks if date is valid in order to allow to change it
 bool Date::is_date_valid(string date) {
+    regex pattern("\\d{2}/\\d{2}/\\d{4}");
+    bool valid_pattern = regex_match(date, pattern);
+    if (valid_pattern == false) {
+        cout << date << " is not a valid date format" << endl;
+        return false;
+    }
     stringstream ss(date);
     int day, month, year;
     char delimiter = '/';
