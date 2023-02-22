@@ -13,8 +13,10 @@
 class DailyMix {
 private:
 	unordered_map<int, Song*> m_daily_mix; //first: id, second: song
+	fstream m_dailymix_file;
 	Date m_last_date_saved; // stores the last saved date (will change if the program will run in a different day)
 	bool check_if_date_changed(Date& new_date); // checks if the date has changed.
+	Date& get_date_from_file();
 public:
 	DailyMix();
 	void Play();

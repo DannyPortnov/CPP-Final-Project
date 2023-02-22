@@ -2,37 +2,37 @@
 
 // after initiallizing the system, if the date did not change: the same mix that was first created in that date
 // needs to be presented to the user.
-DailyMix::DailyMix() {
-	fstream read("c:\\temp\\daily_mix.dat", ios::in);
-	if (!read) {
-		cout << "Couldn't open file for serialization" << endl;
-		return;
-	}
-	// Read the first line as a string to get the Date of the daily mix
-	string date;
-	getline(read, date);
-	Date saved_date(date);
-	m_last_date_saved = saved_date;
+DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_last_date_saved(get_date_from_file()) {
+	
+	//m_last_date_saved = saved_date;
 	Date new_date;
 	// check if date has changed. if so, generate a new daily mix
-	if (check_if_date_changed(new_date) == true) {
+	if (check_if_date_changed(new_date)) {
 		m_last_date_saved = new_date;
 		generate_daily_mix();
 		return;
 	}
 	// if day hasn't changed, reload dailymix data back in to the data structure.
-	while (!read.eof()) {
+	while (!m_dailymix_file.eof()) {
 		int song_id;
-		read >> song_id;
+		m_dailymix_file >> song_id;
 		auto song = Server::find_song_by_id(song_id);
 		m_daily_mix.emplace(song_id, song);
-		char c1 = read.get(); //Skips the \n at the end of line
-		char c2 = read.peek(); //Peeks at the start of the next line
-		if (c2 == '\n') //if the next line is also \n, quit
-		{
-			break;
+		if (Utilities::Is_End_Of_File(m_dailymix_file)) {
+			return;
 		}
 	}
+}
+
+Date& DailyMix::get_date_from_file() {
+	Date default_date("");
+	if (!Utilities::Is_File_Valid(m_dailymix_file)) {
+		return default_date;
+	}
+	string date;
+	getline(m_dailymix_file, date);
+	Date saved_date(date);
+	return saved_date;
 }
 
 // checks if the date has changed. if yes: returns true, else: returns false.
