@@ -29,7 +29,6 @@ public:
 	Song(int id, string song_name, string file_path,
 		string album, string singer, string genre, string release_date, string duration, int plays_count);
 	void Play(); //plays a song // todo: maybe to move to an abstract class: audioFile
-	void Serialize();
 	
 	const string& get_album() const; 
 	const string& get_genre() const;
