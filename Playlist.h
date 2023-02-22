@@ -28,7 +28,7 @@ private:
 public:
 	Playlist(string name);
 	~Playlist();
-	void add_song_to_playlist(Song* song);
+	void add_song_to_playlist(Song* song); //works
 	void remove_song_from_playlist(Song* song, bool make_sure = true);
 	void clear_all_playlist();
 	string get_name() const { return m_playlist_name; }
@@ -36,7 +36,7 @@ public:
 	void Play_Random();
 	void Print();
 	multimap<string, Song*> get_songs();
-	bool check_if_song_exist_in_playlist_by_id(int id);
+	bool check_if_song_exist_in_playlist_by_id(int id); //works
 	Song* get_song_by_name(string song_name);
 	int count_song_name_appearences(string song_name); // count the number of songs with the same name
 

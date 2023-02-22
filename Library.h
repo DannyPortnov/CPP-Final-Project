@@ -36,7 +36,7 @@ private:
 	//Returns the choosen song. If wrong name returns nullptr!
 	Song* Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search);
 	
-	bool check_if_user_playlist_exist(const string& playlist_name);
+	bool check_if_user_playlist_exist(const string& playlist_name); //works
 	bool check_if_playlist_can_be_edited(const string& playlist_name);
 	bool check_if_continue_playing();
 	bool make_sure_to_delete_song(Song* song);
@@ -89,7 +89,7 @@ public:
 	void Delete_Podcast(string podcast_name);
 
 
-	void Add2PL(int id, const string& playlist_name);
+	void Add2PL(int id, const string& playlist_name); //works
 	void RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
 	void add_to_favorites(Song* song);
 
@@ -130,7 +130,7 @@ public:
 	void Play_Podcast(string podcast_name);
 
 	//void print_all_playlists(); // print all playlists in library
-	void create_playlist(const string& playlist_name); // create a new playlist
+	void create_playlist(const string& playlist_name); // create a new playlist //works
 	void delete_playlist(Playlist* playlist); // delete a playlist
 	
 

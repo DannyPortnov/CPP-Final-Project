@@ -148,7 +148,7 @@ void Library::add_to_favorites(Song* song) {
 
 
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
-void Library::Add2PL(int id, const string& playlist_name)
+void Library::Add2PL(int id, const string& playlist_name) //todo: add parameter for prints
 {
 	auto song_to_add = Server::find_song_by_id(id);
 	Playlist* playlist;
