@@ -111,11 +111,11 @@ int* days_in_each_month(bool is_leap_year) {
 void Date::create_formated_date_string(string& date) {
     stringstream ss;
     if (m_month < 10 && m_day < 10)
-        ss << '0' << m_day << '/0' << m_month << '/' << m_year;
+        ss << "0" << m_day << "/0" << m_month << "/"  << m_year;
     else if (m_month < 10)
-        ss << m_day << '/0' << m_month << '/' << m_year;
+        ss << m_day << "/0" << m_month << "/"  << m_year;
     else if (m_day < 10)
-        ss << '0' << m_day << '/' << m_month << '/' << m_year;
+        ss << "0" << m_day << "/" << m_month << "/" << m_year;
     date = ss.str();
 }
 
