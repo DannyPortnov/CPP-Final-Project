@@ -9,18 +9,17 @@
 
 class DailyMix {
 private:
-	static unordered_multimap<int, Song*> m_daily_mix; //first: id, second: song
-	static Date m_last_date_saved; // stores the last saved date (will change if the program will run in a different day)
-	bool check_if_date_changed(); // checks if the date has changed.
+	unordered_map<int, Song*> m_daily_mix; //first: id, second: song
+	Date m_last_date_saved; // stores the last saved date (will change if the program will run in a different day)
+	bool check_if_date_changed(Date& new_date); // checks if the date has changed.
 public:
 	DailyMix();
 	void Play();
 	void Play_Random();
 	void generate_daily_mix(); // generate a random mix of 10 songs from the library/server
 	void set_date(); // sets the date- checks if day was changed.
-	static void remove_song_from_mix(int id);
-	void restore_dailymix();
-
+	void remove_song_from_mix(int id);
+	void save_dailymix();
 };
 
 
