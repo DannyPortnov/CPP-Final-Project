@@ -11,6 +11,15 @@ Song::Song(string song_name, string file_path,
 	song_id++;
 }
 
+Song::Song(int id, string song_name, string file_path, string album, string singer, 
+	string genre, string release_date, string duration, int plays_count) :AudioFile(id, song_name, file_path, duration, release_date),
+	m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(plays_count)
+{
+	song_id++;
+}
+
+
+
 void Song::set_artist(string& artist) {
 	m_artist = artist;
 }
@@ -60,6 +69,7 @@ void Song::Play()
 	m_player.play(m_file_path);
 	//the most_played, and most_recent update is made in Library and Server
 }
+
 
 // update when a song is played
 void Song::update_plays_counter() {

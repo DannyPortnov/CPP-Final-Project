@@ -18,6 +18,7 @@ protected:
 	int m_id_code;
 	Player m_player;
 	AudioFile(string file_name, string file_path, string duration="", string release_date = "");
+	AudioFile(int id, string file_name, string file_path, string duration="", string release_date = "");
 public:
 
 	virtual void Play() = 0;

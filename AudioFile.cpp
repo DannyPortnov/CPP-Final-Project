@@ -11,6 +11,12 @@ AudioFile::AudioFile(string file_name, string file_path, string duration, string
     set_duration(duration);
 }
 
+AudioFile::AudioFile(int id, string file_name, string file_path, string duration, string release_date)
+    : m_id_code(id), m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
+{
+    set_duration(duration);
+}
+
 const string& AudioFile::get_name() const {
 	return m_file_name;
 }
