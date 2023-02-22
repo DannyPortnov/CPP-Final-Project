@@ -578,26 +578,25 @@ void Library::Begin_Serialization()
 {
 	Server::Restore_Songs();
 	fstream read("c:\\temp\\playlists.dat", ios::in);
-	if (!read) {
-		cout << "Couldn't open file for serialization" << endl;
+	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
 	while (!read.eof()) {
 		string playlist_name;
 		int song_id;
 		read>> playlist_name >> song_id;
-		replace(playlist_name.begin(), playlist_name.end(), '_', ' '); // replace all '_' to ' '
+		Utilities::Replace_All({ playlist_name });
 		Add2PL(song_id, playlist_name);
-		char c1 = read.get(); //Skips the \n at the end of line
-		char c2 = read.peek(); //Peeks at the start of the next line
-		if (c2 == '\n') //if the next line is also \n, quit
-		{
+		if (Utilities::Is_End_Of_File(read)) {
 			break;
 		}
 	}
-	Server::Restore_Most_Recent();
-	update_most_recent();
-	//most played, same
+	Server::Restore_Most_Recent(); //ALL songs ordered by last time played
+	update_most_recent(); //only top 10
+	Server::update_most_played_songs(); //ALL songs ordered by their plays count
+	update_most_played(); //only top 10
+	Server::Restore_Podcasts();
+	//left to serialize daily mix
 
 }
 
