@@ -1,12 +1,24 @@
 #include "Server.h"
 
-//Server::Server()
-//{
-//	auto compare_by_id = [](Song* a, Song* b) { //lambda function
-//		return a->get_id() < b->get_id();
-//	};
-//	set<int, decltype(compare_by_id)> songs_by_id; //insert here all the songs!
-//}
+multimap<string, Song*> Server::m_songs_by_alphabet_order = multimap<string, Song*>();
+list<Song*> Server::m_recently_played = list<Song*>();
+map<string, Podcast*> Server::m_podcasts_by_alphabet_order = map<string, Podcast*>();
+unordered_map<int, Episode*> Server::m_all_episodes_by_id = unordered_map<int, Episode*>();
+unordered_map<string, Episode*> Server::m_all_episodes_by_name = unordered_map<string, Episode*>();
+unordered_map<string, Podcast*> Server::m_all_podcasts = unordered_map<string, Podcast*>();
+
+unordered_map<int, Song*> Server::m_all_songs_by_id = unordered_map<int, Song*>();
+unordered_set<string> Server::m_songs_file_paths = unordered_set<string>();
+unordered_multimap<string, Song*> Server::m_all_songs_by_artist = unordered_multimap<string, Song*> ();
+unordered_multimap<string, Song*> Server::m_all_songs_by_name = unordered_multimap<string, Song*>();
+unordered_multimap<string, Song*> Server::m_all_songs_by_album = unordered_multimap<string, Song*>();
+unordered_multimap<string, Song*> Server::m_all_songs_by_genre = unordered_multimap<string, Song*>();
+unordered_map<int, Song*>  Server::m_recently_played_by_id = unordered_map<int, Song*>();
+multimap<int, Song*>  Server::m_most_played = multimap<int, Song*>();
+Server::Server()
+{
+	Restore_Songs();
+}
 
 //Song is unique!
 void Server::Upload_Song(string song_name, string file_path,

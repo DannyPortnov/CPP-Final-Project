@@ -147,6 +147,7 @@
     <ClCompile Include="Episode.cpp" />
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Playlist.cpp" />
     <ClCompile Include="Podcast.cpp" />
     <ClCompile Include="Server.cpp" />

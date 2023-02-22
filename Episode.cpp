@@ -21,3 +21,8 @@ Podcast* Episode::Get_Podcast() const
 {
 	return m_podcast;
 }
+
+void Episode::Play()
+{
+	//todo: implement
+}

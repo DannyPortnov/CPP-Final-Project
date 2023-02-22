@@ -84,9 +84,13 @@ bool Date::is_date_valid(string date) {
     int day, month, year;
     char delimiter = '/';
     ss >> day >> delimiter >> month >> delimiter >> year;
+    if (month < 0 || month > 12) {
+        cout << "Invalid date! Month isn't 1-12"<< endl;
+        return false;
+    }
     int max_day = days_in_each_month(is_leap_year(year))[month];
-    if (day > max_day) {
-        cout << "Invalid date! The maximum number of days of this specified month is:  " << max_day << endl;
+    if (day > max_day || day < 0) {
+        cout << "Invalid date! Day cannot be bigger than " << max_day << " Or less than 0" << endl;
         return false;
     }
     return true;
@@ -102,6 +106,7 @@ bool is_leap_year(int year) {
         (year % 400 == 0)));
 }
 
+
 int* days_in_each_month(bool is_leap_year) {
     int array_of_days[] = { NULL, 31, 28 + is_leap_year, 31, 30, 31, 30, 31, 31,30, 31, 30, 31 };
     return array_of_days;
@@ -111,11 +116,11 @@ int* days_in_each_month(bool is_leap_year) {
 void Date::create_formated_date_string(string& date) {
     stringstream ss;
     if (m_month < 10 && m_day < 10)
-        ss << '0' << m_day << '/0' << m_month << '/' << m_year;
+        ss << "0" << m_day << "/0" << m_month << "/"  << m_year;
     else if (m_month < 10)
-        ss << m_day << '/0' << m_month << '/' << m_year;
+        ss << m_day << "/0" << m_month << "/"  << m_year;
     else if (m_day < 10)
-        ss << '0' << m_day << '/' << m_month << '/' << m_year;
+        ss << "0" << m_day << "/" << m_month << "/" << m_year;
     date = ss.str();
 }
 

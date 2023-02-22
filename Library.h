@@ -15,7 +15,7 @@
 
 using namespace std;
 
-class Library
+class Library : Server
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
@@ -63,7 +63,7 @@ private:
 	//Podcast* Pick_Podcast(string episode_name);
 
 public:
-	Library();
+	Library(); //works
 	~Library();
 	//Creates a song and adds it to the library.
 	void Add_Song(string song_name, string file_path, string artist, string album, string genre, string duration, string release_date);
@@ -71,7 +71,7 @@ public:
 	void Add_Podcast_Episode(string episode_name, string podcast_name,
 	string file_path, string duration = "", string release_Date="");
 
-	void Begin_Serialization();
+	void Begin_Serialization();//works
 	void Begin_Deserialization();
 
 

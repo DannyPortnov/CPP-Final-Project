@@ -8,7 +8,7 @@ Playlist* Library::m_deleted = new Playlist("deleted");
 Playlist* Library::m_recent = new Playlist("recent");
 Playlist* Library::m_most_played = new Playlist("most played");
 
-Library::Library()
+Library::Library() : Server()
 {
 	m_saved_playlist_names.insert(make_pair(m_favorites->get_name(), m_favorites));
 	m_saved_playlist_names.insert(make_pair(m_deleted->get_name(), m_deleted));
@@ -37,7 +37,7 @@ Library::~Library() {
 void Library::PrintSong(int id)
 {
 	cout << "The song details are:" << endl;
-	cout << Server::find_song_by_id(id)<< endl;
+	cout << Server::find_song_by_id(id) << endl;
 }
 
 // print all songs with this name.
@@ -78,7 +78,7 @@ bool Library::check_if_playlist_can_be_edited(const string& playlist_name) {
 
 // create a new playlist
 void Library::create_playlist(const string& playlist_name) {
-	if (check_if_user_playlist_exist(playlist_name)) {	
+	if (check_if_user_playlist_exist(playlist_name)) {
 		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
 		return;
 	}
@@ -106,14 +106,14 @@ void Library::delete_playlist(Playlist* playlist) {
 		for (it = playlist->get_songs().begin(); it != playlist->get_songs().end(); it++) {
 			Server::Permanent_Delete_Song(it->second);
 
-		//now when a song was permanently deleted, it needs to be removed from recents and most played playlists
+			//now when a song was permanently deleted, it needs to be removed from recents and most played playlists
 			remove_from_most_recent(it->second->get_id()); //todo: maybe to move to Permanent_Delete_Song in Server
 			// the update of most recent happans in remove_from_most_recent() method.
 		}
 		update_most_played(); // update most_played after deleting songs //todo: maybe to move to Permanent_Delete_Song in Server
-		playlist->clear_all_playlist(); 
+		playlist->clear_all_playlist();
 	}
-	else 
+	else
 		cout << "This Playlist Cannot Be Deleted!" << endl;
 }
 
@@ -150,9 +150,10 @@ void Library::add_to_favorites(Song* song) {
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name)
 {
-	auto playlist = m_user_playlists.find(playlist_name)->second;
 	auto song_to_add = Server::find_song_by_id(id);
+	Playlist* playlist;
 	if (check_if_user_playlist_exist(playlist_name)) {
+		playlist = m_user_playlists.find(playlist_name)->second;
 		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
 		return;
 	}
@@ -163,12 +164,13 @@ void Library::Add2PL(int id, const string& playlist_name)
 		cout << "No such playlist was found!" << endl;
 		cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
 		create_playlist(playlist_name); // creates the playlist automatically
+		playlist = m_user_playlists[playlist_name];
 		playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
 	}
 	else
 		cout << "This Playlist Cannot Be Edited!" << endl;
 }
- 
+
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure) {
 	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
@@ -211,8 +213,8 @@ void Library::RemoveFromPL(const string& song_name, const string& playlist_name,
 //}
 
 
-bool Library::Are_All_Parameters_Empty(const string & param1,
- const string & param2, const string & param3 = "", const string & param4 = "", const string & param5 = "")
+bool Library::Are_All_Parameters_Empty(const string& param1,
+	const string& param2, const string& param3 = "", const string& param4 = "", const string& param5 = "")
 {
 	return param1.empty() && param2.empty() && param3.empty() && param4.empty();
 }
@@ -228,7 +230,7 @@ bool Library::Are_All_Parameters_Empty(const string & param1,
 //}
 //Asks the user which song he meant and updates the choosen one.
 void Library::Update_Song(string song_name,
- string new_name, string artist, string album, string genre, string duration, string release_date)
+	string new_name, string artist, string album, string genre, string duration, string release_date)
 {
 	if (Are_All_Parameters_Empty(artist, album, genre, duration, new_name) && release_date == "") {
 		Print_No_Input_Parameters_Error();
@@ -256,7 +258,7 @@ void Library::Update_Song(int song_id, string new_name, string artist, string al
 	try
 	{
 		//move updating to Song
-		auto picked_song= Update_Media_By_Id(song_id, Server::find_song_by_id, new_name, duration, release_date);
+		auto picked_song = Update_Media_By_Id(song_id, Server::find_song_by_id, new_name, duration, release_date);
 		if (!artist.empty()) {
 			picked_song->set_artist(artist);
 		}
@@ -312,12 +314,12 @@ void Library::UpdateEpisode(int episode_id, string new_name, string duration, st
 	{
 		Print_Not_Found_By_Id_Error(episode_id, typeid(Episode).name());
 	}
-	
+
 }
 
-void Library::Print_Media_Exists_Error(std::string& new_name, const string & media_type)
+void Library::Print_Media_Exists_Error(std::string& new_name, const string& media_type)
 {
-	cout << media_type <<" with name " << new_name << " already exists, please choose a unique name" << endl;
+	cout << media_type << " with name " << new_name << " already exists, please choose a unique name" << endl;
 }
 
 template <class T>
@@ -474,12 +476,12 @@ void Library::PlayRandom() {
 	random_device rd;
 	mt19937 generator(rd());
 	shuffle(songs_vector.begin(), songs_vector.end(), generator);
-	
-	cout << "Playing all library songs, shuffled: " << endl; 
+
+	cout << "Playing all library songs, shuffled: " << endl;
 
 	// Play the songs of the multimap in the shuffled order
 	for (auto const& song : songs_vector) {
-		cout << "Now playing: " << *(song->second) << endl; 
+		cout << "Now playing: " << *(song->second) << endl;
 		int id = song->second->get_id();
 		Play(id);
 		if (check_if_continue_playing() == false)
@@ -520,7 +522,7 @@ void Library::PlayPlaylistShuffled(string playlist_name) {
 
 //called from the interface ("main")
 void Library::Add_Song(string song_name, string file_path, string artist = "",
-	 string album = "", string genre = "", string duration = "", string release_date = "")
+	string album = "", string genre = "", string duration = "", string release_date = "")
 {
 	if (Server::Does_Song_Exist(file_path)) { //checks uniqueness
 		cout << "Song was already added" << endl;
@@ -528,7 +530,7 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 	}
 	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_date);
 
-	#pragma region Algorithm to find all songs by that name and choosing specific one
+#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
 	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	//multiset<Song*>::iterator end_of_songs_set;
@@ -554,7 +556,7 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 }
 
 void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
- string file_path, string duration, string release_Date)
+	string file_path, string duration, string release_Date)
 {
 	if (Server::Does_Episode_Exist(episode_name)) { //checks uniqueness
 		cout << "Episode was already added." << endl;
@@ -575,7 +577,7 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
 
 void Library::Begin_Serialization()
 {
-	Server::Restore_Songs();
+	//Server::Restore_Songs();
 	fstream read("c:\\temp\\playlists.dat", ios::in);
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
@@ -583,7 +585,7 @@ void Library::Begin_Serialization()
 	while (!read.eof()) {
 		string playlist_name;
 		int song_id;
-		read>> playlist_name >> song_id;
+		read >> playlist_name >> song_id;
 		vector<string> params = { playlist_name };
 		Utilities::Replace_All(&params);
 		Add2PL(song_id, playlist_name);
@@ -780,8 +782,8 @@ void Library::update_most_played() { // need to be called after playing a song a
 	Server::update_most_played_songs();
 	auto most_played = Server::get_most_played();
 	int most_played_size = most_played->size();
-	m_most_played->clear_all_playlist();  
-	int minimum = min(most_played_size , max_most_played); // using c++ algorithm
+	m_most_played->clear_all_playlist();
+	int minimum = min(most_played_size, max_most_played); // using c++ algorithm
 	multimap<int, Song*>::iterator it = most_played->end();
 	for (int i = 0; i < minimum; i++) {
 		it--;

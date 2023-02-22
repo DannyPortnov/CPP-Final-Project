@@ -25,8 +25,10 @@ private:
 	int m_plays_counter; // counter for the amount of times the song was played
 	unordered_set<string> m_playlist_appearances; // stores the names of the playlists that have this song
 public:
+	
 	Song(string song_name, string file_path,
 	string album="",string artist="", string genre="", string release_date="", string duration = "");
+	//works
 	Song(int id, string song_name, string file_path,
 		string album, string singer, string genre, string release_date, string duration, int plays_count);
 	void Play(); //plays a song // todo: maybe to move to an abstract class: audioFile
