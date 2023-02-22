@@ -24,7 +24,7 @@ Date& Date::init(int d, int m, int y) {
 
 // extract date in format: "d/m/yyyy" to day, month, year
 void Date::set_date_from_string(string date) {
-    if (date == "") {
+    if (date.empty()) {
         init(0, 0, 1900); // if string is empty, the date will be 0,0,1900
         m_date = "00/00/1900";
         return;
