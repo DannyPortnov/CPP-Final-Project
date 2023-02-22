@@ -48,6 +48,16 @@ private:
 	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
 	static void Replace_Underscores_With_Space(string& name);
 
+	//remove a song from recents by using song id
+	static void remove_from_most_recent(int id);
+	//add a song to recents by using song id
+	static void add_to_most_recent(int id);
+	//todo: maybe move to private, no one needs to use this methods
+	static void update_most_recent();	//update recent songs playlist 
+	// the update of most recent happans in remove_from_most_recent() method.
+
+	static void update_most_played(); 	//update most played songs playlist
+	
 	
 	// void ask_user_to_remove_song(Song* song, Playlist* playlist); // was implemented in playlist instead
 	//Song* Pick_Song(string song_name);
@@ -96,16 +106,6 @@ public:
 	void UpdatePodcast(string podcast_name, string new_name);
 	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", int release_date=0);
 	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
-	
-	//remove a song from recents by using song id
-	static void remove_from_most_recent(int id);
-	//add a song to recents by using song id
-	static void add_to_most_recent(int id);
-	//todo: maybe move to private, no one needs to use this methods
-	static void update_most_recent();	//update recent songs playlist 
-	// the update of most recent happans in remove_from_most_recent() method.
-
-	static void update_most_played(); 	//update most played songs playlist
 	
 	//return the playlist that needs to be played
 	Playlist* get_playlist_to_play(string playlist_name);

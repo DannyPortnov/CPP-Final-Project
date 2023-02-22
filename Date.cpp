@@ -6,6 +6,7 @@ Date::Date() {
 	time_t now = time(0);
 	localtime_s(&newtime, &now);
 	init(newtime.tm_mday, newtime.tm_mon + 1, newtime.tm_year + 1900);
+    create_formated_date_string(m_date);
 }
 
 
@@ -38,7 +39,7 @@ bool Date::change_date() {
         string answer; cin >> answer; cout << endl;
         if (validate_before_change(answer) == true) {
             set_date_from_string(answer);
-            m_date = create_formated_date_string();
+            create_formated_date_string(m_date);
             cout << "Date was successfully changed!" << endl;
             return true;
         }
@@ -90,16 +91,15 @@ int* days_in_each_month(bool is_leap_year) {
 }
 
 // creates a string in the format dd/mm/yyyy
-string& Date::create_formated_date_string() {
+void Date::create_formated_date_string(string& date) {
     stringstream ss;
     if (m_month < 10 && m_day < 10)
         ss << '0' << m_day << '/0' << m_month << '/' << m_year;
-    if (m_month < 10)
+    else if (m_month < 10)
         ss << m_day << '/0' << m_month << '/' << m_year;
-    if (m_day < 10)
+    else if (m_day < 10)
         ss << '0' << m_day << '/' << m_month << '/' << m_year;
-    string date_string = ss.str();
-    return date_string;
+    date = ss.str();
 }
 
 // returns the date as a string in format dd/mm/yyyy

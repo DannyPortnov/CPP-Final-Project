@@ -291,7 +291,8 @@ list<Song*>* Server::get_recently_played() {
 // remove a song from recently played songs data structure
 void Server::remove_from_recently_played(int id) {
 	auto song = find_song_by_id(id);
-	m_recently_played.remove(song); // removes the song from the list
+	//todo: maybe to improve it, mabye to change m_recently played data structure
+	m_recently_played.remove(song); // removes the song from the list // complexity O(n)- n= number of songs in m_recently_played
 	m_recently_played_by_id.erase(id);
 	/*list<Song*>::iterator it;
 	for (it = m_recently_played.begin(); it != m_recently_played.end(); it++) {
