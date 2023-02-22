@@ -324,7 +324,7 @@ void Server::update_recently_played(int id) {
 // when a song is deleted from server, we can just call this method and update the data structure
 void Server::update_most_played_songs() {
 	m_most_played.clear(); // clear most played and than add to multimap after, plays_count updated.
-	unordered_map<int, Song*>::iterator it;
+	unordered_map<int, Song*>::iterator it; // goes over all songs organized by id
 	for (it = m_all_songs_by_id.begin(); it != m_all_songs_by_id.end(); it++) {
 		m_most_played.insert(make_pair(it->second->get_plays_count(), it->second)); // start:least played, end: most played
 	}
