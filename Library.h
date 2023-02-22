@@ -15,7 +15,7 @@
 
 using namespace std;
 
-class Library
+class Library : Server
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
