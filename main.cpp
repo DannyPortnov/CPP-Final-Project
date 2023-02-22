@@ -20,8 +20,10 @@ void mp3player() {
 	bool run_program = true;
 	cout << "Welcome To mp3player" << endl;
 	cout << endl;
-	Library::Begin_Serialization();
-	Library::Begin_Deserialization();
+	Library lib;
+	lib.Begin_Serialization();
+
+	lib.Begin_Deserialization();
 
 	//int id;
 	

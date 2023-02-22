@@ -114,9 +114,10 @@ ostream& operator<<(ostream& os, const Song& song)
 	if (song.m_genre != "") {
 		os << " " << song.m_genre << "genre";
 	}
-	if (song.m_release_date != 0) {
-		os << " release date: " << song.m_release_date;
-	}
+	//todo: implement later
+	//if (!(song.m_release_date == Date(""))) {
+	//	os << " release date: " << song.m_release_date;
+	//}
 	song.print_playlists();
 	return os;
 }

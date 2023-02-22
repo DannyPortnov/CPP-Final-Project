@@ -1,10 +1,11 @@
 #ifndef SONG_H
 #define SONG_H
 #include "AudioFile.h"
-#include "Library.h"
+//#include "Library.h"
 //#include <Phonon/MediaSource>
 //#include <Phonon/MediaObject>
 #include <iostream>
+#include <unordered_set>
 //#include <Qstring>
 //#include <ctime>
 //#include <chrono>

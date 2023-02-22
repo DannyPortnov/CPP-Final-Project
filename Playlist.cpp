@@ -1,4 +1,5 @@
 #include "Playlist.h"
+#include "Library.h"
 
 
 
@@ -125,7 +126,7 @@ void Playlist::add_song_to_playlist(Song* song) {
 }
 
 // double checks with the user if the song should be deleted, if yes- returns true.
-bool Playlist::make_sure_to_remove_song(Song* song, bool make_sure = true) {
+bool Playlist::make_sure_to_remove_song(Song* song, bool make_sure) {
 	cout << "You chose to remove the song: " << endl;
 	cout << "The song details are:" << endl;
 	cout << *song << endl;
@@ -151,7 +152,7 @@ bool Playlist::make_sure_to_remove_song(Song* song, bool make_sure = true) {
 
 // removes a song from playlist
 // if doesn't need to make_sure, the song will be deleted (returns true)
-void Playlist::remove_song_from_playlist(Song* song, bool make_sure = true) {
+void Playlist::remove_song_from_playlist(Song* song, bool make_sure ) {
 	if (make_sure_to_remove_song(song, make_sure)) {
 		m_songs.erase(song->get_name());
 		song->remove_from_playlist(m_playlist_name);

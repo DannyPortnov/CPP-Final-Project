@@ -1,11 +1,11 @@
 #ifndef PODCAST_H
 #define PODCAST_H
+#include "AudioFile.h"
+//#include "Episode.h" //Avoid circular dependency
+#include "Player.h"
 #include <string>
 #include <iostream>
 #include <unordered_set>
-#include "Player.h"
-#include "AudioFile.h"
-#include "Episode.h"
 using namespace std;
 
 /*
@@ -23,6 +23,7 @@ Questions:
 */
 
 //each podcast is a collection of episodes!
+class Episode;
 class Podcast 
 {
 private:

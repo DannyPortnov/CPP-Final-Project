@@ -1,15 +1,16 @@
 #include "Utilities.h"
 
 
-void Utilities::Replace_All(vector<string> params)
+void Utilities::Replace_All(vector<string>* params)
 {
 	char charToRemove = '_', charToReplaceWith=' '; //if there's any '_', replace them with ' '
-	if (params.front().find('_') == std::string::npos) { //else, replace ' ' with '_'
+	if (params->front().find('_') == std::string::npos) { //else, replace ' ' with '_'
 		charToRemove = ' ';
 		charToReplaceWith = '_';
 	}
-	for (auto& param : params) {
-		std::replace(param.begin(), param.end(), charToRemove, charToReplaceWith);
+	for (string& param : *params) {
+		//string tempString = "temporary";
+		//std::replace(tempString.begin(), tempString.end(), charToRemove, charToReplaceWith);
 	}
 }
 

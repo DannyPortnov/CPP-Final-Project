@@ -61,7 +61,7 @@ void AudioFile::set_duration(string& duration) //only allow m:ss ?
     }
 }
 
-void AudioFile::set_release_date(int release_date)
+void AudioFile::set_release_date(Date release_date)
 {
 	m_release_date = release_date;
 }
