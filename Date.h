@@ -15,7 +15,7 @@ private:
 	string m_date; // store the date as a string.
 	Date& init(int d, int m, int y); // set the date
 	void set_date_from_string(string date);
-	string& create_formated_date_string();
+	void create_formated_date_string(string& date);
 	bool validate_before_change(string date);
 public:
 	Date(); //constructor that creates an instance with the current day
