@@ -14,11 +14,12 @@ Library::Library() : Server()
 	m_saved_playlist_names.insert(make_pair(m_deleted->get_name(), m_deleted));
 	m_saved_playlist_names.insert(make_pair(m_recent->get_name(), m_recent));
 	m_saved_playlist_names.insert(make_pair(m_most_played->get_name(), m_most_played));
-
+	Begin_Serialization();
 }
 
 //todo: add getters for each playlists
 Library::~Library() {
+	Begin_Deserialization();
 	//delete m_daily_mix;
 	delete m_deleted;
 	delete m_favorites;
@@ -579,33 +580,45 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
 void Library::Begin_Serialization()
 {
 	//Server::Restore_Songs();
-	fstream read("c:\\temp\\playlists.dat", ios::in);
-	if (!Utilities::Is_File_Valid(read)) {
+	ifstream read_playlists("c:\\temp\\playlists.dat", ios::in);
+	if (!Utilities::Is_File_Valid(read_playlists)) {
 		return;
 	}
-	while (!read.eof()) {
+	while (!read_playlists.eof()) {
 		string playlist_name;
 		int song_id;
-		read >> playlist_name >> song_id;
+		read_playlists >> playlist_name >> song_id;
 		vector<string*> params = { &playlist_name };
 		Utilities::Replace_All(params, true);
 		Add2PL(song_id, playlist_name);
-		if (Utilities::Is_End_Of_File(read)) {
+		if (Utilities::Is_End_Of_File(read_playlists)) {
 			break;
 		}
 	}
-	Server::Restore_Most_Recent(); //ALL songs ordered by last time played
 	update_most_recent(); //only top 10
-	Server::update_most_played_songs(); //ALL songs ordered by their plays count
 	update_most_played(); //only top 10
-	Server::Restore_Podcasts();
-	DailyMix m_daily_mix();
-
 }
 
 void Library::Begin_Deserialization()
 {
-	Server::Save_Songs();
+	ofstream write_playlists("c:\\temp\\playlists.dat", ios::in);
+	if (!Utilities::Is_File_Valid(write_playlists)) {
+		return;
+	}
+	unordered_map<string, Playlist*>::iterator itr;
+	for (itr = m_user_playlists.begin(); itr != m_user_playlists.end(); itr++)
+	{
+		string playlist_name = itr->first;
+		Playlist* current_playlist = itr->second;
+		vector<string*> params = { &playlist_name };
+		Utilities::Replace_All(params, false);
+		for (auto& song : current_playlist->get_songs()) {
+			write_playlists << " " << playlist_name << " " << song.second->get_id() << endl;
+		}
+		
+	}
+
+	
 }
 
 Song* Library::Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search) {
