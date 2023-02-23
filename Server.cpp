@@ -1,28 +1,29 @@
 #include "Server.h"
 
-multimap<string, Song*>* Server::m_songs_by_alphabet_order;
-list<Song*>* Server::m_recently_played;
-map<string, Podcast*>* Server::m_podcasts_by_alphabet_order;
-unordered_map<int, Episode*>* Server::m_all_episodes_by_id;
-unordered_map<string, Episode*>* Server::m_all_episodes_by_name;
-unordered_map<string, Podcast*>* Server::m_all_podcasts;
+multimap<string, Song*>* Server::m_songs_by_alphabet_order = new multimap<string, Song*>();
+list<Song*>* Server::m_recently_played = new list<Song*>();
+map<string, Podcast*>* Server::m_podcasts_by_alphabet_order = new map<string, Podcast*>();
+unordered_map<int, Episode*>* Server::m_all_episodes_by_id = new unordered_map<int, Episode*>();
+unordered_map<string, Episode*>* Server::m_all_episodes_by_name = new unordered_map<string, Episode*>();
+unordered_map<string, Podcast*>* Server::m_all_podcasts = new unordered_map<string, Podcast*>();
 
-unordered_map<int, Song*>* Server::m_all_songs_by_id;
-unordered_set<string>* Server::m_songs_file_paths;
-unordered_multimap<string, Song*>* Server::m_all_songs_by_artist;
-unordered_multimap<string, Song*>* Server::m_all_songs_by_name;
-unordered_multimap<string, Song*>* Server::m_all_songs_by_album;
-unordered_multimap<string, Song*>* Server::m_all_songs_by_genre;
-unordered_map<int, Song*>* Server::m_recently_played_by_id;
-multimap<int, Song*>* Server::m_most_played;
+unordered_map<int, Song*>* Server::m_all_songs_by_id = new unordered_map<int, Song*>();
+unordered_set<string>* Server::m_songs_file_paths = new unordered_set<string>();
+unordered_multimap<string, Song*>* Server::m_all_songs_by_artist = new unordered_multimap<string, Song*>();
+unordered_multimap<string, Song*>* Server::m_all_songs_by_name = new unordered_multimap<string, Song*>();
+unordered_multimap<string, Song*>* Server::m_all_songs_by_album = new unordered_multimap<string, Song*>();
+unordered_multimap<string, Song*>* Server::m_all_songs_by_genre = new unordered_multimap<string, Song*>();
+unordered_map<int, Song*>* Server::m_recently_played_by_id = new unordered_map<int, Song*>();
+multimap<int, Song*>* Server::m_most_played = new multimap<int, Song*>();
 
 Server::Server()
 {
-	//Restore_Songs();
+	Restore_Songs(); //Must be here because serialization must happen before anything else
 }
 
 Server::~Server()
 {
+	Save_Songs(); //Do serialization in destructor (before removing all songs)
 	Destroy_All_Allocations();
 }
 
@@ -31,22 +32,22 @@ void Server::Destroy_All_Allocations()
 	Destory_Allocations(m_songs_by_alphabet_order);
 	Destory_Allocations(m_podcasts_by_alphabet_order);
 	Destory_Allocations(m_all_episodes_by_id);
-	Destory_Allocations(m_all_episodes_by_name);
-	Destory_Allocations(m_all_podcasts);
-	Destory_Allocations(m_all_songs_by_id);
-	Destory_Allocations(m_all_songs_by_artist);
-	Destory_Allocations(m_all_songs_by_name);
-	Destory_Allocations(m_all_songs_by_album);
-	Destory_Allocations(m_all_songs_by_genre);
-	Destory_Allocations(m_recently_played_by_id);
-	Destory_Allocations(m_most_played);
+	Clear_And_Delete(m_all_episodes_by_name);
+	Clear_And_Delete(m_all_podcasts);
+	Clear_And_Delete(m_all_songs_by_id);
+	Clear_And_Delete(m_all_songs_by_artist);
+	Clear_And_Delete(m_all_songs_by_name);
+	Clear_And_Delete(m_all_songs_by_album);
+	Clear_And_Delete(m_all_songs_by_genre);
+	Clear_And_Delete(m_recently_played_by_id);
+	Clear_And_Delete(m_most_played);
 
-	if (m_recently_played != nullptr)
-	{
-		for (auto elem : *m_recently_played) {
-			delete elem;
-		}
-	}
+	//if (m_recently_played != nullptr)
+	//{
+	//	for (auto elem : *m_recently_played) {
+	//		delete elem;
+	//	}
+	//}
 	Clear_And_Delete(m_recently_played);
 	Clear_And_Delete(m_songs_file_paths);
 }
@@ -104,8 +105,8 @@ void Server::Restore_Songs()
 		string song_name, artist, album, genre, duration, release_date, file_path;
 		int id, plays_count;
 		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
-		vector<string> params = { song_name, artist, album,genre };
-		Utilities::Replace_All(&params);// replace all '_' to ' '
+		vector<string*> params = { &song_name, &artist, &album,&genre };
+		Utilities::Replace_All(params);// replace all '_' to ' '
 		auto song = new Song(id, song_name, file_path, album, artist, genre, release_date, duration, plays_count);
 		Add_Song_To_Collections(song);
 		if (Utilities::Is_End_Of_File(read)) {
@@ -123,8 +124,8 @@ void Server::Restore_Podcasts() {
 	while (!read.eof()) {
 		string episode_name,podcast_name, duration, release_date, file_path;
 		read >> episode_name >> podcast_name >> file_path >> duration >> release_date;
-		vector<string> params = { episode_name,podcast_name };
-		Utilities::Replace_All(&params);// replace all '_' to ' '
+		vector<string*> params = { &episode_name,&podcast_name };
+		Utilities::Replace_All(params);// replace all '_' to ' '
 		Upload_Episode_To_Podcast(nullptr, episode_name, podcast_name, file_path, duration, release_date);
 		if (Utilities::Is_End_Of_File(read)) {
 			break;
@@ -163,8 +164,8 @@ void Server::Save_Songs()
 		artist = song->get_artist();
 		album = song->get_album();
 		genre = song->get_genre();
-		vector<string> params = { song_name, artist, album, genre };
-		Utilities::Replace_All(&params);// replace all '_' to ' '
+		vector<string*> params = { &song_name, &artist, &album, &genre };
+		Utilities::Replace_All(params);// replace all '_' to ' '
 		write << song->get_id() << " " << song_name << " " << song->get_path() << " " << artist << " " << album
 			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << " " << song->get_plays_count() << endl;
 	}
@@ -242,7 +243,11 @@ void Server::Destory_Allocations(T* collection)
 	if (collection != nullptr)
 	{
 		for (typename T::iterator it = collection->begin(); it != collection->end(); ++it) {
-			delete it->second;
+			try
+			{
+				delete it->second;
+			}
+			catch (const std::exception&) {} //do nothing, pointer was already deleted probably
 		}
 	}
 	Clear_And_Delete(collection);

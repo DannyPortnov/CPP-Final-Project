@@ -587,8 +587,8 @@ void Library::Begin_Serialization()
 		string playlist_name;
 		int song_id;
 		read >> playlist_name >> song_id;
-		vector<string> params = { playlist_name };
-		Utilities::Replace_All(&params);
+		vector<string*> params = { &playlist_name };
+		Utilities::Replace_All(params);
 		Add2PL(song_id, playlist_name);
 		if (Utilities::Is_End_Of_File(read)) {
 			break;
