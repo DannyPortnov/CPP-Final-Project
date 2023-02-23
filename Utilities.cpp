@@ -1,27 +1,31 @@
 #include "Utilities.h"
 
 //todo: put regex and use refs
-void Utilities::Replace_All(vector<string*>& params)
+void Utilities::Replace_All(vector<string*>& params, bool is_serialization)
 {
-	//if (params.front()->find('_') == std::string::npos) { //else, replace ' ' with '_'
-	//	charToRemove = ' ';
-	//	charToReplaceWith = '_';
-	//}
-	
 	// REGEX IMPLEMENTATION:
-	/*for (auto param : params) {
-		regex pattern("_");
-		*param = regex_replace(*param, pattern, " ");
-	}*/
+	string charToRemove = " ", charToReplaceWith = "_"; //if there's any '_', replace them with ' '
+	if (is_serialization) {
+		charToRemove = "_";
+		charToReplaceWith = " ";
+	}
 
 	for (auto param : params) {
-		char charToRemove = '_', charToReplaceWith = ' '; //if there's any '_', replace them with ' '
-		if (param->find('_') == std::string::npos) { //else, replace ' ' with '_'
-			charToRemove = ' ';
-			charToReplaceWith = '_';
-		}
-		std::replace(param->begin(), param->end(), charToRemove, charToReplaceWith);
+		regex pattern(charToRemove);
+		*param = regex_replace(*param, pattern, charToReplaceWith);
 	}
+
+	#pragma region previous implementation
+	//for (auto param : params) {
+//	char charToRemove = '_', charToReplaceWith = ' '; //if there's any '_', replace them with ' '
+//	if (param->find('_') == std::string::npos) { //else, replace ' ' with '_'
+//		charToRemove = ' ';
+//		charToReplaceWith = '_';
+//	}
+//	std::replace(param->begin(), param->end(), charToRemove, charToReplaceWith);
+//}  
+#pragma endregion
+
 }
 
 bool Utilities::Is_End_Of_File(ios_base& fileToCheck)

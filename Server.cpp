@@ -109,7 +109,7 @@ void Server::Restore_Songs()
 		int id, plays_count;
 		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
 		vector<string*> params = { &song_name, &artist, &album,&genre };
-		Utilities::Replace_All(params);// replace all '_' to ' '
+		Utilities::Replace_All(params,true );// replace all '_' to ' '
 		auto song = new Song(id, song_name, file_path, album, artist, genre, release_date, duration, plays_count);
 		Add_Song_To_Collections(song);
 		if (Utilities::Is_End_Of_File(read)) {
@@ -128,7 +128,7 @@ void Server::Restore_Podcasts() {
 		string episode_name,podcast_name, duration, release_date, file_path;
 		read >> episode_name >> podcast_name >> file_path >> duration >> release_date;
 		vector<string*> params = { &episode_name,&podcast_name };
-		Utilities::Replace_All(params);// replace all '_' to ' '
+		Utilities::Replace_All(params, true);// replace all '_' to ' '
 		Podcast* podcast = nullptr;
 		if (Does_Podcast_Exist(podcast_name)) {
 			podcast = find_podcast_by_name(podcast_name);
@@ -175,7 +175,7 @@ void Server::Save_Podcasts()
 		episode_name = episode->get_name();
 		podcast_name = episode->Get_Podcast()->Get_Podcast_Name();
 		vector<string*> params = { &episode_name, &podcast_name };
-		Utilities::Replace_All(params);// replace all '_' to ' '
+		Utilities::Replace_All(params, false);// replace all '_' to ' '
 		write  << episode_name << " " << podcast_name << " " << episode->get_path() << " "
 			  << episode->get_duration() << " " << episode->get_release_date() << endl;
 	}
@@ -196,7 +196,7 @@ void Server::Save_Songs()
 		album = song->get_album();
 		genre = song->get_genre();
 		vector<string*> params = { &song_name, &artist, &album, &genre };
-		Utilities::Replace_All(params);// replace all '_' to ' '
+		Utilities::Replace_All(params, false);// replace all '_' to ' '
 		write << song->get_id() << " " << song_name << " " << song->get_path() << " " << artist << " " << album
 			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << " " << song->get_plays_count() << endl;
 	}
