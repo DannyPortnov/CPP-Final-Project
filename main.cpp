@@ -20,10 +20,11 @@ void mp3player() {
 	bool run_program = true;
 	cout << "Welcome To mp3player" << endl;
 	cout << endl;
+	//Server server;
 	Library lib;
-	lib.Begin_Serialization();
+	//lib.Begin_Serialization();
 
-	lib.Begin_Deserialization();
+	//lib.Begin_Deserialization();
 
 	//int id;
 	
@@ -34,6 +35,7 @@ void mp3player() {
 int main()
 {
 	mp3player();
+	//Server::Destroy_All_Allocations();
 	cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << endl;
 	return 0;
 }
