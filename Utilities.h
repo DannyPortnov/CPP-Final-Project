@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <regex>
+
 using namespace std;
 
 class Utilities

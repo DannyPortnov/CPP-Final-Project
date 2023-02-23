@@ -7,6 +7,13 @@ void Utilities::Replace_All(vector<string*>& params)
 	//	charToRemove = ' ';
 	//	charToReplaceWith = '_';
 	//}
+	
+	// REGEX IMPLEMENTATION:
+	/*for (auto param : params) {
+		regex pattern("_");
+		*param = regex_replace(*param, pattern, " ");
+	}*/
+
 	for (auto param : params) {
 		char charToRemove = '_', charToReplaceWith = ' '; //if there's any '_', replace them with ' '
 		if (param->find('_') == std::string::npos) { //else, replace ' ' with '_'
