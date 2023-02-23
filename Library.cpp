@@ -32,6 +32,7 @@ Library::~Library() {
 	}
 	m_user_playlists.clear();
 	m_user_playlist_names.clear();
+	m_saved_playlist_names.clear();
 }
 
 void Library::PrintSong(int id)
