@@ -51,6 +51,18 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Deleted.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Favorites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Most_Recent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Most_Played.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Song.cpp">
@@ -87,6 +99,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Deleted.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Favorites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Most_Recent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Most_Played.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
