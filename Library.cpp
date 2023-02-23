@@ -532,7 +532,7 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 	}
 	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_date);
 
-#pragma region Algorithm to find all songs by that name and choosing specific one
+	#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
 	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	//multiset<Song*>::iterator end_of_songs_set;
