@@ -138,11 +138,11 @@ Date& Date::operator=(const Date& otherDate) {
 // operator overload << to show the date
 ostream& operator<<(ostream& os, const Date& a) {
     if (a.m_month < 10 && a.m_day < 10)
-        os << "0" << a.m_day <<"/0"  << a.m_month <<"/"  << a.m_year << endl;
+        os << "0" << a.m_day <<"/0"  << a.m_month <<"/"  << a.m_year;
     if (a.m_month < 10)
-        os << a.m_day << "/0" << a.m_month << "/"  << a.m_year << endl;
+        os << a.m_day << "/0" << a.m_month << "/"  << a.m_year;
     if (a.m_day < 10)
-        os << "0" << a.m_day << "/" << a.m_month << "/"  << a.m_year << endl;
+        os << "0" << a.m_day << "/" << a.m_month << "/"  << a.m_year;
 	return os;
 }
 
