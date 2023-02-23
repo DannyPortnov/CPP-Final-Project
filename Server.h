@@ -101,6 +101,7 @@ public:
 
 	//Saves all songs into a file (deserialization)
 	static void Save_Songs();
+	static void Save_Most_Recent();
 	static void Save_Podcasts();
 
 	// add song to recently played by song id

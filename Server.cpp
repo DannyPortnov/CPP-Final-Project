@@ -21,12 +21,14 @@ Server::Server()
 	Restore_Songs(); //Must be here because serialization must happen before anything else
 	Restore_Podcasts();
 	Restore_Most_Recent(); 
+	update_most_played_songs();//ALL songs ordered by their plays count
 }
 
 Server::~Server()
 {
 	Save_Songs(); //Do serialization in destructor (before removing all songs)
 	Save_Podcasts();
+	Save_Most_Recent();
 	Destroy_All_Allocations();
 }
 
@@ -200,6 +202,25 @@ void Server::Save_Songs()
 		write << song->get_id() << " " << song_name << " " << song->get_path() << " " << artist << " " << album
 			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << " " << song->get_plays_count() << endl;
 	}
+	write.close();
+}
+
+void Server::Save_Most_Recent() {
+	ofstream write("c:\\temp\\most_recent.dat", ios::out);
+	if (!Utilities::Is_File_Valid(write)) {
+		return;
+	}
+	list<Song*>::iterator itr = m_recently_played->end();
+	int length = m_recently_played->size();
+	for (int i = 0; i < length; i++)
+	{
+		itr--;
+		auto song = *itr;
+		write << song->get_id() << endl;
+	}
+	//for (auto& song : *m_recently_played) {
+	//	write << song->get_id() << endl;
+	//}
 	write.close();
 }
 

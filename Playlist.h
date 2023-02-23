@@ -13,8 +13,8 @@
 
 
 class Library;
-class Playlist {
-
+class Playlist { //todo: make deleted, recent, favorites classes which derive from playlist
+	//todo: make a library pointer inside playlist
 private:
 	multimap<string, Song*> m_songs; // uses to store all songs in the playlist in alphabetical order. 
 	// chose to use multimap because if we would choose to store in unordered_multimap and use another data structure
@@ -28,9 +28,9 @@ private:
 public:
 	Playlist(string name);
 	~Playlist();
-	void add_song_to_playlist(Song* song); //works
-	void remove_song_from_playlist(Song* song, bool make_sure = true);
-	void clear_all_playlist();
+	virtual void add_song_to_playlist(Song* song); //works
+	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
+	virtual void clear_all_playlist();
 	string get_name() const { return m_playlist_name; }
 	void Play();
 	void Play_Random();

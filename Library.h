@@ -15,7 +15,7 @@
 
 using namespace std;
 
-class Library : Server
+class Library : Server //todo: remove inheritance
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
