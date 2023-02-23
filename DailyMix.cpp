@@ -8,6 +8,7 @@ DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_la
 	Date new_date;
 	// check if date has changed. if so, generate a new daily mix
 	if (check_if_date_changed(new_date)) {
+		m_dailymix_file.close();
 		m_last_date_saved = new_date;
 		generate_daily_mix();
 		return;
@@ -22,6 +23,7 @@ DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_la
 			return;
 		}
 	}
+	m_dailymix_file.close();
 }
 //Works
 Date& DailyMix::get_date_from_file() {
@@ -55,7 +57,7 @@ void DailyMix::remove_song_from_mix(int id) {
 // deserialization for daily mix
 void DailyMix::save_dailymix() {
 
-	fstream write("c:\\temp\\daily_mix.dat", ios::out);
+	ofstream write("c:\\temp\\daily_mix.dat", ios::out);
 	if (!write) {
 		cout << "Couldn't open file for serialization" << endl;
 		return;
@@ -68,6 +70,7 @@ void DailyMix::save_dailymix() {
 	{
 		write << itr->first << endl;
 	}
+	write.close();
 }
 
 // generate a random mix of 10 songs from the library/server
