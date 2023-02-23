@@ -74,6 +74,9 @@ void DailyMix::save_dailymix() {
 //todo: maybe add a feature to let the user to remix the daily mix.
 void DailyMix::generate_daily_mix(){
 	auto songs_to_shuffle = Server::get_songs_by_id();
+	if (songs_to_shuffle == nullptr) { //todo: dailymix will be empty
+		return;
+	}
 	// Create a vector of iterators to the elements in the multimap
 	vector<unordered_map<int, Song*>::iterator> shuffled_songs_vector;
 	for (auto it = songs_to_shuffle->begin(); it != songs_to_shuffle->end(); ++it) {
