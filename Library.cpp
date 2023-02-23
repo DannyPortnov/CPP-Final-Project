@@ -103,7 +103,7 @@ void Library::delete_playlist(Playlist* playlist) {
 		cout << "Playlist Was Successfully Deleted!" << endl;
 	}
 	// if m_deleted was selected, we need to empty this playlist. all songs need to be permanently deleted!
-	else if (playlist->get_name() == m_deleted->get_name()) {
+	else if (playlist->get_name() == m_deleted->get_name()) { //todo: move to Deleted class
 		multimap<string, Song*>::iterator it;
 		for (it = playlist->get_songs().begin(); it != playlist->get_songs().end(); it++) {
 			Server::Permanent_Delete_Song(it->second);
@@ -120,7 +120,7 @@ void Library::delete_playlist(Playlist* playlist) {
 }
 
 // print all exisiting playlists (names only)
-void Library::PrintPL() {
+void Library::PrintPL() { //todo: make overload
 	int i = 1;
 	cout << "List Of Playlists:" << endl;
 	cout << "(" << i << "). " << m_favorites->get_name() << endl;
