@@ -19,11 +19,14 @@ multimap<int, Song*>* Server::m_most_played = new multimap<int, Song*>();
 Server::Server()
 {
 	Restore_Songs(); //Must be here because serialization must happen before anything else
+	Restore_Podcasts();
+	Restore_Most_Recent(); 
 }
 
 Server::~Server()
 {
 	Save_Songs(); //Do serialization in destructor (before removing all songs)
+	Save_Podcasts();
 	Destroy_All_Allocations();
 }
 
@@ -31,7 +34,7 @@ void Server::Destroy_All_Allocations()
 {
 	Destory_Allocations(m_songs_by_alphabet_order);
 	Destory_Allocations(m_podcasts_by_alphabet_order);
-	Destory_Allocations(m_all_episodes_by_id);
+	Clear_And_Delete(m_all_episodes_by_id);
 	Clear_And_Delete(m_all_episodes_by_name);
 	Clear_And_Delete(m_all_podcasts);
 	Clear_And_Delete(m_all_songs_by_id);
@@ -126,7 +129,11 @@ void Server::Restore_Podcasts() {
 		read >> episode_name >> podcast_name >> file_path >> duration >> release_date;
 		vector<string*> params = { &episode_name,&podcast_name };
 		Utilities::Replace_All(params);// replace all '_' to ' '
-		Upload_Episode_To_Podcast(nullptr, episode_name, podcast_name, file_path, duration, release_date);
+		Podcast* podcast = nullptr;
+		if (Does_Podcast_Exist(podcast_name)) {
+			podcast = find_podcast_by_name(podcast_name);
+		}
+		Upload_Episode_To_Podcast(podcast, episode_name, podcast_name, file_path, duration, release_date);
 		if (Utilities::Is_End_Of_File(read)) {
 			break;
 		}
@@ -151,12 +158,36 @@ void Server::Restore_Most_Recent()
 	read.close();
 }
 
+unordered_map<int, Episode*>* Server::get_episodes_by_id() {
+	return m_all_episodes_by_id;
+}
+
+
+void Server::Save_Podcasts()
+{
+	ofstream write("c:\\temp\\podcasts.dat", ios::out);
+	unordered_map<int, Episode*>::iterator itr;
+	auto all_episodes = Server::get_episodes_by_id();
+	for (itr = all_episodes->begin(); itr != all_episodes->end(); itr++)
+	{
+		auto episode = itr->second;
+		string episode_name, podcast_name;
+		episode_name = episode->get_name();
+		podcast_name = episode->Get_Podcast()->Get_Podcast_Name();
+		vector<string*> params = { &episode_name, &podcast_name };
+		Utilities::Replace_All(params);// replace all '_' to ' '
+		write  << episode_name << " " << podcast_name << " " << episode->get_path() << " "
+			  << episode->get_duration() << " " << episode->get_release_date() << endl;
+	}
+	write.close();
+}
 
 void Server::Save_Songs()
 {
 	ofstream write("c:\\temp\\songs.dat", ios::out);
 	unordered_map<int, Song*>::iterator itr;
-	for (itr = Server::get_songs_by_id()->begin(); itr != Server::get_songs_by_id()->end(); itr++)
+	auto all_songs = Server::get_songs_by_id();
+	for (itr = all_songs->begin(); itr != all_songs->end(); itr++)
 	{
 		auto song = itr->second;
 		string song_name, artist, album, genre;

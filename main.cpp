@@ -20,7 +20,6 @@ void mp3player() {
 	bool run_program = true;
 	cout << "Welcome To mp3player" << endl;
 	cout << endl;
-	//Server server;
 	Library lib;
 	//lib.Begin_Serialization();
 

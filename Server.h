@@ -65,6 +65,7 @@ public:
 	static unordered_multimap<string, Song*>*  get_songs_by_artist();
 	static unordered_multimap<string, Song*>* get_songs_by_album();
 	static unordered_multimap<string, Song*>* get_songs_by_genre();
+	static unordered_map<int, Episode*>* get_episodes_by_id();
 
 	static list<Song*>* get_recently_played();
 	static multimap<int, Song*>* get_most_played();
@@ -100,6 +101,7 @@ public:
 
 	//Saves all songs into a file (deserialization)
 	static void Save_Songs();
+	static void Save_Podcasts();
 
 	// add song to recently played by song id
 	static void add_to_recently_played(int id);
