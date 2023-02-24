@@ -52,3 +52,12 @@ void Most_Recent::Update_Most_Recent()
 	#pragma endregion
 
 }
+
+void Most_Recent::Remove_From_Most_Recent(int id)
+{
+	auto song_to_remove = Server::find_song_by_id(id);
+	Playlist::remove_song_from_playlist(song_to_remove, false); // removes from playlist, don't make sure to delete songs from PL
+	Server::remove_from_recently_played(id); // removes from the data structure
+	Update_Most_Recent();
+
+}
