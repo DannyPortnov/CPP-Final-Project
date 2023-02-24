@@ -17,14 +17,14 @@ void Utilities::Replace_All(vector<string*>& params, bool is_serialization)
 
 	#pragma region previous implementation
 	//for (auto param : params) {
-//	char charToRemove = '_', charToReplaceWith = ' '; //if there's any '_', replace them with ' '
-//	if (param->find('_') == std::string::npos) { //else, replace ' ' with '_'
-//		charToRemove = ' ';
-//		charToReplaceWith = '_';
-//	}
-//	std::replace(param->begin(), param->end(), charToRemove, charToReplaceWith);
-//}  
-#pragma endregion
+	//	char charToRemove = '_', charToReplaceWith = ' '; //if there's any '_', replace them with ' '
+	//	if (param->find('_') == std::string::npos) { //else, replace ' ' with '_'
+	//		charToRemove = ' ';
+	//		charToReplaceWith = '_';
+	//	}
+	//	std::replace(param->begin(), param->end(), charToRemove, charToReplaceWith);
+	//}  
+	#pragma endregion
 
 }
 
@@ -45,7 +45,7 @@ bool Utilities::Is_End_Of_File(ios_base& fileToCheck)
 	return false;
 }
 
-bool Utilities::Is_File_Valid(ios& fileToCheck)
+bool Utilities::Is_File_Valid(ios& fileToCheck) //todo: add promt to create folder if doesn't exist, or check for a command that creates the folder
 {
 	if (!fileToCheck) {
 		cout << "Couldn't open file for serialization or deserialization" << endl;
