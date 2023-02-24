@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include<sstream>
 
 using namespace std;
 
@@ -19,6 +20,8 @@ public:
 	static bool Is_End_Of_File(ios_base & fileToCheck); //works
 	//If the file isn't valid, prints a message.
 	static bool Is_File_Valid(ios & fileToCheck); //works
+	static bool user_prompts_and_dialog(string& prompt_message, string& reject_message,
+		string& accept_message);// create general prompt function for dialog with user- maybe move to utilities
 };
 #endif
 

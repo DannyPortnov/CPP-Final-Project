@@ -51,7 +51,7 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Deleted.h">
+    <ClInclude Include="Trash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Favorites.h">
@@ -104,7 +104,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Deleted.cpp">
+    <ClCompile Include="Trash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Favorites.cpp">

@@ -53,3 +53,23 @@ bool Utilities::Is_File_Valid(ios& fileToCheck)
 	}
 	return true;
 }
+
+// create general prompt function for dialog with user
+bool Utilities::user_prompts_and_dialog(string& prompt_message, string& reject_message, string& accept_message) {
+	bool invalid_char = true;
+	while (invalid_char) {
+		cout << prompt_message << " "; // answer is y/n
+		string answer; //todo: mabye switch back to char
+		cin >> answer; cout << endl;
+		if (answer == "n") {
+			cout << reject_message << endl;
+			return false;
+		}
+		else if (answer == "y") {
+			cout << accept_message << endl;
+			return true;
+		}
+		cout << "Invalid answer! try again." << endl;
+	}
+
+}
