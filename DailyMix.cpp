@@ -2,8 +2,19 @@
 
 // after initiallizing the system, if the date did not change: the same mix that was first created in that date
 // needs to be presented to the user.
-DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_last_date_saved(get_date_from_file()) {
-	
+//DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_last_date_saved(get_date_from_file()) {
+//	
+//	
+//}
+
+DailyMix::DailyMix(Library* library) : Playlist(typeid(this).name(), library), 
+m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in)
+{
+
+}
+
+void DailyMix::restore_playlist() //todo: make maybe another parent class
+{
 	//m_last_date_saved = saved_date;
 	Date new_date;
 	// check if date has changed. if so, generate a new daily mix
@@ -18,13 +29,14 @@ DailyMix::DailyMix() : m_dailymix_file("c:\\temp\\daily_mix.dat", ios::in), m_la
 		int song_id;
 		m_dailymix_file >> song_id;
 		auto song = Server::find_song_by_id(song_id);
-		m_daily_mix.emplace(song_id, song);
+		add_song_to_playlist(song, false);
 		if (Utilities::Is_End_Of_File(m_dailymix_file)) {
+			m_dailymix_file.close();
 			return;
 		}
 	}
-	m_dailymix_file.close();
 }
+
 //Works
 Date& DailyMix::get_date_from_file() {
 	Date default_date("");
@@ -45,12 +57,25 @@ bool DailyMix::check_if_date_changed(Date& new_date) {
 	return false;
 }
 
+
 //todo: need to delete a song from here when we delete from library.
-// removes a song from the mix if it was deleted from the libarary.
-// the mix stays with less songs until the next day
-//todo: maybe add a feature that lets the user to remix the playlist after removing a song.
-void DailyMix::remove_song_from_mix(int id) {
-	m_daily_mix.erase(id);
+
+// removes a song from the mix if it was permanently deleted from the libarary.
+// add a feature that lets the user to chose if he wants to remix the playlist after removing a song,
+// or to leave the mix with less songs until the next day
+void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
+
+	cout << "A song was deleted from " << m_playlist_name << "." << endl;
+	string prompt = "Would you like to regenerate " + m_playlist_name + "? y/n: ";
+	string reject_message = m_playlist_name + " wasn't regenerated!";
+	string accept_message = m_playlist_name + " was regenerated successfully!";
+	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+		clear_all_playlist(false); // don't add prints
+		generate_daily_mix();
+		return;
+	}
+	Playlist::remove_song_from_playlist(song, false);
+	return;
 }
 
 
@@ -65,10 +90,10 @@ void DailyMix::save_dailymix() {
 	// Write the string to the file first
 	write << m_last_date_saved << endl;
 	// Write the song data to the file
-	unordered_map<int, Song*>::iterator itr;
-	for (itr = m_daily_mix.begin(); itr != m_daily_mix.end(); itr++)
+	multiset<Song*>::iterator itr;
+	for (itr = m_songs.begin(); itr != m_songs.end(); itr++)
 	{
-		write << itr->first << endl;
+		write << (*itr)->get_id() << endl;
 	}
 	write.close();
 }
@@ -88,11 +113,10 @@ void DailyMix::generate_daily_mix(){
 	shuffle(shuffled_songs_vector.begin(), shuffled_songs_vector.end(), generator);
 
 	//add 10 songs from shuffled_songs_vector to m_daily_mix 
-	int i = 1;
 	for (int i = 0; i < max_songs && i < shuffled_songs_vector.size(); i++) { // if library has less than 10 songs, mix them also.
-		auto song = shuffled_songs_vector[i];
-		int id = song->second->get_id();
-		m_daily_mix.insert(make_pair(id, song->second));
+		auto& song = shuffled_songs_vector[i];
+		//int id = song->second->get_id();
+		add_song_to_playlist(song->second, false);
 	}
 }
 
