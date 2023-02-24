@@ -11,25 +11,13 @@ Playlist::~Playlist() {
 
 
 bool Playlist::check_if_continue_playing() {
-	bool invalid_char = true;
-	while (invalid_char) {
-		cout << "Would you like to continue playing " << m_playlist_name << "? y/n: ";
-		char answer;
-		cin >> answer; cout << endl;
-		if (answer == 'n') {
-			cout << "Stopped playing " << m_playlist_name << endl;
-			invalid_char = false;
-			return false;
-		}
-		else if (answer == 'y') {
-			cout << "Continue playing " << m_playlist_name << endl;
-			invalid_char = false;
-			return true;
-		}
-		else {
-			cout << "Invalid character entered, try again: " << endl;
-		}
+	string prompt = "Would you like to continue playing " + m_playlist_name + "? y/n: ";
+	string reject_message = "Stopped playing " + m_playlist_name;
+	string accept_message = "Continue playing " + m_playlist_name; // or empty string "";
+	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+		return true;
 	}
+	return false;
 }
 
 // play the songs in alphabetical order
@@ -39,11 +27,12 @@ void Playlist::Play() {
 		return;
 	}
 	cout << "Playing" << m_playlist_name << ":" << endl;
-	multimap<string, Song*>::iterator it;
+	multiset<Song*>::iterator it;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
-		cout << "Now playing: " << *it->second << endl;
-		it->second->update_plays_counter();
-		Library::play_song(it->second); //todo: check if works
+		auto song_to_play = *it;
+		cout << "Now playing: " << song_to_play << endl;
+		song_to_play->update_plays_counter();
+		Library::play_song(song_to_play); //todo: check if works
 		//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
@@ -53,7 +42,7 @@ void Playlist::Play() {
 // play the songs randomly
 void Playlist::Play_Random() {
 	// Create a vector of iterators to the elements in the multimap
-	vector<multimap<string, Song*>::iterator> songs_vector;
+	vector<multiset<Song*>::iterator> songs_vector;
 	for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
 		songs_vector.push_back(it);
 	}
@@ -67,9 +56,9 @@ void Playlist::Play_Random() {
 	
 	// Play the songs of the multimap in the shuffled order
 	for (auto const& song : songs_vector) {
-		cout << "Now playing: " << *(song->second) << endl;
-		song->second->update_plays_counter();
-		Library::play_song(song->second); //todo: check if works
+		cout << "Now playing: " << *(song) << endl;
+		(*song)->update_plays_counter();
+		Library::play_song(*song); //todo: check if works
 		//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
@@ -98,29 +87,31 @@ void Playlist::Play_Random() {
 
 //print the playlist's content - songs in the playlist (organized alphabetically)
 void Playlist::Print() {
-	multimap<string, Song*>::iterator it;
+	multiset<Song*>::iterator it;
 	int i = 1;
 	cout << "List of songs in " << m_playlist_name << " playlist:" << endl;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
-		cout << "(" << i << "). " << *(it->second) << endl; // it->second contains Song*
+		cout << "(" << i << "). " << *(it) << endl; // it->second contains Song*
 		i++;
 	}
 }
 
 //returns the playlist
-multimap<string, Song*> Playlist::get_songs() {
+multiset<Song*> Playlist::get_songs() {
 	return m_songs;
 }
 
 // add a song to the playlist. m_songs is a multimap
-void Playlist::add_song_to_playlist(Song* song) {
-	if (check_if_song_exist_in_playlist_by_id(song->get_id())) {
-		cout << "This song is already in the playlist!" << endl;
+void Playlist::add_song_to_playlist(Song* song, bool add_print) {
+	if (m_songs.find(song) != m_songs.end()) {
+		if (add_print)
+			cout << "This song is already in " << m_playlist_name << "!" << endl;
 	}
 	else {
-		m_songs.insert(make_pair(song->get_name(), song));
+		m_songs.insert(song);
+		// m_songs_by_id.insert(make_pair(song->get_id(), song));
 		song->set_playlist_appearances(m_playlist_name);
-		if (m_playlist_name != "deleted")
+		if (add_print) // if equals to false, don't print
 			cout << "Song was successfully added to " << m_playlist_name << "!" << endl;
 	}
 }
@@ -128,65 +119,72 @@ void Playlist::add_song_to_playlist(Song* song) {
 // double checks with the user if the song should be deleted, if yes- returns true.
 bool Playlist::make_sure_to_remove_song(Song* song, bool make_sure) {
 	cout << "You chose to remove the song: " << endl;
-	cout << "The song details are:" << endl;
+	//cout << "The song details are:" << endl;
 	cout << *song << endl;
 	if (make_sure == false) {
 		return true;
 	}
-	bool invalid_char = true;
-	while (invalid_char) {
-		cout << "Are you sure you want to remove this song from: " << m_playlist_name << "?" << endl;
-		cout << "Press y/n: ";
-		char answer;
-		cin >> answer;
-		cout << endl;
-		if (answer == 'y') {
-			return true;
-		}
-		if (answer == 'n') {
-			return false;
-		}
-		cout << "Invalid answer! try again." << endl;
-	}
-}
-
-// removes a song from playlist
-// if doesn't need to make_sure, the song will be deleted (returns true)
-void Playlist::remove_song_from_playlist(Song* song, bool make_sure ) {
-	if (make_sure_to_remove_song(song, make_sure)) {
-		m_songs.erase(song->get_name());
-		song->remove_from_playlist(m_playlist_name);
-		cout << "Song was successfully removed from playlist: " << m_playlist_name << "!" << endl;
-	}
-	cout << "The song wasn't removed from playlist: " << m_playlist_name << "!" << endl;
-
-}
-
-
-// remove all songs from the playlist.
-void Playlist::clear_all_playlist() {
-	multimap<string, Song*>::iterator it; // go over all songs in the playlist
-	for (it = m_songs.begin(); it != m_songs.end(); it++) {
-		it->second->remove_from_playlist(m_playlist_name);// removes the playlist name from Song's m_playlist_appearences
-	}
-	m_songs.clear(); // remove all songs from the playlist itself
-}
-
-// check if a song exist in the playlist by id, return true if exist
-bool Playlist::check_if_song_exist_in_playlist_by_id(int id) {
-	auto song = Server::find_song_by_id(id);
-	if (m_songs.find(song->get_name()) != m_songs.end()) { //if not found, find method returns '.end()', comlexity: O(log(n))
+	string prompt = "Are you sure you want to remove this song from: " + m_playlist_name + "? y/n: ";
+	string reject_message = "The song wasn't removed from playlist: " + m_playlist_name + "!";
+	string accept_message = "Song was successfully removed from playlist: " + m_playlist_name + "!";
+	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		return true;
 	}
 	return false;
 }
 
-// get how many songs have the same name
-int Playlist::count_song_name_appearences(string song_name) {
-	return m_songs.count(song_name);
+// removes a song from playlist
+// if doesn't need to make_sure, the song will be deleted (returns true)
+void Playlist::remove_song_from_playlist(Song* song, bool make_sure) {
+	if (make_sure_to_remove_song(song, make_sure)) {
+		// need to pick media or to remove by id
+		m_songs.erase(song);//erase by object type
+		//m_songs_by_id.erase(song->get_id());// erase by id
+
+		song->remove_from_playlist(m_playlist_name);
+	}
+	// the printing of the results of the operation happans in make_sure_to_remove
 }
 
 
+// remove all songs from the playlist.
+void Playlist::clear_all_playlist() {
+	multiset<Song*>::iterator it; // go over all songs in the playlist
+	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+		(*it)->remove_from_playlist(m_playlist_name);// removes the playlist name from Song's m_playlist_appearences
+	}
+	m_songs.clear(); // remove all songs from the playlist itself
+	//m_songs_by_id.clear();
+}
+
+
+//returns true if the playlists name are in the right order.
+bool operator<(const Playlist& a, const Playlist& b) {
+	return (a.get_name() < b.get_name());
+}
+
+
+
+
+
+// check if a song exist in the playlist by id, return true if exist
+//bool Playlist::check_if_song_exist_in_playlist_by_id(int id) {
+//	auto song = Server::find_song_by_id(id);
+//	if (m_songs_by_id.find(song->get_id()) != m_songs_by_id.end()) { //if not found, find method returns '.end()', comlexity: O(log(n))
+//		return true;
+//	}
+//	return false;
+//}
+
+//todo: use pick media instea of get_ong_by_name and count_song_name_appearences
+// get how many songs have the same name
+/*
+int Playlist::count_song_name_appearences(string song_name) {
+
+	return m_songs.count(song_name);
+}
+
+//todo: maybe to chabge to pick media
 // get a specific song, even if there are few songs with the same name
 Song* Playlist::get_song_by_name(string song_name)
 {
@@ -222,11 +220,8 @@ Song* Playlist::get_song_by_name(string song_name)
 		cout << "Invalid id! try again." << endl;
 	}
 }
+*/
 
-//returns true if the playlists name are in the right order.
-bool operator<(const Playlist& a, const Playlist& b) {
-	return (a.get_name() < b.get_name());
-}
 
 
 
