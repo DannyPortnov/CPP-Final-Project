@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MOSTPLAYED_H
+#define MOSTPLAYED_H
+
 #include "Automatic_Playlist.h"
 class Most_Played :
     public Automatic_Playlist
@@ -18,3 +20,4 @@ public:
     void save_playlist();
 };
 
+#endif// MOSTPLAYED_H

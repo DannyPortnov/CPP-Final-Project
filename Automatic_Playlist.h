@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AUTOMATICPLAYLIST_H
+#define AUTOMATICPLAYLIST_H
+
 #include "Playlist.h"
 class Automatic_Playlist :
     public Playlist
@@ -12,4 +14,5 @@ class Automatic_Playlist :
 
 };
 
+#endif// AUTOMATICPLAYLIST_H
 
