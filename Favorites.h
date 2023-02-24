@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FAVORITES_H
+#define FAVORITES_H
+
 #include "Playlist.h"
 class Favorites :
     public Playlist
@@ -10,3 +12,4 @@ public:
     void save_playlist();
 };
 
+#endif// FAVORITES_H
