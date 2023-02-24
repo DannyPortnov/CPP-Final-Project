@@ -37,6 +37,7 @@ void Trash::clear_all_playlist() {
 		for (it = m_songs.begin(); it != m_songs.end(); it++) {
 			Server::Permanent_Delete_Song(*it);
 			m_library->remove_from_most_recent((*it)->get_id());
+			m_library->remove_from_daily_mix(*it);
 			//todo: need to remove song from most_played, moset_recent playlists
 		}
 		m_library->update_most_played();
@@ -44,13 +45,17 @@ void Trash::clear_all_playlist() {
 	}
 }
 
-// called when we want to add song to deleted playlist
-void Trash::add_to_trash(Song* song) { //todo: add boolean
+// called when we want to add song to the Trash
+void Trash::add_to_trash(Song* song, bool add_print) { //todo: add boolean
+	if (add_print == false) {
+		Playlist::add_song_to_playlist(song);
+		return;
+	}
+
 	string prompt = "Are you sure that you want to move this song to trash? y/n: ";
 	string reject_message = "The song wasn't added to " + m_playlist_name + "!";
 	string accept_message = "The song was successfully added to " + m_playlist_name + "!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
-
 		Playlist::add_song_to_playlist(song);
 		return;
 	}

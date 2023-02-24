@@ -3,7 +3,6 @@
 #include "Playlist.h"
 
 
-
 class Trash : public Playlist
 {
 private:
@@ -17,7 +16,7 @@ public:
 	void clear_all_playlist();
 	void restore_playlist();
 	void save_playlist();
-	void add_to_trash(Song* song);
+	void add_to_trash(Song* song, bool add_print = true);
 
 };
 
