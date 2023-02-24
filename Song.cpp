@@ -77,13 +77,11 @@ void Song::update_plays_counter() {
 }
 
 void Song::set_playlist_appearances(const string& playlist) {
-	if (playlist != "recent" && playlist != "most played") //todo: names need to match exactly to m_recent & m_most_played playlist
-		m_playlist_appearances.insert(playlist);
+	m_playlist_appearances.insert(playlist);
 }
 
 void Song::remove_from_playlist(const string& playlist) {
-	if (playlist != "recent" && playlist != "most played") //todo: names need to match exactly to m_recent & m_most_played playlist
-		m_playlist_appearances.erase(playlist);
+	m_playlist_appearances.insert(playlist);
 }
 
 // used when trying to delete a song in library
