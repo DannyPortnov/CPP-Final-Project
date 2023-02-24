@@ -24,7 +24,7 @@ class Library : Server //todo: remove inheritance
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
 	Favorites* m_favorites;
-	DailyMix m_daily_mix;
+	DailyMix* m_daily_mix;
 	Most_Recent* m_recent;
 	Most_Played* m_most_played;
 	Trash* m_deleted;
@@ -137,7 +137,7 @@ public:
 	
 	void remove_from_most_recent(int id);
 	void update_most_played(); 
-	
+	void remove_from_daily_mix(Song* song);
 
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 	string genre = "", string duration = "", int release_date =0);*/

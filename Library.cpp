@@ -10,6 +10,7 @@ Library::Library() : Server()
 	m_deleted = new Trash(this);
 	m_recent = new Most_Recent(this);
 	m_most_played = new Most_Played(this);
+	m_daily_mix = new DailyMix(this);
 	m_playlists.insert(make_pair(m_favorites->get_name(), m_favorites));
 	m_playlists.insert(make_pair(m_deleted->get_name(), m_deleted));
 	m_playlists.insert(make_pair(m_recent->get_name(), m_recent));
@@ -104,7 +105,7 @@ void Library::create_playlist(const string& playlist_name) {
 void Library::delete_playlist(string playlist_name) {
 	Playlist* playlist = get_playlist_by_name(playlist_name);
 	if (playlist != nullptr) {
-		playlist->clear_all_playlist();
+		playlist->clear_all_playlist();//the dialog is inside this method. if dialog is not needed, send flase to this method
 		if (check_if_user_playlist(playlist_name)) {
 			m_user_playlist_names.erase(playlist_name);
 			m_playlists.erase(playlist_name);
@@ -112,7 +113,7 @@ void Library::delete_playlist(string playlist_name) {
 			//cout << "Playlist Was Successfully Deleted!" << endl; //in dialog
 			return;
 		}
-	} //todo: add dialog to make sure before deleting
+	} 
 	
 
 
@@ -194,7 +195,7 @@ void Library::Add2PL(int id, const string& playlist_name) //todo: add parameter 
 void Library::RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure) {
 	auto playlist = get_playlist_by_name(playlist_name);
 	if (playlist != nullptr) {
-		playlist->remove_song_from_playlist(song_name);
+		playlist->remove_song_from_playlist(song_name); //if its one song, we want to make sure if the user want to delete
 	}
 	#pragma region Previous Implementation
 	//if (check_if_user_playlist(playlist_name) && m_deleted->get_name() != playlist_name) {
@@ -425,25 +426,13 @@ void Library::Play(int id)
 }
 
 bool Library::check_if_continue_playing() {
-	bool invalid_char = true;
-	while (invalid_char) {
-		cout << "Would you like to continue playing? y/n: ";
-		char answer;
-		cin >> answer; cout << endl;
-		if (answer == 'n') {
-			cout << "Stopped playing" << endl;
-			invalid_char = false;
-			return false;
-		}
-		else if (answer == 'y') {
-			cout << "Continue playing" << endl;
-			invalid_char = false;
-			return true;
-		}
-		else {
-			cout << "Invalid character entered, try again: " << endl;
-		}
+	string prompt = "Would you like to continue playing? y/n: ";
+	string reject_message = "Stopped playing";
+	string accept_message = "Continue playing";
+	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+		return true;
 	}
+	return false;
 }
 
 //todo: check if this function works
@@ -703,13 +692,13 @@ void Library::delete_song(Song* song_to_delete) { //todo: too many messages?
 	if (playlist_appearances->size() > 0) {
 		unordered_set<string>::iterator it;
 		for (it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
-			RemoveFromPL(song_to_delete->get_name(), *it, false);
+			RemoveFromPL(song_to_delete->get_name(), *it, false);// don't need to check with user here
 			// false- don't need to make sure with the user if he wants to delete from this playlist
 		}
 	}
 	// a song will stay in the playlists: most played, recents until it will be permanently deleted
-	m_deleted->add_to_trash(song_to_delete);
-	cout << "Song was successfully removed from the library and all of it's playlists!" << endl;
+	m_deleted->add_to_trash(song_to_delete); // we do want to check with the user if he's sure that he wants to delete song 
+	//cout << "Song was successfully removed from the library and all of it's playlists!" << endl;
 }
 
 //delete song by id
@@ -814,6 +803,9 @@ void Library::remove_from_most_recent(int id) {
 	//update_most_recent();
 }
 
+void Library::remove_from_daily_mix(Song* song) {
+	m_daily_mix->remove_song_from_playlist(song);
+}
 
 
 void Library::update_most_played() { 

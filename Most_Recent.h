@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MOSTRECENT_H
+#define MOSTRECENT_H
+
 #include "Automatic_Playlist.h"
 class Most_Recent :
     public Automatic_Playlist
@@ -22,3 +24,4 @@ public:
     void save_playlist();
 };
 
+#endif// MOSTRECENT_H
