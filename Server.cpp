@@ -210,11 +210,9 @@ void Server::Save_Most_Recent() {
 	if (!Utilities::Is_File_Valid(write)) {
 		return;
 	}
-	list<Song*>::iterator itr = m_recently_played->end();
-	int length = m_recently_played->size();
-	for (int i = 0; i < length; i++)
+	list<Song*>::reverse_iterator itr;
+	for (itr = m_recently_played->rbegin();itr != m_recently_played->rend();itr++)
 	{
-		itr--;
 		auto song = *itr;
 		write << song->get_id() << endl;
 	}
