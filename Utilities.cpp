@@ -56,8 +56,7 @@ bool Utilities::Is_File_Valid(ios& fileToCheck) //todo: add promt to create fold
 
 // create general prompt function for dialog with user
 bool Utilities::user_prompts_and_dialog(string& prompt_message, string& reject_message, string& accept_message) {
-	bool invalid_char = true;
-	while (invalid_char) {
+	while (true) {
 		cout << prompt_message << " "; // answer is y/n
 		string answer; //todo: mabye switch back to char
 		cin >> answer; cout << endl;
