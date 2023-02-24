@@ -75,8 +75,8 @@ bool Library::check_if_playlist_exist(const string& playlist_name) {
 bool Library::check_if_user_playlist(const string& playlist_name) {
 
 	if (m_user_playlist_names.find(playlist_name) != m_user_playlist_names.end()) {
-	return true;
-}
+		return true;
+	}
 	return false;
 
 	#pragma region Previous implementation
@@ -95,10 +95,6 @@ void Library::create_playlist(const string& playlist_name) {
 		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
 		return;
 	}
-	else if (m_saved_playlist_names.find(playlist_name) != m_saved_playlist_names.end()) {
-		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
-		return;
-	}
 	m_user_playlist_names.insert(playlist_name);
 	Playlist* new_playlist = new Playlist(playlist_name, this); // need to delete!
 	m_playlists[playlist_name] = new_playlist;
@@ -112,12 +108,12 @@ void Library::delete_playlist(string playlist_name) {
 		if (check_if_user_playlist(playlist_name)) {
 			m_user_playlist_names.erase(playlist_name);
 			m_playlists.erase(playlist_name);
-		delete playlist;
+			delete playlist;
 			//cout << "Playlist Was Successfully Deleted!" << endl; //in dialog
 			return;
-	}
+		}
 	} //todo: add dialog to make sure before deleting
-
+	
 
 
 	#pragma region Previous implementation
@@ -138,7 +134,7 @@ void Library::delete_playlist(string playlist_name) {
 	//	cout << "This Playlist Cannot Be Deleted!" << endl;  
 	#pragma endregion
 
-		}
+}
 
 // print all exisiting playlists (names only)
 void Library::PrintPL() { //todo: make overload?
@@ -166,49 +162,59 @@ void Library::PrintPL() { //todo: make overload?
 //}
 
 
-
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name) //todo: add parameter for prints
 {
 	auto song_to_add = Server::find_song_by_id(id);
-	Playlist* playlist;
-	if (check_if_user_playlist_exist(playlist_name)) {
-		playlist = m_user_playlists.find(playlist_name)->second;
+	Playlist* playlist = get_playlist_by_name(playlist_name);
+	if (playlist!=nullptr) {
 		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
 		return;
 	}
-	if (check_if_playlist_can_be_edited(playlist_name)) {
-		if (playlist_name == m_favorites->get_name()) {
-			add_to_favorites(song_to_add);
-		}
-		cout << "No such playlist was found!" << endl;
-		cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
-		create_playlist(playlist_name); // creates the playlist automatically
-		playlist = m_user_playlists[playlist_name];
-		playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
-	}
-	else
-		cout << "This Playlist Cannot Be Edited!" << endl;
+	#pragma region Previous implementation
+	//if (check_if_user_playlist(playlist_name)) { //todo: check that goes to right method for each playlist
+	//	m_saved_playlist_names.find(playlist_name)->second->add_song_to_playlist(song_to_add);
+	//	
+		//if (playlist_name == m_favorites->get_name()) {
+		//	add_to_favorites(song_to_add);
+		//}  
+	
+
+	//	return;
+	//}
+	#pragma endregion
+	//cout << "No such playlist was found!" << endl;
+	cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
+	create_playlist(playlist_name); // creates the playlist automatically
+	playlist = m_playlists[playlist_name];
+	playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
 }
 
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure) {
-	if (check_if_playlist_can_be_edited(playlist_name) && m_deleted->get_name() != playlist_name) {
-		if (check_if_user_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
-			auto playlist = m_user_playlists.find(playlist_name)->second;
-			auto song_to_remove = playlist->get_song_by_name(song_name); // this method check if a song exist in the playlist
-			if (song_to_remove == nullptr) {
-				cout << "The song" << song_name << "is not in the playlist: " << playlist_name << "!" << endl;
-				return;
-			}
-			else
-				playlist->remove_song_from_playlist(song_to_remove, make_sure); // all the checking is in playlist 
-		}
-		else
-			cout << "This Playlist Does Not Exist!" << endl;
+	auto playlist = get_playlist_by_name(playlist_name);
+	if (playlist != nullptr) {
+		playlist->remove_song_from_playlist(song_name);
 	}
-	else
-		cout << "This Playlist Cannot Be Edited!" << endl;
+	#pragma region Previous Implementation
+	//if (check_if_user_playlist(playlist_name) && m_deleted->get_name() != playlist_name) {
+	//	if (check_if_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
+	//		auto playlist = m_user_playlists.find(playlist_name)->second;
+	//		auto song_to_remove = playlist->get_song_by_name(song_name); // this method check if a song exist in the playlist
+	//		if (song_to_remove == nullptr) {
+	//			cout << "The song" << song_name << "is not in the playlist: " << playlist_name << "!" << endl;
+	//			return;
+	//		}
+	//		else
+	//			playlist->remove_song_from_playlist(song_to_remove, make_sure); // all the checking is in playlist 
+	//	}
+	//	else
+
+	//}
+	//else
+	//	cout << "This Playlist Cannot Be Edited!" << endl;
+	#pragma endregion
+
 }
 
 ////Asks the user which song he meant and updates the choosen one.
@@ -376,8 +382,9 @@ void Library::Print_No_Input_Parameters_Error()
 void Library::play_song(Song* song) {
 	cout << "Now playing: " << *song << endl;
 	song->Play(); // here plays_counter updates
-	update_most_played();
-	add_to_most_recent(song->get_id());
+	//m_recent->Update_Most_Recent();
+	m_recent->Add_To_Most_Recent(song->get_id());
+	m_most_played->Update_Most_Played();
 }
 
 void Library::Play_Podcast(string podcast_name)
@@ -416,8 +423,6 @@ void Library::Play(int id)
 	auto song_to_play = Server::find_song_by_id(id);
 	play_song(song_to_play);
 }
-
-
 
 bool Library::check_if_continue_playing() {
 	bool invalid_char = true;
@@ -511,31 +516,32 @@ void Library::PlayRandom() {
 }
 
 //return the playlist that needs to be played. return nullptr if no playlist was found
-Playlist* Library::get_playlist_to_play(string playlist_name) {
-	if (check_if_user_playlist_exist(playlist_name)) {
-		auto playlist = m_user_playlists.find(playlist_name);
+Playlist* Library::get_playlist_by_name(string playlist_name) {
+	if (check_if_playlist_exist(playlist_name)) {
+		auto playlist = m_playlists.find(playlist_name);
 		return playlist->second;
 	}
-	auto playlist = m_saved_playlist_names.find(playlist_name);
-	if (playlist != m_saved_playlist_names.end()) {
-		return playlist->second;
-	}
+	//auto playlist = m_saved_playlist_names.find(playlist_name);
+	//if (playlist != m_saved_playlist_names.end()) {
+	//	return playlist->second;
+	//}
+	cout << "Playlist " << playlist_name << " doesn't exist!" << endl;
 	return nullptr;
 }
 
 //play a playlist by its name 
 void Library::PlayPlaylist(string playlist_name) {
-	auto playlist_to_play = get_playlist_to_play(playlist_name);
-	if (playlist_to_play == nullptr)
-		cout << "There is no playlist with that name!" << endl;
-	playlist_to_play->Play();
+	auto playlist_to_play = get_playlist_by_name(playlist_name);
+	if (playlist_to_play != nullptr) {
+		playlist_to_play->Play();
+	}
 }
 
 //play a playlist shuffled by its name 
 void Library::PlayPlaylistShuffled(string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
 	if (playlist_to_play != nullptr)
-	playlist_to_play->Play_Random();
+		playlist_to_play->Play_Random();
 	
 }
 
@@ -598,46 +604,50 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
 void Library::Begin_Serialization()
 {
 	//Server::Restore_Songs();
-	ifstream read_playlists("c:\\temp\\playlists.dat", ios::in);
-	if (!Utilities::Is_File_Valid(read_playlists)) {
+	for (auto& special_playlist : m_playlists) {
+		special_playlist.second->restore_playlist();
+	}
+	ifstream read_user_playlists("c:\\temp\\playlists.dat", ios::in);
+	if (!Utilities::Is_File_Valid(read_user_playlists)) {
 		return;
 	}
-	while (!read_playlists.eof()) {
+	while (!read_user_playlists.eof()) {
 		string playlist_name;
 		int song_id;
-		read_playlists >> playlist_name >> song_id;
+		read_user_playlists >> playlist_name >> song_id;
 		vector<string*> params = { &playlist_name };
 		Utilities::Replace_All(params, true);
 		Add2PL(song_id, playlist_name);
-		if (Utilities::Is_End_Of_File(read_playlists)) {
+		if (Utilities::Is_End_Of_File(read_user_playlists)) {
 			break;
 		}
 	}
-	update_most_recent(); //only top 10
-	update_most_played(); //only top 10
+	m_recent->Update_Most_Recent();
+	m_most_played->Update_Most_Played();
 }
 
 void Library::Begin_Deserialization()
 {
-	ofstream write_playlists("c:\\temp\\playlists.dat", ios::in);
-	if (!Utilities::Is_File_Valid(write_playlists)) {
-		return;
+	for (auto& playlist_pair : m_playlists) {
+		playlist_pair.second->save_playlist();
 	}
-	unordered_map<string, Playlist*>::iterator itr;
-	for (itr = m_user_playlists.begin(); itr != m_user_playlists.end(); itr++)
-	{
-		string playlist_name = itr->first;
-		Playlist* current_playlist = itr->second;
-		vector<string*> params = { &playlist_name };
-		Utilities::Replace_All(params, false);
-		for (auto& song : current_playlist->get_songs()) {
-			write_playlists << " " << playlist_name << " " << song.second->get_id() << endl;
-		}
-		
-	}
+
+	//unordered_map<string, Playlist*>::iterator itr;
+	//for (itr = m_playlists.begin(); itr != m_playlists.end(); itr++)
+	//{
+	//	string playlist_name = itr->first;
+	//	Playlist* current_playlist = itr->second;
+	//	vector<string*> params = { &playlist_name };
+	//	Utilities::Replace_All(params, false);
+	//	for (auto& song : current_playlist->get_songs()) {
+	//		write_playlists << " " << playlist_name << " " << song.second->get_id() << endl;
+	//	}
+	//}
 
 	
 }
+
+
 
 Song* Library::Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search) {
 	auto filtered_media = collection_to_search->equal_range(media_name);
@@ -688,21 +698,18 @@ bool Library::make_sure_to_delete_song(Song* song) {
 
 //Adds song to m_deleted playlist
 // method removes a specific song, used by the two Delete_Song methods
-void Library::delete_song(Song* song_to_delete) {
-	if (make_sure_to_delete_song(song_to_delete)) { //check again if the user wants to delete the song
-		auto playlist_appearances = song_to_delete->get_playlist_appearances(); //todo: check this
-		if (playlist_appearances->size() > 0) {
-			unordered_set<string>::iterator it;
-			for (it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
-				RemoveFromPL(song_to_delete->get_name(), *it, false);
-				// false- don't need to make sure with the user if he wants to delete from this playlist
-			}
+void Library::delete_song(Song* song_to_delete) { //todo: too many messages?
+	auto playlist_appearances = song_to_delete->get_playlist_appearances(); //todo: check this
+	if (playlist_appearances->size() > 0) {
+		unordered_set<string>::iterator it;
+		for (it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
+			RemoveFromPL(song_to_delete->get_name(), *it, false);
+			// false- don't need to make sure with the user if he wants to delete from this playlist
 		}
-		// a song will stay in the playlists: most played, recents until it will be permanently deleted
-		m_deleted->add_song_to_playlist(song_to_delete);
-		cout << "Song was successfully removed from the library and all of it's playlists!" << endl;
 	}
-	cout << "The song wasn't removed from the library!" << endl;
+	// a song will stay in the playlists: most played, recents until it will be permanently deleted
+	m_deleted->add_to_trash(song_to_delete);
+	cout << "Song was successfully removed from the library and all of it's playlists!" << endl;
 }
 
 //delete song by id
@@ -712,7 +719,6 @@ void Library::Delete_Song(int id)
 	{
 		auto song_to_delete = Server::find_song_by_id(id);
 		delete_song(song_to_delete);
-		//Server::Permanent_Delete_Song(Server::find_song_by_id(id));
 	}
 	catch (const std::exception&)
 	{
@@ -781,32 +787,27 @@ void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
 	cout << media_name << " isn't present in the server." << endl;
 }
 
-void Library::add_to_most_recent(int id) {
-	Server::add_to_recently_played(id);
-	update_most_recent();
-}
-
-// update recents
-void Library::update_most_recent() {
-	//todo: impelement
-
-
-	//auto recently_played = Server::get_recently_played();
-	//int recents_size = recently_played->size();
-	//m_recent->clear_all_playlist();
-	//int minimum = min(recents_size, max_most_played); // using c++ algorithm
-	//// Create an iterator for the list
-	//auto it = recently_played->begin();
-	//// Traverse through the list using the iterator
-	//for (int i = 0; i < minimum; i++) {
-	//	m_recent->add_song_to_playlist(*it); // add to recent the updated recently_played linked_list
-	//	it++;
-	//}
-}
-
+//void Library::add_to_most_recent(int id) {
+//	Server::add_to_recently_played(id);
+//	update_most_recent();
+//}
+//
+//void Library::update_most_recent() {
+//	m_recent->Update_Most_Recent();
+//	//auto recently_played = Server::get_recently_played();
+//	//int recents_size = recently_played->size();
+//	//m_recent->clear_all_playlist();
+//	//int minimum = min(recents_size, max_most_played); // using c++ algorithm
+//	//// Create an iterator for the list
+//	//auto it = recently_played->begin();
+//	//// Traverse through the list using the iterator
+//	//for (int i = 0; i < minimum; i++) {
+//	//	m_recent->add_song_to_playlist(*it); // add to recent the updated recently_played linked_list
+//	//	it++;
+//	//}
+//}
 void Library::remove_from_most_recent(int id) {
-	//todo: implement
-
+	m_recent->Remove_From_Most_Recent(id);
 	//auto song_to_remove = Server::find_song_by_id(id);
 	//m_recent->remove_song_from_playlist(song_to_remove, false); // removes from playlist, don't make sure to delete songs from PL
 	//Server::remove_from_recently_played(id); // removes from the data structure
@@ -814,10 +815,10 @@ void Library::remove_from_most_recent(int id) {
 }
 
 
-// update most played song using the server method.
-void Library::update_most_played() { // need to be called after playing a song and after the m_plays_counter is updated!
-	//todo: implement
-	 
+
+void Library::update_most_played() { 
+	
+	m_most_played->Update_Most_Played();
 	//Server::update_most_played_songs();
 	//auto most_played = Server::get_most_played();
 	//int most_played_size = most_played->size();
