@@ -1,5 +1,6 @@
 #include "Most_Recent.h"
 #include <algorithm>
+#include "Library.cpp"
 #define max_recents 10
 
 Most_Recent::Most_Recent(Library* library) : Automatic_Playlist(typeid(this).name(), library)
@@ -31,7 +32,9 @@ void Most_Recent::clear_all_playlist()
 //{
 //	Playlist::clear_all_playlist();
 //}
-
+// 
+// 
+//update recent songs playlist 
 void Most_Recent::Update_Most_Recent()
 {
 	auto recently_played = Server::get_recently_played();
@@ -60,4 +63,38 @@ void Most_Recent::Remove_From_Most_Recent(int id)
 	Server::remove_from_recently_played(id); // removes from the data structure
 	Update_Most_Recent();
 
+}
+
+
+void Most_Recent::Add_To_Most_Recent(int id)
+{
+	Server::add_to_recently_played(id);
+	Update_Most_Recent();
+}
+
+void Most_Recent::restore_playlist() //todo: make maybe another parent class
+{
+	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(read_playlist)) {
+		return;
+	}
+	while (!read_playlist.eof()) {
+		int song_id;
+		read_playlist >> song_id;
+		m_library->Add2PL(song_id, m_playlist_name);
+		if (Utilities::Is_End_Of_File(read_playlist)) {
+			break;
+		}
+	}
+}
+
+void Most_Recent::save_playlist() //todo: make maybe another parent class
+{
+	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(write_playlist)) {
+		return;
+	}
+	for (auto& song : m_songs) {
+		write_playlist << song->get_id() << endl;
+	}
 }

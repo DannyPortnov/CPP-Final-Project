@@ -1,5 +1,6 @@
 #include "Most_Played.h"
 #include <algorithm>
+#include "Library.cpp"
 
 #define max_most_played 10
 
@@ -33,6 +34,7 @@ void Most_Played::clear_all_playlist()
 //	Playlist::clear_all_playlist();
 //}
 
+// update most played song using the server method.
 void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 {
 	Server::update_most_played_songs();
@@ -58,4 +60,31 @@ void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 	//}  
 	#pragma endregion
 
+}
+
+void Most_Played::restore_playlist() //todo: make maybe another parent class
+{
+	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(read_playlist)) {
+		return;
+	}
+	while (!read_playlist.eof()) {
+		int song_id;
+		read_playlist >> song_id;
+		m_library->Add2PL(song_id, m_playlist_name);
+		if (Utilities::Is_End_Of_File(read_playlist)) {
+			break;
+		}
+	}
+}
+
+void Most_Played::save_playlist() //todo: make maybe another parent class
+{
+	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(write_playlist)) {
+		return;
+	}
+	for (auto& song : m_songs) {
+		write_playlist << song->get_id() << endl;
+	}
 }

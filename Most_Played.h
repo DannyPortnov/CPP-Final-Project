@@ -12,6 +12,9 @@ public:
     void clear_all_playlist();
     void Add_To_Most_Played(Song* song);
     void Clear_Most_Played();
+    //update most played songs playlist
     void Update_Most_Played();
+    void restore_playlist();
+    void save_playlist();
 };
 

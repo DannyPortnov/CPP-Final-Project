@@ -5,5 +5,8 @@ class Favorites :
 {
 public:
     Favorites(Library* library);
+
+    void restore_playlist();
+    void save_playlist();
 };
 

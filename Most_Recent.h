@@ -14,6 +14,11 @@ public:
  /*   void Add_To_Most_Recent(Song* song);
     void Clear_Most_Recent();*/
     void Update_Most_Recent();
+    //remove a song from recents by using song id
     void Remove_From_Most_Recent(int id);
+    //add a song to recents by using song id
+    void Add_To_Most_Recent(int id);
+    void restore_playlist(); 
+    void save_playlist();
 };
 
