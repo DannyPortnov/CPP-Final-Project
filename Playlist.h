@@ -34,8 +34,8 @@ public:
 	virtual void add_song_to_playlist(Song* song, bool add_print = true); //works
 	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
 	void remove_song_from_playlist(string song_name, bool make_sure = true); //todo: check
-	virtual void clear_all_playlist();
-	virtual void restore_playlist() = 0;
+	virtual void clear_all_playlist(bool add_print = true);
+	virtual void restore_playlist(); //todo: check if implementation is needed here
 	virtual void save_playlist();
 	string get_name() const { return m_playlist_name; }
 	void Play();

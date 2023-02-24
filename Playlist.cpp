@@ -6,7 +6,7 @@
 Playlist::Playlist(string name, Library* library) : m_playlist_name(name), m_library(library) {}
 
 Playlist::~Playlist() {
-	clear_all_playlist();
+	clear_all_playlist(false);
 }
 
 
@@ -153,8 +153,15 @@ void Playlist::remove_song_from_playlist(string song_name, bool make_sure) {
 }
 
 // remove all songs from the playlist.
-void Playlist::clear_all_playlist() { // favorites will also implement this (meaning,it empties the playlist)
-	//todo: add check before clearing all
+void Playlist::clear_all_playlist(bool add_print) { // favorites will also implement this (meaning,it empties the playlist)
+	if (add_print) { // check before clearing playlist prompt
+		string prompt = "Are you sure that you want to remove: " + m_playlist_name + "? y/n: ";
+		string reject_message = m_playlist_name + " wasn't removed!";
+		string accept_message = m_playlist_name + " was successfully removed!";
+		if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message) == false) {
+			return;
+		}
+	}
 	multiset<Song*>::iterator it; // go over all songs in the playlist
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		(*it)->remove_from_playlist(m_playlist_name);// removes the playlist name from Song's m_playlist_appearences
