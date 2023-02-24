@@ -30,9 +30,9 @@ void Playlist::Play() {
 	multiset<Song*>::iterator it;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		auto song_to_play = *it;
-		cout << "Now playing: " << song_to_play << endl;
-		song_to_play->update_plays_counter();
-		Library::play_song(song_to_play); //todo: check if works
+		//cout << "Now playing: " << song_to_play << endl;
+		//song_to_play->update_plays_counter();
+		m_library->play_song(song_to_play); //todo: check if works
 		//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
@@ -56,9 +56,9 @@ void Playlist::Play_Random() {
 	
 	// Play the songs of the multimap in the shuffled order
 	for (auto const& song : songs_vector) {
-		cout << "Now playing: " << *(song) << endl;
-		(*song)->update_plays_counter();
-		Library::play_song(*song); //todo: check if works
+		//cout << "Now playing: " << *(song) << endl;
+		//(*song)->update_plays_counter();
+		m_library->play_song(*song); //todo: check if works
 		//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 		if (check_if_continue_playing() == false)
 			return;
@@ -146,9 +146,15 @@ void Playlist::remove_song_from_playlist(Song* song, bool make_sure) {
 	// the printing of the results of the operation happans in make_sure_to_remove
 }
 
+//todo: check if overriden properly
+void Playlist::remove_song_from_playlist(string song_name, bool make_sure) {
+	auto song = get_song_by_name(song_name);
+	remove_song_from_playlist(song, make_sure);
+}
 
 // remove all songs from the playlist.
-void Playlist::clear_all_playlist() {
+void Playlist::clear_all_playlist() { // favorites will also implement this (meaning,it empties the playlist)
+	//todo: add check before clearing all
 	multiset<Song*>::iterator it; // go over all songs in the playlist
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		(*it)->remove_from_playlist(m_playlist_name);// removes the playlist name from Song's m_playlist_appearences
@@ -157,14 +163,54 @@ void Playlist::clear_all_playlist() {
 	//m_songs_by_id.clear();
 }
 
-
+void Playlist::save_playlist() {
+	ofstream write_playlist("c:\\temp\\playlists.dat", ios::in);
+	if (!Utilities::Is_File_Valid(write_playlist)) {
+		return;
+	}
+	vector<string*> params = { &m_playlist_name };
+	Utilities::Replace_All(params, false);
+	for (auto& song : m_songs) {
+		write_playlist << " " << m_playlist_name << " " << song->get_id() << endl;
+	}
+}
 //returns true if the playlists name are in the right order.
 bool operator<(const Playlist& a, const Playlist& b) {
 	return (a.get_name() < b.get_name());
 }
 
-
-
+//todo: merge later with pick media
+// get a specific song, even if there are few songs with the same name
+Song* Playlist::get_song_by_name(string song_name)
+{
+	unordered_multimap<string, Song*> filtered_songs;
+	for (auto& song : m_songs) {
+		filtered_songs.emplace(song->get_name(), song);
+	}
+	int number_of_media_items = filtered_songs.count(song_name); //O(log n), distance is O(n). overall doesn't matter
+	if (number_of_media_items == 0) {
+		return nullptr;
+	}
+	if (number_of_media_items == 1) {
+		return filtered_songs.find(song_name)->second;
+	}
+	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
+	unordered_multimap<string, Song*>::iterator iterator;
+	for (iterator = filtered_songs.begin(); iterator != filtered_songs.end(); ++iterator, ++i) {//loops over all podcasts
+		cout << i << " - " << iterator->second << endl;//prints numbered songs
+	}
+	int answer;
+	do {
+		cout << "Please choose a number between 1 and " << number_of_media_items << " (0 to cancel): ";
+		cin >> answer;
+	} while (answer < 0 || answer > number_of_media_items); //todo: check string input
+	if (answer == 0) {
+		throw exception();
+	}
+	iterator = filtered_songs.begin();
+	advance(iterator, answer - 1);
+	return iterator->second;
+}
 
 
 // check if a song exist in the playlist by id, return true if exist
