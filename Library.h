@@ -2,6 +2,10 @@
 #define LIBRARY_H
 #include "Song.h"
 #include "DailyMix.h"
+#include "Favorites.h"
+#include "Most_Played.h"
+#include "Most_Recent.h"
+#include "Trash.h"
 #include "Playlist.h"
 #include "Server.h"
 #include <string>
@@ -19,14 +23,14 @@ class Library : Server //todo: remove inheritance
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
-	static Playlist* m_favorites;
+	Favorites* m_favorites;
 	DailyMix m_daily_mix;
-	static Playlist* m_recent;
-	static Playlist* m_most_played;
-	static Playlist* m_deleted;
-	unordered_map<string, Playlist*> m_saved_playlist_names;
+	Most_Recent* m_recent;
+	Most_Played* m_most_played;
+	Trash* m_deleted;
+	//unordered_map<string, Playlist*> m_saved_playlist_names;
 	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
-	unordered_map<string, Playlist*> m_user_playlists; // store the user playlists, sorted by name of the playlist.
+	unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
 													   // better comlexity when using un_ordered_map.
 
 	const int num_of_songs_to_print = 10;
@@ -36,8 +40,8 @@ private:
 	//Returns the choosen song. If wrong name returns nullptr!
 	Song* Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search);
 	
-	bool check_if_user_playlist_exist(const string& playlist_name); //works
-	bool check_if_playlist_can_be_edited(const string& playlist_name);
+	bool check_if_playlist_exist(const string& playlist_name); //works
+	bool check_if_user_playlist(const string& playlist_name);
 	bool check_if_continue_playing();
 	bool make_sure_to_delete_song(Song* song);
 	void Print_Not_Found_By_Id_Error(int song_id, string item_type);
@@ -47,15 +51,13 @@ private:
 
 	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
 
-	//remove a song from recents by using song id
-	void remove_from_most_recent(int id);
-	//add a song to recents by using song id
-	static void add_to_most_recent(int id);
+	
+	
+	//void add_to_most_recent(int id);
 	//todo: maybe move to private, no one needs to use this methods
-	static void update_most_recent();	//update recent songs playlist 
+	//void update_most_recent();	
 	// the update of most recent happans in remove_from_most_recent() method.
 
-	static void update_most_played(); 	//update most played songs playlist
 	
 	
 	// void ask_user_to_remove_song(Song* song, Playlist* playlist); // was implemented in playlist instead
@@ -108,7 +110,7 @@ public:
 	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
 	
 	//return the playlist that needs to be played
-	Playlist* get_playlist_to_play(string playlist_name);
+	Playlist* get_playlist_by_name(string playlist_name);
 	//play a playlist by its name 
 	void PlayPlaylist(string playlist_name);
 	//play a playlist shuffled by its name 
@@ -126,12 +128,15 @@ public:
 	//gets the data structure from Server!
 	void PlayRandom();
 	//play song and update song data
-	static void play_song(Song* song);
+	void play_song(Song* song);
 	void Play_Podcast(string podcast_name);
 
 	//void print_all_playlists(); // print all playlists in library
 	void create_playlist(const string& playlist_name); // create a new playlist //works
-	void delete_playlist(Playlist* playlist); // delete a playlist
+	void delete_playlist(string playlist_name); // delete a playlist
+	
+	void remove_from_most_recent(int id);
+	void update_most_played(); 
 	
 
 	/*void Add(string path, string song_name, string artist = "", string album = "",
