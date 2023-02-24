@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="AudioCollection.h" />
     <ClInclude Include="AudioFile.h" />
+    <ClInclude Include="Automatic_Playlist.h" />
     <ClInclude Include="DailyMix.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="Deleted.h" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioFile.cpp" />
+    <ClCompile Include="Automatic_Playlist.cpp" />
     <ClCompile Include="DailyMix.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Deleted.cpp" />

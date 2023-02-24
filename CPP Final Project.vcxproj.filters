@@ -63,6 +63,9 @@
     <ClInclude Include="Most_Played.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Automatic_Playlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Song.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Most_Played.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Automatic_Playlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
