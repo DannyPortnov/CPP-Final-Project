@@ -16,14 +16,16 @@ class Library;
 class Playlist { //todo: make deleted, recent, favorites classes which derive from playlist
 	//todo: make a library pointer inside playlist
 private:
+	Player m_player;
+	bool check_if_continue_playing();
+	bool make_sure_to_remove_song(Song* song, bool make_sure = true); // double checks with the user if the song should be deleted, if yes- removes the song.
+protected:
 	multimap<string, Song*> m_songs; // uses to store all songs in the playlist in alphabetical order. 
 	// chose to use multimap because if we would choose to store in unordered_multimap and use another data structure
 	// for the names of the song (oredered alphabeticaly), we will still need to search the song inside the multimap,
 	// the implementation will be complicated.
 	string m_playlist_name;
-	Player m_player;
-	bool check_if_continue_playing();
-	bool make_sure_to_remove_song(Song* song, bool make_sure = true); // double checks with the user if the song should be deleted, if yes- removes the song.
+
 
 public:
 	Playlist(string name);
