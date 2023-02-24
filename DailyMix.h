@@ -1,8 +1,7 @@
 #ifndef DAILYMIX_H
 #define DAILYMIX_H
 #include "Date.h"
-#include "Server.h"
-#include "Playlist.h"
+//#include "Playlist.h"
 #include <time.h>
 #include <random>
 #include <stdbool.h> 
@@ -10,7 +9,7 @@
 #define max_songs 10
 
 // use time.h, date classes in order to check the current date 
-
+class Playlist;
 class DailyMix : public Playlist 
 {
 private:

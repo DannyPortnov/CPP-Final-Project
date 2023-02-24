@@ -2,6 +2,7 @@
 #define MOSTPLAYED_H
 
 #include "Automatic_Playlist.h"
+//class Automatic_Playlist;
 class Most_Played :
     public Automatic_Playlist
 {

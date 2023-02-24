@@ -2,6 +2,7 @@
 #define MOSTRECENT_H
 
 #include "Automatic_Playlist.h"
+//class Automatic_Playlist;
 class Most_Recent :
     public Automatic_Playlist
 {

@@ -1,8 +1,11 @@
 #ifndef TRASH_H
 #define TRASH_H
-#include "Playlist.h"
+//#include "Playlist.h"
 
 
+//class Song;
+//class Library;
+class Playlist;
 class Trash : public Playlist
 {
 private:

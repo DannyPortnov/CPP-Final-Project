@@ -1,5 +1,5 @@
-#include "Favorites.h"
-#include "Library.cpp"
+#include "Library.h"
+//#include "Favorites.h"
 
 Favorites::Favorites(Library* library) : Playlist(typeid(this).name(), library)
 {

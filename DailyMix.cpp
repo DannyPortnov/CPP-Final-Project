@@ -1,4 +1,5 @@
-#include "DailyMix.h"
+#include "Library.h"
+//#include "DailyMix.h"
 
 // after initiallizing the system, if the date did not change: the same mix that was first created in that date
 // needs to be presented to the user.
@@ -29,7 +30,7 @@ void DailyMix::restore_playlist() //todo: make maybe another parent class
 		int song_id;
 		m_dailymix_file >> song_id;
 		auto song = Server::find_song_by_id(song_id);
-		add_song_to_playlist(song, false);
+		Playlist::add_song_to_playlist(song, false);
 		if (Utilities::Is_End_Of_File(m_dailymix_file)) {
 			m_dailymix_file.close();
 			return;
@@ -70,7 +71,7 @@ void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
 	string reject_message = m_playlist_name + " wasn't regenerated!";
 	string accept_message = m_playlist_name + " was regenerated successfully!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
-		clear_all_playlist(false); // don't add prints
+		Playlist::clear_all_playlist(false); // don't add prints
 		generate_daily_mix();
 		return;
 	}
@@ -116,7 +117,7 @@ void DailyMix::generate_daily_mix(){
 	for (int i = 0; i < max_songs && i < shuffled_songs_vector.size(); i++) { // if library has less than 10 songs, mix them also.
 		auto& song = shuffled_songs_vector[i];
 		//int id = song->second->get_id();
-		add_song_to_playlist(song->second, false);
+		Playlist::add_song_to_playlist(song->second, false);
 	}
 }
 

@@ -1,7 +1,8 @@
 #ifndef FAVORITES_H
 #define FAVORITES_H
 
-#include "Playlist.h"
+//#include "Playlist.h"
+class Playlist;
 class Favorites :
     public Playlist
 {

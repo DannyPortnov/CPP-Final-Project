@@ -143,6 +143,6 @@ public:
 	string genre = "", string duration = "", int release_date =0);*/
 };
 
-
+ostream& operator<<(ostream& os, const Library& lib);
 
 #endif

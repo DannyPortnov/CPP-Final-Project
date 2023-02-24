@@ -1,15 +1,12 @@
-#include "Automatic_Playlist.h"
+#include "Library.h" //todo: check this one
+//#include "Automatic_Playlist.h"
+
+Automatic_Playlist::Automatic_Playlist(string name, Library* library) : Playlist(name, library) {}
 
 inline void Automatic_Playlist::Print_Cannot_Edit_Error()
 {
 	cout << "This playlist cannot be edited!" << endl;
 }
-
-Automatic_Playlist::Automatic_Playlist(string name, Library* library) : Playlist(name, library)
-{
-
-}
-
 template <typename TCollection, typename TIter >
 void Automatic_Playlist::Update_Most(TCollection songs_collection, int max_items, TIter iter) {
 	int playlist_size = songs_collection->size();

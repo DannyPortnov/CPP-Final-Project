@@ -1,5 +1,7 @@
-#include "Trash.h"
-#include "Library.cpp"
+#include "Library.h"
+//#include "Trash.h"
+
+
 
 Trash::Trash(Library* library) : Playlist(typeid(this).name(), library) {}
 
