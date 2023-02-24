@@ -1,8 +1,7 @@
 #include "Trash.h"
+#include "Library.cpp"
 
 Trash::Trash(Library* library) : Playlist(typeid(this).name(), library) {}
-
-Trash::Trash() : Playlist(typeid(this).name()) {}
 
 
 void Trash::add_song_to_playlist(Song* song) {
@@ -37,19 +36,49 @@ void Trash::clear_all_playlist() {
 		multiset<Song*>::iterator it;
 		for (it = m_songs.begin(); it != m_songs.end(); it++) {
 			Server::Permanent_Delete_Song(*it);
+			m_library->remove_from_most_recent((*it)->get_id());
 			//todo: need to remove song from most_played, moset_recent playlists
 		}
+		m_library->update_most_played();
 		return;
 	}
 }
 
 // called when we want to add song to deleted playlist
-void Trash::add_to_trash(Song* song) {
+void Trash::add_to_trash(Song* song) { //todo: add boolean
 	string prompt = "Are you sure that you want to move this song to trash? y/n: ";
 	string reject_message = "The song wasn't added to " + m_playlist_name + "!";
 	string accept_message = "The song was successfully added to " + m_playlist_name + "!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+
 		Playlist::add_song_to_playlist(song);
 		return;
+	}
+}
+
+void Trash::restore_playlist() //todo: make maybe another parent class
+{
+	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(read_playlist)) {
+		return;
+	}
+	while (!read_playlist.eof()) {
+		int song_id;
+		read_playlist >> song_id;
+		m_library->Add2PL(song_id, m_playlist_name);
+		if (Utilities::Is_End_Of_File(read_playlist)) {
+			break;
+		}
+	}
+}
+
+void Trash::save_playlist() //todo: make maybe another parent class
+{
+	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(write_playlist)) {
+		return;
+	}
+	for (auto& song : m_songs) {
+		write_playlist << song->get_id() << endl;
 	}
 }
