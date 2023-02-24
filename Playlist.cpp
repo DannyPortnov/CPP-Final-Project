@@ -3,7 +3,7 @@
 
 
 
-Playlist::Playlist(string name) : m_playlist_name(name) {}
+Playlist::Playlist(string name, Library* library) : m_playlist_name(name), m_library(library) {}
 
 Playlist::~Playlist() {
 	clear_all_playlist();

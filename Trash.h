@@ -11,7 +11,7 @@ private:
 
 
 public:
-	Trash();
+	Trash(Library* library);
 	void add_song_to_playlist(Song* song); 
 	void remove_song_from_playlist(Song* song);
 	void clear_all_playlist();

@@ -5,7 +5,7 @@ inline void Automatic_Playlist::Print_Cannot_Edit_Error()
 	cout << "This playlist cannot be edited!" << endl;
 }
 
-Automatic_Playlist::Automatic_Playlist(string name) : Playlist(name)
+Automatic_Playlist::Automatic_Playlist(string name, Library* library) : Playlist(name, library)
 {
 
 }

@@ -3,7 +3,7 @@
 
 #define max_most_played 10
 
-Most_Played::Most_Played() : Automatic_Playlist(typeid(this).name())
+Most_Played::Most_Played(Library* library) : Automatic_Playlist(typeid(this).name(), library)
 {
 
 }

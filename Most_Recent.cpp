@@ -2,7 +2,7 @@
 #include <algorithm>
 #define max_recents 10
 
-Most_Recent::Most_Recent() : Automatic_Playlist(typeid(this).name())
+Most_Recent::Most_Recent(Library* library) : Automatic_Playlist(typeid(this).name(), library)
 {
 
 }

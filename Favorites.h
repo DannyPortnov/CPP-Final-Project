@@ -4,6 +4,6 @@ class Favorites :
     public Playlist
 {
 public:
-    Favorites();
+    Favorites(Library* library);
 };
 

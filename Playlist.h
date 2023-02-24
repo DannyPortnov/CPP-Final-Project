@@ -16,6 +16,7 @@ class Library;
 class Playlist { //todo: make deleted, recent, favorites classes which derive from playlist
 	//todo: make a library pointer inside playlist
 protected:
+	Library* m_library;
 	multiset<Song*> m_songs; // uses to store all songs in the playlist in alphabetical order (use it for play). 
 	//unordered_map<int, Song*> m_songs_by_id; // uses to store all songs by id. 
 	// chose to use multimap because if we would choose to store in unordered_multimap and use another data structure

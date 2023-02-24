@@ -7,7 +7,7 @@ private:
     
 
 public:
-    Most_Recent();
+    Most_Recent(Library* library);
     void add_song_to_playlist(Song* song); //works
     void remove_song_from_playlist(Song* song, bool make_sure = true);
     void clear_all_playlist();
