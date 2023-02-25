@@ -34,15 +34,22 @@ Library::Library() : m_server(new Server()), m_favorites(new Favorites(this)), m
 //todo: add getters for each playlists
 Library::~Library() {
 	//Begin_Deserialization();
-	/*delete m_daily_mix;*/
 	//delete m_deleted;
 	//delete m_favorites;
 	//delete m_most_played;
 	//delete m_recent;
+	
+	
 	if (m_playlists.size()) {
 		unordered_map<string, Playlist*>::iterator it;
 		for (it = m_playlists.begin(); it != m_playlists.end(); it++) {
-			delete it->second;
+			Playlist* playlist_to_delete = it->second;
+			if (playlist_to_delete == m_daily_mix) {
+				delete m_daily_mix;
+			}
+			else {
+				delete playlist_to_delete;
+			}
 		}
 	}
 	delete m_server;
