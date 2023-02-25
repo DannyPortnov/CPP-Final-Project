@@ -1,6 +1,8 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 #include "Song.h"
+#define   _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 //#include "Playlist.h"
 //#include "DailyMix.h"
 //#include "Favorites.h"
@@ -14,6 +16,13 @@
 #include <array>
 #include <fstream>
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 using namespace std;
 
 class Playlist;
@@ -25,19 +34,20 @@ class Most_Recent;
 class Most_Played;
 
 
-class Library : Server //todo: remove inheritance
+class Library //: Server //todo: remove inheritance
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
+	Server* m_server;
+	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
+	unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
+													   // better comlexity when using un_ordered_map.
 	Favorites* m_favorites;
 	DailyMix* m_daily_mix;
 	Most_Recent* m_recent;
 	Most_Played* m_most_played;
 	Trash* m_deleted;
 	//unordered_map<string, Playlist*> m_saved_playlist_names;
-	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
-	unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
-													   // better comlexity when using un_ordered_map.
 
 	const int num_of_songs_to_print = 10;
 

@@ -1,10 +1,18 @@
 #ifndef _DATE_H_
 #define _DATE_H_
+#define   _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 #include <iostream>
 #include <time.h>
 #include <sstream>
 #include <string>
 #include <regex>
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
 using namespace std;
 
 class Date

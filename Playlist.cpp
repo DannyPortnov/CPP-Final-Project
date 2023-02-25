@@ -3,7 +3,11 @@
 
 
 
-Playlist::Playlist(string name, Library* library) : m_playlist_name(name), m_library(library) {}
+Playlist::Playlist(string name, Library* library, bool restore_songs) : m_playlist_name(name), m_library(library) {
+	if (restore_songs) {
+		restore_playlist(name);
+	}
+}
 
 Playlist::~Playlist() {
 	clear_all_playlist(false);
@@ -170,19 +174,33 @@ void Playlist::clear_all_playlist(bool add_print) { // favorites will also imple
 	//m_songs_by_id.clear();
 }
 
-void Playlist::save_playlist() {
-	ofstream write_playlist("c:\\temp\\playlists.dat", ios::in);
+void Playlist::save_playlist(string file_name, ios_base::openmode mode) {
+	ofstream write_playlist("c:\\temp\\" + file_name + ".dat", mode);
 	if (!Utilities::Is_File_Valid(write_playlist)) {
 		return;
 	}
 	vector<string*> params = { &m_playlist_name };
 	Utilities::Replace_All(params, false);
 	for (auto& song : m_songs) {
-		write_playlist << " " << m_playlist_name << " " << song->get_id() << endl;
+		write_playlist << m_playlist_name << " " << song->get_id() << endl;
 	}
 }
-void Playlist::restore_playlist() {
-	return;
+void Playlist::restore_playlist(string file_name) {
+	ifstream read_user_playlists("c:\\temp\\" + file_name + ".dat", ios::in);
+	if (!Utilities::Is_File_Valid(read_user_playlists)) {
+		return;
+	}
+	while (!Utilities::Is_End_Of_File_Or_Empty(read_user_playlists)) {
+		string playlist_name;
+		int song_id;
+		read_user_playlists >> playlist_name >> song_id;
+		vector<string*> params = { &playlist_name };
+		Utilities::Replace_All(params, true);
+		add_song_to_playlist(Server::find_song_by_id(song_id), false);
+		if (Utilities::Is_End_Of_File(read_user_playlists)) {
+			break;
+		}
+	}
 }
 
 //returns true if the playlists name are in the right order.

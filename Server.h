@@ -1,5 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
+#define   _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 #include "Song.h"
 #include "Podcast.h"
 #include "Episode.h"
@@ -11,6 +13,12 @@
 #include <unordered_map>
 #include <unordered_set>
 using namespace std;
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
 
 #define max_recents 30 // 30 and not 10 because we want to save some spare songs
 

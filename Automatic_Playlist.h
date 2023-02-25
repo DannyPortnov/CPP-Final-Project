@@ -13,12 +13,13 @@ class Automatic_Playlist :
         inline void Print_Cannot_Edit_Error();
         /*template <typename TCollection >
         void Update_Most(TCollection songs_collection, int max_items, bool is_reverse);*/
-        virtual void restore_playlist(); //todo: implement here, even a simple implementation
+        //virtual void restore_playlist(); //todo: implement here, even a simple implementation
         virtual void add_song_to_playlist(Song* song, bool add_print = true); //works
         virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
         virtual void clear_all_playlist(bool add_print = true);
     public:
         Automatic_Playlist(string name, Library* library);
+        void save_playlist(string file_name, ios_base::openmode mode = ios::out);
         //todo: think of an implementation ffor all of Playlist's virtual methods
 };
 

@@ -11,37 +11,44 @@
 #include <vector>
 #include <algorithm>
 
+#define user_playlists_file_name "playlists"
 
-Library::Library() : Server()
+Library::Library() : m_server(new Server()), m_favorites(new Favorites(this)), m_deleted(new Trash(this)), m_recent(new Most_Recent(this))
+	, m_most_played(new Most_Played(this)), m_daily_mix(new DailyMix(this)) /* :  m_favorites(new Favorites(this)), m_deleted(new Trash(this)), m_recent(new Most_Recent(this))
+		, m_most_played(new Most_Played(this)), m_daily_mix(new DailyMix(this))*/
 {
-	m_favorites = new Favorites(this);
-	m_deleted = new Trash(this);
-	m_recent = new Most_Recent(this);
-	m_most_played = new Most_Played(this);
-	m_daily_mix = new DailyMix(this);
-	m_playlists.insert(make_pair(m_favorites->get_name(), m_favorites));
-	m_playlists.insert(make_pair(m_deleted->get_name(), m_deleted));
-	m_playlists.insert(make_pair(m_recent->get_name(), m_recent));
-	m_playlists.insert(make_pair(m_most_played->get_name(), m_most_played));
-	Begin_Serialization();
+	/*delete m_daily_mix;*/
+	//m_favorites = new Favorites(this);
+	//m_deleted = new Trash(this);
+	//m_recent = new Most_Recent(this);
+	//m_most_played = new Most_Played(this);
+	//m_daily_mix = new DailyMix(this);
+	m_playlists.emplace(m_favorites->get_name(), m_favorites);
+	m_playlists.emplace(m_daily_mix->get_name(), m_daily_mix);
+	m_playlists.emplace(m_recent->get_name(), m_recent);
+	m_playlists.emplace(m_most_played->get_name(), m_most_played);
+	m_playlists.emplace(m_deleted->get_name(), m_deleted);
+	//Begin_Serialization();
 }
 
 //todo: add getters for each playlists
 Library::~Library() {
-	Begin_Deserialization();
-	//delete m_daily_mix;
-	delete m_deleted;
-	delete m_favorites;
-	delete m_most_played;
-	delete m_recent;
+	//Begin_Deserialization();
+	/*delete m_daily_mix;*/
+	//delete m_deleted;
+	//delete m_favorites;
+	//delete m_most_played;
+	//delete m_recent;
 	if (m_playlists.size()) {
 		unordered_map<string, Playlist*>::iterator it;
 		for (it = m_playlists.begin(); it != m_playlists.end(); it++) {
 			delete it->second;
 		}
 	}
+	delete m_server;
 	//m_user_playlists.clear();
 	m_user_playlist_names.clear();
+	m_playlists.clear();
 	//m_saved_playlist_names.clear();
 }
 
@@ -195,7 +202,7 @@ void Library::Add2PL(int id, const string& playlist_name) //todo: add parameter 
 	//cout << "No such playlist was found!" << endl;
 	cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
 	create_playlist(playlist_name); // creates the playlist automatically
-	playlist = m_playlists[playlist_name];
+	playlist = m_playlists[playlist_name]; 
 	playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
 }
 
@@ -522,7 +529,7 @@ Playlist* Library::get_playlist_by_name(string playlist_name) {
 	//if (playlist != m_saved_playlist_names.end()) {
 	//	return playlist->second;
 	//}
-	cout << "Playlist " << playlist_name << " doesn't exist!" << endl;
+	cout << "Playlist " << playlist_name << " doesn't exist!" << endl; //todo: make printing optional
 	return nullptr;
 }
 
@@ -601,14 +608,14 @@ void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
 void Library::Begin_Serialization()
 {
 	//Server::Restore_Songs();
-	for (auto& special_playlist : m_playlists) {
-		special_playlist.second->restore_playlist();
-	}
+	//for (auto& special_playlist : m_playlists) {
+	//	special_playlist.second->restore_playlist();
+	//}
 	ifstream read_user_playlists("c:\\temp\\playlists.dat", ios::in);
 	if (!Utilities::Is_File_Valid(read_user_playlists)) {
 		return;
 	}
-	while (!read_user_playlists.eof()) {
+	while (!Utilities::Is_End_Of_File_Or_Empty(read_user_playlists)) {
 		string playlist_name;
 		int song_id;
 		read_user_playlists >> playlist_name >> song_id;
@@ -619,14 +626,24 @@ void Library::Begin_Serialization()
 			break;
 		}
 	}
-	m_recent->Update_Most_Recent();
-	m_most_played->Update_Most_Played();
+	/*m_recent->Update_Most_Recent();
+	m_most_played->Update_Most_Played();*/
 }
 
 void Library::Begin_Deserialization()
 {
+	bool is_started_writing_user_playlists = false;
+	ios_base::openmode mode = ios::out;
 	for (auto& playlist_pair : m_playlists) {
-		playlist_pair.second->save_playlist();
+		string file_name = playlist_pair.first;
+		if (check_if_user_playlist(file_name)) {
+			file_name = user_playlists_file_name;
+			is_started_writing_user_playlists = true;
+		}
+		playlist_pair.second->save_playlist(file_name, mode);
+		if (is_started_writing_user_playlists) {
+			mode = ios::app;
+		}
 	}
 
 	//unordered_map<string, Playlist*>::iterator itr;

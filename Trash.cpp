@@ -1,10 +1,10 @@
 #include "Library.h"
 #include "Playlist.h"
 #include "Trash.h"
+#define Trash_Name "Trash"
 
 
-
-Trash::Trash(Library* library) : Playlist(typeid(this).name(), library) {}
+Trash::Trash(Library* library) : Playlist(Trash_Name, library, true) {}
 
 
 void Trash::add_song_to_playlist(Song* song) {
@@ -63,30 +63,30 @@ void Trash::add_to_trash(Song* song, bool add_print) { //todo: add boolean
 		return;
 	}
 }
+//
+//void Trash::restore_playlist() //todo: make maybe another parent class
+//{
+//	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+//	if (!Utilities::Is_File_Valid(read_playlist)) {
+//		return;
+//	}
+//	while (!read_playlist.eof()) {
+//		int song_id;
+//		read_playlist >> song_id;
+//		m_library->Add2PL(song_id, m_playlist_name);
+//		if (Utilities::Is_End_Of_File(read_playlist)) {
+//			break;
+//		}
+//	}
+//}
 
-void Trash::restore_playlist() //todo: make maybe another parent class
-{
-	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
-	if (!Utilities::Is_File_Valid(read_playlist)) {
-		return;
-	}
-	while (!read_playlist.eof()) {
-		int song_id;
-		read_playlist >> song_id;
-		m_library->Add2PL(song_id, m_playlist_name);
-		if (Utilities::Is_End_Of_File(read_playlist)) {
-			break;
-		}
-	}
-}
-
-void Trash::save_playlist() //todo: make maybe another parent class
-{
-	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
-	if (!Utilities::Is_File_Valid(write_playlist)) {
-		return;
-	}
-	for (auto& song : m_songs) {
-		write_playlist << song->get_id() << endl;
-	}
-}
+//void Trash::save_playlist() //todo: make maybe another parent class
+//{
+//	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+//	if (!Utilities::Is_File_Valid(write_playlist)) {
+//		return;
+//	}
+//	for (auto& song : m_songs) {
+//		write_playlist << song->get_id() << endl;
+//	}
+//}

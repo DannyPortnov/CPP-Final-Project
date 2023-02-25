@@ -5,10 +5,12 @@
 #include <algorithm>
 
 #define max_most_played 10
+#define Most_Played_Name "Most_Played"
 
-Most_Played::Most_Played(Library* library) : Automatic_Playlist(typeid(this).name(), library)
+Most_Played::Most_Played(Library* library) : Automatic_Playlist(Most_Played_Name, library)
 {
-
+	//restore_playlist();
+	Update_Most_Played();
 }
 // all 3 methods do exactly the same thing that happens in Automatic_Playlist
 //void Most_Played::add_song_to_playlist(Song* song)
@@ -39,7 +41,11 @@ Most_Played::Most_Played(Library* library) : Automatic_Playlist(typeid(this).nam
 // update most played song using the server method.
 void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 {
+	Server::update_most_played_songs();
 	auto most_played = Server::get_most_played();
+	if (most_played == nullptr) {
+		return;
+	}
 	int most_played_size = most_played->size();
 	Playlist::clear_all_playlist(false);
 	int minimum = min(most_played_size, max_most_played); // using c++ algorithm
@@ -64,29 +70,29 @@ void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 	#pragma endregion
 }
 
-void Most_Played::restore_playlist() //todo: make maybe another parent class
-{
-	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
-	if (!Utilities::Is_File_Valid(read_playlist)) {
-		return;
-	}
-	while (!read_playlist.eof()) {
-		int song_id;
-		read_playlist >> song_id;
-		m_library->Add2PL(song_id, m_playlist_name);
-		if (Utilities::Is_End_Of_File(read_playlist)) {
-			break;
-		}
-	}
-}
+//void Most_Played::restore_playlist() //todo: make maybe another parent class
+//{
+//	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+//	if (!Utilities::Is_File_Valid(read_playlist)) {
+//		return;
+//	}
+//	while (!read_playlist.eof()) {
+//		int song_id;
+//		read_playlist >> song_id;
+//		m_library->Add2PL(song_id, m_playlist_name);
+//		if (Utilities::Is_End_Of_File(read_playlist)) {
+//			break;
+//		}
+//	}
+//}
 
-void Most_Played::save_playlist() //todo: make maybe another parent class
-{
-	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
-	if (!Utilities::Is_File_Valid(write_playlist)) {
-		return;
-	}
-	for (auto& song : m_songs) {
-		write_playlist << song->get_id() << endl;
-	}
-}
+//void Most_Played::save_playlist() //todo: make maybe another parent class
+//{
+//	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
+//	if (!Utilities::Is_File_Valid(write_playlist)) {
+//		return;
+//	}
+//	for (auto& song : m_songs) {
+//		write_playlist << song->get_id() << endl;
+//	}
+//}

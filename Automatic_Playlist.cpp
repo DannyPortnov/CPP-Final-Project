@@ -23,9 +23,14 @@ inline void Automatic_Playlist::Print_Cannot_Edit_Error()
 //	}
 //}
 
-void Automatic_Playlist::restore_playlist() {
+//void Automatic_Playlist::restore_playlist() {
+//	return;
+//}
+
+void Automatic_Playlist::save_playlist(string file_name, ios_base::openmode mode) {
 	return;
 }
+
 
 void Automatic_Playlist::add_song_to_playlist(Song* song, bool add_print) {
 	Print_Cannot_Edit_Error();

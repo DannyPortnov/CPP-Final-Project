@@ -1,6 +1,14 @@
+#define   _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 #include "Library.h"
 #include "Playlist.h"
 #include "DailyMix.h"
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
 
 // after initiallizing the system, if the date did not change: the same mix that was first created in that date
 // needs to be presented to the user.
@@ -8,45 +16,48 @@
 //	
 //	
 //}
+#define DailyMix_Name "DailyMix"
 
-DailyMix::DailyMix(Library* library) : Playlist(typeid(this).name(), library), 
-m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in)
+DailyMix::DailyMix(Library* library) : Playlist(DailyMix_Name, library)//,
+	//m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in)
 {
-
+	//restore_playlist();
 }
 
 void DailyMix::restore_playlist() //todo: make maybe another parent class
 {
-	//m_last_date_saved = saved_date;
-	Date new_date;
-	// check if date has changed. if so, generate a new daily mix
-	if (check_if_date_changed(new_date)) {
-		m_dailymix_file.close();
-		m_last_date_saved = new_date;
-		generate_daily_mix();
-		return;
-	} //Untill here works
-	// if day hasn't changed, reload dailymix data back in to the data structure.
-	while (!m_dailymix_file.eof()) {
-		int song_id;
-		m_dailymix_file >> song_id;
-		auto song = Server::find_song_by_id(song_id);
-		Playlist::add_song_to_playlist(song, false);
-		if (Utilities::Is_End_Of_File(m_dailymix_file)) {
-			m_dailymix_file.close();
-			return;
-		}
-	}
+	////m_last_date_saved = saved_date;
+	//Date new_date;
+	//// check if date has changed. if so, generate a new daily mix
+	//if (check_if_date_changed(new_date)) {
+	//	m_dailymix_file.close();
+	//	m_last_date_saved = new_date;
+	//	generate_daily_mix();
+	//	return;
+	//} //Untill here works
+	//// if day hasn't changed, reload dailymix data back in to the data structure.
+
+	//while (!Utilities::Is_End_Of_File_Or_Empty(m_dailymix_file)) {
+	//	int song_id;
+	//	m_dailymix_file >> song_id;
+	//	auto song = Server::find_song_by_id(song_id);
+	//	Playlist::add_song_to_playlist(song, false);
+	//	if (Utilities::Is_End_Of_File(m_dailymix_file)) {
+	//		m_dailymix_file.close();
+	//		return;
+	//	}
+	//}
+	
 }
 
 //Works
 Date& DailyMix::get_date_from_file() {
-	Date default_date("");
-	if (!Utilities::Is_File_Valid(m_dailymix_file)) {
+	/*Date default_date("");
+	if (!Utilities::Is_File_Valid(m_dailymix_file) || Utilities::Is_End_Of_File_Or_Empty(m_dailymix_file)) {
 		return default_date;
 	}
+	getline(m_dailymix_file, date);*/
 	string date;
-	getline(m_dailymix_file, date);
 	Date saved_date(date);
 	return saved_date;
 }
@@ -82,11 +93,10 @@ void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
 
 
 // deserialization for daily mix
-void DailyMix::save_dailymix() {
+void DailyMix::save_playlist(string file_name, ios_base::openmode mode) {
 
-	ofstream write("c:\\temp\\daily_mix.dat", ios::out);
-	if (!write) {
-		cout << "Couldn't open file for serialization" << endl;
+	ofstream write("c:\\temp\\" + m_playlist_name + ".dat", ios::out);
+	if (!Utilities::Is_File_Valid(write)) {
 		return;
 	}
 	// Write the string to the file first
@@ -104,6 +114,9 @@ void DailyMix::save_dailymix() {
 //todo: maybe add a feature to let the user to remix the daily mix.
 void DailyMix::generate_daily_mix(){
 	auto songs_to_shuffle = Server::get_songs_by_id();
+	if (songs_to_shuffle == nullptr) {
+		return;
+	}
 	// Create a vector of iterators to the elements in the multimap
 	vector<unordered_map<int, Song*>::iterator> shuffled_songs_vector;
 	for (auto it = songs_to_shuffle->begin(); it != songs_to_shuffle->end(); ++it) {
@@ -120,6 +133,7 @@ void DailyMix::generate_daily_mix(){
 		//int id = song->second->get_id();
 		Playlist::add_song_to_playlist(song->second, false);
 	}
+	shuffled_songs_vector.clear();
 }
 
 

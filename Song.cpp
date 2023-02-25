@@ -81,7 +81,7 @@ void Song::set_playlist_appearances(const string& playlist) {
 }
 
 void Song::remove_from_playlist(const string& playlist) {
-	m_playlist_appearances.insert(playlist);
+	m_playlist_appearances.erase(playlist);
 }
 
 // used when trying to delete a song in library

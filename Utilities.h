@@ -22,6 +22,8 @@ public:
 	static bool Is_File_Valid(ios & fileToCheck); //works
 	static bool user_prompts_and_dialog(string& prompt_message, string& reject_message,
 		string& accept_message);// create general prompt function for dialog with user- maybe move to utilities
+	//Returns true if finished reading file/empty.
+	static bool Is_End_Of_File_Or_Empty(ifstream& fileToCheck);
 };
 #endif
 

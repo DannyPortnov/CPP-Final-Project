@@ -16,6 +16,22 @@ unordered_multimap<string, Song*>* Server::m_all_songs_by_genre = new unordered_
 unordered_map<int, Song*>* Server::m_recently_played_by_id = new unordered_map<int, Song*>();
 multimap<int, Song*>* Server::m_most_played = new multimap<int, Song*>();
 
+//multimap<string, Song*>* Server::m_songs_by_alphabet_order;
+//list<Song*>* Server::m_recently_played ;
+//map<string, Podcast*>* Server::m_podcasts_by_alphabet_order ;
+//unordered_map<int, Episode*>* Server::m_all_episodes_by_id;
+//unordered_map<string, Episode*>* Server::m_all_episodes_by_name;
+//unordered_map<string, Podcast*>* Server::m_all_podcasts;
+//
+//unordered_map<int, Song*>* Server::m_all_songs_by_id;
+//unordered_set<string>* Server::m_songs_file_paths;
+//unordered_multimap<string, Song*>* Server::m_all_songs_by_artist;
+//unordered_multimap<string, Song*>* Server::m_all_songs_by_name ;
+//unordered_multimap<string, Song*>* Server::m_all_songs_by_album;
+//unordered_multimap<string, Song*>* Server::m_all_songs_by_genre ;
+//unordered_map<int, Song*>* Server::m_recently_played_by_id;
+//multimap<int, Song*>* Server::m_most_played ;
+
 Server::Server()
 {
 	Restore_Songs(); //Must be here because serialization must happen before anything else
@@ -28,7 +44,7 @@ Server::~Server()
 {
 	Save_Songs(); //Do serialization in destructor (before removing all songs)
 	Save_Podcasts();
-	Save_Most_Recent();
+	Save_Most_Recent(); //todo: maybe move to saving inside Playlist
 	Destroy_All_Allocations();
 }
 
@@ -106,7 +122,7 @@ void Server::Restore_Songs()
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
-	while (!read.eof()) {
+	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
 		string song_name, artist, album, genre, duration, release_date, file_path;
 		int id, plays_count;
 		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
@@ -126,7 +142,7 @@ void Server::Restore_Podcasts() {
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
-	while (!read.eof()) {
+	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
 		string episode_name,podcast_name, duration, release_date, file_path;
 		read >> episode_name >> podcast_name >> file_path >> duration >> release_date;
 		vector<string*> params = { &episode_name,&podcast_name };
@@ -145,12 +161,14 @@ void Server::Restore_Podcasts() {
 
 void Server::Restore_Most_Recent()
 {
-	ifstream read("c:\\temp\\most_recent.dat", ios::in);
+	ifstream read("c:\\temp\\Most_Recent.dat", ios::in);
 	if (!Utilities::Is_File_Valid(read)) {
 		return;
 	}
-	while (!read.eof()) {
+	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
 		int song_id;
+		//string playlist_name;
+		//read >> playlist_name >> song_id;
 		read >> song_id;
 		add_to_recently_played(song_id);
 		if (Utilities::Is_End_Of_File(read)) {
@@ -437,10 +455,13 @@ void Server::update_recently_played(int id) {
 // update the multimap that holds the songs by the order of the last played (search O(1)).
 // when a song is deleted from server, we can just call this method and update the data structure
 void Server::update_most_played_songs() {
+	if (m_most_played == nullptr) {
+		return;
+	}
 	m_most_played->clear(); // clear most played and than add to multimap after, plays_count updated.
 	unordered_map<int, Song*>::iterator it; // goes over all songs organized by id
 	for (it = m_all_songs_by_id->begin(); it != m_all_songs_by_id->end(); it++) {
-		m_most_played->insert(make_pair(it->second->get_plays_count(), it->second)); // start:least played, end: most played
+		m_most_played->emplace(it->second->get_plays_count(), it->second); // start:least played, end: most played
 	}
 }
 

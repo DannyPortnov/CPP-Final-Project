@@ -44,10 +44,20 @@ bool Utilities::Is_End_Of_File(ios_base& fileToCheck)
 	}
 	return false;
 }
+bool Utilities::Is_End_Of_File_Or_Empty(ifstream& fileToCheck)
+{
+	//first condition: file is empty, second: finished reading
+	auto first = fileToCheck.peek(); //todo: temporary, to be removed after testing
+	auto second = fileToCheck.eof();
+	if (fileToCheck.peek() == std::ifstream::traits_type::eof() || fileToCheck.eof()) {
+		return true;
+	}
+	return false;
+}
 
 bool Utilities::Is_File_Valid(ios& fileToCheck) //todo: add promt to create folder if doesn't exist, or check for a command that creates the folder
 {
-	if (!fileToCheck) {
+	if (!fileToCheck) { //todo: pass the file name also
 		cout << "Couldn't open file for serialization or deserialization" << endl;
 		return false;
 	}

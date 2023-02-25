@@ -23,8 +23,8 @@ public:
     void Remove_From_Most_Recent(int id);
     //add a song to recents by using song id
     void Add_To_Most_Recent(int id);
-    void restore_playlist(); 
-    void save_playlist();
+    //void restore_playlist(); 
+   /* void save_playlist();*/
 
 };
 
