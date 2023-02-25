@@ -2,7 +2,7 @@
 #include "Playlist.h"
 #include "Automatic_Playlist.h"
 
-Automatic_Playlist::Automatic_Playlist(string name, Library* library) : Playlist(name, library) {}
+Automatic_Playlist::Automatic_Playlist(string name, Library* library, Server* server) : Playlist(name, library, server) {}
 
 inline void Automatic_Playlist::Print_Cannot_Edit_Error()
 {

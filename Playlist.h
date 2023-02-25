@@ -31,6 +31,7 @@ private:
 	Player m_player;
 
 protected:
+	Server* m_server;
 	Library* m_library;
 	multiset<Song*> m_songs; // uses to store all songs in the playlist in alphabetical order (use it for play). 
 	//unordered_map<int, Song*> m_songs_by_id; // uses to store all songs by id. 
@@ -41,7 +42,7 @@ protected:
 	bool check_if_continue_playing();
 	bool make_sure_to_remove_song(Song* song, bool make_sure = true); // double checks with the user if the song should be deleted, if yes- removes the song.
 public:
-	Playlist(string name, Library* library, bool restore_songs = false);
+	Playlist(string name, Library* library, Server* server, bool restore_songs = false);
 	~Playlist();
 	virtual void add_song_to_playlist(Song* song, bool prints_enabled = true); //works
 	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);

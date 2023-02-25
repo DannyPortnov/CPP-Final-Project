@@ -18,7 +18,7 @@
 //}
 #define DailyMix_Name "DailyMix"
 
-DailyMix::DailyMix(Library* library) : Playlist(DailyMix_Name, library),
+DailyMix::DailyMix(Library* library, Server* server) : Playlist(DailyMix_Name, library, server),
 	m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in)
 {
 	restore_playlist();
@@ -40,7 +40,7 @@ void DailyMix::restore_playlist() //todo: make maybe another parent class
 	while (!Utilities::Is_End_Of_File_Or_Empty(m_dailymix_file)) {
 		int song_id;
 		m_dailymix_file >> song_id;
-		auto song = Server::find_song_by_id(song_id);
+		auto song = m_server->find_song_by_id(song_id);
 		Playlist::add_song_to_playlist(song, false);
 		if (Utilities::Is_End_Of_File(m_dailymix_file)) {
 			m_dailymix_file.close();
@@ -113,7 +113,7 @@ void DailyMix::save_playlist(string file_name, ios_base::openmode mode) {
 // generate a random mix of 10 songs from the library/server
 //todo: maybe add a feature to let the user to remix the daily mix.
 void DailyMix::generate_daily_mix(){
-	auto songs_to_shuffle = Server::get_songs_by_id();
+	auto songs_to_shuffle = m_server->get_songs_by_id();
 	if (songs_to_shuffle == nullptr) {
 		return;
 	}

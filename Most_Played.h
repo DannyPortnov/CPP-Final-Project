@@ -20,7 +20,7 @@ class Most_Played :
 private:
 
 public:
-    Most_Played(Library* library);
+    Most_Played(Library* library, Server* server);
     //void add_song_to_playlist(Song* song);
     //void remove_song_from_playlist(Song* song, bool make_sure = true);
     //void clear_all_playlist();

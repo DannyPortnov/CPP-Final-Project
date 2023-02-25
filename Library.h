@@ -52,7 +52,7 @@ private:
 	const int num_of_songs_to_print = 10;
 
 	template<class T>
-	T* Update_Media_By_Id(int episode_id, T*(*f)(int), string new_name, string duration, string release_date);
+	T* Update_Media_By_Id(int episode_id, T* (Server::* methodPtr)(int), string new_name, string duration, string release_date);
 	//Returns the choosen song. If wrong name returns nullptr!
 	Song* Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search);
 	

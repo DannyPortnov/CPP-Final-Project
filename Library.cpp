@@ -13,8 +13,9 @@
 
 #define user_playlists_file_name "playlists"
 
-Library::Library() : m_server(new Server()), m_favorites(new Favorites(this)), m_deleted(new Trash(this)), m_recent(new Most_Recent(this))
-	, m_most_played(new Most_Played(this)), m_daily_mix(new DailyMix(this)) /* :  m_favorites(new Favorites(this)), m_deleted(new Trash(this)), m_recent(new Most_Recent(this))
+Library::Library() : m_server(new Server()), m_favorites(new Favorites(this, m_server)), m_deleted(new Trash(this, m_server)), 
+m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m_server)), m_daily_mix(new DailyMix(this, m_server)) 
+/* :  m_favorites(new Favorites(this)), m_deleted(new Trash(this)), m_recent(new Most_Recent(this))
 		, m_most_played(new Most_Played(this)), m_daily_mix(new DailyMix(this))*/
 {
 	/*delete m_daily_mix;*/
@@ -62,13 +63,13 @@ Library::~Library() {
 void Library::PrintSong(int id)
 {
 	cout << "The song details are:" << endl;
-	cout << Server::find_song_by_id(id) << endl;
+	cout << m_server->find_song_by_id(id) << endl;
 }
 
 // print all songs with this name.
 void Library::PrintSong(string song_name)
 {
-	auto songs = Server::find_by_name(song_name);
+	auto songs = m_server->find_by_name(song_name);
 	auto count = songs->count(song_name);
 	if (count == 0) {
 		cout << "Song wasn't found in the database!" << endl;
@@ -122,7 +123,7 @@ void Library::create_playlist(const string& playlist_name, bool prints_enabled) 
 	if (prints_enabled)
 		cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
 	m_user_playlist_names.insert(playlist_name);
-	Playlist* new_playlist = new Playlist(playlist_name, this); // need to delete!
+	Playlist* new_playlist = new Playlist(playlist_name, this, m_server); // need to delete!
 	m_playlists[playlist_name] = new_playlist;
 }
 
@@ -191,7 +192,7 @@ void Library::PrintPL() { //todo: make overload?
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
 void Library::Add2PL(int id, const string& playlist_name, bool prints_enabled) //todo: COMPLETED! parameter for prints was added
 {
-	auto song_to_add = Server::find_song_by_id(id);
+	auto song_to_add = m_server->find_song_by_id(id);
 	Playlist* playlist = get_playlist_by_name(playlist_name);
 	if (playlist != nullptr) {
 		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
@@ -291,7 +292,7 @@ void Library::Update_Song(string song_name,
 	try
 	{
 
-		auto picked_song = Pick_Media(song_name, Server::get_songs_by_name());
+		auto picked_song = Pick_Media(song_name, m_server->get_songs_by_name());
 		if (picked_song != nullptr) {
 			Update_Song(picked_song->get_id(), new_name, artist, album, genre, duration);
 			return;
@@ -310,7 +311,7 @@ void Library::Update_Song(int song_id, string new_name, string artist, string al
 	try
 	{
 		//move updating to Song
-		auto picked_song = Update_Media_By_Id(song_id, Server::find_song_by_id, new_name, duration, release_date);
+		auto picked_song = Update_Media_By_Id(song_id, &Server::find_song_by_id, new_name, duration, release_date);
 		if (!artist.empty()) {
 			picked_song->set_artist(artist);
 		}
@@ -333,13 +334,13 @@ void Library::UpdatePodcast(string podcast_name, string new_name)
 		Print_No_Input_Parameters_Error();
 		return;
 	}
-	if (Server::Does_Podcast_Exist(new_name)) {
+	if (m_server->Does_Podcast_Exist(new_name)) {
 		Print_Media_Exists_Error(new_name, typeid(Podcast).name());
 		return;
 	}
 	try
 	{
-		auto picked_podcast = Server::find_podcast_by_name(podcast_name); //throws exception
+		auto picked_podcast = m_server->find_podcast_by_name(podcast_name); //throws exception
 		if (picked_podcast != nullptr) {
 			picked_podcast->Set_Podcast_Name(new_name); //not empty!
 			return;
@@ -354,13 +355,13 @@ void Library::UpdatePodcast(string podcast_name, string new_name)
 
 void Library::UpdateEpisode(int episode_id, string new_name, string duration, string release_date)
 {
-	if (Server::Does_Episode_Exist(new_name)) {
+	if (m_server->Does_Episode_Exist(new_name)) {
 		Print_Media_Exists_Error(new_name, typeid(Episode).name());
 		return;
 	}
 	try
 	{
-		Update_Media_By_Id(episode_id, Server::find_episode_by_id, new_name, duration, release_date);
+		Update_Media_By_Id(episode_id, &Server::find_episode_by_id, new_name, duration, release_date);
 	}
 	catch (const std::exception&)
 	{
@@ -375,10 +376,10 @@ void Library::Print_Media_Exists_Error(std::string& new_name, const string& medi
 }
 
 template <class T>
-T* Library::Update_Media_By_Id(int media_id, T* (*find_media_by_id)(int), string new_name, string duration, string release_date)
+T* Library::Update_Media_By_Id(int media_id, T* (Server::* methodPtr)(int), string new_name, string duration, string release_date)
 {
 	//Here if all paramters are empty it does nothing
-	auto picked_media = find_media_by_id(media_id);
+	auto picked_media = (m_server->*methodPtr)(media_id);
 	if (!new_name.empty()) {
 		picked_media->set_name(new_name);
 	}
@@ -417,7 +418,7 @@ void Library::Play_Podcast(string podcast_name)
 {
 	try
 	{
-		Server::find_podcast_by_name(podcast_name)->Play(); //throws exception if not found
+		m_server->find_podcast_by_name(podcast_name)->Play(); //throws exception if not found
 	}
 	catch (const std::exception&)
 	{
@@ -428,7 +429,7 @@ void Library::Play_Podcast(string podcast_name)
 void Library::Play(string song_name)
 {
 	//todo: niv - add play playlist to library
-	auto song = Server::find_by_name(song_name);
+	auto song = m_server->find_by_name(song_name);
 	auto count = song->count(song_name);
 	PrintSong(song_name);
 	if (count == 0) {
@@ -446,7 +447,7 @@ void Library::Play(string song_name)
 
 void Library::Play(int id)
 {
-	auto song_to_play = Server::find_song_by_id(id);
+	auto song_to_play = m_server->find_song_by_id(id);
 	play_song(song_to_play);
 }
 
@@ -482,7 +483,7 @@ void Library::PlayAll(MapType<string, Song*>* songs_to_play) {
 
 // PlayAll with no function template
 void Library::PlayAll() {
-	auto songs_to_play = Server::get_songs_sorted_by_alphabet();
+	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		cout << "There are no songs in the library." << endl;
 		return;
@@ -501,7 +502,7 @@ void Library::PlayAll() {
 
 // Play all of the songs in the library, shuffled
 void Library::PlayRandom() {
-	auto songs_to_play = Server::get_songs_sorted_by_alphabet();
+	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		cout << "There are no songs in the library." << endl;
 		return;
@@ -564,11 +565,11 @@ void Library::PlayPlaylistShuffled(string playlist_name) {
 void Library::Add_Song(string song_name, string file_path, string artist = "",
 	string album = "", string genre = "", string duration = "", string release_date = "")
 {
-	if (Server::Does_Song_Exist(file_path)) { //checks uniqueness
+	if (m_server->Does_Song_Exist(file_path)) { //checks uniqueness
 		cout << "Song was already added" << endl;
 		return;
 	}
-	Server::Upload_Song(song_name, file_path, artist, album, genre, duration, release_date);
+	m_server->Upload_Song(song_name, file_path, artist, album, genre, duration, release_date);
 
 	#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
@@ -598,20 +599,20 @@ void Library::Add_Song(string song_name, string file_path, string artist = "",
 void Library::Add_Podcast_Episode(string episode_name, string podcast_name,
 	string file_path, string duration, string release_Date)
 {
-	if (Server::Does_Episode_Exist(episode_name)) { //checks uniqueness
+	if (m_server->Does_Episode_Exist(episode_name)) { //checks uniqueness
 		cout << "Episode was already added." << endl;
 		return;
 	}
 	Podcast* picked_podcast;
 	try
 	{
-		picked_podcast = Server::find_podcast_by_name(podcast_name);
+		picked_podcast = m_server->find_podcast_by_name(podcast_name);
 	}
 	catch (const std::exception&)
 	{
 		picked_podcast = nullptr;
 	}
-	Server::Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
+	m_server->Upload_Episode_To_Podcast(picked_podcast, episode_name, podcast_name, file_path, duration, release_Date);
 
 }
 
@@ -741,7 +742,7 @@ void Library::Delete_Song(int id)
 {
 	try
 	{
-		auto song_to_delete = Server::find_song_by_id(id);
+		auto song_to_delete = m_server->find_song_by_id(id);
 		delete_song(song_to_delete);
 	}
 	catch (const std::exception&)
@@ -755,7 +756,7 @@ void Library::Delete_Song(string song_name)
 {
 	try
 	{
-		auto song_to_delete = Pick_Media(song_name, Server::get_songs_by_name());
+		auto song_to_delete = Pick_Media(song_name, m_server->get_songs_by_name());
 		if (song_to_delete != nullptr) {
 			delete_song(song_to_delete);
 			//Server::Permanent_Delete_Song(picked_song);
@@ -774,7 +775,7 @@ void Library::Delete_Episode(int id)
 	try
 	{
 		//todo: add check before delete
-		Server::Permanent_Delete_Podcast_Episode(Server::find_episode_by_id(id));
+		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_id(id));
 	}
 	catch (const std::exception&)
 	{
@@ -786,7 +787,7 @@ void Library::Delete_Episode(string episode_name)
 {
 	try
 	{
-		Server::Permanent_Delete_Podcast_Episode(Server::find_episode_by_name(episode_name)); //if episode doesn't exist, throws exception
+		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_name(episode_name)); //if episode doesn't exist, throws exception
 	}
 	catch (const std::exception&)
 	{
@@ -798,7 +799,7 @@ void Library::Delete_Podcast(string podcast_name)
 {
 	try
 	{
-		Server::Permanent_Delete_Podcast(Server::find_podcast_by_name(podcast_name)); //if podcast doesn't exist, throws exception
+		m_server->Permanent_Delete_Podcast(m_server->find_podcast_by_name(podcast_name)); //if podcast doesn't exist, throws exception
 	}
 	catch (const std::exception&)
 	{
@@ -861,14 +862,14 @@ void Library::update_most_played() {
 
 ostream& Library::Print(ostream& os, int begin, int end) const
 {
-	auto itr = Server::get_songs_by_name()->begin();
+	auto itr = m_server->get_songs_by_name()->begin();
 	advance(itr, begin);//if begin!=0, inc itr untill reached begin
 	//for (int i = 0; i < begin && itr != Server::get_songs_by_name()->end(); i++, itr++) {} 
-	for (int i = begin; i < end && itr != Server::get_songs_by_name()->end(); i++, itr++)
+	for (int i = begin; i < end && itr != m_server->get_songs_by_name()->end(); i++, itr++)
 	{
 		cout << itr->second << endl;
 	}
-	if (itr == Server::get_songs_by_name()->end()) {
+	if (itr == m_server->get_songs_by_name()->end()) {
 		os << "No more songs :(" << endl;
 	}
 	return os;

@@ -4,7 +4,7 @@
 #define Trash_Name "Trash"
 
 
-Trash::Trash(Library* library) : Playlist(Trash_Name, library, true) {}
+Trash::Trash(Library* library, Server* server) : Playlist(Trash_Name, library, server, true) {}
 
 
 void Trash::add_song_to_playlist(Song* song) {
@@ -38,7 +38,7 @@ void Trash::clear_all_playlist() {
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		multiset<Song*>::iterator it;
 		for (it = m_songs.begin(); it != m_songs.end(); it++) {
-			Server::Permanent_Delete_Song(*it);
+			m_server->Permanent_Delete_Song(*it);
 			m_library->remove_from_most_recent((*it)->get_id());
 			m_library->remove_from_daily_mix(*it);
 			//todo: need to remove song from most_played, moset_recent playlists

@@ -18,7 +18,7 @@ class Automatic_Playlist :
         virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
         virtual void clear_all_playlist(bool add_print = true);
     public:
-        Automatic_Playlist(string name, Library* library);
+        Automatic_Playlist(string name, Library* library, Server* server);
         void save_playlist(string file_name, ios_base::openmode mode = ios::out);
         //todo: think of an implementation ffor all of Playlist's virtual methods
 };

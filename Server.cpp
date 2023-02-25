@@ -1,20 +1,6 @@
 #include "Server.h"
 
-multimap<string, Song*>* Server::m_songs_by_alphabet_order = new multimap<string, Song*>();
-list<Song*>* Server::m_recently_played = new list<Song*>();
-map<string, Podcast*>* Server::m_podcasts_by_alphabet_order = new map<string, Podcast*>();
-unordered_map<int, Episode*>* Server::m_all_episodes_by_id = new unordered_map<int, Episode*>();
-unordered_map<string, Episode*>* Server::m_all_episodes_by_name = new unordered_map<string, Episode*>();
-unordered_map<string, Podcast*>* Server::m_all_podcasts = new unordered_map<string, Podcast*>();
 
-unordered_map<int, Song*>* Server::m_all_songs_by_id = new unordered_map<int, Song*>();
-unordered_set<string>* Server::m_songs_file_paths = new unordered_set<string>();
-unordered_multimap<string, Song*>* Server::m_all_songs_by_artist = new unordered_multimap<string, Song*>();
-unordered_multimap<string, Song*>* Server::m_all_songs_by_name = new unordered_multimap<string, Song*>();
-unordered_multimap<string, Song*>* Server::m_all_songs_by_album = new unordered_multimap<string, Song*>();
-unordered_multimap<string, Song*>* Server::m_all_songs_by_genre = new unordered_multimap<string, Song*>();
-unordered_map<int, Song*>* Server::m_recently_played_by_id = new unordered_map<int, Song*>();
-multimap<int, Song*>* Server::m_most_played = new multimap<int, Song*>();
 
 //multimap<string, Song*>* Server::m_songs_by_alphabet_order;
 //list<Song*>* Server::m_recently_played ;
@@ -34,6 +20,22 @@ multimap<int, Song*>* Server::m_most_played = new multimap<int, Song*>();
 
 Server::Server()
 {
+	m_songs_by_alphabet_order = new multimap<string, Song*>();
+	m_recently_played = new list<Song*>();
+	m_podcasts_by_alphabet_order = new map<string, Podcast*>();
+	m_all_episodes_by_id = new unordered_map<int, Episode*>();
+	m_all_episodes_by_name = new unordered_map<string, Episode*>();
+	m_all_podcasts = new unordered_map<string, Podcast*>();
+
+	m_all_songs_by_id = new unordered_map<int, Song*>();
+	m_songs_file_paths = new unordered_set<string>();
+	m_all_songs_by_artist = new unordered_multimap<string, Song*>();
+	m_all_songs_by_name = new unordered_multimap<string, Song*>();
+	m_all_songs_by_album = new unordered_multimap<string, Song*>();
+	m_all_songs_by_genre = new unordered_multimap<string, Song*>();
+	m_recently_played_by_id = new unordered_map<int, Song*>();
+	m_most_played = new multimap<int, Song*>();
+
 	Restore_Songs(); //Must be here because serialization must happen before anything else
 	Restore_Podcasts();
 	Restore_Most_Recent(); 
@@ -353,7 +355,7 @@ Podcast* Server::find_podcast_by_name(string name)
 }
 
 template < class TKey, class TValue>
-static TValue* Server::Find_Unique(TKey param, unordered_map<TKey, TValue*>* collection_to_Search) {
+TValue* Server::Find_Unique(TKey param, unordered_map<TKey, TValue*>* collection_to_Search) {
 	if (collection_to_Search->count(param) > 0) {
 		return collection_to_Search->at(param);
 	}

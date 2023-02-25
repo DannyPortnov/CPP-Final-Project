@@ -16,7 +16,7 @@ class Favorites :
     public Playlist
 {
 public:
-    Favorites(Library* library);
+    Favorites(Library* library, Server* server);
 
     //void restore_playlist();
     //void save_playlist();

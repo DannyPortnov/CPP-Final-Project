@@ -3,7 +3,8 @@
 
 
 
-Playlist::Playlist(string name, Library* library, bool restore_songs) : m_playlist_name(name), m_library(library) {
+Playlist::Playlist(string name, Library* library, Server* server, bool restore_songs) : 
+	m_playlist_name(name), m_library(library), m_server(server) {
 	if (restore_songs) {
 		restore_playlist(name);
 	}
@@ -196,7 +197,7 @@ void Playlist::restore_playlist(string file_name) {
 		read_user_playlists >> playlist_name >> song_id;
 		vector<string*> params = { &playlist_name };
 		Utilities::Replace_All(params, true);
-		add_song_to_playlist(Server::find_song_by_id(song_id), false);
+		add_song_to_playlist(m_server->find_song_by_id(song_id), false);
 		if (Utilities::Is_End_Of_File(read_user_playlists)) {
 			break;
 		}

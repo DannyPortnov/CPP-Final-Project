@@ -13,7 +13,7 @@ private:
 
 
 public:
-	Trash(Library* library);
+	Trash(Library* library, Server* server);
 	void add_song_to_playlist(Song* song); 
 	void remove_song_from_playlist(Song* song);
 	void clear_all_playlist();

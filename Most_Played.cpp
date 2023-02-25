@@ -7,7 +7,7 @@
 #define max_most_played 10
 #define Most_Played_Name "Most_Played"
 
-Most_Played::Most_Played(Library* library) : Automatic_Playlist(Most_Played_Name, library)
+Most_Played::Most_Played(Library* library, Server* server) : Automatic_Playlist(Most_Played_Name, library, server)
 {
 	//restore_playlist();
 	Update_Most_Played();
@@ -41,8 +41,8 @@ Most_Played::Most_Played(Library* library) : Automatic_Playlist(Most_Played_Name
 // update most played song using the server method.
 void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 {
-	Server::update_most_played_songs();
-	auto most_played = Server::get_most_played();
+	m_server->update_most_played_songs();
+	auto most_played = m_server->get_most_played();
 	if (most_played == nullptr) {
 		return;
 	}

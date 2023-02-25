@@ -7,7 +7,7 @@
 
 #define Most_Recent_Name "Most_Recent"
 
-Most_Recent::Most_Recent(Library* library) : Automatic_Playlist(Most_Recent_Name, library)
+Most_Recent::Most_Recent(Library* library, Server* server) : Automatic_Playlist(Most_Recent_Name, library, server)
 {
 	Update_Most_Recent();
 }
@@ -41,7 +41,7 @@ Most_Recent::Most_Recent(Library* library) : Automatic_Playlist(Most_Recent_Name
 //update recent songs playlist 
 void Most_Recent::Update_Most_Recent()
 {
-	auto recently_played = Server::get_recently_played();
+	auto recently_played = m_server->get_recently_played();
 	if (recently_played == nullptr) {
 		return;
 	}
@@ -66,16 +66,16 @@ void Most_Recent::Update_Most_Recent()
 
 void Most_Recent::Remove_From_Most_Recent(int id)
 {
-	auto song_to_remove = Server::find_song_by_id(id);
+	auto song_to_remove = m_server->find_song_by_id(id);
 	//Playlist::remove_song_from_playlist(song_to_remove, false); // Playlist is already cleared in Update_Most_Recent
-	Server::remove_from_recently_played(id); // removes from the data structure
+	m_server->remove_from_recently_played(id); // removes from the data structure
 	Update_Most_Recent();
 
 }
 
 void Most_Recent::Add_To_Most_Recent(int id)
 {
-	Server::add_to_recently_played(id);
+	m_server->add_to_recently_played(id);
 	Update_Most_Recent();
 }
 

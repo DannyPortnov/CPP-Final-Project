@@ -29,7 +29,7 @@ private:
 	bool check_if_date_changed(Date& new_date); // checks if the date has changed.
 	Date& get_date_from_file();
 public:
-	DailyMix(Library* library); // Partially tested and works
+	DailyMix(Library* library, Server* server); // Partially tested and works
 	//void Play(); from playlist
 	//void Play_Random(); from playlist
 	void generate_daily_mix(); //works // generate a random mix of 10 songs from the library/server

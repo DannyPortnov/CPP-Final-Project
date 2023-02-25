@@ -4,7 +4,7 @@
 
 #define Favorites_name "Favorites"
 
-Favorites::Favorites(Library* library) : Playlist(Favorites_name, library, true) //cannot use typeid(*this) (at least in initalization list)
+Favorites::Favorites(Library* library, Server* server) : Playlist(Favorites_name, library, server, true) //cannot use typeid(*this) (at least in initalization list)
 {
 	//restore_playlist();
 }
