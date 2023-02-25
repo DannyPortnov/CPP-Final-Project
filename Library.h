@@ -155,6 +155,7 @@ public:
 	void update_most_played(); 
 	void remove_from_daily_mix(Song* song);
 
+	void Podcasts_Menu(const string& input);
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 	string genre = "", string duration = "", int release_date =0);*/
 };

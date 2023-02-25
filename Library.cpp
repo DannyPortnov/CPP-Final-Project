@@ -829,6 +829,72 @@ void Library::remove_from_daily_mix(Song* song) {
 	m_daily_mix->remove_song_from_playlist(song);
 }
 
+void Library::Podcasts_Menu(const string& input)
+{
+	bool repeat = true;
+	while (repeat)
+	{
+		//printing all podcasts in alphabet order
+		string command, podcast_name;
+		regex pattern("(delete|play|back)\\s*(\\S*)"); //matches a string that starts with either "delete", 
+		//"play", or "back", followed by zero or more whitespace characters
+		smatch match;
+		if (regex_search(input, match, pattern)) {
+			string command = match[1];
+			string podcast_name = match[2];
+			switch (Utilities::hashit(command))
+			{
+			case(ePlay): {
+				try
+				{
+					auto podcast_choosen= m_server->find_podcast_by_name(podcast_name); //add a check inside 
+					podcast_choosen->Play();
+					repeat = false;
+				}
+				catch (const std::exception&)
+				{
+					cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << endl;
+				}
+			}
+			case(eDelete): {
+				try
+				{
+					auto podcast_choosen = m_server->find_podcast_by_name(podcast_name); //add a check inside 
+					m_server->Permanent_Delete_Podcast(podcast_choosen);
+					repeat = false;
+				}
+				catch (const std::exception&)
+				{
+					cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << endl;
+				}
+			}
+			default:
+				break;
+			}
+		}
+	}
+	#pragma region Without regex
+	//size_t space_pos = input.find(' ');
+	//if (space_pos != string::npos) { //if found 
+	//	command = input.substr(0, space_pos);
+	//	podcast_name = input.substr(space_pos + 1);
+	//}
+	//else {
+	//	return;
+	//}
+	//// call the appropriate function based on the command
+	//if (command == "delete") {
+	//	deletePodcast(podcast_name);
+	//}
+	//else if (command == "play") {
+	//	playPodcast(podcast_name);
+	//}
+	//else {
+	//	cout << "Invalid command" << endl;
+	//}  
+	#pragma endregion
+}
+
 
 void Library::update_most_played() { 
 	
