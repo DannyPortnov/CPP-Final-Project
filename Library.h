@@ -198,6 +198,7 @@ public:
 
 	void Menu();
 	void Print_Menu();
+	void Podcasts_Menu(const string& input);
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 	string genre = "", string duration = "", int release_date =0);*/
 };

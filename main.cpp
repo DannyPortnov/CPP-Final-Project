@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include "Library.h"
+#include "Utilities.h"
 #include "Server.h"
 using namespace std;
 
@@ -14,25 +15,8 @@ using namespace std;
 #endif
 #endif  // _DEBUG
 
-enum string_code {
-	eDailyMix,
-	eSearch,
-	ePodcast,
-	eLibrary,
-	ePlaylists,
-	eHelp,
-	eBack
-};
 
-string_code hashit(std::string const& inString) {
-	if (inString == "Daily Mix") return eDailyMix;
-	if (inString == "Search") return eSearch;
-	if (inString == "Podcast") return ePodcast;
-	if (inString == "Library") return eLibrary;
-	if (inString == "Playlists") return ePlaylists;
-	if (inString == "Help") return eHelp;
-	if (inString == "Back") return eBack;
-}
+
 
 //void foo() {
 //	switch (hashit(stringValue)) {
@@ -64,7 +48,7 @@ void mp3player() {
 
 //		cout << "To continue press (1), To print board press (2), To end game press (0):" << endl;
 		cin >> answer;
-		switch (hashit(answer))
+		switch (Utilities::hashit(answer))
 		{
 		case(eDailyMix): {
 

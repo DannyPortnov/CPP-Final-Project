@@ -11,9 +11,22 @@
 
 using namespace std;
 
+enum string_code {
+	eDailyMix,
+	eSearch,
+	ePodcast,
+	eLibrary,
+	ePlaylists,
+	ePlay,
+	eDelete,
+	eHelp,
+	eBack
+};
+
 class Utilities
 {
 public:
+	static string_code hashit(std::string const& inString);
 	//Replaces all underscores with space and vice versa in each string in the vector.
 	static void Replace_All(vector<string*>& params, bool is_serialization);
 	//Checks if reached the end of the file to avoid empty lines

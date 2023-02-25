@@ -1,5 +1,18 @@
 #include "Utilities.h"
 
+
+
+
+string_code Utilities::hashit(std::string const& inString) {
+	if (inString == "Daily Mix") return eDailyMix;
+	if (inString == "Search") return eSearch;
+	if (inString == "Podcast") return ePodcast;
+	if (inString == "Library") return eLibrary;
+	if (inString == "Playlists") return ePlaylists;
+	if (inString == "Help") return eHelp;
+	if (inString == "Back") return eBack;
+}
+
 //todo: put regex and use refs
 void Utilities::Replace_All(vector<string*>& params, bool is_serialization)
 {
