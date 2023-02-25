@@ -33,6 +33,47 @@ class Automatic_Playlist;
 class Most_Recent;
 class Most_Played;
 
+enum string_code {
+	eMore,
+	eList,
+	eAddSong,
+	eUpdateSongByName,
+	eUpdateSongById,
+	eDeleteSongByName,
+	eDeleteSongById,
+	ePrintSongByName,
+	ePrintSongById,
+	eAddSong2PL,
+	eRemoveFromPL,
+	ePrintPL,
+	ePlaySongByName,
+	ePlaySongById,
+	ePlayAll,
+	ePlayAllShuffled,
+	eHelp,
+	eBack
+};
+
+string_code hashit(std::string const& inString) {
+	if (inString == "More") return eMore;
+	if (inString == "List") return eList;
+	if (inString == "Add Song") return eAddSong;
+	if (inString == "Update song by using name") return eUpdateSongByName;
+	if (inString == "Update song by using id") return eUpdateSongById;
+	if (inString == "Delete song by using name") return eDeleteSongByName;
+	if (inString == "Delete song by using id") return eDeleteSongById;
+	if (inString == "Print song by using name") return ePrintSongByName;
+	if (inString == "Print song by using id") return ePrintSongById;
+	if (inString == "Add song to playlist") return eAddSong2PL;
+	if (inString == "Remove song from playlist") return eRemoveFromPL;
+	if (inString == "Print playlist") return ePrintPL;
+	if (inString == "Play song by using name") return ePlaySongByName;
+	if (inString == "Play song by using id") return ePlaySongById;
+	if (inString == "Play all") return ePlayAll;
+	if (inString == "Play all shuffled") return ePlayAllShuffled;
+	if (inString == "Help") return eHelp;
+	if (inString == "Back") return eBack;
+}
 
 class Library //: Server //todo: remove inheritance
 {
@@ -155,6 +196,8 @@ public:
 	void update_most_played(); 
 	void remove_from_daily_mix(Song* song);
 
+	void Menu();
+	void Print_Menu();
 	/*void Add(string path, string song_name, string artist = "", string album = "",
 	string genre = "", string duration = "", int release_date =0);*/
 };

@@ -46,6 +46,8 @@ Library::~Library() {
 	//m_saved_playlist_names.clear();
 }
 
+
+
 void Library::PrintSong(int id)
 {
 	cout << "The song details are:" << endl;
@@ -866,6 +868,128 @@ ostream& operator<<(ostream& os, const Library& lib)
 	return lib.Print(os, 0, lib.num_of_songs_to_print);
 }
 
+void Library::Menu() {
+	cout << "Library Menu:" << endl;
+	cout << *this << endl; // print the first 10 songs in alphabetically order using operator overload <<
+	Print_Menu();
+	cout << endl;
+	string answer;
+	bool invalid_answer = true;
+	while (invalid_answer) {
+		cin >> answer;
+		switch (hashit(answer))
+		{
+		case(eMore): {
+			cout << " here are another 10 songs out of the library:" << endl;
+			cout << *this << endl; // print the first 10 songs in alphabetically order using operator overload <<
+			break;
+		}
+		case(eList): {
+			//todo: check if need this, it's doing an operation that has to be done when we enter to this menu 
+			break;
+		}
+		case(eAddSong): {
+			string song_name, file_path, artist, album, genre, duration, release_date;
+			//todo: improve implementation, need to make other inputs optional
+			cout << "Enter song's name, file path, artist(optional), album(optional), genre(optional), duration(optional), release date(optional): " << endl;
+			getline(cin, song_name);
+			getline(cin, file_path);
+			getline(cin, artist);
+			getline(cin, album);
+			getline(cin, genre);
+			getline(cin, duration);
+			getline(cin, release_date);
+			Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
+			break;
+		}
+		case(eUpdateSongByName): {
+
+			break;
+		}
+		case(eUpdateSongById): {
+
+			break;
+		}
+		case(eDeleteSongByName): {
+
+			break;
+		}
+		case(eDeleteSongById): {
+
+			break;
+		}
+		case(ePrintSongByName): {
+
+			break;
+		}
+		case(ePrintSongById): {
+
+			break;
+		}
+		case(eAddSong2PL): {
+
+			break;
+		}
+		case(eRemoveFromPL): {
+
+			break;
+		}
+		case(ePrintPL): {
+
+			break;
+		}
+		case(ePlaySongByName): {
+
+			break;
+		}
+		case(ePlaySongById): {
+
+			break;
+		}
+		case(ePlayAll): {
+
+			break;
+		}
+		case(ePlayAllShuffled): {
+
+			break;
+		}
+		case(eHelp): {
+			Print_Menu();
+			break;
+		}
+		case(eBack): {
+			return;
+			break;
+		}
+		}
+	}
+}
+
+void Library::Print_Menu() {
+	cout << " More" << endl;
+	cout << " List" << endl;
+	cout << " Add Song" << endl;
+	cout << " Update song by using name" << endl;
+	cout << " Update song by using id" << endl;
+	cout << " Delete song by using name" << endl;
+	cout << " Delete song by using id" << endl;
+	cout << " Print song by using name" << endl;
+	cout << " Print song by using id" << endl;
+	cout << " Add song to playlist" << endl;
+	cout << " Print song by using name" << endl;
+	cout << " Print song by using id" << endl;
+	cout << " Add song to playlist" << endl;
+	cout << " Remove song from playlist" << endl;
+	cout << " Print playlist" << endl;
+	cout << " Play song by using name" << endl;
+	cout << " Play song by using id" << endl;
+	cout << " Play all" << endl;
+	cout << " Play all shuffled" << endl;
+	cout << " Help" << endl;
+	cout << " Back" << endl;
+
+}
 
 
 
