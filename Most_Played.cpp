@@ -1,5 +1,7 @@
 #include "Library.h"
-//#include "Most_Played.h"
+#include "Playlist.h"
+#include "Automatic_Playlist.h"
+#include "Most_Played.h"
 #include <algorithm>
 
 #define max_most_played 10
@@ -8,21 +10,21 @@ Most_Played::Most_Played(Library* library) : Automatic_Playlist(typeid(this).nam
 {
 
 }
-
-void Most_Played::add_song_to_playlist(Song* song)
-{
-	Automatic_Playlist::Print_Cannot_Edit_Error();
-}
-
-void Most_Played::remove_song_from_playlist(Song* song, bool make_sure)
-{
-	Automatic_Playlist::Print_Cannot_Edit_Error();
-}
-
-void Most_Played::clear_all_playlist()
-{
-	Automatic_Playlist::Print_Cannot_Edit_Error();
-}
+// all 3 methods do exactly the same thing that happens in Automatic_Playlist
+//void Most_Played::add_song_to_playlist(Song* song)
+//{
+//	Automatic_Playlist::add_song_to_playlist(song);
+//}
+//
+//void Most_Played::remove_song_from_playlist(Song* song, bool make_sure)
+//{
+//	Automatic_Playlist::remove_song_from_playlist(song, make_sure);
+//}
+//
+//void Most_Played::clear_all_playlist()
+//{
+//	Automatic_Playlist::clear_all_playlist();
+//}
 
 //void Most_Played::Add_To_Most_Played(Song* song)
 //{

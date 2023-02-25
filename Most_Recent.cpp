@@ -1,5 +1,7 @@
 #include "Library.h"
-//#include "Most_Recent.h"
+#include "Playlist.h"
+#include "Automatic_Playlist.h"
+#include "Most_Recent.h"
 #include <algorithm>
 #define max_recents 10
 
@@ -8,20 +10,20 @@ Most_Recent::Most_Recent(Library* library) : Automatic_Playlist(typeid(this).nam
 
 }
 
-void Most_Recent::add_song_to_playlist(Song* song)
-{
-	Automatic_Playlist::Print_Cannot_Edit_Error();
-}
-
-void Most_Recent::remove_song_from_playlist(Song* song, bool make_sure)
-{
-	Automatic_Playlist::Print_Cannot_Edit_Error();
-}
-
-void Most_Recent::clear_all_playlist()
-{
-	Automatic_Playlist::Print_Cannot_Edit_Error();
-}
+//void Most_Recent::add_song_to_playlist(Song* song)
+//{
+//	Automatic_Playlist::Print_Cannot_Edit_Error();
+//}
+//
+//void Most_Recent::remove_song_from_playlist(Song* song, bool make_sure)
+//{
+//	Automatic_Playlist::Print_Cannot_Edit_Error();
+//}
+//
+//void Most_Recent::clear_all_playlist()
+//{
+//	Automatic_Playlist::Print_Cannot_Edit_Error();
+//}
 
 //void Most_Recent::Add_To_Most_Recent(Song* song)
 //{

@@ -1,5 +1,6 @@
 #include "Library.h"
-//#include "Trash.h"
+#include "Playlist.h"
+#include "Trash.h"
 
 
 

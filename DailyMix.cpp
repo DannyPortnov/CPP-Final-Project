@@ -1,5 +1,6 @@
 #include "Library.h"
-//#include "DailyMix.h"
+#include "Playlist.h"
+#include "DailyMix.h"
 
 // after initiallizing the system, if the date did not change: the same mix that was first created in that date
 // needs to be presented to the user.

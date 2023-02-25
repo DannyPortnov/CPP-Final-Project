@@ -1,4 +1,12 @@
 #include "Library.h"
+#include "Playlist.h"
+#include "DailyMix.h"
+#include "Favorites.h"
+#include "Trash.h"
+#include "Automatic_Playlist.h"
+#include "Most_Played.h"
+#include "Most_Recent.h"
+
 #include <set>
 #include <vector>
 #include <algorithm>

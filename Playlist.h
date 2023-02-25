@@ -1,6 +1,6 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
-#include "AudioCollection.h"
+//#include "AudioCollection.h"
 #include "Song.h"
 #include "Server.h"
 //#include "Library.h"
@@ -11,8 +11,10 @@
 #include<unordered_map>
 #include<unordered_set>
 
-
+//class Server;
 class Library;
+//class Song;
+
 class Playlist { //todo: make deleted, recent, favorites classes which derive from playlist
 	//todo: make a library pointer inside playlist
 private:
@@ -35,7 +37,7 @@ public:
 	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
 	void remove_song_from_playlist(string song_name, bool make_sure = true); //todo: check
 	virtual void clear_all_playlist(bool add_print = true);
-	virtual void restore_playlist(); //todo: check if implementation is needed here
+	virtual void restore_playlist(); //todo: implementation is needed! even a simple one
 	virtual void save_playlist();
 	string get_name() const { return m_playlist_name; }
 	void Play();

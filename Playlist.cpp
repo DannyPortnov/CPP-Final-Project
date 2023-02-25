@@ -1,5 +1,5 @@
+#include "Library.h"
 #include "Playlist.h"
-#include "Library.cpp"
 
 
 
@@ -181,10 +181,15 @@ void Playlist::save_playlist() {
 		write_playlist << " " << m_playlist_name << " " << song->get_id() << endl;
 	}
 }
+void Playlist::restore_playlist() {
+	return;
+}
+
 //returns true if the playlists name are in the right order.
 bool operator<(const Playlist& a, const Playlist& b) {
 	return (a.get_name() < b.get_name());
 }
+
 
 //todo: merge later with pick media
 // get a specific song, even if there are few songs with the same name

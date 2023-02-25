@@ -1,12 +1,12 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 #include "Song.h"
-#include "DailyMix.h"
-#include "Favorites.h"
-#include "Most_Played.h"
-#include "Most_Recent.h"
-#include "Trash.h"
-#include "Playlist.h"
+//#include "Playlist.h"
+//#include "DailyMix.h"
+//#include "Favorites.h"
+//#include "Most_Played.h"
+//#include "Most_Recent.h"
+//#include "Trash.h"
 #include "Server.h"
 #include <string>
 #include <map>
@@ -14,10 +14,16 @@
 #include <array>
 #include <fstream>
 
-
-
-
 using namespace std;
+
+class Playlist;
+class Favorites;
+class DailyMix;
+class Trash;
+class Automatic_Playlist;
+class Most_Recent;
+class Most_Played;
+
 
 class Library : Server //todo: remove inheritance
 {
