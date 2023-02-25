@@ -11,8 +11,8 @@ class Automatic_Playlist :
 {
     protected: //todo: continue here
         inline void Print_Cannot_Edit_Error();
-        template <typename TCollection, typename TIter >
-        void Update_Most(TCollection songs_collection, int max_items, TIter iter);
+        /*template <typename TCollection >
+        void Update_Most(TCollection songs_collection, int max_items, bool is_reverse);*/
         virtual void restore_playlist(); //todo: implement here, even a simple implementation
         virtual void add_song_to_playlist(Song* song, bool add_print = true); //works
         virtual void remove_song_from_playlist(Song* song, bool make_sure = true);

@@ -40,20 +40,21 @@ Most_Recent::Most_Recent(Library* library) : Automatic_Playlist(typeid(this).nam
 void Most_Recent::Update_Most_Recent()
 {
 	auto recently_played = Server::get_recently_played();
-	Automatic_Playlist::Update_Most(recently_played, max_recents, recently_played->begin());
-
+	int recents_size = recently_played->size();
+	Playlist::clear_all_playlist(false);
+	int minimum = min(recents_size, max_recents); // using c++ algorithm
+	// Create an iterator for the list
+	auto it = recently_played->begin();
+	// Traverse through the list using the iterator
+	for (int i = 0; i < minimum; i++) {
+		Add_To_Most_Recent((*it)->get_id() ); // add to recent the updated recently_played linked_list
+		it++;
+	}  
 	#pragma region Previous implementation
 	//auto recently_played = Server::get_recently_played();
-	//int recents_size = recently_played->size();
-	//Clear_Most_Recent();
-	//int minimum = min(recents_size, max_recents); // using c++ algorithm
-	//// Create an iterator for the list
-	//auto it = recently_played->begin();
-	//// Traverse through the list using the iterator
-	//for (int i = 0; i < minimum; i++) {
-	//	Add_To_Most_Recent(*it); // add to recent the updated recently_played linked_list
-	//	it++;
-	//}  
+	//auto itr = recently_played->begin();
+	//Automatic_Playlist::Update_Most(recently_played, max_recents, recently_played->begin());
+
 	#pragma endregion
 
 }
