@@ -41,12 +41,12 @@ protected:
 	bool check_if_continue_playing();
 	bool make_sure_to_remove_song(Song* song, bool make_sure = true); // double checks with the user if the song should be deleted, if yes- removes the song.
 public:
-	Playlist(string name, Library* library, bool restore_songs=false);
+	Playlist(string name, Library* library, bool restore_songs = false);
 	~Playlist();
-	virtual void add_song_to_playlist(Song* song, bool add_print = true); //works
+	virtual void add_song_to_playlist(Song* song, bool prints_enabled = true); //works
 	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
 	void remove_song_from_playlist(string song_name, bool make_sure = true); //todo: check
-	virtual void clear_all_playlist(bool add_print = true);
+	virtual void clear_all_playlist(bool prints_enabled = true);
 	virtual void restore_playlist(string file_name); //todo: implementation is needed! even a simple one
 	virtual void save_playlist(string file_name, ios_base::openmode mode = ios::out);
 	string get_name() const { return m_playlist_name; }

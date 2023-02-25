@@ -1,12 +1,12 @@
 #ifndef DAILYMIX_H
 #define DAILYMIX_H
 #define   _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
 #include "Date.h"
-//#include "Playlist.h"
+#include <crtdbg.h>
 #include <time.h>
 #include <random>
 #include <stdbool.h> 
+//#include "Playlist.h"
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -24,7 +24,7 @@ class DailyMix : public Playlist
 {
 private:
 	//unordered_map<int, Song*> m_daily_mix; //first: id, second: song
-	//ifstream m_dailymix_file;
+	ifstream m_dailymix_file;
 	Date m_last_date_saved; // stores the last saved date (will change if the program will run in a different day)
 	bool check_if_date_changed(Date& new_date); // checks if the date has changed.
 	Date& get_date_from_file();

@@ -107,7 +107,7 @@ public:
 	void Delete_Podcast(string podcast_name);
 
 
-	void Add2PL(int id, const string& playlist_name); //works
+	void Add2PL(int id, const string& playlist_name, bool prints_enabled = true); //works
 	void RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
 	void add_to_favorites(Song* song);
 
@@ -148,7 +148,7 @@ public:
 	void Play_Podcast(string podcast_name);
 
 	//void print_all_playlists(); // print all playlists in library
-	void create_playlist(const string& playlist_name); // create a new playlist //works
+	void create_playlist(const string& playlist_name, bool prints_enabled = true); // create a new playlist //works
 	void delete_playlist(string playlist_name); // delete a playlist
 	
 	void remove_from_most_recent(int id);

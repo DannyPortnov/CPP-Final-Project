@@ -112,12 +112,15 @@ bool Library::check_if_user_playlist(const string& playlist_name) {
 }
 
 // create a new playlist
-void Library::create_playlist(const string& playlist_name) {
+void Library::create_playlist(const string& playlist_name, bool prints_enabled) {
 
 	if (check_if_playlist_exist(playlist_name)) {
-		cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
+		if (prints_enabled)
+			cout << "A playlist with the name: " << playlist_name << " is already exists!" << endl; // todo: change to try, throw
 		return;
 	}
+	if (prints_enabled)
+		cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
 	m_user_playlist_names.insert(playlist_name);
 	Playlist* new_playlist = new Playlist(playlist_name, this); // need to delete!
 	m_playlists[playlist_name] = new_playlist;
@@ -186,11 +189,11 @@ void Library::PrintPL() { //todo: make overload?
 
 
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
-void Library::Add2PL(int id, const string& playlist_name) //todo: add parameter for prints
+void Library::Add2PL(int id, const string& playlist_name, bool prints_enabled) //todo: COMPLETED! parameter for prints was added
 {
 	auto song_to_add = Server::find_song_by_id(id);
 	Playlist* playlist = get_playlist_by_name(playlist_name);
-	if (playlist!=nullptr) {
+	if (playlist != nullptr) {
 		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
 		return;
 	}
@@ -201,15 +204,15 @@ void Library::Add2PL(int id, const string& playlist_name) //todo: add parameter 
 		//if (playlist_name == m_favorites->get_name()) {
 		//	add_to_favorites(song_to_add);
 		//}  
-	
+
 
 	//	return;
 	//}
-	#pragma endregion
+#pragma endregion
 	//cout << "No such playlist was found!" << endl;
-	cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
-	create_playlist(playlist_name); // creates the playlist automatically
-	playlist = m_playlists[playlist_name]; 
+	//cout << "A playlist with the name: " << playlist_name << " was created!" << endl;
+	create_playlist(playlist_name, prints_enabled); // creates the playlist automatically
+	playlist = m_playlists[playlist_name];
 	playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
 }
 
@@ -628,7 +631,7 @@ void Library::Begin_Serialization()
 		read_user_playlists >> playlist_name >> song_id;
 		vector<string*> params = { &playlist_name };
 		Utilities::Replace_All(params, true);
-		Add2PL(song_id, playlist_name);
+		Add2PL(song_id, playlist_name, false);// false for disable prints
 		if (Utilities::Is_End_Of_File(read_user_playlists)) {
 			break;
 		}

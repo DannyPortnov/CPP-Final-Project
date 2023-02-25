@@ -106,16 +106,16 @@ multiset<Song*> Playlist::get_songs() {
 }
 
 // add a song to the playlist. m_songs is a multimap
-void Playlist::add_song_to_playlist(Song* song, bool add_print) {
+void Playlist::add_song_to_playlist(Song* song, bool prints_enabled) {
 	if (m_songs.find(song) != m_songs.end()) {
-		if (add_print)
+		if (prints_enabled)
 			cout << "This song is already in " << m_playlist_name << "!" << endl;
 	}
 	else {
 		m_songs.insert(song);
 		// m_songs_by_id.insert(make_pair(song->get_id(), song));
 		song->set_playlist_appearances(m_playlist_name);
-		if (add_print) // if equals to false, don't print
+		if (prints_enabled) // if equals to false, don't print
 			cout << "Song was successfully added to " << m_playlist_name << "!" << endl;
 	}
 }
@@ -157,8 +157,8 @@ void Playlist::remove_song_from_playlist(string song_name, bool make_sure) {
 }
 
 // remove all songs from the playlist.
-void Playlist::clear_all_playlist(bool add_print) { // favorites will also implement this (meaning,it empties the playlist)
-	if (add_print) { // check before clearing playlist prompt
+void Playlist::clear_all_playlist(bool prints_enabled) { // favorites will also implement this (meaning,it empties the playlist)
+	if (prints_enabled) { // check before clearing playlist prompt
 		string prompt = "Are you sure that you want to remove: " + m_playlist_name + "? y/n: ";
 		string reject_message = m_playlist_name + " wasn't removed!";
 		string accept_message = m_playlist_name + " was successfully removed!";
