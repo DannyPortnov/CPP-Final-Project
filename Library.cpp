@@ -15,32 +15,18 @@
 
 Library::Library() : m_server(new Server()), m_favorites(new Favorites(this, m_server)), m_deleted(new Trash(this, m_server)), 
 m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m_server)), m_daily_mix(new DailyMix(this, m_server)) 
-/* :  m_favorites(new Favorites(this)), m_deleted(new Trash(this)), m_recent(new Most_Recent(this))
-		, m_most_played(new Most_Played(this)), m_daily_mix(new DailyMix(this))*/
 {
-	/*delete m_daily_mix;*/
-	//m_favorites = new Favorites(this);
-	//m_deleted = new Trash(this);
-	//m_recent = new Most_Recent(this);
-	//m_most_played = new Most_Played(this);
-	//m_daily_mix = new DailyMix(this);
 	m_playlists.emplace(m_favorites->get_name(), m_favorites);
 	m_playlists.emplace(m_daily_mix->get_name(), m_daily_mix);
 	m_playlists.emplace(m_recent->get_name(), m_recent);
 	m_playlists.emplace(m_most_played->get_name(), m_most_played);
 	m_playlists.emplace(m_deleted->get_name(), m_deleted);
-	//Begin_Serialization();
+	Begin_Serialization();
 }
 
 //todo: add getters for each playlists
 Library::~Library() {
-	//Begin_Deserialization();
-	//delete m_deleted;
-	//delete m_favorites;
-	//delete m_most_played;
-	//delete m_recent;
-	
-	
+	Begin_Deserialization();	
 	if (m_playlists.size()) {
 		unordered_map<string, Playlist*>::iterator it;
 		for (it = m_playlists.begin(); it != m_playlists.end(); it++) {
@@ -53,10 +39,10 @@ Library::~Library() {
 			}
 		}
 	}
-	delete m_server;
-	//m_user_playlists.clear();
 	m_user_playlist_names.clear();
 	m_playlists.clear();
+	delete m_server;
+	//m_user_playlists.clear();
 	//m_saved_playlist_names.clear();
 }
 
