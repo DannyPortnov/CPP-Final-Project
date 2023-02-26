@@ -55,6 +55,12 @@ void mp3player() {
 	// ** How to use MethodMap for parameter-less methods ** //
 	methodmap.Insert(key, &Library::Begin_Deserialization); //Add method to map with its key
 	methodmap.Call(key, &lib); // Call method that belongs to its key
+	// ** How to use MethodMap for methods with any parameters** //
+	MethodMap<Library, std::string> methodmapWithParameters; //Specify the parameters the method gets
+	key = "Test";
+	std::string plname = "name";
+	methodmapWithParameters.Insert(key, &Library::PlayPlaylist);
+	methodmapWithParameters.Call(key, &lib, plname); //Pass the parameter here
 	//** **//
 	while (run_program) {
 		std::cout << "Welcome To mp3player" << std::endl;

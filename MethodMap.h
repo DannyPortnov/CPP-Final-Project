@@ -11,12 +11,12 @@
 template <typename T, typename... Args>
 class MethodMap {
 private:
-	std::map<std::string, std::function<void(T*, Args...)>> method_map;
+	std::unordered_map<std::string, std::function<void(T*, Args...)>> method_map;
 public:
-	template <typename T, typename... Args>
+	//template <typename T>
 	void Insert(const std::string& key, void (T::* method)(Args...)) {
 		method_map[key] = [method](T* obj, Args... args) { (obj->*method)(args...); };
-
+		//method_map[key] = [method](T* obj, Args... args) { (*method)(obj, args...); };
 		/* method_map[key] = [methodName, methodArgs...]() {
 			 (methodName)(methodArgs...);
 		 };*/
