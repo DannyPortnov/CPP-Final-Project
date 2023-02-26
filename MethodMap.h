@@ -26,21 +26,14 @@ struct member_ptr : public member_base_ptr {
 	}
 };
 
-//template <typename T, typename... Args>
 class MethodMap {
 private:
 	std::unordered_map<std::string, std::unique_ptr<member_base_ptr>> m_method_map;
 public:
-	//template <typename T>
-	void Insert(std::string key, auto type) {
-		std::unique_ptr<member_base_ptr> ptr = std::make_unique<decltype(member_ptr(type))>(type);
+	template <typename... Args, typename RT, typename T>
+	void Insert(std::string key, RT(T::* method)(Args...)) {
+		std::unique_ptr<member_base_ptr> ptr = std::make_unique<member_ptr<T, RT, Args ...>>(method);
 		m_method_map.insert(std::make_pair(key, std::move(ptr)));
-
-		//m_method_map[key] = [method](T* obj, Args... args) { (obj->*method)(args...); }; //WORKS
-		//method_map[key] = [method](T* obj, Args... args) { (*method)(obj, args...); };
-		/* method_map[key] = [methodName, methodArgs...]() {
-			 (methodName)(methodArgs...);
-		 };*/
 	}
 
 	template <typename RT, typename T, typename... Args>
@@ -56,18 +49,4 @@ public:
 		}
 		throw std::runtime_error("not found");
 	}
-
-	////template <typename T, typename... Args>
-	//void Call(const std::string& key, T* instance, Args&&... methodArgs) const {
-	//	auto it = m_method_map.find(key);
-	//	if (it != m_method_map.end()) {
-	//		auto& func = it->second;
-	//		// use tuple to store and forward the arguments
-	//		std::tuple<Args...> arg_tuple(std::forward<Args>(methodArgs)...);
-	//		std::apply(func, std::tuple_cat(std::make_tuple(instance), arg_tuple));
-	//		return;
-	//	}
-	//	std::cerr << "Error: method '" << key << "' not found" << std::endl;
-	//}
-
 };
