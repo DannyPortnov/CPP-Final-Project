@@ -165,6 +165,7 @@ public:
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 
 	void Example_Func_For_MethodMap();
+	void Example_Func_For_MethodMap(std::string temp);
 	void Example2_Func_For_MethodMap(std::string temp);
 };
 

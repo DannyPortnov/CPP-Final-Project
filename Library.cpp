@@ -929,6 +929,10 @@ ostream& operator<<(ostream& os, const Library& lib)
 }
 
 void Library::Example_Func_For_MethodMap() {}
+void Library::Example_Func_For_MethodMap(std::string temp) {
+
+}
+
 void Library::Example2_Func_For_MethodMap(std::string temp) {
 
 }
