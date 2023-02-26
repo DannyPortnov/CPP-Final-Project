@@ -928,6 +928,12 @@ ostream& operator<<(ostream& os, const Library& lib)
 	return lib.Print(os, 0, lib.num_of_songs_to_print);
 }
 
+void Library::Example_Func_For_MethodMap() {}
+void Library::Example2_Func_For_MethodMap(std::string temp) {
+
+}
+
+
 void Library::Menu() {
 	std::cout << "Library Menu:" << std::endl;
 	std::cout << *this << std::endl; // print the first 10 songs in alphabetically order using operator overload <<

@@ -163,6 +163,9 @@ public:
 	void Podcasts_Menu(const std::string& input);
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/
+
+	void Example_Func_For_MethodMap();
+	void Example2_Func_For_MethodMap(std::string temp);
 };
 
 ostream& operator<<(ostream& os, const Library& lib);
