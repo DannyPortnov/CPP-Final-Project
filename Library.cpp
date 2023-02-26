@@ -30,13 +30,7 @@ Library::~Library() {
 	if (m_playlists.size()) {
 		unordered_map<string, Playlist*>::iterator it;
 		for (it = m_playlists.begin(); it != m_playlists.end(); it++) {
-			Playlist* playlist_to_delete = it->second;
-			if (playlist_to_delete == m_daily_mix) {
-				delete m_daily_mix;
-			}
-			else {
-				delete playlist_to_delete;
-			}
+			delete it->second;
 		}
 	}
 	m_user_playlist_names.clear();
