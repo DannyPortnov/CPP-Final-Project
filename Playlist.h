@@ -43,7 +43,7 @@ protected:
 	bool make_sure_to_remove_song(Song* song, bool make_sure = true); // double checks with the user if the song should be deleted, if yes- removes the song.
 public:
 	Playlist(string name, Library* library, Server* server, bool restore_songs = false);
-	~Playlist();
+	virtual ~Playlist();
 	virtual void add_song_to_playlist(Song* song, bool prints_enabled = true); //works
 	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
 	void remove_song_from_playlist(string song_name, bool make_sure = true); //todo: check
