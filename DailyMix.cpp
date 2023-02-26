@@ -21,7 +21,7 @@
 DailyMix::DailyMix(Library* library, Server* server) : Playlist(DailyMix_Name, library, server),
 	m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in)
 {
-	restore_playlist();
+	restore_playlist(); //todo: add try-catch for when trying to initialize m_dailymix_file 
 }
 
 void DailyMix::restore_playlist() //todo: make maybe another parent class
