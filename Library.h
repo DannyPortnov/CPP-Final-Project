@@ -33,47 +33,9 @@ class Automatic_Playlist;
 class Most_Recent;
 class Most_Played;
 
-enum string_code {
-	eMore,
-	eList,
-	eAddSong,
-	eUpdateSongByName,
-	eUpdateSongById,
-	eDeleteSongByName,
-	eDeleteSongById,
-	ePrintSongByName,
-	ePrintSongById,
-	eAddSong2PL,
-	eRemoveFromPL,
-	ePrintPL,
-	ePlaySongByName,
-	ePlaySongById,
-	ePlayAll,
-	ePlayAllShuffled,
-	eHelp,
-	eBack
-};
-
-string_code hashit(std::string const& inString) {
-	if (inString == "More") return eMore;
-	if (inString == "List") return eList;
-	if (inString == "Add Song") return eAddSong;
-	if (inString == "Update song by using name") return eUpdateSongByName;
-	if (inString == "Update song by using id") return eUpdateSongById;
-	if (inString == "Delete song by using name") return eDeleteSongByName;
-	if (inString == "Delete song by using id") return eDeleteSongById;
-	if (inString == "Print song by using name") return ePrintSongByName;
-	if (inString == "Print song by using id") return ePrintSongById;
-	if (inString == "Add song to playlist") return eAddSong2PL;
-	if (inString == "Remove song from playlist") return eRemoveFromPL;
-	if (inString == "Print playlist") return ePrintPL;
-	if (inString == "Play song by using name") return ePlaySongByName;
-	if (inString == "Play song by using id") return ePlaySongById;
-	if (inString == "Play all") return ePlayAll;
-	if (inString == "Play all shuffled") return ePlayAllShuffled;
-	if (inString == "Help") return eHelp;
-	if (inString == "Back") return eBack;
-}
+//std::string_code hashit(std::string const& instd::string) {
+//
+//}
 
 class Library //: Server //todo: remove inheritance
 {
@@ -93,20 +55,20 @@ private:
 	const int num_of_songs_to_print = 10;
 
 	template<class T>
-	T* Update_Media_By_Id(int episode_id, T* (Server::* methodPtr)(int), string new_name, string duration, string release_date);
+	T* Update_Media_By_Id(int episode_id, T* (Server::* methodPtr)(int), std::string new_name, std::string duration, std::string release_date);
 	//Returns the choosen song. If wrong name returns nullptr!
-	Song* Pick_Media(string media_name, unordered_multimap<string, Song*>* collection_to_search);
+	Song* Pick_Media(std::string media_name, unordered_multimap<string, Song*>* collection_to_search);
 	
-	bool check_if_playlist_exist(const string& playlist_name); //works
-	bool check_if_user_playlist(const string& playlist_name);
+	bool check_if_playlist_exist(const std::string& playlist_name); //works
+	bool check_if_user_playlist(const std::string& playlist_name);
 	bool check_if_continue_playing();
 	bool make_sure_to_delete_song(Song* song);
-	void Print_Not_Found_By_Id_Error(int song_id, string item_type);
+	void Print_Not_Found_By_Id_Error(int song_id, std::string item_type);
 	void Print_No_Input_Parameters_Error();
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
-	void Print_Media_Exists_Error(std::string& new_name, const string & media_type);
+	void Print_Media_Exists_Error(std::string& new_name, const std::string & media_type);
 
-	bool Are_All_Parameters_Empty(const string & param1, const string & param2, const string & param3, const string & param4, const string & param5);
+	bool Are_All_Parameters_Empty(const std::string & param1, const std::string & param2, const std::string & param3, const std::string & param4, const std::string & param5);
 
 	
 	
@@ -118,17 +80,17 @@ private:
 	
 	
 	// void ask_user_to_remove_song(Song* song, Playlist* playlist); // was implemented in playlist instead
-	//Song* Pick_Song(string song_name);
-	//Podcast* Pick_Podcast(string episode_name);
+	//Song* Pick_Song(std::string song_name);
+	//Podcast* Pick_Podcast(std::string episode_name);
 
 public:
 	Library(); //works
 	~Library();
 	//Creates a song and adds it to the library.
-	void Add_Song(string song_name, string file_path, string artist, string album, string genre, string duration, string release_date);
+	void Add_Song(std::string song_name, std::string file_path, std::string artist, std::string album, std::string genre, std::string duration, std::string release_date);
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
-	void Add_Podcast_Episode(string episode_name, string podcast_name,
-	string file_path, string duration = "", string release_Date="");
+	void Add_Podcast_Episode(std::string episode_name, std::string podcast_name,
+	std::string file_path, std::string duration = "", std::string release_Date="");
 
 	void Begin_Serialization();//works
 	void Begin_Deserialization();
@@ -137,45 +99,45 @@ public:
 	//Deletes a song from the library
 	void Delete_Song(int id);
 	//Deletes a song from the library
-	void Delete_Song(string song_name);
+	void Delete_Song(std::string song_name);
 	// method removes a specific song, used by the two Delete_Song methods
 	void delete_song(Song* song_to_delete);
 	//Deletes an episode from the library
 	void Delete_Episode(int id);
 	//Deletes an episode from the library
-	void Delete_Episode(string episode_name);
+	void Delete_Episode(std::string episode_name);
 	//Deletes a podcast from the library
-	void Delete_Podcast(string podcast_name);
+	void Delete_Podcast(std::string podcast_name);
 
 
-	void Add2PL(int id, const string& playlist_name, bool prints_enabled = true); //works
-	void RemoveFromPL(const string& song_name, const string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
+	void Add2PL(int id, const std::string& playlist_name, bool prints_enabled = true); //works
+	void RemoveFromPL(const std::string& song_name, const std::string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
 	void add_to_favorites(Song* song);
 
 	ostream& Print(ostream& os, int begin, int end) const;
 	void PrintPL();
 	void PrintSong(int id);
-	void PrintSong(string song_name);
+	void PrintSong(std::string song_name);
 
-	void Update_Song(string song_name, string new_name = "",
- string artist = "", string album = "", string genre = "", string duration = "", string release_date ="");
-	void Update_Song(int song_id, string new_name = "", string artist = "",
-		string album = "", string genre = "", string duration = "", string release_date="");
+	void Update_Song(std::string song_name, std::string new_name = "",
+ std::string artist = "", std::string album = "", std::string genre = "", std::string duration = "", std::string release_date ="");
+	void Update_Song(int song_id, std::string new_name = "", std::string artist = "",
+		std::string album = "", std::string genre = "", std::string duration = "", std::string release_date="");
 	//Update podcast's name
-	void UpdatePodcast(string podcast_name, string new_name);
-	void UpdateEpisode(int episode_id, string new_name = "", string duration = "", string release_date="");
-	void Update_Episode(string episode_name, string new_name = "", string duration = "", int release_date = 0); //maybe later
+	void UpdatePodcast(std::string podcast_name, std::string new_name);
+	void UpdateEpisode(int episode_id, std::string new_name = "", std::string duration = "", std::string release_date="");
+	void Update_Episode(std::string episode_name, std::string new_name = "", std::string duration = "", int release_date = 0); //maybe later
 	
 	//return the playlist that needs to be played
-	Playlist* get_playlist_by_name(string playlist_name);
+	Playlist* get_playlist_by_name(std::string playlist_name);
 	//play a playlist by its name 
-	void PlayPlaylist(string playlist_name);
+	void PlayPlaylist(std::string playlist_name);
 	//play a playlist shuffled by its name 
-	void PlayPlaylistShuffled(string playlist_name);
+	void PlayPlaylistShuffled(std::string playlist_name);
 
 
 	//gets the data structure from Server!
-	void Play(string song_name);
+	void Play(std::string song_name);
 	//gets the data structure from Server!
 	void Play(int id);
 	//gets the data structure from Server!
@@ -186,11 +148,11 @@ public:
 	void PlayRandom();
 	//play song and update song data
 	void play_song(Song* song);
-	void Play_Podcast(string podcast_name);
+	void Play_Podcast(std::string podcast_name);
 
 	//void print_all_playlists(); // print all playlists in library
-	void create_playlist(const string& playlist_name, bool prints_enabled = true); // create a new playlist //works
-	void delete_playlist(string playlist_name); // delete a playlist
+	void create_playlist(const std::string& playlist_name, bool prints_enabled = true); // create a new playlist //works
+	void delete_playlist(std::string playlist_name); // delete a playlist
 	
 	void remove_from_most_recent(int id);
 	void update_most_played(); 
@@ -198,9 +160,9 @@ public:
 
 	void Menu();
 	void Print_Menu();
-	void Podcasts_Menu(const string& input);
-	/*void Add(string path, string song_name, string artist = "", string album = "",
-	string genre = "", string duration = "", int release_date =0);*/
+	void Podcasts_Menu(const std::string& input);
+	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
+	std::string genre = "", std::string duration = "", int release_date =0);*/
 };
 
 ostream& operator<<(ostream& os, const Library& lib);
