@@ -3,7 +3,7 @@
 
 //int AudioFile::id_code = 1;
 
-AudioFile::AudioFile(string file_name, string file_path, string duration, string release_date)
+AudioFile::AudioFile(std::string file_name, std::string file_path, std::string duration, std::string release_date)
 	: m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
 {
 	//m_id_code = id_code;
@@ -11,17 +11,17 @@ AudioFile::AudioFile(string file_name, string file_path, string duration, string
     set_duration(duration);
 }
 
-AudioFile::AudioFile(int id, string file_name, string file_path, string duration, string release_date)
+AudioFile::AudioFile(int id, std::string file_name, std::string file_path, std::string duration, std::string release_date)
     : m_id_code(id), m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
 {
     set_duration(duration);
 }
 
-const string& AudioFile::get_name() const {
+const std::string& AudioFile::get_name() const {
 	return m_file_name;
 }
 
-const string& AudioFile::get_path() const {
+const std::string& AudioFile::get_path() const {
 	return m_file_path;
 }
 
@@ -34,18 +34,18 @@ const Date& AudioFile::get_release_date() const
     return m_release_date;
 }
 
-const string& AudioFile::get_duration() const
+const std::string& AudioFile::get_duration() const
 {
     return m_duration;
 }
 
-void AudioFile::set_name(string& name)
+void AudioFile::set_name(std::string& name)
 {
 	m_file_name = name;
 }
 
 //works
-void AudioFile::set_duration(string& duration) //only allow m:ss ?
+void AudioFile::set_duration(std::string& duration) //only allow m:ss ?
 {
     int minutes, seconds;
     char delimiter;

@@ -12,10 +12,10 @@ private:
     Podcast* m_podcast;
 public:
     ////Returns the podcast's name to which the episode belongs to
-    //const string& get_series_name() const;
-    //void set_series_name(const string& podcast_name);
+    //const std::string& get_series_name() const;
+    //void set_series_name(const std::string& podcast_name);
     //Update the podcast's song
-    Episode(string file_path, string episode_name, Podcast* podcast, string release_date = "", string duration = "");
+    Episode(std::string file_path, std::string episode_name, Podcast* podcast, std::string release_date = "", std::string duration = "");
     Podcast* Get_Podcast() const;
     //Plays the episode
     void Play();

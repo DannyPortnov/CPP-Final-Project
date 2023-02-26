@@ -2,8 +2,8 @@
 
 int Song::song_id = 1;
 
-Song::Song(string song_name, string file_path,
-	string album, string singer, string genre, string release_date, string duration)
+Song::Song(std::string song_name, std::string file_path,
+	std::string album, std::string singer, std::string genre, std::string release_date, std::string duration)
 	: AudioFile(song_name, file_path, duration, release_date), m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(0)
 {
 	//to add duration calculation
@@ -11,8 +11,8 @@ Song::Song(string song_name, string file_path,
 	song_id++;
 }
 
-Song::Song(int id, string song_name, string file_path, string album, string singer, 
-	string genre, string release_date, string duration, int plays_count) :AudioFile(id, song_name, file_path, duration, release_date),
+Song::Song(int id, std::string song_name, std::string file_path, std::string album, std::string singer, 
+	std::string genre, std::string release_date, std::string duration, int plays_count) :AudioFile(id, song_name, file_path, duration, release_date),
 	m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(plays_count)
 {
 	song_id++;
@@ -20,27 +20,27 @@ Song::Song(int id, string song_name, string file_path, string album, string sing
 
 
 
-void Song::set_artist(string& artist) {
+void Song::set_artist(std::string& artist) {
 	m_artist = artist;
 }
-void Song::set_album(string& album) {
+void Song::set_album(std::string& album) {
 	m_album = album;
 }
-void Song::set_genre(string& genre) {
+void Song::set_genre(std::string& genre) {
 	m_genre = genre;
 }
 
-const string& Song::get_album() const
+const std::string& Song::get_album() const
 {
 	return m_album;
 }
 
-const string& Song::get_genre() const
+const std::string& Song::get_genre() const
 {
 	return m_genre;
 }
 
-const string& Song::get_artist() const
+const std::string& Song::get_artist() const
 {
 	return m_artist;
 }
@@ -51,16 +51,16 @@ const int Song::get_plays_count() const {
 
 
 void Song::print_playlists() const {
-	cout << "Playlists: ";
+	std::cout << "Playlists: ";
 	if (m_playlist_appearances.size() == 0) {
-		cout << " None.";
+		std::cout << " None.";
 		return;
 	}
 	unordered_set<string>::iterator it;
 	for (it = m_playlist_appearances.begin(); it != m_playlist_appearances.end(); it++) {
-		cout << *it << ", ";
+		std::cout << *it << ", ";
 	}
-	cout << endl;
+	std::cout << std::endl;
 }
 
 void Song::Play()
@@ -76,11 +76,11 @@ void Song::update_plays_counter() {
 	m_plays_counter += 1;
 }
 
-void Song::set_playlist_appearances(const string& playlist) {
+void Song::set_playlist_appearances(const std::string& playlist) {
 	m_playlist_appearances.insert(playlist);
 }
 
-void Song::remove_from_playlist(const string& playlist) {
+void Song::remove_from_playlist(const std::string& playlist) {
 	m_playlist_appearances.erase(playlist);
 }
 

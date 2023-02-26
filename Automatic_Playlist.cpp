@@ -2,11 +2,11 @@
 #include "Playlist.h"
 #include "Automatic_Playlist.h"
 
-Automatic_Playlist::Automatic_Playlist(string name, Library* library, Server* server) : Playlist(name, library, server) {}
+Automatic_Playlist::Automatic_Playlist(std::string name, Library* library, Server* server) : Playlist(name, library, server) {}
 
 inline void Automatic_Playlist::Print_Cannot_Edit_Error()
 {
-	cout << "This playlist cannot be edited!" << endl;
+	std::cout << "This playlist cannot be edited!" << std::endl;
 }
 
 //template <typename TCollection >
@@ -27,7 +27,7 @@ inline void Automatic_Playlist::Print_Cannot_Edit_Error()
 //	return;
 //}
 
-void Automatic_Playlist::save_playlist(string file_name, ios_base::openmode mode) {
+void Automatic_Playlist::save_playlist(std::string file_name, ios_base::openmode mode) {
 	return;
 }
 

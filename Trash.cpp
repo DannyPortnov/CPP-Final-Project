@@ -8,9 +8,9 @@ Trash::Trash(Library* library, Server* server) : Playlist(Trash_Name, library, s
 
 
 void Trash::add_song_to_playlist(Song* song) {
-	string prompt = "Did you mean to move this song to trash? y/n: ";
-	string reject_message = "The song wasn't added to " + m_playlist_name + "!";
-	string accept_message = "";
+	std::string prompt = "Did you mean to move this song to trash? y/n: ";
+	std::string reject_message = "The song wasn't added to " + m_playlist_name + "!";
+	std::string accept_message = "";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		add_to_trash(song);
 		return;
@@ -19,11 +19,11 @@ void Trash::add_song_to_playlist(Song* song) {
 
 // will be called when the user would like to restore a song from trash
 void Trash::remove_song_from_playlist(Song* song) {
-	cout << "You chose to restore the song: " << endl;
-	cout << *song << endl;
-	string prompt = "Are you sure that you want to restore this song? y/n: ";
-	string reject_message = "Song is still in Trash";
-	string accept_message = "Song was successfully restored!";
+	cout << "You chose to restore the song: " << std::endl;
+	cout << *song << std::endl;
+	std::string prompt = "Are you sure that you want to restore this song? y/n: ";
+	std::string reject_message = "Song is still in Trash";
+	std::string accept_message = "Song was successfully restored!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		Playlist::remove_song_from_playlist(song, false);
 		return;
@@ -32,9 +32,9 @@ void Trash::remove_song_from_playlist(Song* song) {
 
 // called when trying to delete Deleted songs playlist
 void Trash::clear_all_playlist() {
-	string prompt = "Are you sure that you want to empty Trash and permanently delete it's content? y/n: ";
-	string reject_message = "Trash list wasn't emptied!";
-	string accept_message = "Trash is empty, all songs were permanently deleted!";
+	std::string prompt = "Are you sure that you want to empty Trash and permanently delete it's content? y/n: ";
+	std::string reject_message = "Trash list wasn't emptied!";
+	std::string accept_message = "Trash is empty, all songs were permanently deleted!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		multiset<Song*>::iterator it;
 		for (it = m_songs.begin(); it != m_songs.end(); it++) {
@@ -55,9 +55,9 @@ void Trash::add_to_trash(Song* song, bool add_print) { //todo: add boolean
 		return;
 	}
 
-	string prompt = "Are you sure that you want to move this song to trash? y/n: ";
-	string reject_message = "The song wasn't added to " + m_playlist_name + "!";
-	string accept_message = "The song was successfully added to " + m_playlist_name + "!";
+	std::string prompt = "Are you sure that you want to move this song to trash? y/n: ";
+	std::string reject_message = "The song wasn't added to " + m_playlist_name + "!";
+	std::string accept_message = "The song was successfully added to " + m_playlist_name + "!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		Playlist::add_song_to_playlist(song);
 		return;
@@ -87,6 +87,6 @@ void Trash::add_to_trash(Song* song, bool add_print) { //todo: add boolean
 //		return;
 //	}
 //	for (auto& song : m_songs) {
-//		write_playlist << song->get_id() << endl;
+//		write_playlist << song->get_id() << std::endl;
 //	}
 //}

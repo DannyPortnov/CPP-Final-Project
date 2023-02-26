@@ -56,7 +56,7 @@ Date& DailyMix::get_date_from_file() {
 	if (!Utilities::Is_File_Valid(m_dailymix_file) || Utilities::Is_End_Of_File_Or_Empty(m_dailymix_file)) {
 		return default_date;
 	}
-	string date;
+	std::string date;
 	getline(m_dailymix_file, date);
 	Date saved_date(date);
 	return saved_date;
@@ -78,10 +78,10 @@ bool DailyMix::check_if_date_changed(Date& new_date) {
 // or to leave the mix with less songs until the next day
 void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
 
-	cout << "A song was deleted from " << m_playlist_name << "." << endl;
-	string prompt = "Would you like to regenerate " + m_playlist_name + "? y/n: ";
-	string reject_message = m_playlist_name + " wasn't regenerated!";
-	string accept_message = m_playlist_name + " was regenerated successfully!";
+	std::cout << "A song was deleted from " << m_playlist_name << "." << std::endl;
+	std::string prompt = "Would you like to regenerate " + m_playlist_name + "? y/n: ";
+	std::string reject_message = m_playlist_name + " wasn't regenerated!";
+	std::string accept_message = m_playlist_name + " was regenerated successfully!";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		Playlist::clear_all_playlist(false); // don't add prints
 		generate_daily_mix();
@@ -93,19 +93,19 @@ void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
 
 
 // deserialization for daily mix
-void DailyMix::save_playlist(string file_name, ios_base::openmode mode) {
+void DailyMix::save_playlist(std::string file_name, ios_base::openmode mode) {
 
 	ofstream write("c:\\temp\\" + m_playlist_name + ".dat", ios::out);
 	if (!Utilities::Is_File_Valid(write)) {
 		return;
 	}
-	// Write the string to the file first
-	write << m_last_date_saved << endl;
+	// Write the std::string to the file first
+	write << m_last_date_saved << std::endl;
 	// Write the song data to the file
 	multiset<Song*>::iterator itr;
 	for (itr = m_songs.begin(); itr != m_songs.end(); itr++)
 	{
-		write << (*itr)->get_id() << endl;
+		write << (*itr)->get_id() << std::endl;
 	}
 	write.close();
 }

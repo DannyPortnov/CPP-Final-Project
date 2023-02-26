@@ -10,8 +10,8 @@ Date::Date() {
 }
 
 //todo: maybe check if the date that was entered is valid (main or here).
-//constructor that creates an instance by string
-Date::Date(string date) {
+//constructor that creates an instance by std::string
+Date::Date(std::string date) {
     if (date.empty()) {
         m_date = "00/00/1900";
         set_date_from_string(m_date);
@@ -33,8 +33,8 @@ Date& Date::init(int d, int m, int y) {
 }
 
 // extract date in format: "d/m/yyyy" to day, month, year
-void Date::set_date_from_string(string date) {
-    stringstream ss(date);
+void Date::set_date_from_string(std::string date) {
+    std::stringstream ss(date);
     int day, month, year;
     char delimiter = '/'; // we do not need to explicitly define the delimiter variable as "/" 
     // because it is the default delimiter used by the '>>' operator.
@@ -46,25 +46,25 @@ void Date::set_date_from_string(string date) {
 void Date::set_date() {
     bool invalid_answer = true;
     while (invalid_answer) {
-        cout << "Enter the date in the following format- dd/mm/yyyy: ";
-        string answer; cin >> answer; cout << endl;
+        std::cout << "Enter the date in the following format- dd/mm/yyyy: ";
+        std::string answer; cin >> answer; std::cout << std::endl;
         if (is_date_valid(answer) == true) {
             set_date_from_string(answer);
             create_formated_date_string(m_date);
-            cout << "Date was successfully set!" << endl;
+            std::cout << "Date was successfully set!" << std::endl;
             return;
         }
         else {
             bool invalid_char = true;
             while (invalid_char) {
-                cout << "Still want to set date? y/n: ";
-                char answer; cin >> answer; cout << endl;
+                std::cout << "Still want to set date? y/n: ";
+                char answer; cin >> answer; std::cout << std::endl;
                 if (answer == 'n') {
-                    cout << "Date was not set." << endl;
+                    std::cout << "Date was not set." << std::endl;
                     return;
                 }
                 else if (answer == 'y') {
-                    cout << "Try again. " << endl;
+                    std::cout << "Try again. " << std::endl;
                     invalid_char = false;
                 }
             }
@@ -73,24 +73,24 @@ void Date::set_date() {
 }
 
 //checks if date is valid in order to allow to change it
-bool Date::is_date_valid(string date) {
+bool Date::is_date_valid(std::string date) {
     regex pattern("\\d{2}/\\d{2}/\\d{4}");
     bool valid_pattern = regex_match(date, pattern);
     if (valid_pattern == false) {
-        cout << date << " is not a valid date format" << endl;
+        std::cout << date << " is not a valid date format" << std::endl;
         return false;
     }
-    stringstream ss(date);
+    std::stringstream ss(date);
     int day, month, year;
     char delimiter = '/';
     ss >> day >> delimiter >> month >> delimiter >> year;
     if (month < 0 || month > 12) {
-        cout << "Invalid date! Month isn't 1-12"<< endl;
+        std::cout << "Invalid date! Month isn't 1-12"<< std::endl;
         return false;
     }
     int max_day = days_in_each_month(is_leap_year(year))[month];
     if (day > max_day || day < 0) {
-        cout << "Invalid date! Day cannot be bigger than " << max_day << " Or less than 0" << endl;
+        std::cout << "Invalid date! Day cannot be bigger than " << max_day << " Or less than 0" << std::endl;
         return false;
     }
     return true;
@@ -112,9 +112,9 @@ int* days_in_each_month(bool is_leap_year) {
     return array_of_days;
 }
 
-// creates a string in the format dd/mm/yyyy
-void Date::create_formated_date_string(string& date) {
-    stringstream ss;
+// creates a std::string in the format dd/mm/yyyy
+void Date::create_formated_date_string(std::string& date) {
+    std::stringstream ss;
     if (m_month < 10 && m_day < 10)
         ss << "0" << m_day << "/0" << m_month << "/"  << m_year;
     else if (m_month < 10)
@@ -124,8 +124,8 @@ void Date::create_formated_date_string(string& date) {
     date = ss.str();
 }
 
-// returns the date as a string in format dd/mm/yyyy
-string& Date::get_date_as_string() {
+// returns the date as a std::string in format dd/mm/yyyy
+std::string& Date::get_date_as_string() {
     return m_date;
 }
 

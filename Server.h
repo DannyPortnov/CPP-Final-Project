@@ -47,7 +47,7 @@ private:
 
 	multimap<int, Song*>* m_most_played; // songs in an oreder from least played to most played
 
-	unordered_multimap<string, Song*>* find_all(string& key, unordered_multimap<string, Song*>* collection);
+	unordered_multimap<string, Song*>* find_all(std::string& key, unordered_multimap<string, Song*>* collection);
 
 	template<class T>
 	void remove_song_from_collection(T* songs_by_field, Song* song);
@@ -79,28 +79,28 @@ public:
 	multimap<int, Song*>* get_most_played();
 
 	Episode* find_episode_by_id(int id); // returns 1 episode, there is a unique ID for every episode
-	Episode* find_episode_by_name(string name);
-	Podcast* find_podcast_by_name(string name);
+	Episode* find_episode_by_name(std::string name);
+	Podcast* find_podcast_by_name(std::string name);
 	Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 	//search the data structures based on a parameter
-	unordered_multimap<string, Song*>* find_by_name(string& name);
-	unordered_multimap<string, Song*>* find_by_artist(string& singer);
-	unordered_multimap<string, Song*>* find_by_album(string& album);
-	unordered_multimap<string, Song*>* find_by_genre(string& genre);
+	unordered_multimap<string, Song*>* find_by_name(std::string& name);
+	unordered_multimap<string, Song*>* find_by_artist(std::string& singer);
+	unordered_multimap<string, Song*>* find_by_album(std::string& album);
+	unordered_multimap<string, Song*>* find_by_genre(std::string& genre);
 
 
 	//Checks if song was already added to server
-	bool Does_Song_Exist(const string& file_path);
+	bool Does_Song_Exist(const std::string& file_path);
 	//Checks if episode was already added to server
-	bool Does_Episode_Exist(string& episode_name);
-	bool Does_Podcast_Exist(string& podcast_name);
+	bool Does_Episode_Exist(std::string& episode_name);
+	bool Does_Podcast_Exist(std::string& podcast_name);
 
 	//Allocates memory for the new song and adds to each data structure
-	void Upload_Song(string song_name, string file_path, string artist = "",
-		string album = "", string genre = "", string duration = "", string release_Date = "");
+	void Upload_Song(std::string song_name, std::string file_path, std::string artist = "",
+		std::string album = "", std::string genre = "", std::string duration = "", std::string release_Date = "");
 	//Creates an episode and adds to a podcast. If podcast doesn't exist creates one. If episodes exists doesn't do anything
-	void Upload_Episode_To_Podcast(Podcast* podcast, string episode_name, string podcast_name, string file_path,
-		string duration, string release_Date);
+	void Upload_Episode_To_Podcast(Podcast* podcast, std::string episode_name, std::string podcast_name, std::string file_path,
+		std::string duration, std::string release_Date);
 
 	//Loads all songs saved on file (serialization)
 	void Restore_Songs(); //works
@@ -129,8 +129,8 @@ public:
 	void Permanent_Delete_Podcast(Podcast* podcast);
 
 	//updates an existing song - did that in Library
-//static void Update(string song_name, string new_name = "", string artist = "", string album = ""
-//	, string genre = "", string duration = "");
+//static void Update(std::string song_name, std::string new_name = "", std::string artist = "", std::string album = ""
+//	, std::string genre = "", std::string duration = "");
 };
 #endif
 

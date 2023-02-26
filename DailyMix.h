@@ -36,7 +36,7 @@ public:
 	void set_date(); // sets the date- checks if day was changed.
 	void remove_song_from_playlist(Song* song, bool make_sure = true);
 	//void save_dailymix();
-	void save_playlist(string file_name, ios_base::openmode mode = ios::out);
+	void save_playlist(std::string file_name, ios_base::openmode mode = ios::out);
 	void restore_playlist();
 };
 

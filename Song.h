@@ -7,7 +7,7 @@
 //#include <Phonon/MediaObject>
 #include <iostream>
 #include <unordered_set>
-//#include <Qstring>
+//#include <Qstd::string>
 //#include <ctime>
 //#include <chrono>
 //using namespace std::chrono;
@@ -18,33 +18,33 @@ using namespace std;
 class Song : public AudioFile
 {
 private:
-	string m_artist;
-	string m_album;
-	string m_genre;
+	std::string m_artist;
+	std::string m_album;
+	std::string m_genre;
 	static int song_id;
 	//int m_song_id;
 	int m_plays_counter; // counter for the amount of times the song was played
 	unordered_set<string> m_playlist_appearances; // stores the names of the playlists that have this song
 public:
 	
-	Song(string song_name, string file_path,
-	string album="",string artist="", string genre="", string release_date="", string duration = "");
+	Song(std::string song_name, std::string file_path,
+	std::string album="",std::string artist="", std::string genre="", std::string release_date="", std::string duration = "");
 	//works
-	Song(int id, string song_name, string file_path,
-		string album, string singer, string genre, string release_date, string duration, int plays_count);
+	Song(int id, std::string song_name, std::string file_path,
+		std::string album, std::string singer, std::string genre, std::string release_date, std::string duration, int plays_count);
 	void Play(); //plays a song // todo: maybe to move to an abstract class: audioFile
 	
-	const string& get_album() const; 
-	const string& get_genre() const;
-	const string& get_artist() const;
+	const std::string& get_album() const; 
+	const std::string& get_genre() const;
+	const std::string& get_artist() const;
 	const int get_plays_count() const;
 	unordered_set<string>* get_playlist_appearances();
 
-	void set_artist(string& artist);
-	void set_album(string& album);
-	void set_genre(string& genre);
-	void set_playlist_appearances(const string& playlist);
-	void remove_from_playlist(const string& playlist);
+	void set_artist(std::string& artist);
+	void set_album(std::string& album);
+	void set_genre(std::string& genre);
+	void set_playlist_appearances(const std::string& playlist);
+	void remove_from_playlist(const std::string& playlist);
 	void clear_from_all_playlists();
 
 	void update_plays_counter();

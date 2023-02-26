@@ -1,7 +1,7 @@
 #include "Podcast.h"
 #include "Episode.h"
 
-Podcast::Podcast(string podcast_name) : m_podcast_name(podcast_name), m_podcast_episodes() {}
+Podcast::Podcast(std::string podcast_name) : m_podcast_name(podcast_name), m_podcast_episodes() {}
 
 Podcast::~Podcast()
 {
@@ -32,16 +32,16 @@ void Podcast::Delete_Episode(Episode* episode)
 }
 
 //Chooses the first episode and returns the podcast's name from that
-const string& Podcast::Get_Podcast_Name()
+const std::string& Podcast::Get_Podcast_Name()
 {
 	return m_podcast_name;
 }
-//bool Podcast::Is_Episode_In_Podcast(const string& episode_name)
+//bool Podcast::Is_Episode_In_Podcast(const std::string& episode_name)
 //{
 //	return m_episode_names.count(episode_name) > 0;
 //}
 //Updates for each episode the series name
-void Podcast::Set_Podcast_Name(const string& new_name)
+void Podcast::Set_Podcast_Name(const std::string& new_name)
 {
 	m_podcast_name = new_name;
 	//for (auto itr = m_podcast_episodes.begin(); itr != m_podcast_episodes.end(); itr++)
@@ -54,7 +54,7 @@ void Podcast::Play()
 {
 	for (Episode* episode : m_podcast_episodes) {
 		episode->Play();
-		cout << "Would you like to continue playing " << m_podcast_name << "? y if yes, anything else no ";
+		std::cout << "Would you like to continue playing " << m_podcast_name << "? y if yes, anything else no ";
 		char answer;
 		cin >> answer;
 		if (answer != 'y') {
