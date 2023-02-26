@@ -43,22 +43,22 @@ void Main_Menu() {
 	std::cout << " Library" << std::endl;
 	std::cout << " Playlists" << std::endl;
 	std::cout << " Help" << std::endl;
-	std::cout << " Back" << std::endl;
+	std::cout << " Back\n" << std::endl;
 }
 
 void mp3player() {
 	std::string answer;
-	bool run_program = false;
+	bool run_program = true;
 	Library lib;
 	MethodMap methodmap;
 	std::string key = "hello";
 	// ** How to use MethodMap for parameter-less methods ** //
-	methodmap.Insert<std::string>("second", &Library::Example_Func_For_MethodMap); //Add method to map with its key
-	//methodmap.Insert<void>("first", &Library::Example_Func_For_MethodMap); //Add method to map with its key
-	methodmap.Insert("third", &Library::Example2_Func_For_MethodMap);
-	methodmap.Call<void>("first", &lib); // Call method that belongs to its key
-	methodmap.Call<void>("second", &lib, std::string("wow")); // Call method that belongs to its key
-	methodmap.Call<void>("third", &lib, std::string("wow")); // Call method that belongs to its key
+	//methodmap.Insert<std::string>("second", &Library::Example_Func_For_MethodMap); //Add method to map with its key
+	////methodmap.Insert<void>("first", &Library::Example_Func_For_MethodMap); //Add method to map with its key
+	//methodmap.Insert("third", &Library::Example2_Func_For_MethodMap);
+	//methodmap.Call<void>("first", &lib); // Call method that belongs to its key
+	//methodmap.Call<void>("second", &lib, std::string("wow")); // Call method that belongs to its key
+	//methodmap.Call<void>("third", &lib, std::string("wow")); // Call method that belongs to its key
 	// ** How to use MethodMap for methods with any parameters** //
 	//MethodMap methodmapWithParameters; //Specify the parameters the method gets
 	//key = "Test";
@@ -69,43 +69,44 @@ void mp3player() {
 	while (run_program) {
 		std::cout << "Welcome To mp3player" << std::endl;
 		std::cout << std::endl;
-
+		Main_Menu();
 //		std::cout << "To continue press (1), To print board press (2), To end game press (0):" << std::endl;
 		cin >> answer;
 
 		switch (Utilities::hashit(answer))
 		{
-		case(eDailyMix): {
+			case(eDailyMix): {
 
-			break;
-		}
-		case(eSearch): {
+				break;
+			}
+			case(eSearch): {
 
-			break;
-		}
-		case(ePodcast): {
+				break;
+			}
+			case(ePodcast): {
+				lib.Podcasts_Menu();
+				break;
+			}
+			case(eLibrary): {
 
-			break;
-		}
-		case(eLibrary): {
+				break;
+			}
+			case(ePlaylists): {
 
-			break;
-		}
-		case(ePlaylists): {
-
-			break;
-		}
-		case(eHelp): {
-			Main_Menu();
-			break;
-		}
-		case(eBack): {
-
-			break;
-		}
-		default: {
-			std::cout << "Wrong Key Was PRESSED!!! Please Try Another Time" << std::endl;
-		}
+				break;
+			}
+			case(eHelp): {
+				Main_Menu();
+				break;
+			}
+			case(eBack): {
+				run_program=false;
+				break;
+			}
+			default: {
+				std::cout << "Wrong Key Was PRESSED!!! Please Try Another Time" << std::endl;
+				break;
+			}
 		}
 
 		std::cout << std::endl;

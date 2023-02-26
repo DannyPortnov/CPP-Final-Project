@@ -1,5 +1,6 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
+#define NOMINMAX //HAS TO BE FIRST
 #include "Song.h"
 #define   _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -15,6 +16,7 @@
 #include <unordered_map>
 #include <array>
 #include <fstream>
+#include <limits> 
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -160,7 +162,7 @@ public:
 
 	void Menu();
 	void Print_Menu();
-	void Podcasts_Menu(const std::string& input);
+	void Podcasts_Menu();
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 
