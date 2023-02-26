@@ -20,7 +20,25 @@ enum string_code {
 	ePlay,
 	eDelete,
 	eHelp,
-	eBack
+	eBack,
+	eMore,
+	eList,
+	eAdd,
+	eUpdate,
+	/*eUpdateSongByName,
+	eUpdateSongById,
+	eDeleteSongByName,
+	eDeleteSongById,
+	ePrintSongByName,
+	ePrintSongById,*/
+	ePrintSong,
+	eAdd2PL,
+	eRemoveFromPL,
+	ePrintPL,
+	/*ePlaySongByName,
+	ePlaySongById,*/
+	ePlayAll,
+	ePlayRandom,
 };
 
 class Utilities

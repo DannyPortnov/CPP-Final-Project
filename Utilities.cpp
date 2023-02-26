@@ -11,6 +11,27 @@ string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "Playlists") return ePlaylists;
 	if (inString == "Help") return eHelp;
 	if (inString == "Back") return eBack;
+	if (inString == "More") return eMore;
+	if (inString == "List") return eList;
+	if (inString == "Add") return eAdd;
+	if (inString == "Update") return eUpdate;
+	//if (inString == "Update song by using name") return eUpdateSongByName;
+	//if (inString == "Update song by using id") return eUpdateSongById;
+	//if (inString == "Delete song by using name") return eDeleteSongByName;
+	//if (inString == "Delete song by using id") return eDeleteSongById;
+	if (inString == "Delete") return eDelete;
+	//if (inString == "Print song by using name") return ePrintSongByName;
+	//if (inString == "Print song by using id") return ePrintSongById;
+	if (inString == "PrintSong") return ePrintSong;
+	if (inString == "Add2PL") return eAdd2PL;
+	if (inString == "RemoveFromPL") return eRemoveFromPL;
+	if (inString == "PrintPL") return ePrintPL;
+	//if (inString == "Play song by using name") return ePlaySongByName;
+	//if (inString == "Play song by using id") return ePlaySongById;
+	if (inString == "PlayAll") return ePlayAll;
+	if (inString == "PlayRandom") return ePlayRandom;
+	if (inString == "Help") return eHelp;
+	if (inString == "Back") return eBack;
 }
 
 //todo: put regex and use refs
@@ -71,7 +92,7 @@ bool Utilities::Is_End_Of_File_Or_Empty(ifstream& fileToCheck)
 bool Utilities::Is_File_Valid(ios& fileToCheck) //todo: add promt to create folder if doesn't exist, or check for a command that creates the folder
 {
 	if (!fileToCheck) { //todo: pass the file name also
-		cout << "Couldn't open file for serialization or deserialization" << endl;
+		std::cout << "Couldn't open file for serialization or deserialization" << endl;
 		return false;
 	}
 	return true;
@@ -80,18 +101,18 @@ bool Utilities::Is_File_Valid(ios& fileToCheck) //todo: add promt to create fold
 // create general prompt function for dialog with user
 bool Utilities::user_prompts_and_dialog(string& prompt_message, string& reject_message, string& accept_message) {
 	while (true) {
-		cout << prompt_message << " "; // answer is y/n
+		std::cout << prompt_message << " "; // answer is y/n
 		string answer; //todo: mabye switch back to char
-		cin >> answer; cout << endl;
+		cin >> answer; std::cout << endl;
 		if (answer == "n") {
-			cout << reject_message << endl;
+			std::cout << reject_message << endl;
 			return false;
 		}
 		else if (answer == "y") {
-			cout << accept_message << endl;
+			std::cout << accept_message << endl;
 			return true;
 		}
-		cout << "Invalid answer! try again." << endl;
+		std::cout << "Invalid answer! try again." << endl;
 	}
 
 }
