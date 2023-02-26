@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,6 +134,7 @@
     <ClInclude Include="Automatic_Playlist.h" />
     <ClInclude Include="DailyMix.h" />
     <ClInclude Include="Date.h" />
+    <ClInclude Include="MethodMap.h" />
     <ClInclude Include="Trash.h" />
     <ClInclude Include="Episode.h" />
     <ClInclude Include="Favorites.h" />
@@ -150,6 +153,7 @@
     <ClCompile Include="Automatic_Playlist.cpp" />
     <ClCompile Include="DailyMix.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="MethodMap.cpp" />
     <ClCompile Include="Trash.cpp" />
     <ClCompile Include="Episode.cpp" />
     <ClCompile Include="Favorites.cpp" />
