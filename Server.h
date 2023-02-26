@@ -20,7 +20,8 @@ using namespace std;
 #endif
 #endif  // _DEBUG
 
-#define max_recents 30 // 30 and not 10 because we want to save some spare songs
+//Why do we need this??
+//#define max_recents 30 // 30 and not 10 because we want to save some spare songs 
 
 
 class Server {
