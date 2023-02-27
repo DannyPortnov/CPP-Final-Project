@@ -163,3 +163,11 @@ bool operator<(const Date& date1, const Date& date2) {
     }
     return false;
 }
+
+//returns true if date is the same as date2, otherwise false.
+bool Date::operator==(const Date& date2) {
+    if (m_date == date2.m_date) {
+        return true;
+    }
+    return false;
+}
