@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include <array>
 #include <fstream>
+#include <regex>
+#include <optional>
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
