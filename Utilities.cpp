@@ -37,17 +37,17 @@ string_code Utilities::hashit(std::string const& inString) {
 }
 
 //todo: put regex and use refs
-void Utilities::Replace_All(vector<string*>& params, bool is_serialization)
+void Utilities::Replace_All(std::vector<std::string*>& params, bool is_serialization)
 {
 	// REGEX IMPLEMENTATION:
-	string charToRemove = " ", charToReplaceWith = "_"; //if there's any '_', replace them with ' '
+	std::string charToRemove = " ", charToReplaceWith = "_"; //if there's any '_', replace them with ' '
 	if (is_serialization) {
 		charToRemove = "_";
 		charToReplaceWith = " ";
 	}
 
 	for (auto param : params) {
-		regex pattern(charToRemove);
+		std::regex pattern(charToRemove);
 		*param = regex_replace(*param, pattern, charToReplaceWith);
 	}
 
@@ -64,7 +64,7 @@ void Utilities::Replace_All(vector<string*>& params, bool is_serialization)
 
 }
 
-bool Utilities::Is_End_Of_File(ios_base& fileToCheck)
+bool Utilities::Is_End_Of_File(std::ios_base& fileToCheck)
 {
 	std::istream* input = dynamic_cast<std::istream*>(&fileToCheck);
 	if (!input) {
@@ -80,7 +80,7 @@ bool Utilities::Is_End_Of_File(ios_base& fileToCheck)
 	}
 	return false;
 }
-bool Utilities::Is_End_Of_File_Or_Empty(ifstream& fileToCheck)
+bool Utilities::Is_End_Of_File_Or_Empty(std::ifstream& fileToCheck)
 {
 	//first condition: file is empty, second: finished reading
 	auto first = fileToCheck.peek(); //todo: temporary, to be removed after testing
@@ -91,30 +91,30 @@ bool Utilities::Is_End_Of_File_Or_Empty(ifstream& fileToCheck)
 	return false;
 }
 
-bool Utilities::Is_File_Valid(ios& fileToCheck) //todo: add promt to create folder if doesn't exist, or check for a command that creates the folder
+bool Utilities::Is_File_Valid(std::ios& fileToCheck) //todo: add promt to create folder if doesn't exist, or check for a command that creates the folder
 {
 	if (!fileToCheck) { //todo: pass the file name also
-		std::cout << "Couldn't open file for serialization or deserialization" << endl;
+		std::cout << "Couldn't open file for serialization or deserialization" << std::endl;
 		return false;
 	}
 	return true;
 }
 
 // create general prompt function for dialog with user
-bool Utilities::user_prompts_and_dialog(string& prompt_message, string& reject_message, string& accept_message) {
+bool Utilities::user_prompts_and_dialog(std::string& prompt_message, std::string& reject_message, std::string& accept_message) {
 	while (true) {
 		std::cout << prompt_message << " "; // answer is y/n
-		string answer; //todo: mabye switch back to char
-		cin >> answer; std::cout << endl;
+		std::string answer; //todo: mabye switch back to char
+		std::cin >> answer; std::cout << std::endl;
 		if (answer == "n") {
-			std::cout << reject_message << endl;
+			std::cout << reject_message << std::endl;
 			return false;
 		}
 		else if (answer == "y") {
-			std::cout << accept_message << endl;
+			std::cout << accept_message << std::endl;
 			return true;
 		}
-		std::cout << "Invalid answer! try again." << endl;
+		std::cout << "Invalid answer! try again." << std::endl;
 	}
 
 }
