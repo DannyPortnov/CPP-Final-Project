@@ -105,13 +105,13 @@ std::ostream& operator<<(std::ostream& os, const Song& song)
 {
 	os << static_cast<const AudioFile&>(song); // call AudioFile's operator<<
 	if (song.m_album != "") {
-		os<< "Album: " << song.m_album;
+		os<< "Album: " << song.m_album << "\n";
 	}
 	if (song.m_artist != "") {
-		os<< ", by " << song.m_artist;
+		os<< "Artist: " << song.m_artist << "\n";
 	}
 	if (song.m_genre != "") {
-		os << ", " << song.m_genre << "genre";
+		os << "Genre: " << song.m_genre << std::endl;
 	}
 	song.print_playlists();
 	return os;
