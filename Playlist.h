@@ -53,7 +53,7 @@ public:
 	std::string get_name() const { return m_playlist_name; }
 	void Play();
 	void Play_Random();
-	void Print();
+//	void Print();
 	std::multiset<Song*> get_songs();
 	bool check_if_song_exist_in_playlist_by_id(int id); //works
 	Song* get_song_by_name(std::string song_name);
@@ -65,6 +65,8 @@ public:
 //friend bool operator<(Playlist* a, Playlist* b);
 
 friend bool operator<(const Playlist& a, const Playlist& b); //todo: check if we need this
+friend std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
+
 //friend bool operator!=(const Playlist& a, const Playlist& b);
 
 
@@ -73,6 +75,8 @@ friend bool operator<(const Playlist& a, const Playlist& b); //todo: check if we
 // todo: implement operator < in order std::set stl will be able to sort
 //bool operator<(Playlist* a, Playlist* b);
 bool operator<(const Playlist& a, const Playlist& b);
+std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
+
 //bool operator!=(const Playlist& a, const Playlist& b);
 
 

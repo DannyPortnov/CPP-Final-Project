@@ -17,6 +17,8 @@
 #include <array>
 #include <fstream>
 #include <limits> 
+#include <regex>
+#include <optional>
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -118,6 +120,7 @@ public:
 	void PrintPL();
 	void PrintSong(int id);
 	void PrintSong(std::string song_name);
+	void PrintPlaylist(std::string playlist_name); // print a specific playlist data
 
 	void Update_Song(std::string song_name, std::string new_name = "", std::string artist = "",
 	 std::string album = "", std::string genre = "", std::string duration = "", std::string release_date ="");
@@ -158,8 +161,10 @@ public:
 	void update_most_played(); 
 	void remove_from_daily_mix(Song* song);
 
-	void Menu();
-	void Print_Menu();
+	void Library_Menu();
+	void Print_Library_Menu();
+	void Playlists_Menu();
+	void Print_Playlists_Menu();
 	void Podcasts_Menu();
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/

@@ -20,6 +20,7 @@ string_code Utilities::hashit(std::string const& inString) {
 	//if (inString == "Delete song by using name") return eDeleteSongByName;
 	//if (inString == "Delete song by using id") return eDeleteSongById;
 	if (inString == "Delete") return eDelete;
+	if (inString == "PrintSong") return ePrintSong;
 	//if (inString == "Print song by using name") return ePrintSongByName;
 	//if (inString == "Print song by using id") return ePrintSongById;
 	if (inString == "PrintSong") return ePrintSong;
@@ -28,6 +29,7 @@ string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "PrintPL") return ePrintPL;
 	//if (inString == "Play song by using name") return ePlaySongByName;
 	//if (inString == "Play song by using id") return ePlaySongById;
+	if (inString == "Play") return ePlay;
 	if (inString == "PlayAll") return ePlayAll;
 	if (inString == "Play") return ePlay;
 	if (inString == "PlayRandom") return ePlayRandom;
