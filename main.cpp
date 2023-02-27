@@ -52,19 +52,13 @@ void mp3player() {
 	Library lib;
 	MethodMap methodmap;
 	std::string key = "hello";
-	// ** How to use MethodMap for parameter-less methods ** //
-	//methodmap.Insert<std::string>("second", &Library::Example_Func_For_MethodMap); //Add method to map with its key
-	////methodmap.Insert<void>("first", &Library::Example_Func_For_MethodMap); //Add method to map with its key
-	//methodmap.Insert("third", &Library::Example2_Func_For_MethodMap);
-	//methodmap.Call<void>("first", &lib); // Call method that belongs to its key
-	//methodmap.Call<void>("second", &lib, std::string("wow")); // Call method that belongs to its key
-	//methodmap.Call<void>("third", &lib, std::string("wow")); // Call method that belongs to its key
 	// ** How to use MethodMap for methods with any parameters** //
-	//MethodMap methodmapWithParameters; //Specify the parameters the method gets
-	//key = "Test";
-	//std::string plname = "name";
-	//methodmapWithParameters.Insert(key, &Library::PlayPlaylist);
-	//methodmapWithParameters.Call(key, &lib, "name"); //Pass the parameter here
+	methodmap.Insert<std::string>("second", &Library::Example_Func_For_MethodMap); //Add method to map with its key
+	//methodmap.Insert<void>("first", &Library::Example_Func_For_MethodMap); //Add method to map with its key
+	methodmap.Insert("third", &Library::Example2_Func_For_MethodMap);
+	methodmap.Call<void>("first", &lib); // Call method that belongs to its key
+	methodmap.Call<void>("second", &lib, std::string("wow")); // Call method that belongs to its key
+	methodmap.Call<void>("third", &lib, std::string("wow")); // Call method that belongs to its key
 	//** **//
 	while (run_program) {
 		std::cout << "Welcome To mp3player" << std::endl;
