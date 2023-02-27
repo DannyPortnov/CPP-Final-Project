@@ -90,16 +90,6 @@ void Playlist::Play_Random() {
 }
 
 
-//print the playlist's content - songs in the playlist (organized alphabetically)
-void Playlist::Print() {
-	multiset<Song*>::iterator it;
-	int i = 1;
-	std::cout << "List of songs in " << m_playlist_name << " playlist:" << std::endl;
-	for (it = m_songs.begin(); it != m_songs.end(); it++) {
-		std::cout << "(" << i << "). " << *(it) << std::endl; // it->second contains Song*
-		i++;
-	}
-}
 
 //returns the playlist
 multiset<Song*> Playlist::get_songs() {
@@ -242,6 +232,31 @@ Song* Playlist::get_song_by_name(std::string song_name)
 	advance(iterator, answer - 1);
 	return iterator->second;
 }
+
+
+//print the playlist's content - songs in the playlist (organized alphabetically)
+void Playlist::Print() {
+	multiset<Song*>::iterator it;
+	int i = 1;
+	std::cout << "List of songs in " << m_playlist_name << " playlist:" << std::endl;
+	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+		std::cout << "(" << i << "). " << *(it) << std::endl; // it->second contains Song*
+		i++;
+	}
+}
+
+
+ostream& operator<<(ostream& os, const Playlist& playlist) {
+	multiset<Song*>::iterator it;
+	int i = 1;
+	os << "List of songs in " << playlist.m_playlist_name << " playlist:" << std::endl;
+	for (it = playlist.m_songs.begin(); it != playlist.m_songs.end(); it++) {
+		os << "(" << i << "). " << *(it) << std::endl; // it->second contains Song*
+		i++;
+	}
+	return os;
+}
+
 
 
 // check if a song exist in the playlist by id, return true if exist

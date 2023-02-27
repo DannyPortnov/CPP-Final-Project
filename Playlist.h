@@ -65,6 +65,8 @@ public:
 //friend bool operator<(Playlist* a, Playlist* b);
 
 friend bool operator<(const Playlist& a, const Playlist& b); //todo: check if we need this
+friend ostream& operator<<(ostream& os, const Playlist& playlist);
+
 //friend bool operator!=(const Playlist& a, const Playlist& b);
 
 
@@ -73,6 +75,8 @@ friend bool operator<(const Playlist& a, const Playlist& b); //todo: check if we
 // todo: implement operator < in order set stl will be able to sort
 //bool operator<(Playlist* a, Playlist* b);
 bool operator<(const Playlist& a, const Playlist& b);
+ostream& operator<<(ostream& os, const Playlist& playlist);
+
 //bool operator!=(const Playlist& a, const Playlist& b);
 
 
