@@ -463,7 +463,7 @@ void Library::PlayAll(MapType<string, Song*>* songs_to_play) {
 }
 
 // PlayAll with no function template
-void Library::PlayAll() {
+void Library::PlayAll() { //todo: don't ask after last song
 	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		std::cout << "There are no songs in the library." << std::endl;

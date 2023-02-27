@@ -72,6 +72,7 @@ void Playlist::Play_Songs(const std::string& message, bool shuffle) {
 		m_library->play_song(it); //todo: check if works
 		first_play = false;
 	}
+	//todo: add 'finished playing' here
 }
 
 // play the songs randomly
