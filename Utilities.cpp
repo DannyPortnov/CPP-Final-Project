@@ -33,6 +33,7 @@ string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "PlayAll") return ePlayAll;
 	if (inString == "Play") return ePlay;
 	if (inString == "PlayRandom") return ePlayRandom;
+	if (inString == "Random") return eRandom;
 	if (inString == "Help") return eHelp;
 	if (inString == "Back") return eBack;
 	return eError;
@@ -112,7 +113,7 @@ bool Utilities::user_prompts_and_dialog(std::string& prompt_message, std::string
 			std::cout << reject_message << std::endl;
 			return false;
 		}
-		else if (answer == "y") {
+		if (answer == "y") {
 			std::cout << accept_message << std::endl;
 			return true;
 		}

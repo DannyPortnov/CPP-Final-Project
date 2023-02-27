@@ -38,6 +38,7 @@ enum string_code {
 	ePlaySongById,*/
 	ePlayAll,
 	ePlayRandom,
+	eRandom,
 };
 
 class Utilities
