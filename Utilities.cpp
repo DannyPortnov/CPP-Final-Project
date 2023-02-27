@@ -6,6 +6,10 @@
 string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "Daily Mix") return eDailyMix;
 	if (inString == "Search") return eSearch;
+	if (inString == "Search by genre") return eSearchByGenre;
+	if (inString == "Search by album") return eSearchByAlbum;
+	if (inString == "Search by name") return eSearchByName;
+	if (inString == "Search by singer") return eSearchBySinger;
 	if (inString == "Podcast") return ePodcast;
 	if (inString == "Library") return eLibrary;
 	if (inString == "Playlists") return ePlaylists;
