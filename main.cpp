@@ -113,9 +113,21 @@ void mp3player() {
 
 }
 
+void test_library_menu() {
+	Library lib;
+	lib.Library_Menu();
+}
+
+void test_playlists_menu() {
+	Library lib;
+	lib.Playlists_Menu();
+}
+
 int main()
 {
-	mp3player();
+//	mp3player();
+	//test_library_menu();
+	test_playlists_menu();
 	//Server::Destroy_All_Allocations();
 	std::cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << std::endl;
 	return 0;
