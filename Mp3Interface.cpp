@@ -505,7 +505,7 @@ void Mp3Interface::Search_Menu() {
 		string input;
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, value_to_search;
-		std::regex pattern(R"(^(Search by \w+)\s(.*)$)");
+		std::regex pattern(R"(^(Search by \w+)\s(.*)$)"); //todo: add check for 'or Back' here
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
@@ -514,6 +514,7 @@ void Mp3Interface::Search_Menu() {
 			{
 			case(eSearchByAlbum): {
 				auto collection = m_server->find_by_album(value_to_search);
+				//todo: use PlayAll here????
 				continue;
 			}
 			case(eSearchByGenre): {

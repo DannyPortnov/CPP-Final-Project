@@ -177,7 +177,7 @@ void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabl
 	auto song_to_add = m_server->find_song_by_id(id);
 	Playlist* playlist = get_playlist_by_name(playlist_name);
 	if (playlist != nullptr) {
-		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
+		playlist->add_song_to_playlist(song_to_add, prints_enabled); // we check if a song exist in playlist in add_song_to_playlist
 		return;
 	}
 #pragma region Previous implementation
@@ -196,7 +196,7 @@ void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabl
 	//std::cout << "A playlist with the name: " << playlist_name << " was created!" << std::endl;
 	create_playlist(playlist_name, prints_enabled); // creates the playlist automatically
 	playlist = m_playlists[playlist_name];
-	playlist->add_song_to_playlist(song_to_add); // adds a song to the created playlist
+	playlist->add_song_to_playlist(song_to_add, prints_enabled); // adds a song to the created playlist
 }
 
 // remove a song from the playlist by song's name.
@@ -463,7 +463,7 @@ void Library::PlayAll(MapType<string, Song*>* songs_to_play) {
 }
 
 // PlayAll with no function template
-void Library::PlayAll() {
+void Library::PlayAll() { //todo: don't ask after last song
 	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		std::cout << "There are no songs in the library." << std::endl;
