@@ -858,7 +858,7 @@ void Library::Podcasts_Menu()
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		//printing all podcasts in alphabet order
 		std::string command, podcast_name;
-		regex pattern("(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
+		regex pattern("^(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
 		smatch match;
 		if (regex_search(input, match, pattern)) {
