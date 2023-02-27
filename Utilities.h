@@ -9,7 +9,7 @@
 #include <regex>
 #include <sstream>
 
-using namespace std;
+
 
 enum string_code {
 	eError,

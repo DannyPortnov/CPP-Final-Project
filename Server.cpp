@@ -2,39 +2,39 @@
 
 
 
-//multimap<string, Song*>* Server::m_songs_by_alphabet_order;
-//list<Song*>* Server::m_recently_played ;
-//map<string, Podcast*>* Server::m_podcasts_by_alphabet_order ;
-//unordered_map<int, Episode*>* Server::m_all_episodes_by_id;
-//unordered_map<string, Episode*>* Server::m_all_episodes_by_name;
-//unordered_map<string, Podcast*>* Server::m_all_podcasts;
+//std::multimap<string, Song*>* Server::m_songs_by_alphabet_order;
+//std::list<Song*>* Server::m_recently_played ;
+//std::map<std::string, Podcast*>* Server::m_podcasts_by_alphabet_order ;
+//std::unordered_map<int, Episode*>* Server::m_all_episodes_by_id;
+//std::unordered_map<std::string, Episode*>* Server::m_all_episodes_by_name;
+//std::unordered_map<std::string, Podcast*>* Server::m_all_podcasts;
 //
-//unordered_map<int, Song*>* Server::m_all_songs_by_id;
-//unordered_set<string>* Server::m_songs_file_paths;
-//unordered_multimap<string, Song*>* Server::m_all_songs_by_artist;
-//unordered_multimap<string, Song*>* Server::m_all_songs_by_name ;
-//unordered_multimap<string, Song*>* Server::m_all_songs_by_album;
-//unordered_multimap<string, Song*>* Server::m_all_songs_by_genre ;
-//unordered_map<int, Song*>* Server::m_recently_played_by_id;
-//multimap<int, Song*>* Server::m_most_played ;
+//std::unordered_map<int, Song*>* Server::m_all_songs_by_id;
+//std::unordered_set<std::string>* Server::m_songs_file_paths;
+//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_artist;
+//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_name ;
+//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_album;
+//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_genre ;
+//std::unordered_map<int, Song*>* Server::m_recently_played_by_id;
+//std::multimap<int, Song*>* Server::m_most_played ;
 
 Server::Server()
 {
-	m_songs_by_alphabet_order = new multimap<string, Song*>();
-	m_recently_played = new list<Song*>();
-	m_podcasts_by_alphabet_order = new map<string, Podcast*>();
-	m_all_episodes_by_id = new unordered_map<int, Episode*>();
-	m_all_episodes_by_name = new unordered_map<string, Episode*>();
-	m_all_podcasts = new unordered_map<string, Podcast*>();
+	m_songs_by_alphabet_order = new std::multimap<std::string, Song*>();
+	m_recently_played = new std::list<Song*>();
+	m_podcasts_by_alphabet_order = new std::map<std::string, Podcast*>();
+	m_all_episodes_by_id = new std::unordered_map<int, Episode*>();
+	m_all_episodes_by_name = new std::unordered_map<std::string, Episode*>();
+	m_all_podcasts = new std::unordered_map<std::string, Podcast*>();
 
-	m_all_songs_by_id = new unordered_map<int, Song*>();
-	m_songs_file_paths = new unordered_set<string>();
-	m_all_songs_by_artist = new unordered_multimap<string, Song*>();
-	m_all_songs_by_name = new unordered_multimap<string, Song*>();
-	m_all_songs_by_album = new unordered_multimap<string, Song*>();
-	m_all_songs_by_genre = new unordered_multimap<string, Song*>();
-	m_recently_played_by_id = new unordered_map<int, Song*>();
-	m_most_played = new multimap<int, Song*>();
+	m_all_songs_by_id = new std::unordered_map<int, Song*>();
+	m_songs_file_paths = new std::unordered_set<std::string>();
+	m_all_songs_by_artist = new std::unordered_multimap<std::string, Song*>();
+	m_all_songs_by_name = new std::unordered_multimap<std::string, Song*>();
+	m_all_songs_by_album = new std::unordered_multimap<std::string, Song*>();
+	m_all_songs_by_genre = new std::unordered_multimap<std::string, Song*>();
+	m_recently_played_by_id = new std::unordered_map<int, Song*>();
+	m_most_played = new std::multimap<int, Song*>();
 
 	Restore_Songs(); //Must be here because serialization must happen before anything else
 	Restore_Podcasts();
@@ -128,7 +128,7 @@ void Server::Restore_Songs()
 		std::string song_name, artist, album, genre, duration, release_date, file_path;
 		int id, plays_count;
 		read >> id >> song_name >> file_path >> artist >> album >> genre >> duration >> release_date >> plays_count;
-		vector<string*> params = { &song_name, &artist, &album,&genre };
+		vector<std::string*> params = { &song_name, &artist, &album,&genre };
 		Utilities::Replace_All(params,true );// replace all '_' to ' '
 		auto song = new Song(id, song_name, file_path, album, artist, genre, release_date, duration, plays_count);
 		Add_Song_To_Collections(song);
@@ -147,7 +147,7 @@ void Server::Restore_Podcasts() {
 	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
 		std::string episode_name,podcast_name, duration, release_date, file_path;
 		read >> episode_name >> podcast_name >> file_path >> duration >> release_date;
-		vector<string*> params = { &episode_name,&podcast_name };
+		vector<std::string*> params = { &episode_name,&podcast_name };
 		Utilities::Replace_All(params, true);// replace all '_' to ' '
 		Podcast* podcast = nullptr;
 		if (Does_Podcast_Exist(podcast_name)) {
@@ -180,7 +180,7 @@ void Server::Restore_Most_Recent()
 	read.close();
 }
 
-unordered_map<int, Episode*>* Server::get_episodes_by_id() {
+std::unordered_map<int, Episode*>* Server::get_episodes_by_id() {
 	return m_all_episodes_by_id;
 }
 
@@ -188,7 +188,7 @@ unordered_map<int, Episode*>* Server::get_episodes_by_id() {
 void Server::Save_Podcasts()
 {
 	ofstream write("c:\\temp\\podcasts.dat", ios::out);
-	unordered_map<int, Episode*>::iterator itr;
+	std::unordered_map<int, Episode*>::iterator itr;
 	auto all_episodes = Server::get_episodes_by_id();
 	for (itr = all_episodes->begin(); itr != all_episodes->end(); itr++)
 	{
@@ -196,7 +196,7 @@ void Server::Save_Podcasts()
 		std::string episode_name, podcast_name;
 		episode_name = episode->get_name();
 		podcast_name = episode->Get_Podcast()->Get_Podcast_Name();
-		vector<string*> params = { &episode_name, &podcast_name };
+		vector<std::string*> params = { &episode_name, &podcast_name };
 		Utilities::Replace_All(params, false);// replace all '_' to ' '
 		write  << episode_name << " " << podcast_name << " " << episode->get_path() << " "
 			  << episode->get_duration() << " " << episode->get_release_date() << std::endl;
@@ -207,7 +207,7 @@ void Server::Save_Podcasts()
 void Server::Save_Songs()
 {
 	ofstream write("c:\\temp\\songs.dat", ios::out);
-	unordered_map<int, Song*>::iterator itr;
+	std::unordered_map<int, Song*>::iterator itr;
 	auto all_songs = Server::get_songs_by_id();
 	for (itr = all_songs->begin(); itr != all_songs->end(); itr++)
 	{
@@ -217,7 +217,7 @@ void Server::Save_Songs()
 		artist = song->get_artist();
 		album = song->get_album();
 		genre = song->get_genre();
-		vector<string*> params = { &song_name, &artist, &album, &genre };
+		vector<std::string*> params = { &song_name, &artist, &album, &genre };
 		Utilities::Replace_All(params, false);// replace all '_' to ' '
 		write << song->get_id() << " " << song_name << " " << song->get_path() << " " << artist << " " << album
 			<< " " << genre << " " << song->get_duration() << " " << song->get_release_date() << " " << song->get_plays_count() << std::endl;
@@ -230,7 +230,7 @@ void Server::Save_Most_Recent() {
 	if (!Utilities::Is_File_Valid(write)) {
 		return;
 	}
-	list<Song*>::reverse_iterator itr;
+	std::list<Song*>::reverse_iterator itr;
 	for (itr = m_recently_played->rbegin();itr != m_recently_played->rend();itr++)
 	{
 		auto song = *itr;
@@ -355,26 +355,26 @@ Podcast* Server::find_podcast_by_name(std::string name)
 }
 
 template < class TKey, class TValue>
-TValue* Server::Find_Unique(TKey param, unordered_map<TKey, TValue*>* collection_to_Search) {
+TValue* Server::Find_Unique(TKey param, std::unordered_map<TKey, TValue*>* collection_to_Search) {
 	if (collection_to_Search->count(param) > 0) {
 		return collection_to_Search->at(param);
 	}
 	throw exception();
 }
 
-unordered_multimap<string, Song*>* Server::find_by_name(std::string& name)
+std::unordered_multimap<std::string, Song*>* Server::find_by_name(std::string& name)
 {
 	return find_all(name, m_all_songs_by_name);
 }
-unordered_multimap<string, Song*>* Server::find_by_artist(std::string& singer)
+std::unordered_multimap<std::string, Song*>* Server::find_by_artist(std::string& singer)
 {
 	return find_all(singer, m_all_songs_by_artist);
 }
-unordered_multimap<string, Song*>* Server::find_by_album(std::string& album)
+std::unordered_multimap<std::string, Song*>* Server::find_by_album(std::string& album)
 {
 	return find_all(album, m_all_songs_by_album);
 }
-unordered_multimap<string, Song*>* Server::find_by_genre(std::string& genre)
+std::unordered_multimap<std::string, Song*>* Server::find_by_genre(std::string& genre)
 {
 	return find_all(genre, m_all_songs_by_genre);
 }
@@ -391,20 +391,20 @@ bool Server::Does_Podcast_Exist(std::string& podcast_name)
 	return m_all_podcasts->count(podcast_name) > 0;
 }
 //Searches in given collection based on key, and returns filtered unordered_multiset 
-unordered_multimap<string, Song*>* Server::find_all(std::string& key, unordered_multimap<string, Song*>* collection) {
+std::unordered_multimap<std::string, Song*>* Server::find_all(std::string& key, std::unordered_multimap<std::string, Song*>* collection) {
 	auto range = collection->equal_range(key); // range of values that match the given name
-	unordered_multimap<string, Song*>* filtered_songs = new unordered_multimap<string, Song*>;
+	std::unordered_multimap<std::string, Song*>* filtered_songs = new std::unordered_multimap<std::string, Song*>;
 	for (auto& it = range.first; it != range.second; ++it) {
 		filtered_songs->insert(make_pair(it->first, it->second)); //inserts each value into the filtered set.
 	}
 	return filtered_songs;
 }
 
-list<Song*>* Server::get_recently_played() {
+std::list<Song*>* Server::get_recently_played() {
 	return m_recently_played;
 }
 
-multimap<int, Song*>* Server::get_most_played() {
+std::multimap<int, Song*>* Server::get_most_played() {
 	return m_most_played;
 }
 
@@ -428,7 +428,7 @@ void Server::remove_from_recently_played(int id) {
 	//todo: maybe to improve it, mabye to change m_recently played data structure
 	m_recently_played->remove(song); // removes the song from the list // complexity O(n)- n= number of songs in m_recently_played
 	m_recently_played_by_id->erase(id);
-	/*list<Song*>::iterator it;
+	/*std::list<Song*>::iterator it;
 	for (it = m_recently_played.begin(); it != m_recently_played.end(); it++) {
 		if (*it == song) {
 			m_recently_played.erase(it);
@@ -461,39 +461,39 @@ void Server::update_most_played_songs() {
 		return;
 	}
 	m_most_played->clear(); // clear most played and than add to multimap after, plays_count updated.
-	unordered_map<int, Song*>::iterator it; // goes over all songs organized by id
+	std::unordered_map<int, Song*>::iterator it; // goes over all songs organized by id
 	for (it = m_all_songs_by_id->begin(); it != m_all_songs_by_id->end(); it++) {
 		m_most_played->emplace(it->second->get_plays_count(), it->second); // start:least played, end: most played
 	}
 }
 
 
-unordered_map<int, Song*>* Server::get_songs_by_id()
+std::unordered_map<int, Song*>* Server::get_songs_by_id()
 {
 	return m_all_songs_by_id;
 }
 
-unordered_multimap<string, Song*>* Server::get_songs_by_name()
+std::unordered_multimap<std::string, Song*>* Server::get_songs_by_name()
 {
 	return m_all_songs_by_name;
 }
 
-multimap<string, Song*>* Server::get_songs_sorted_by_alphabet()
+std::multimap<std::string, Song*>* Server::get_songs_sorted_by_alphabet()
 {
 	return m_songs_by_alphabet_order;
 }
 
-unordered_multimap<string, Song*>* Server::get_songs_by_artist()
+std::unordered_multimap<std::string, Song*>* Server::get_songs_by_artist()
 {
 	return m_all_songs_by_artist;
 }
 
-unordered_multimap<string, Song*>* Server::get_songs_by_album()
+std::unordered_multimap<std::string, Song*>* Server::get_songs_by_album()
 {
 	return m_all_songs_by_album;
 }
 
-unordered_multimap<string, Song*>* Server::get_songs_by_genre()
+std::unordered_multimap<std::string, Song*>* Server::get_songs_by_genre()
 {
 	return m_all_songs_by_genre;
 }

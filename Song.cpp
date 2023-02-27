@@ -89,7 +89,7 @@ void Song::clear_from_all_playlists() {
 	m_playlist_appearances.clear();
 }
 
-unordered_set<string>* Song::get_playlist_appearances() {
+std::unordered_set<std::string>* Song::get_playlist_appearances() {
 	return &m_playlist_appearances;
 }
 
@@ -100,7 +100,7 @@ bool operator<(const Song& a, const Song& b) {
 }
 
 
-ostream& operator<<(ostream& os, const Song& song)
+std::ostream& operator<<(std::ostream& os, const Song& song)
 {
 	os << song.m_file_name;
 	if (song.m_album != "") {

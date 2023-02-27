@@ -342,7 +342,7 @@ Song* Playlist::get_song_by_name(std::string song_name)
 //}
 
 
-//unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const std::string& song_name) {
+//std::unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const std::string& song_name) {
 //	unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
 //	if (check_if_songs_have_same_names(song_name)) {
 //		multimap<string, Song*>::iterator it;

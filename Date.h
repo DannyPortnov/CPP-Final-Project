@@ -13,7 +13,7 @@
 #define new DBG_NEW
 #endif
 #endif  // _DEBUG
-using namespace std;
+
 
 class Date
 {

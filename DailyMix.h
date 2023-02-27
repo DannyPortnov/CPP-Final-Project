@@ -23,7 +23,7 @@ class Playlist;
 class DailyMix : public Playlist 
 {
 private:
-	//unordered_map<int, Song*> m_daily_mix; //first: id, second: song
+	//std::unordered_map<int, Song*> m_daily_mix; //first: id, second: song
 	ifstream m_dailymix_file;
 	Date m_last_date_saved; // stores the last saved date (will change if the program will run in a different day)
 	bool check_if_date_changed(Date& new_date); // checks if the date has changed.

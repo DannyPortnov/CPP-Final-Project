@@ -6,7 +6,6 @@
 #include <string>
 #include <iostream>
 #include <unordered_set>
-using namespace std;
 
 /*
 A little explenation of how I understood Podcast & Podcasts:
