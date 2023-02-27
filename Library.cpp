@@ -1044,32 +1044,6 @@ void Library::Library_Menu() {
 					duration = matches[9].str();
 					release_date = matches[11].str();
 				}
-
-					//	rest_of_string = matches[4].str();
-					//}
-					//// extract artist name
-					//std::regex pattern2("^(.*?)((\\salbum=)\\s*(.+)|(\\sgenre=)\\s*(.+)|(\\sduration=)\\s*(.+)|(\\srelease_date=)\\s*(.+)|$)?");
-					//if (regex_match(rest_of_string, matches, pattern2)) {
-					//	rest_of_string = matches[4].str();
-					//}
-					//// extract album name
-					//std::regex pattern3("^(.*?)((\\sgenre=)\\s*(.+)|(\\sduration=)\\s*(.+)|(\\srelease_date=)\\s*(.+)|$)?");
-					//if (regex_match(rest_of_string, matches, pattern3)) {
-					//	album = matches[1].str();
-					//	rest_of_string = matches[4].str();
-					//}
-					//// extract genre name
-					//std::regex pattern4("^(.*?)((\\sduration=)\\s*(.+)|(\\srelease_date=)\\s*(.+)|$)?");
-					//if (regex_match(rest_of_string, matches, pattern4)) {
-					//	genre = matches[1].str();
-					//	rest_of_string = matches[4].str();
-					//}
-					//// extract duration and release_date
-					//std::regex pattern5("^(.*?)((\\srelease_date=)\\s*(.+)|$)?");
-					//if (regex_match(rest_of_string, matches, pattern5)) {
-					//	duration = matches[1].str();
-					//	release_date = matches[4].str();
-					//}
 				//todo: add check for valid release date format and valid duration format
 				else {
 					//todo: add ecxeption here maybe, for invalid input parameter
@@ -1078,48 +1052,34 @@ void Library::Library_Menu() {
 				break;
 			}
 			case(eUpdate): {
-				//std::string input = "play me a song name=The Box singer=Roddy Ricch album=Please Excuse Me For Being Antisocial genre=Hip-hop duration=03:17 release_date=29/11/2019";
-				//std::regex pattern("^([a-zA-Z ]+) ((?:name|singer|album|genre|duration|release_date)=[^ ]+(?: [^ ]+)*)$");
-				//std::regex pattern("^([a-zA-Z]+[a-zA-Z0-9 ]*) ((?:name|singer|album|genre|duration|release_date)=[^ ]+(?: [^ ]+)*)$");
-				//std::regex pattern2("^([0-9]+)\\s+((?:name|singer|album|genre|duration|release_date)=[^ ]+(?: [^ ]+)*)$");
-
+				std::string update_by_name_or_id, new_name, file_path, artist, album, genre, duration, release_date;
 				// Define regex pattern
-				std::regex pattern("^([a-zA-Z0-9 _]+) ((?:name|singer|album|genre|duration|release_date)=[^ ]+(?: [^ ]+)*)$");
+				std::regex pattern("^(.*?)\\s*(name=\\s*(.*?))?\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
 				// Create regex match object
 				std::smatch match;
-
 				// Execute regex search
-				if (std::regex_search(parameters, match, pattern)) {
-					std::string update_by_name_or_id = match[1]; // Extract command
-					std::string new_song_details = match[2]; // Extract rest of string
-					std::string new_name, artist, album, genre, duration, release_date;
-					std::regex pattern("^([^\s]+(?:\\s[^\s]+)*)\\s*(name=([^=]+(?:\\s[^=]+)*))?\\s*(singer=([^=]+(?:\\s[^=]+)*))?\\s*(album=([^=]+(?:\\s[^=]+)*))?\\s*(genre=([^=]+(?:\\s[^=]+)*))?\\s*(duration=(\\d{2}:\\d{2}))?\\s*(release_date=(\\d{2}/\\d{2}/\\d{4}))?\\s*$");
-					std::smatch matches;
-					if (std::regex_match(new_song_details, matches, pattern)) {
-						new_name = matches[3].str();
-						artist = matches[5].str();
-						album = matches[7].str();
-						genre = matches[9].str();
-						duration = matches[11].str();
-						release_date = matches[13].str();
-						try {
-							int id = std::stoi(update_by_name_or_id);
-							Update_Song(id, new_name, artist, album, genre, duration, release_date);
-						}
-						catch (std::invalid_argument& e) {
-							// Handle the exception if the input string is not a valid integer-> call the overload function
-							Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
-						}
-
+				if (regex_match(parameters, matches, pattern)) {
+					update_by_name_or_id = matches[1].str();
+					new_name = matches[3].str();
+					artist = matches[5].str();
+					album = matches[7].str();
+					genre = matches[9].str();
+					duration = matches[11].str();
+					release_date = matches[13].str();
+					try {
+						int id = std::stoi(update_by_name_or_id);
+						Update_Song(id, new_name, artist, album, genre, duration, release_date);
 					}
-					// Create a regex pattern to match the input string and capture the command and the rest of the string
+					catch (std::invalid_argument& e) {
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
+					}
 				}
 				else {
 					//todo: add ecxeption here maybe, for invalid input parameter
 				}
 				break;
 			}
-
 			case(eDelete): {
 				// Define regex pattern
 				std::regex pattern("^([a-zA-Z0-9 _]+)$");
