@@ -992,24 +992,52 @@ void Library::Library_Menu() {
 				break;
 			}
 			case(eAdd): {
-				std::string song_name, file_path, artist, album, genre, duration, release_date;
+				std::string rest_of_string, song_name, file_path, artist, album, genre, duration, release_date;
 				// Define the regular expression pattern
-				//regex pattern("^(.+)\\s([^\\s]+)\\s*(album=([^\\s]+))?\\s*(genre=([^\\s]+))?\\s*(duration=(\\d{1,2}:\\d{1,2}))?\\s*(release_date=(\\d{2}/\\d{2}/\\d{4}))?\\s*$");
-				std::regex pattern("^([^\s]+(?:\\s[^\s]+)*)\\s([^\s]+(?:\\s[^\s]+)*)\\s*(singer=([^=]+(?:\\s[^=]+)*))?\\s*(album=([^=]+(?:\\s[^=]+)*))?\\s*(genre=([^=]+(?:\\s[^=]+)*))?\\s*(duration=(\\d{2}:\\d{2}))?\\s*(release_date=(\\d{2}/\\d{2}/\\d{4}))?\\s*$");
-
-				//regex pattern("^(.+)\\s([^\\s]+)\\s*(singer=([^\\s]+))?\\s*(album=([^\\s]+))?\\s*(genre=([^\\s]+))?\\s*(duration=(\\d{2}:\\d{2}))?\\s*(release_date=(\\d{2}/\\d{2}/\\d{4}))?\\s*$");
-				//std::regex pattern(R"(([^ ]+) ([^ ]+)(?: singer=([^ ]+))?(?: album=([^ ]+))?(?: genre=([^ ]+))?(?: duration=([0-5]?[0-9]:[0-5][0-9]))?(?: release_date=(\d{2}/\d{2}/\d{4})))");
+				std::regex pattern("^(.+\\.mp3)\\s(.+)$");// works for seperatring file path from rest of the string
 				// Extract the different parts of the input string using regex
 				smatch matches;
 				if (regex_match(parameters, matches, pattern)) {
 					file_path = matches[1].str();
-					song_name = matches[2].str();
-					artist = matches[4].str();
-					album = matches[6].str();
-					genre = matches[8].str();
-					duration = matches[10].str();
-					release_date = matches[12].str();
+					rest_of_string = matches[2].str();
 				}
+				// extract artist name
+				 regex pattern1("^(.*?)\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
+				//matches;
+				if (regex_match(rest_of_string, matches, pattern1)) {
+					song_name = matches[1].str();
+					artist = matches[3].str();
+					album = matches[5].str();
+					genre = matches[7].str();
+					duration = matches[9].str();
+					release_date = matches[11].str();
+				}
+
+					//	rest_of_string = matches[4].str();
+					//}
+					//// extract artist name
+					//std::regex pattern2("^(.*?)((\\salbum=)\\s*(.+)|(\\sgenre=)\\s*(.+)|(\\sduration=)\\s*(.+)|(\\srelease_date=)\\s*(.+)|$)?");
+					//if (regex_match(rest_of_string, matches, pattern2)) {
+					//	rest_of_string = matches[4].str();
+					//}
+					//// extract album name
+					//std::regex pattern3("^(.*?)((\\sgenre=)\\s*(.+)|(\\sduration=)\\s*(.+)|(\\srelease_date=)\\s*(.+)|$)?");
+					//if (regex_match(rest_of_string, matches, pattern3)) {
+					//	album = matches[1].str();
+					//	rest_of_string = matches[4].str();
+					//}
+					//// extract genre name
+					//std::regex pattern4("^(.*?)((\\sduration=)\\s*(.+)|(\\srelease_date=)\\s*(.+)|$)?");
+					//if (regex_match(rest_of_string, matches, pattern4)) {
+					//	genre = matches[1].str();
+					//	rest_of_string = matches[4].str();
+					//}
+					//// extract duration and release_date
+					//std::regex pattern5("^(.*?)((\\srelease_date=)\\s*(.+)|$)?");
+					//if (regex_match(rest_of_string, matches, pattern5)) {
+					//	duration = matches[1].str();
+					//	release_date = matches[4].str();
+					//}
 				//todo: add check for valid release date format and valid duration format
 				else {
 					//todo: add ecxeption here maybe, for invalid input parameter
