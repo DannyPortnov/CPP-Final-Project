@@ -51,12 +51,12 @@ const int Song::get_plays_count() const {
 
 
 void Song::print_playlists() const {
-	std::cout << "Playlists: ";
+	std::cout << "Appears in playlists: ";
 	if (m_playlist_appearances.size() == 0) {
-		std::cout << " None.";
+		std::cout << " None." << std::endl;
 		return;
 	}
-	unordered_set<string>::iterator it;
+	std::unordered_set<std::string>::iterator it;
 	for (it = m_playlist_appearances.begin(); it != m_playlist_appearances.end(); it++) {
 		std::cout << *it << ", ";
 	}
@@ -66,7 +66,8 @@ void Song::print_playlists() const {
 void Song::Play()
 {
 	update_plays_counter();
-	m_player.play(m_file_path);
+	AudioFile::Play();
+	//m_player.play(m_file_path);
 	//the most_played, and most_recent update is made in Library and Server
 }
 
@@ -89,7 +90,7 @@ void Song::clear_from_all_playlists() {
 	m_playlist_appearances.clear();
 }
 
-unordered_set<string>* Song::get_playlist_appearances() {
+std::unordered_set<std::string>* Song::get_playlist_appearances() {
 	return &m_playlist_appearances;
 }
 
@@ -100,22 +101,18 @@ bool operator<(const Song& a, const Song& b) {
 }
 
 
-ostream& operator<<(ostream& os, const Song& song)
+std::ostream& operator<<(std::ostream& os, const Song& song)
 {
-	os << song.m_file_name;
+	os << static_cast<const AudioFile&>(song); // call AudioFile's operator<<
 	if (song.m_album != "") {
-		os<< ", from " << song.m_album;
+		os<< "Album: " << song.m_album << "\n";
 	}
 	if (song.m_artist != "") {
-		os<< ", by " << song.m_artist;
+		os<< "Artist: " << song.m_artist << "\n";
 	}
 	if (song.m_genre != "") {
-		os << " " << song.m_genre << "genre";
+		os << "Genre: " << song.m_genre << std::endl;
 	}
-	//todo: implement later
-	//if (!(song.m_release_date == Date(""))) {
-	//	os << " release date: " << song.m_release_date;
-	//}
 	song.print_playlists();
 	return os;
 }

@@ -22,7 +22,8 @@ Podcast* Episode::Get_Podcast() const
 	return m_podcast;
 }
 
-void Episode::Play()
+ostream& operator<<(ostream& os, const Episode& episode)
 {
-	//todo: implement
+	os << static_cast<const AudioFile&>(episode); // call AudioFile's operator<<
+	return os;
 }

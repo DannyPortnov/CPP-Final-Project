@@ -6,7 +6,9 @@
 class Episode :
     public AudioFile
 {
+
 private:
+    friend ostream& operator<<(ostream& os, const Episode& episode);
     static int episode_code;
     //The podcast to which the episode belongs
     Podcast* m_podcast;
@@ -18,7 +20,8 @@ public:
     Episode(std::string file_path, std::string episode_name, Podcast* podcast, std::string release_date = "", std::string duration = "");
     Podcast* Get_Podcast() const;
     //Plays the episode
-    void Play();
+    //void Play();
 };
+ostream& operator<<(ostream& os, const Episode& episode);
 #endif
 

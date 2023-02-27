@@ -165,7 +165,7 @@ void Library::PrintPL() { //todo: make overload?
 }
 
 //todo: check if implementation needed, if so, change implementation
-//set<Playlist*>* Library::get_user_playlists()
+//std::set<Playlist*>* Library::get_user_playlists()
 //{
 //	return &user_playlists;
 //}
@@ -389,7 +389,7 @@ void Library::Print_No_Input_Parameters_Error()
 //can be found in Play(song_name), Play(id). 
 //since PlayAll and PlayAllRandom uses Play(id), we don't need to worry about the update of most_played, most_recent
 void Library::play_song(Song* song) {
-	std::cout << "Now playing: " << *song << std::endl;
+	//std::cout << "Now playing: " << *song << std::endl; //Moved this inside Play()!
 	song->Play(); // here plays_counter updates
 	//m_recent->Update_Most_Recent();
 	m_recent->Add_To_Most_Recent(song->get_id());
@@ -489,13 +489,13 @@ void Library::PlayRandom() {
 		return;
 	}
 	// Create a vector of iterators to the elements in the multimap
-	vector<multimap<string, Song*>::iterator> songs_vector;
+	std::vector<std::multimap<string, Song*>::iterator> songs_vector;
 	for (auto it = songs_to_play->begin(); it != songs_to_play->end(); ++it) {
 		songs_vector.push_back(it);
 	}
 	// Shuffle the keys of the multimap randomly
-	random_device rd;
-	mt19937 generator(rd());
+	std::random_device rd;
+	std::mt19937 generator(rd());
 	shuffle(songs_vector.begin(), songs_vector.end(), generator);
 
 	std::cout << "Playing all library songs, shuffled: " << std::endl;
@@ -647,7 +647,7 @@ void Library::Begin_Deserialization()
 		}
 	}
 
-	//unordered_map<string, Playlist*>::iterator itr;
+	//std::unordered_map<string, Playlist*>::iterator itr;
 	//for (itr = m_playlists.begin(); itr != m_playlists.end(); itr++)
 	//{
 	//	std::string playlist_name = itr->first;
@@ -836,61 +836,50 @@ void Library::remove_from_daily_mix(Song* song) {
 void Library::Podcasts_Menu()
 {
 	// This declares a lambda, which can be called just like a function
-	auto print_message = []()
+	auto print_message = [this]() //means that 'this' is in the lambda's scope
 	{
+		std::cout << std::endl;
+		std::unordered_map<std::string, Podcast*>::iterator itr; 	//printing all podcasts in alphabet order
+		for (const auto& podcast_pair : *m_server->get_podcasts()) {
+			std::cout << *podcast_pair.second;
+		}
 		std::cout << "\nPlay <podcast name>" << "\n";
 		std::cout << "Delete <podcast name>" << "\n";
-		std::cout << "Back" << "\n" << "\n";
+		std::cout << "Back\n" << std::endl;
 	};
 	bool repeat = true;
 	//ignore has to be OUTSIDE the loop!
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
+	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
 		print_message();
-		string input;
+		std::string input;
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
-		//printing all podcasts in alphabet order
 		std::string command, podcast_name;
-		regex pattern("(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
+		std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
-		smatch match;
+		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
 			std::string podcast_name = match[2];
 			switch (Utilities::hashit(command))
 			{
 				case(ePlay): {
-					try
-					{
-						auto podcast_choosen = m_server->find_podcast_by_name(podcast_name);
-						podcast_choosen->Play();
-					}
-					catch (const std::exception&)
-					{
-						std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
-					}
-					break;
+					Play_Podcast(podcast_name);
+					continue;
 				}
 				case(eDelete): {
-					try
-					{
-						auto podcast_choosen = m_server->find_podcast_by_name(podcast_name); //add a check inside 
-						m_server->Permanent_Delete_Podcast(podcast_choosen);
-					}
-					catch (const std::exception&)
-					{
-						std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
-					}
-					break;
+					Delete_Podcast(podcast_name);
+					continue;
 				}
-				default: {
+				case(eBack): {
 					repeat = false;
-					break;
+					continue;
 				}
 			}
 		}
+		Print_Invalid_Command_Error(input); //if no match found or command doesn't fit switch case
 	}
 	#pragma region Without regex
 	//size_t space_pos = input.find(' ');
@@ -911,7 +900,50 @@ void Library::Podcasts_Menu()
 	//else {
 	//	std::cout << "Invalid command" << std::endl;
 	//}  
-#pragma endregion
+	#pragma endregion
+}
+void Library::Print_Invalid_Command_Error(const std::string& input) {
+	std::cout << input << " isn't a valid command. Try again." << std::endl;
+}
+
+void Library::DailyMix_Menu()
+{
+	// This declares a lambda, which can be called just like a function
+	auto print_message = [this]()
+	{
+		std::cout << *m_daily_mix;
+		std::cout << "\nPlay" << "\n";
+		std::cout << "Random" << "\n";
+		std::cout << "Back\n" << std::endl;
+	};
+	bool repeat = true;
+	//ignore has to be OUTSIDE the loop!
+	// Clear the input buffer before reading the command input
+	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
+	while (repeat)
+	{
+		print_message();
+		string command;
+		std::getline(std::cin, command, '\n'); //We need to use getline and '\n' in the end!
+		switch (Utilities::hashit(command))
+		{
+			case(ePlay): {
+				m_daily_mix->Play();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eRandom): {
+				m_daily_mix->Play_Random();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eBack): {
+				repeat = false;
+				continue;
+			}
+		}
+		Print_Invalid_Command_Error(command);
+	}
 }
 
 
@@ -923,7 +955,7 @@ void Library::update_most_played() {
 	//int most_played_size = most_played->size();
 	//m_most_played->clear_all_playlist();
 	//int minimum = min(most_played_size, max_most_played); // using c++ algorithm
-	//multimap<int, Song*>::iterator it = most_played->end();
+	//std::multimap<int, Song*>::iterator it = most_played->end();
 	//for (int i = 0; i < minimum; i++) {
 	//	it--;
 	//	m_most_played->add_song_to_playlist(it->second);
@@ -1363,7 +1395,7 @@ void Library::Playlists_Menu() {
 //Library::Library() : m_songs_by_name(Server::get_songs_by_name()), m_playlists()
 //{
 //	// = new set<Song*>*; //is initialization needed here?
-//	//m_playlists_map= &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
+//	//m_playlists_map= &std::map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
 //}
 
 //void Library::Are_All_Parameters_Empty(std::string& artist, std::string& album, std::string& genre, std::string& duration)

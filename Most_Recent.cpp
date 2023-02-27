@@ -5,7 +5,7 @@
 #include <algorithm>
 #define max_recents 10
 
-#define Most_Recent_Name "Most_Recent"
+#define Most_Recent_Name "Most Recent"
 
 Most_Recent::Most_Recent(Library* library, Server* server) : Automatic_Playlist(Most_Recent_Name, library, server)
 {

@@ -5,7 +5,7 @@
 #include <algorithm>
 
 #define max_most_played 10
-#define Most_Played_Name "Most_Played"
+#define Most_Played_Name "Most Played"
 
 Most_Played::Most_Played(Library* library, Server* server) : Automatic_Playlist(Most_Played_Name, library, server)
 {
@@ -49,9 +49,9 @@ void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 	int most_played_size = most_played->size();
 	Playlist::clear_all_playlist(false);
 	int minimum = min(most_played_size, max_most_played); // using c++ algorithm
-	multimap<int, Song*>::reverse_iterator it = most_played->rbegin();
+	std::multimap<int, Song*>::reverse_iterator it = most_played->rbegin();
 	for (int i = 0; i < minimum; i++) {
-		Playlist::add_song_to_playlist(it->second);
+		Playlist::add_song_to_playlist(it->second, false);
 		it++;
 	}  
 	//rbegin is a reverse iterator that starts at the last element most_played
@@ -63,7 +63,7 @@ void Most_Played::Update_Most_Played() //todo: make maybe another parent class
 	#pragma endregion
 
 	#pragma region Reversing most played
-	//multimap<int, Song*> reversed_most_played;
+	//std::multimap<int, Song*> reversed_most_played;
 	//for (auto it = most_played->rbegin(); it != most_played->rend(); ++it) { 
 	//	reversed_most_played.emplace(it->first, it->second);
 	//}  

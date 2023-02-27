@@ -29,12 +29,12 @@ class Playlist { //todo: make deleted, recent, favorites classes which derive fr
 	//todo: make a library pointer inside playlist
 private:
 	Player m_player;
-
+	void Play_Songs(const std::string& message, bool shuffle);
 protected:
 	Server* m_server;
 	Library* m_library;
-	multiset<Song*> m_songs; // uses to store all songs in the playlist in alphabetical order (use it for play). 
-	//unordered_map<int, Song*> m_songs_by_id; // uses to store all songs by id. 
+	std::multiset<Song*> m_songs; // uses to store all songs in the playlist in alphabetical order (use it for play). 
+	//std::unordered_map<int, Song*> m_songs_by_id; // uses to store all songs by id. 
 	// chose to use multimap because if we would choose to store in unordered_multimap and use another data structure
 	// for the names of the song (oredered alphabeticaly), we will still need to search the song inside the multimap,
 	// the implementation will be complicated.
@@ -49,33 +49,33 @@ public:
 	void remove_song_from_playlist(std::string song_name, bool make_sure = true); //todo: check
 	virtual void clear_all_playlist(bool prints_enabled = true);
 	virtual void restore_playlist(std::string file_name); //todo: implementation is needed! even a simple one
-	virtual void save_playlist(std::string file_name, ios_base::openmode mode = ios::out);
+	virtual void save_playlist(std::string file_name, std::ios_base::openmode mode = ios::out);
 	std::string get_name() const { return m_playlist_name; }
 	void Play();
 	void Play_Random();
 //	void Print();
-	multiset<Song*> get_songs();
+	std::multiset<Song*> get_songs();
 	bool check_if_song_exist_in_playlist_by_id(int id); //works
 	Song* get_song_by_name(std::string song_name);
 	int count_song_name_appearences(std::string song_name); // count the number of songs with the same name
 	//void remove_song_from_playlist_by_name(const std::string& song_name);
 	//bool check_if_songs_have_same_names(const std::string& song_name);
 	//bool check_if_song_exist_in_playlist_by_name(const std::string& song_name);
-	//unordered_multimap<string, Song*>* get_songs_with_same_name(const std::string& song_name);
+	//std::unordered_multimap<string, Song*>* get_songs_with_same_name(const std::string& song_name);
 //friend bool operator<(Playlist* a, Playlist* b);
 
 friend bool operator<(const Playlist& a, const Playlist& b); //todo: check if we need this
-friend ostream& operator<<(ostream& os, const Playlist& playlist);
+friend std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
 
 //friend bool operator!=(const Playlist& a, const Playlist& b);
 
 
 };
 
-// todo: implement operator < in order set stl will be able to sort
+// todo: implement operator < in order std::set stl will be able to sort
 //bool operator<(Playlist* a, Playlist* b);
 bool operator<(const Playlist& a, const Playlist& b);
-ostream& operator<<(ostream& os, const Playlist& playlist);
+std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
 
 //bool operator!=(const Playlist& a, const Playlist& b);
 

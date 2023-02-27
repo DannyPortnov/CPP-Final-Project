@@ -12,7 +12,6 @@
 #include <list>
 #include <unordered_map>
 #include <unordered_set>
-using namespace std;
 #ifdef _DEBUG
 #ifndef DBG_NEW
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -28,27 +27,27 @@ class Server {
 	
 private:
 	//sorting - O(log n) - FOR PRINTING
-	multimap<string, Song*>* m_songs_by_alphabet_order;
-	map<string, Podcast*>* m_podcasts_by_alphabet_order;
+	std::multimap<std::string, Song*>* m_songs_by_alphabet_order;
+	std::map<std::string, Podcast*>* m_podcasts_by_alphabet_order;
 
 	//search - O(1), insertion - O(1), deletion - O(1) - FOR EVERYTHING ELSE
-	unordered_map<int, Episode*>* m_all_episodes_by_id;
-	unordered_map<string, Episode*>* m_all_episodes_by_name;
-	unordered_map<string, Podcast*>* m_all_podcasts;
+	std::unordered_map<int, Episode*>* m_all_episodes_by_id;
+	std::unordered_map<std::string, Episode*>* m_all_episodes_by_name;
+	std::unordered_map<std::string, Podcast*>* m_all_podcasts;
 
-	unordered_map<int, Song*>* m_all_songs_by_id;
-	unordered_set<string>* m_songs_file_paths;  //Nessecary to check songs uniqueness in the server (can't add same song twice)
-	unordered_multimap<string, Song*>* m_all_songs_by_artist;
-	unordered_multimap<string, Song*>* m_all_songs_by_name;
-	unordered_multimap<string, Song*>* m_all_songs_by_album;
-	unordered_multimap<string, Song*>* m_all_songs_by_genre;
+	std::unordered_map<int, Song*>* m_all_songs_by_id;
+	std::unordered_set<std::string>* m_songs_file_paths;  //Nessecary to check songs uniqueness in the server (can't add same song twice)
+	std::unordered_multimap<std::string, Song*>* m_all_songs_by_artist;
+	std::unordered_multimap<std::string, Song*>* m_all_songs_by_name;
+	std::unordered_multimap<std::string, Song*>* m_all_songs_by_album;
+	std::unordered_multimap<std::string, Song*>* m_all_songs_by_genre;
 
 	list<Song*>* m_recently_played; // good complexity for insertion/deletion O(1)
 	unordered_map<int, Song*>* m_recently_played_by_id; // good complexity for searching song in playlist O(1) (search by id)
 
 	multimap<int, Song*>* m_most_played; // songs in an oreder from least played to most played
 
-	unordered_multimap<string, Song*>* find_all(std::string& key, unordered_multimap<string, Song*>* collection);
+	std::unordered_multimap<std::string, Song*>* find_all(std::string& key, std::unordered_multimap<std::string, Song*>* collection);
 
 	template<class T>
 	void remove_song_from_collection(T* songs_by_field, Song* song);
@@ -67,27 +66,28 @@ public:
 
 	void Destroy_All_Allocations();
 	//getters
-	unordered_map<int, Song*>* get_songs_by_id(); //todo: implement
-	unordered_multimap<string, Song*>* get_songs_by_name(); //default comparison (by name)
+	std::unordered_map<int, Song*>* get_songs_by_id(); //todo: implement
+	std::unordered_multimap<std::string, Song*>* get_songs_by_name(); //default comparison (by name)
 	//Returns the unique episode with given name
-	multimap<string, Song*>* get_songs_sorted_by_alphabet(); //default comparison (by name)
-	unordered_multimap<string, Song*>*  get_songs_by_artist();
-	unordered_multimap<string, Song*>* get_songs_by_album();
-	unordered_multimap<string, Song*>* get_songs_by_genre();
-	unordered_map<int, Episode*>* get_episodes_by_id();
+	multimap<std::string, Song*>* get_songs_sorted_by_alphabet(); //default comparison (by name)
+	std::unordered_multimap<std::string, Song*>*  get_songs_by_artist();
+	std::unordered_multimap<std::string, Song*>* get_songs_by_album();
+	std::unordered_multimap<std::string, Song*>* get_songs_by_genre();
+	std::unordered_map<int, Episode*>* get_episodes_by_id();
+	std::unordered_map<std::string, Podcast*>* get_podcasts();
 
-	list<Song*>* get_recently_played();
-	multimap<int, Song*>* get_most_played();
+	std::list<Song*>* get_recently_played();
+	std::multimap<int, Song*>* get_most_played();
 
 	Episode* find_episode_by_id(int id); // returns 1 episode, there is a unique ID for every episode
 	Episode* find_episode_by_name(std::string name);
 	Podcast* find_podcast_by_name(std::string name);
 	Song* find_song_by_id(int id); // returns 1 song, there is a unique ID for every song
 	//search the data structures based on a parameter
-	unordered_multimap<string, Song*>* find_by_name(std::string& name);
-	unordered_multimap<string, Song*>* find_by_artist(std::string& singer);
-	unordered_multimap<string, Song*>* find_by_album(std::string& album);
-	unordered_multimap<string, Song*>* find_by_genre(std::string& genre);
+	std::unordered_multimap<std::string, Song*>* find_by_name(std::string& name);
+	std::unordered_multimap<std::string, Song*>* find_by_artist(std::string& singer);
+	std::unordered_multimap<std::string, Song*>* find_by_album(std::string& album);
+	std::unordered_multimap<std::string, Song*>* find_by_genre(std::string& genre);
 
 
 	//Checks if song was already added to server

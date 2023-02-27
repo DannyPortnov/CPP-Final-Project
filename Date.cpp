@@ -47,7 +47,7 @@ void Date::set_date() {
     bool invalid_answer = true;
     while (invalid_answer) {
         std::cout << "Enter the date in the following format- dd/mm/yyyy: ";
-        std::string answer; cin >> answer; std::cout << std::endl;
+        std::string answer; std::cin >> answer; std::cout << std::endl;
         if (is_date_valid(answer) == true) {
             set_date_from_string(answer);
             create_formated_date_string(m_date);
@@ -58,7 +58,7 @@ void Date::set_date() {
             bool invalid_char = true;
             while (invalid_char) {
                 std::cout << "Still want to set date? y/n: ";
-                char answer; cin >> answer; std::cout << std::endl;
+                char answer; std::cin >> answer; std::cout << std::endl;
                 if (answer == 'n') {
                     std::cout << "Date was not set." << std::endl;
                     return;
@@ -74,7 +74,7 @@ void Date::set_date() {
 
 //checks if date is valid in order to allow to change it
 bool Date::is_date_valid(std::string date) {
-    regex pattern("\\d{2}/\\d{2}/\\d{4}");
+    std::regex pattern("\\d{2}/\\d{2}/\\d{4}");
     bool valid_pattern = regex_match(date, pattern);
     if (valid_pattern == false) {
         std::cout << date << " is not a valid date format" << std::endl;
@@ -136,7 +136,7 @@ Date& Date::operator=(const Date& otherDate) {
 }
 
 // operator overload << to show the date
-ostream& operator<<(ostream& os, const Date& a) {
+std::ostream& operator<<(std::ostream& os, const Date& a) {
     if (a.m_month < 10 && a.m_day < 10)
         os << "0" << a.m_day <<"/0"  << a.m_month <<"/"  << a.m_year;
     if (a.m_month < 10)
@@ -160,6 +160,14 @@ bool operator<(const Date& date1, const Date& date2) {
                 return true;
             }
         }
+    }
+    return false;
+}
+
+//returns true if date is the same as date2, otherwise false.
+bool Date::operator==(const Date& date2) {
+    if (m_date == date2.m_date) {
+        return true;
     }
     return false;
 }

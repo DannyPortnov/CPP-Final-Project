@@ -25,7 +25,7 @@ struct member_ptr : public member_base_ptr {
 		return m_ptr(instance, std::forward<Args>(methodArgs)...);
 	}
 };
-
+//todo: seperate to cpp
 class MethodMap {
 private:
 	std::unordered_map<std::string, std::unique_ptr<member_base_ptr>> m_method_map;
@@ -33,7 +33,7 @@ public:
 	template <typename... Args, typename RT, typename T>
 	void Insert(std::string key, RT(T::* method)(Args...)) {
 		std::unique_ptr<member_base_ptr> ptr = std::make_unique<member_ptr<T, RT, Args ...>>(method);
-		m_method_map.insert(std::make_pair(key, std::move(ptr)));
+		m_method_map.emplace(key, std::move(ptr));
 	}
 
 	template <typename RT, typename T, typename... Args>

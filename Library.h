@@ -27,8 +27,6 @@
 #endif
 #endif  // _DEBUG
 
-using namespace std;
-
 class Playlist;
 class Favorites;
 class DailyMix;
@@ -46,15 +44,15 @@ class Library //: Server //todo: remove inheritance
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
 	Server* m_server;
-	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
-	unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
-													   // better comlexity when using un_ordered_map.
+	std::set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
+	std::unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
+													   // better comlexity when using unordered_map.
 	Favorites* m_favorites;
 	DailyMix* m_daily_mix;
 	Most_Recent* m_recent;
 	Most_Played* m_most_played;
 	Trash* m_deleted;
-	//unordered_map<string, Playlist*> m_saved_playlist_names;
+	//std::unordered_map<string, Playlist*> m_saved_playlist_names;
 
 	const int num_of_songs_to_print = 10;
 
@@ -67,11 +65,13 @@ private:
 	bool check_if_user_playlist(const std::string& playlist_name);
 	bool check_if_continue_playing();
 	bool make_sure_to_delete_song(Song* song);
+
 	void Print_Not_Found_By_Id_Error(int song_id, std::string item_type);
 	void Print_No_Input_Parameters_Error();
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
 	void Print_Media_Exists_Error(std::string& new_name, const std::string & media_type);
-
+	void Print_Invalid_Command_Error(const std::string& input);
+	
 	bool Are_All_Parameters_Empty(const std::string & param1, const std::string & param2, const std::string & param3, const std::string & param4, const std::string & param5);
 
 	
@@ -116,7 +116,7 @@ public:
 
 	void Add2PL(int id, const std::string& playlist_name, bool prints_enabled = true); //works
 	void RemoveFromPL(const std::string& song_name, const std::string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
-	void add_to_favorites(Song* song);
+	//void add_to_favorites(Song* song);
 
 	ostream& Print(ostream& os, int begin, int end) const;
 	void PrintPL();
@@ -124,8 +124,8 @@ public:
 	void PrintSong(std::string song_name);
 	void PrintPlaylist(std::string playlist_name); // print a specific playlist data
 
-	void Update_Song(std::string song_name, std::string new_name = "",
- std::string artist = "", std::string album = "", std::string genre = "", std::string duration = "", std::string release_date ="");
+	void Update_Song(std::string song_name, std::string new_name = "", std::string artist = "",
+	 std::string album = "", std::string genre = "", std::string duration = "", std::string release_date ="");
 	void Update_Song(int song_id, std::string new_name = "", std::string artist = "",
 		std::string album = "", std::string genre = "", std::string duration = "", std::string release_date="");
 	//Update podcast's name
@@ -148,7 +148,7 @@ public:
 	//gets the data structure from Server!
 	void PlayAll();
 	template <template<typename, typename> class MapType>
-	void PlayAll(MapType<string, Song*>*);
+	void PlayAll(MapType<std::string, Song*>*);
 	//gets the data structure from Server!
 	void PlayRandom();
 	//play song and update song data
@@ -168,6 +168,7 @@ public:
 	void Playlists_Menu();
 	void Print_Playlists_Menu();
 	void Podcasts_Menu();
+	void DailyMix_Menu();
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 

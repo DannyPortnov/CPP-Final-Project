@@ -11,7 +11,7 @@
 //#include <ctime>
 //#include <chrono>
 //using namespace std::chrono;
-using namespace std;
+
 
 
 //int Song::id_code = 0;
@@ -24,7 +24,7 @@ private:
 	static int song_id;
 	//int m_song_id;
 	int m_plays_counter; // counter for the amount of times the song was played
-	unordered_set<string> m_playlist_appearances; // stores the names of the playlists that have this song
+	std::unordered_set<std::string> m_playlist_appearances; // stores the names of the playlists that have this song
 public:
 	
 	Song(std::string song_name, std::string file_path,
@@ -38,7 +38,7 @@ public:
 	const std::string& get_genre() const;
 	const std::string& get_artist() const;
 	const int get_plays_count() const;
-	unordered_set<string>* get_playlist_appearances();
+	std::unordered_set<std::string>* get_playlist_appearances();
 
 	void set_artist(std::string& artist);
 	void set_album(std::string& album);
@@ -53,12 +53,12 @@ public:
 	//Song& operator=(const Song& exisiting_song);
 	
 friend bool operator<(const Song& a, const Song& b);
-friend ostream& operator<<(ostream& os, const Song& song);
+friend ostream& operator<<(std::ostream& os, const Song& song);
 //friend bool operator!=(const Song& a, const Song& b);
 };
 
 bool operator<(const Song& a, const Song& b);
-ostream& operator<<(ostream& os, const Song& song);
+std::ostream& operator<<(std::ostream& os, const Song& song);
 
 //bool operator!=(const Song& a, const Song& b);
 

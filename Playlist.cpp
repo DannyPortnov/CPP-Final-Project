@@ -18,7 +18,7 @@ Playlist::~Playlist() {
 bool Playlist::check_if_continue_playing() {
 	std::string prompt = "Would you like to continue playing " + m_playlist_name + "? y/n: ";
 	std::string reject_message = "Stopped playing " + m_playlist_name;
-	std::string accept_message = "Continue playing " + m_playlist_name; // or empty std::string "";
+	std::string accept_message = "Continue playing " + m_playlist_name; // or empty string "";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		return true;
 	}
@@ -27,49 +27,86 @@ bool Playlist::check_if_continue_playing() {
 
 // play the songs in alphabetical order
 void Playlist::Play() {
-	if (m_songs.size() == 0) {
-		std::cout << "There are no songs in the this playlist." << std::endl;
+	Play_Songs("Playing " + m_playlist_name + ":", false);
+
+	#pragma region Previous implementation
+	//if (m_songs.size() == 0) {
+//	std::cout << "There are no songs in the this playlist." << std::endl;
+//	return;
+//}
+//std::cout <<  << std::endl;
+//std::multiset<Song*>::iterator it;
+//bool first_play = true;
+//for (it = m_songs.begin(); it != m_songs.end(); it++) {
+//	if (!first_play && !check_if_continue_playing()) { //asks after first play
+//		return;
+//	}
+//	auto song_to_play = *it;
+//	//std::cout << "Now playing: " << song_to_play << std::endl;
+//	//song_to_play->update_plays_counter();
+//	m_library->play_song(song_to_play); //todo: check if works
+//	first_play = false;
+//	//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+//}  
+#pragma endregion
+}
+
+void Playlist::Play_Songs(const std::string& message, bool shuffle) {
+	if (m_songs.empty()) {
+		std::cout << "There are no songs in this playlist." << std::endl;
 		return;
 	}
-	std::cout << "Playing" << m_playlist_name << ":" << std::endl;
-	multiset<Song*>::iterator it;
-	for (it = m_songs.begin(); it != m_songs.end(); it++) {
-		auto song_to_play = *it;
-		//std::cout << "Now playing: " << song_to_play << std::endl;
-		//song_to_play->update_plays_counter();
-		m_library->play_song(song_to_play); //todo: check if works
-		//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
-		if (check_if_continue_playing() == false)
+	std::cout << message << std::endl;
+	bool first_play = true;
+	std::vector<Song*> songs_vector (m_songs.begin(), m_songs.end()); //range constructor
+	if (shuffle) {
+		std::random_device rd;
+		std::mt19937 generator(rd());
+		std::shuffle(songs_vector.begin(), songs_vector.end(), generator);
+	}
+	for (const auto& it : songs_vector) {
+		if (!first_play && !check_if_continue_playing()) { //asks after first play
 			return;
+		}
+		//auto song_to_play = it;
+		m_library->play_song(it); //todo: check if works
+		first_play = false;
 	}
 }
 
 // play the songs randomly
 void Playlist::Play_Random() {
-	// Create a vector of iterators to the elements in the multimap
-	vector<multiset<Song*>::iterator> songs_vector;
-	for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
-		songs_vector.push_back(it);
-	}
+	Play_Songs("Playing" + m_playlist_name + ", shuffled: ", true);
 
-	// Shuffle the keys of the multimap randomly
-	random_device rd;
-	mt19937 generator(rd());
-	shuffle(songs_vector.begin(), songs_vector.end(), generator);
+	#pragma region Previous implementation
+	//if (m_songs.size() == 0) {
+//	std::cout << "There are no songs in the this playlist." << std::endl;
+//	return;
+//}
+//// Create a vector of iterators to the elements in the multimap
+//std::vector<std::multiset<Song*>::iterator> songs_vector;
+//for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
+//	songs_vector.push_back(it);
+//}
+//// Shuffle the keys of the multimap randomly
+//std::random_device rd;
+//std::mt19937 generator(rd());
+//shuffle(songs_vector.begin(), songs_vector.end(), generator);
+//std::cout << "Playing" << m_playlist_name << ", shuffled: " << std::endl;
+//
+//// Play the songs of the multimap in the shuffled order
+//for (auto const& song : songs_vector) {
+//	//std::cout << "Now playing: " << *(song) << std::endl;
+//	//(*song)->update_plays_counter();
+//	m_library->play_song(*song); //todo: check if works
+//	//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+//	if (check_if_continue_playing() == false)
+//		return;
+//}  
+#pragma endregion
 
-	std::cout << "Playing" << m_playlist_name << ", shuffled: " << std::endl;
-	
-	// Play the songs of the multimap in the shuffled order
-	for (auto const& song : songs_vector) {
-		//std::cout << "Now playing: " << *(song) << std::endl;
-		//(*song)->update_plays_counter();
-		m_library->play_song(*song); //todo: check if works
-		//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
-		if (check_if_continue_playing() == false)
-			return;
-	}
 	/*
-	 probably don't needed, another implementation:
+	 probably isn't needed, another implementation:
 	// Convert the set to a vector for shuffling
 	std::vector<string> songs_vector(m_songs.begin(), m_songs.end());
 	// Seed the random number generator with the current time
@@ -92,7 +129,7 @@ void Playlist::Play_Random() {
 
 
 //returns the playlist
-multiset<Song*> Playlist::get_songs() {
+std::multiset<Song*> Playlist::get_songs() {
 	return m_songs;
 }
 
@@ -170,14 +207,14 @@ void Playlist::save_playlist(std::string file_name, ios_base::openmode mode) {
 	if (!Utilities::Is_File_Valid(write_playlist)) {
 		return;
 	}
-	vector<string*> params = { &m_playlist_name };
+	std::vector<std::string*> params = { &m_playlist_name };
 	Utilities::Replace_All(params, false);
 	for (auto& song : m_songs) {
 		write_playlist << m_playlist_name << " " << song->get_id() << std::endl;
 	}
 }
 void Playlist::restore_playlist(std::string file_name) {
-	ifstream read_user_playlists("c:\\temp\\" + file_name + ".dat", ios::in);
+	std::ifstream read_user_playlists("c:\\temp\\" + file_name + ".dat", ios::in);
 	if (!Utilities::Is_File_Valid(read_user_playlists)) {
 		return;
 	}
@@ -185,7 +222,7 @@ void Playlist::restore_playlist(std::string file_name) {
 		std::string playlist_name;
 		int song_id;
 		read_user_playlists >> playlist_name >> song_id;
-		vector<string*> params = { &playlist_name };
+		std::vector<std::string*> params = { &playlist_name };
 		Utilities::Replace_All(params, true);
 		add_song_to_playlist(m_server->find_song_by_id(song_id), false);
 		if (Utilities::Is_End_Of_File(read_user_playlists)) {
@@ -204,7 +241,7 @@ bool operator<(const Playlist& a, const Playlist& b) {
 // get a specific song, even if there are few songs with the same name
 Song* Playlist::get_song_by_name(std::string song_name)
 {
-	unordered_multimap<string, Song*> filtered_songs;
+	std::unordered_multimap<string, Song*> filtered_songs;
 	for (auto& song : m_songs) {
 		filtered_songs.emplace(song->get_name(), song);
 	}
@@ -216,7 +253,7 @@ Song* Playlist::get_song_by_name(std::string song_name)
 		return filtered_songs.find(song_name)->second;
 	}
 	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
-	unordered_multimap<string, Song*>::iterator iterator;
+	std::unordered_multimap<std::string, Song*>::iterator iterator;
 	for (iterator = filtered_songs.begin(); iterator != filtered_songs.end(); ++iterator, ++i) {//loops over all podcasts
 		std::cout << i << " - " << iterator->second << std::endl;//prints numbered songs
 	}
@@ -240,7 +277,7 @@ ostream& operator<<(ostream& os, const Playlist& playlist) {
 	int i = 1;
 	os << "List of songs in " << playlist.m_playlist_name << " playlist:" << std::endl;
 	for (it = playlist.m_songs.begin(); it != playlist.m_songs.end(); it++) {
-		os << "(" << i << "). " << *(it) << std::endl; // it->second contains Song*
+		os << "(" << i << "). " << **(it) << std::endl; // *it is *Song, so **it is Song!
 		i++;
 	}
 	return os;
@@ -358,7 +395,7 @@ Song* Playlist::get_song_by_name(std::string song_name)
 //}
 
 
-//unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const std::string& song_name) {
+//std::unordered_multimap<string, Song*>* Playlist::get_songs_with_same_name(const std::string& song_name) {
 //	unordered_multimap<string, Song*>* same_name_songs = new unordered_multimap<string, Song*>; //todo: check memroy allocation, check if we need to delete.
 //	if (check_if_songs_have_same_names(song_name)) {
 //		multimap<string, Song*>::iterator it;

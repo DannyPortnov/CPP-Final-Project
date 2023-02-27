@@ -13,15 +13,15 @@
 #define new DBG_NEW
 #endif
 #endif  // _DEBUG
-using namespace std;
+
 
 class Date
 {
-friend ostream& operator<<(ostream& os, const Date& a); 
+friend std::ostream& operator<<(std::ostream& os, const Date& a);
 friend bool operator<(const Date& a, const Date& b);
 private:
 	int m_day, m_month, m_year;
-	std::string m_date; // store the date as a std::string.
+	std::string m_date; // store the date as a string.
 	Date& init(int d, int m, int y); // set the date
 	void set_date_from_string(std::string date);
 	//works
@@ -36,9 +36,10 @@ public:
 	void set_date(); // changes the date, the user have an option to do so.
 	std::string& get_date_as_string(); // in order to put date back in serialization.
 	Date& operator=(const Date& otherDate); // assign one date to another
+	bool operator==(const Date& date2);
 };
 
-ostream& operator<<(ostream& os, const Date& a); // operator overload << to show the date
+std::ostream& operator<<(std::ostream& os, const Date& a); // operator overload << to show the date
 bool operator<(const Date& date1, const Date& date2); // compare between two dates
 //works
 int* days_in_each_month(bool is_leap_year);
