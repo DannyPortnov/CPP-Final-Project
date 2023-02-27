@@ -27,52 +27,86 @@ bool Playlist::check_if_continue_playing() {
 
 // play the songs in alphabetical order
 void Playlist::Play() {
-	if (m_songs.size() == 0) {
-		std::cout << "There are no songs in the this playlist." << std::endl;
+	Play_Songs("Playing " + m_playlist_name + ":", false);
+
+	#pragma region Previous implementation
+	//if (m_songs.size() == 0) {
+//	std::cout << "There are no songs in the this playlist." << std::endl;
+//	return;
+//}
+//std::cout <<  << std::endl;
+//std::multiset<Song*>::iterator it;
+//bool first_play = true;
+//for (it = m_songs.begin(); it != m_songs.end(); it++) {
+//	if (!first_play && !check_if_continue_playing()) { //asks after first play
+//		return;
+//	}
+//	auto song_to_play = *it;
+//	//std::cout << "Now playing: " << song_to_play << std::endl;
+//	//song_to_play->update_plays_counter();
+//	m_library->play_song(song_to_play); //todo: check if works
+//	first_play = false;
+//	//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+//}  
+#pragma endregion
+}
+
+void Playlist::Play_Songs(const std::string& message, bool shuffle) {
+	if (m_songs.empty()) {
+		std::cout << "There are no songs in this playlist." << std::endl;
 		return;
 	}
-	std::cout << "Playing " << m_playlist_name << ":" << std::endl;
-	std::multiset<Song*>::iterator it;
+	std::cout << message << std::endl;
 	bool first_play = true;
-	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+	std::vector<Song*> songs_vector (m_songs.begin(), m_songs.end()); //range constructor
+	if (shuffle) {
+		std::random_device rd;
+		std::mt19937 generator(rd());
+		std::shuffle(songs_vector.begin(), songs_vector.end(), generator);
+	}
+	for (const auto& it : songs_vector) {
 		if (!first_play && !check_if_continue_playing()) { //asks after first play
 			return;
 		}
-		auto song_to_play = *it;
-		//std::cout << "Now playing: " << song_to_play << std::endl;
-		//song_to_play->update_plays_counter();
-		m_library->play_song(song_to_play); //todo: check if works
+		//auto song_to_play = it;
+		m_library->play_song(it); //todo: check if works
 		first_play = false;
-		//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 	}
 }
 
 // play the songs randomly
 void Playlist::Play_Random() {
-	// Create a vector of iterators to the elements in the multimap
-	std::vector<std::multiset<Song*>::iterator> songs_vector;
-	for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
-		songs_vector.push_back(it);
-	}
+	Play_Songs("Playing" + m_playlist_name + ", shuffled: ", true);
 
-	// Shuffle the keys of the multimap randomly
-	std::random_device rd;
-	std::mt19937 generator(rd());
-	shuffle(songs_vector.begin(), songs_vector.end(), generator);
+	#pragma region Previous implementation
+	//if (m_songs.size() == 0) {
+//	std::cout << "There are no songs in the this playlist." << std::endl;
+//	return;
+//}
+//// Create a vector of iterators to the elements in the multimap
+//std::vector<std::multiset<Song*>::iterator> songs_vector;
+//for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
+//	songs_vector.push_back(it);
+//}
+//// Shuffle the keys of the multimap randomly
+//std::random_device rd;
+//std::mt19937 generator(rd());
+//shuffle(songs_vector.begin(), songs_vector.end(), generator);
+//std::cout << "Playing" << m_playlist_name << ", shuffled: " << std::endl;
+//
+//// Play the songs of the multimap in the shuffled order
+//for (auto const& song : songs_vector) {
+//	//std::cout << "Now playing: " << *(song) << std::endl;
+//	//(*song)->update_plays_counter();
+//	m_library->play_song(*song); //todo: check if works
+//	//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
+//	if (check_if_continue_playing() == false)
+//		return;
+//}  
+#pragma endregion
 
-	std::cout << "Playing" << m_playlist_name << ", shuffled: " << std::endl;
-	
-	// Play the songs of the multimap in the shuffled order
-	for (auto const& song : songs_vector) {
-		//std::cout << "Now playing: " << *(song) << std::endl;
-		//(*song)->update_plays_counter();
-		m_library->play_song(*song); //todo: check if works
-		//m_player.play((song->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
-		if (check_if_continue_playing() == false)
-			return;
-	}
 	/*
-	 probably don't needed, another implementation:
+	 probably isn't needed, another implementation:
 	// Convert the set to a vector for shuffling
 	std::vector<string> songs_vector(m_songs.begin(), m_songs.end());
 	// Seed the random number generator with the current time
