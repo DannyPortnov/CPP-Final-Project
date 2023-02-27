@@ -60,51 +60,48 @@ void mp3player() {
 	//methodmap.Call<void>("second", &lib, std::string("wow")); // Call method that belongs to its key
 	//methodmap.Call<void>("third", &lib, std::string("wow")); // Call method that belongs to its key
 	//** **//
+	
 	while (run_program) {
 		std::cout << "Welcome To mp3player" << std::endl;
 		std::cout << std::endl;
 		Main_Menu();
-//		std::cout << "To continue press (1), To print board press (2), To end game press (0):" << std::endl;
-		cin >> answer;
-
+		std::getline(std::cin, answer, '\n');
+		
 		switch (Utilities::hashit(answer))
 		{
 			case(eDailyMix): {
-
-				break;
+				lib.DailyMix_Menu();
+				continue;
 			}
 			case(eSearch): {
 
-				break;
+				continue;
 			}
 			case(ePodcast): {
 				lib.Podcasts_Menu();
-				break;
+				continue;
 			}
 			case(eLibrary): {
 
-				break;
+				continue;
 			}
 			case(ePlaylists): {
 
-				break;
+				continue;
 			}
 			case(eHelp): {
 				Main_Menu();
-				break;
+				continue;
 			}
 			case(eBack): {
 				run_program=false;
-				break;
-			}
-			default: {
-				std::cout << "Wrong Key Was PRESSED!!! Please Try Another Time" << std::endl;
-				break;
+				continue;
 			}
 		}
-
+		std::cout << answer << " isn't a valid command." << std::endl;
 		std::cout << std::endl;
 		std::cout << std::endl;
+		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 	//lib.Begin_Serialization();
 
