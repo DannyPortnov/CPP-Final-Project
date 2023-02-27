@@ -830,9 +830,10 @@ void Library::Podcasts_Menu()
 	// This declares a lambda, which can be called just like a function
 	auto print_message = [](Server* server)
 	{
+		std::cout << std::endl;
 		std::unordered_map<std::string, Podcast*>::iterator itr; //prints all podcasts
 		for (const auto& podcast_pair : *server->get_podcasts()) {
-			std::cout << podcast_pair.second << "\n";
+			std::cout << *podcast_pair.second;
 		}
 		std::cout << "\nPlay <podcast name>" << "\n";
 		std::cout << "Delete <podcast name>" << "\n";
