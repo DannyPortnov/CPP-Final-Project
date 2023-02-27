@@ -184,6 +184,11 @@ std::unordered_map<int, Episode*>* Server::get_episodes_by_id() {
 	return m_all_episodes_by_id;
 }
 
+std::unordered_map<std::string, Podcast*>* Server::get_podcasts()
+{
+	return m_all_podcasts;
+}
+
 
 void Server::Save_Podcasts()
 {
