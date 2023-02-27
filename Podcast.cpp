@@ -52,14 +52,20 @@ void Podcast::Set_Podcast_Name(const std::string& new_name)
 
 void Podcast::Play()
 {
+	std::cout << "Playing " << m_podcast_name << std::endl;
+	bool ask_to_continue = false;
 	for (Episode* episode : m_podcast_episodes) {
-		episode->Play();
-		std::cout << "Would you like to continue playing " << m_podcast_name << "? y if yes, anything else no ";
-		char answer;
-		cin >> answer;
-		if (answer != 'y') {
-			return;
+		if (ask_to_continue)
+		{
+			std::cout << "Would you like to continue playing " << m_podcast_name << "? y if yes, anything else no ";
+			char answer;
+			cin >> answer;
+			if (answer != 'y') {
+				return;
+			}
 		}
+		episode->Play();
+		ask_to_continue = true; //only ask if there's more episodes to play. Don't ask before the first play!
 	}
 }
 
