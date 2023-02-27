@@ -849,7 +849,7 @@ void Library::Podcasts_Menu()
 	};
 	bool repeat = true;
 	//ignore has to be OUTSIDE the loop!
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
+	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
 		print_message();
