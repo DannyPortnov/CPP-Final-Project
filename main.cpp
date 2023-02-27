@@ -1,6 +1,7 @@
 #define   _CRTDBG_MAP_ALLOC
-#include "MethodMap.h"
+//#include "MethodMap.h"
 #include "Library.h"
+#include "Mp3Interface.h"
 //#include "Utilities.h"
 //#include "Server.h"
 #include <crtdbg.h>
@@ -24,8 +25,6 @@
 #endif  // _DEBUG
 
 
-
-
 //void foo() {
 //	switch (hashit(std::stringValue)) {
 //	case eFred:
@@ -35,22 +34,13 @@
 //	}
 //}
 
-void Main_Menu() {
-	std::cout << "Main Menu: " << std::endl;
-	std::cout << " Daily Mix" << std::endl;
-	std::cout << " Search" << std::endl;
-	std::cout << " Podcast" << std::endl;
-	std::cout << " Library" << std::endl;
-	std::cout << " Playlists" << std::endl;
-	std::cout << " Help" << std::endl;
-	std::cout << " Back\n" << std::endl;
-}
+
 
 void mp3player() {
-	std::string answer;
-	bool run_program = true;
 	Library lib;
-	MethodMap methodmap;
+	Mp3Interface mp3(&lib);
+	mp3.Run_Program();
+	//MethodMap methodmap;
 	std::string key = "hello";
 	// ** How to use MethodMap for methods with any parameters** //
 	//methodmap.Insert<std::string>("second", &Library::Example_Func_For_MethodMap); //Add method to map with its key
@@ -61,48 +51,7 @@ void mp3player() {
 	//methodmap.Call<void>("third", &lib, std::string("wow")); // Call method that belongs to its key
 	//** **//
 	
-	while (run_program) {
-		std::cout << "Welcome To mp3player" << std::endl;
-		std::cout << std::endl;
-		Main_Menu();
-		std::getline(std::cin, answer, '\n');
-		
-		switch (Utilities::hashit(answer))
-		{
-			case(eDailyMix): {
-				lib.DailyMix_Menu();
-				continue;
-			}
-			case(eSearch): {
-				lib.Search_Menu();
-				continue;
-			}
-			case(ePodcast): {
-				lib.Podcasts_Menu();
-				continue;
-			}
-			case(eLibrary): {
-				lib.Library_Menu();
-				continue;
-			}
-			case(ePlaylists): {
-
-				continue;
-			}
-			case(eHelp): {
-				Main_Menu();
-				continue;
-			}
-			case(eBack): {
-				run_program=false;
-				continue;
-			}
-		}
-		std::cout << answer << " isn't a valid command." << std::endl;
-		std::cout << std::endl;
-		std::cout << std::endl;
-		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}
+	
 	//lib.Begin_Serialization();
 
 	//lib.Begin_Deserialization();
@@ -112,22 +61,22 @@ void mp3player() {
 	//....
 
 }
-
-void test_library_menu() {
-	Library lib;
-	lib.Library_Menu();
-}
-
-void test_playlists_menu() {
-	Library lib;
-	lib.Playlists_Menu();
-}
+//
+//void test_library_menu() {
+//	Library lib;
+//	lib.Library_Menu();
+//}
+//
+//void test_playlists_menu() {
+//	Library lib;
+//	lib.Playlists_Menu();
+//}
 
 int main()
 {
-//	mp3player();
+	mp3player();
 	//test_library_menu();
-	test_playlists_menu();
+	//test_playlists_menu();
 	//Server::Destroy_All_Allocations();
 	std::cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << std::endl;
 	return 0;
