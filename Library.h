@@ -65,11 +65,13 @@ private:
 	bool check_if_user_playlist(const std::string& playlist_name);
 	bool check_if_continue_playing();
 	bool make_sure_to_delete_song(Song* song);
+
 	void Print_Not_Found_By_Id_Error(int song_id, std::string item_type);
 	void Print_No_Input_Parameters_Error();
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
 	void Print_Media_Exists_Error(std::string& new_name, const std::string & media_type);
-
+	void Print_Invalid_Command_Error(const std::string& input);
+	
 	bool Are_All_Parameters_Empty(const std::string & param1, const std::string & param2, const std::string & param3, const std::string & param4, const std::string & param5);
 
 	
@@ -114,7 +116,7 @@ public:
 
 	void Add2PL(int id, const std::string& playlist_name, bool prints_enabled = true); //works
 	void RemoveFromPL(const std::string& song_name, const std::string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
-	void add_to_favorites(Song* song);
+	//void add_to_favorites(Song* song);
 
 	ostream& Print(ostream& os, int begin, int end) const;
 	void PrintPL();
@@ -166,6 +168,7 @@ public:
 	void Playlists_Menu();
 	void Print_Playlists_Menu();
 	void Podcasts_Menu();
+	void DailyMix_Menu();
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 

@@ -836,69 +836,50 @@ void Library::remove_from_daily_mix(Song* song) {
 void Library::Podcasts_Menu()
 {
 	// This declares a lambda, which can be called just like a function
-	auto print_message = [](Server* server)
+	auto print_message = [this]() //means that 'this' is in the lambda's scope
 	{
 		std::cout << std::endl;
-		std::unordered_map<std::string, Podcast*>::iterator itr; //prints all podcasts
-		for (const auto& podcast_pair : *server->get_podcasts()) {
+		std::unordered_map<std::string, Podcast*>::iterator itr; 	//printing all podcasts in alphabet order
+		for (const auto& podcast_pair : *m_server->get_podcasts()) {
 			std::cout << *podcast_pair.second;
 		}
 		std::cout << "\nPlay <podcast name>" << "\n";
 		std::cout << "Delete <podcast name>" << "\n";
-		std::cout << "Back\n" << "\n";
+		std::cout << "Back\n" << std::endl;
 	};
 	bool repeat = true;
 	//ignore has to be OUTSIDE the loop!
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
-		print_message(m_server);
-		string input;
+		print_message();
+		std::string input;
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
-		//printing all podcasts in alphabet order
 		std::string command, podcast_name;
-		regex pattern("^(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
+		std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
-		smatch match;
+		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
 			std::string podcast_name = match[2];
 			switch (Utilities::hashit(command))
 			{
 				case(ePlay): {
-					try
-					{
-						auto podcast_choosen = m_server->find_podcast_by_name(podcast_name);
-						podcast_choosen->Play();
-					}
-					catch (const std::exception&)
-					{
-						std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
-					}
-					break;
+					Play_Podcast(podcast_name);
+					continue;
 				}
 				case(eDelete): {
-					try
-					{
-						auto podcast_choosen = m_server->find_podcast_by_name(podcast_name); //add a check inside 
-						m_server->Permanent_Delete_Podcast(podcast_choosen);
-					}
-					catch (const std::exception&)
-					{
-						std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
-					}
-					break;
+					Delete_Podcast(podcast_name);
+					continue;
 				}
-				default: {
+				case(eBack): {
 					repeat = false;
-					break;
+					continue;
 				}
 			}
 		}
-		else {
-			std::cout << input << " isn't a valid command. Try again." << std::endl;
-		}
+		Print_Invalid_Command_Error(input); //if no match found or command doesn't fit switch case
 	}
 	#pragma region Without regex
 	//size_t space_pos = input.find(' ');
@@ -919,7 +900,50 @@ void Library::Podcasts_Menu()
 	//else {
 	//	std::cout << "Invalid command" << std::endl;
 	//}  
-#pragma endregion
+	#pragma endregion
+}
+void Library::Print_Invalid_Command_Error(const std::string& input) {
+	std::cout << input << " isn't a valid command. Try again." << std::endl;
+}
+
+void Library::DailyMix_Menu()
+{
+	// This declares a lambda, which can be called just like a function
+	auto print_message = [this]()
+	{
+		std::cout << *m_daily_mix;
+		std::cout << "\nPlay" << "\n";
+		std::cout << "Random" << "\n";
+		std::cout << "Back\n" << std::endl;
+	};
+	bool repeat = true;
+	//ignore has to be OUTSIDE the loop!
+	// Clear the input buffer before reading the command input
+	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
+	while (repeat)
+	{
+		print_message();
+		string command;
+		std::getline(std::cin, command, '\n'); //We need to use getline and '\n' in the end!
+		switch (Utilities::hashit(command))
+		{
+			case(ePlay): {
+				m_daily_mix->Play();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eRandom): {
+				m_daily_mix->Play_Random();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eBack): {
+				repeat = false;
+				continue;
+			}
+		}
+		Print_Invalid_Command_Error(command);
+	}
 }
 
 
