@@ -70,7 +70,6 @@ private:
 	void Print_No_Input_Parameters_Error();
 	void Print_Not_Found_By_Name_Error(std::string& song_name);
 	void Print_Media_Exists_Error(std::string& new_name, const std::string & media_type);
-	void Print_Invalid_Command_Error(const std::string& input);
 	
 	bool Are_All_Parameters_Empty(const std::string & param1, const std::string & param2, const std::string & param3, const std::string & param4, const std::string & param5);
 
@@ -163,20 +162,18 @@ public:
 	void update_most_played(); 
 	void remove_from_daily_mix(Song* song);
 
-	void Library_Menu();
-	void Print_Library_Menu();
-	void Playlists_Menu();
-	void Print_Playlists_Menu();
-	void Podcasts_Menu();
-	void DailyMix_Menu();
-	void Search_Menu();
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 
 	void Example_Func_For_MethodMap();
 	void Example_Func_For_MethodMap(std::string temp);
 	void Example2_Func_For_MethodMap(std::string temp);
+
+	DailyMix* Get_DailyMix();
+	Server* Get_Server();
+
 };
+
 
 ostream& operator<<(ostream& os, const Library& lib);
 
