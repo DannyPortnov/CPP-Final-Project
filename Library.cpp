@@ -389,7 +389,7 @@ void Library::Print_No_Input_Parameters_Error()
 //can be found in Play(song_name), Play(id). 
 //since PlayAll and PlayAllRandom uses Play(id), we don't need to worry about the update of most_played, most_recent
 void Library::play_song(Song* song) {
-	std::cout << "Now playing: " << *song << std::endl;
+	//std::cout << "Now playing: " << *song << std::endl; //Moved this inside Play()!
 	song->Play(); // here plays_counter updates
 	//m_recent->Update_Most_Recent();
 	m_recent->Add_To_Most_Recent(song->get_id());

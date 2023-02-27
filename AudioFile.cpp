@@ -21,7 +21,7 @@ void AudioFile::Play()
 {
     //todo: implement
     //m_player.play(m_file_path);
-    cout << "Playing " << m_file_name << std::endl;
+    std::cout << "Now playing: " << m_file_name << std::endl;
 }
 
 const std::string& AudioFile::get_name() const {
