@@ -1,3 +1,6 @@
+#ifndef METHODMAP_H
+#define METHODMAP_H
+
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -50,3 +53,4 @@ public:
 		throw std::runtime_error("not found");
 	}
 };
+#endif 
