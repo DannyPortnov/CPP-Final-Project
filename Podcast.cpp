@@ -67,6 +67,7 @@ void Podcast::Play()
 		episode->Play();
 		ask_to_continue = true; //only ask if there's more episodes to play. Don't ask before the first play!
 	}
+	std::cout << "Finished playing " << m_podcast_name << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const Podcast& podcast)
