@@ -66,7 +66,8 @@ void Song::print_playlists() const {
 void Song::Play()
 {
 	update_plays_counter();
-	m_player.play(m_file_path);
+	AudioFile::Play();
+	//m_player.play(m_file_path);
 	//the most_played, and most_recent update is made in Library and Server
 }
 
