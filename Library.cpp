@@ -969,6 +969,8 @@ void Library::Library_Menu() {
 	std::string answer, command, parameters;
 	// Create a regex pattern to match the input string and capture the command and the rest of the string
 	regex pattern("^\\s*(\\w+)\\s+(.*)$");
+	//ignore has to be OUTSIDE the loop!
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 	bool invalid_answer = true;
 	while (invalid_answer) {
 		std::cout << "Type your selection:" << std::endl;
@@ -1233,6 +1235,8 @@ void Library::Playlists_Menu() {
 	std::string answer, command, playlist_name;
 	// Create a regex pattern to match the input string and capture the command and the rest of the string
 	regex pattern("^\\s*(\\w+)\\s+(.*)$");
+	//ignore has to be OUTSIDE the loop!
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 	bool invalid_answer = true;
 	while (invalid_answer) {
 		std::cout << "Type your selection:" << std::endl;
