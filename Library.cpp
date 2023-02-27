@@ -888,6 +888,9 @@ void Library::Podcasts_Menu()
 				}
 			}
 		}
+		else {
+			std::cout << input << " isn't a valid command. Try again." << std::endl;
+		}
 	}
 	#pragma region Without regex
 	//size_t space_pos = input.find(' ');
