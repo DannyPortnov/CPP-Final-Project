@@ -24,7 +24,7 @@ protected:
 	AudioFile(int id, std::string file_name, std::string file_path, std::string duration="", std::string release_date = "");
 public:
 
-	virtual void Play() = 0;
+	virtual void Play();
 	const std::string& get_name() const; // get the name of the song
 	const std::string& get_path() const; // get the name of the song
 	const int get_id() const;
