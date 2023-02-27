@@ -15,6 +15,7 @@ string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "Playlists") return ePlaylists;
 	if (inString == "Help") return eHelp;
 	if (inString == "Back") return eBack;
+	if (inString == "Exit") return eExit;
 	if (inString == "More") return eMore;
 	if (inString == "List") return eList;
 	if (inString == "Add") return eAdd;

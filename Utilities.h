@@ -24,6 +24,7 @@ enum string_code {
 	eDelete,
 	eHelp,
 	eBack,
+	eExit,
 	eMore,
 	eList,
 	eAdd,
