@@ -51,12 +51,12 @@ const int Song::get_plays_count() const {
 
 
 void Song::print_playlists() const {
-	std::cout << "Playlists: ";
+	std::cout << "Appears in playlists: ";
 	if (m_playlist_appearances.size() == 0) {
-		std::cout << " None.";
+		std::cout << " None." << std::endl;
 		return;
 	}
-	unordered_set<string>::iterator it;
+	std::unordered_set<std::string>::iterator it;
 	for (it = m_playlist_appearances.begin(); it != m_playlist_appearances.end(); it++) {
 		std::cout << *it << ", ";
 	}
@@ -102,20 +102,16 @@ bool operator<(const Song& a, const Song& b) {
 
 std::ostream& operator<<(std::ostream& os, const Song& song)
 {
-	os << song.m_file_name;
+	os << static_cast<const AudioFile&>(song); // call AudioFile's operator<<
 	if (song.m_album != "") {
-		os<< ", from " << song.m_album;
+		os<< "Album: " << song.m_album;
 	}
 	if (song.m_artist != "") {
 		os<< ", by " << song.m_artist;
 	}
 	if (song.m_genre != "") {
-		os << " " << song.m_genre << "genre";
+		os << ", " << song.m_genre << "genre";
 	}
-	//todo: implement later
-	//if (!(song.m_release_date == Date(""))) {
-	//	os << " release date: " << song.m_release_date;
-	//}
 	song.print_playlists();
 	return os;
 }

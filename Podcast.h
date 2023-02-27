@@ -25,10 +25,11 @@ Questions:
 class Episode;
 class Podcast 
 {
+	friend std::ostream& operator<<(std::ostream& os, const Podcast& podcast);
 private:
-	unordered_set<Episode*> m_podcast_episodes; // podcast is a playlist of episodes (no need to be ordered)
-	//unordered_set<string> m_episode_names; 
-	//unordered_set<string> m_episodes_file_paths; // all file paths to episodes to check uniqueness 
+	std::unordered_set<Episode*> m_podcast_episodes; // podcast is a playlist of episodes (no need to be ordered)
+	//std::unordered_set<string> m_episode_names; 
+	//std::unordered_set<string> m_episodes_file_paths; // all file paths to episodes to check uniqueness 
 	std::string m_podcast_name;
 public:
 	Podcast(std::string podcast_name);
@@ -44,7 +45,7 @@ public:
 	void Play();
 	//todo: check if a setter is needed (podcast should be set only by admin and not by user)
 };
-
+std::ostream& operator<<(std::ostream& os, const Podcast& podcast);
 
 
 /*

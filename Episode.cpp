@@ -26,3 +26,9 @@ void Episode::Play()
 {
 	//todo: implement
 }
+
+ostream& operator<<(ostream& os, const Episode& episode)
+{
+	os << static_cast<const AudioFile&>(episode); // call AudioFile's operator<<
+	return os;
+}

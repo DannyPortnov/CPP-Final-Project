@@ -67,3 +67,24 @@ void AudioFile::set_release_date(Date release_date)
 {
 	m_release_date = release_date;
 }
+
+std::ostream& operator<<(std::ostream& os, const AudioFile& audio)
+{
+    os << "Name:" << audio.m_file_name << std::endl;
+    os << "ID code: " << audio.m_id_code << std::endl;
+    if (!(audio.m_release_date == Date(""))) {
+        os << "Release date: " << audio.m_release_date << std::endl;
+    }
+    //song.print_playlists();
+    return os;
+}
+
+//std::ostream& AudioFile::Print(std::ostream& os) const
+//{
+//	os << m_file_name;
+//	if (!(audio.m_release_date == Date(""))) {
+//		os << " release date: " << audio.m_release_date;
+//	}
+//	//song.print_playlists();
+//	return os;
+//}

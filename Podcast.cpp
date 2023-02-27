@@ -62,3 +62,14 @@ void Podcast::Play()
 		}
 	}
 }
+
+std::ostream& operator<<(std::ostream& os, const Podcast& podcast)
+{
+	os << "Podcast name:" << podcast.m_podcast_name << std::endl;
+	os << "Has the following episodes:" << std::endl;
+	for (Episode* episode : podcast.m_podcast_episodes) {
+
+		os << episode << std::endl;
+	}
+	return os;
+}

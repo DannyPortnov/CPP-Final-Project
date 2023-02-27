@@ -10,7 +10,9 @@
 
 class AudioFile
 {
+	friend std::ostream& operator<<(std::ostream& os, const AudioFile& audio);
 protected:
+	std::ostream& Print(std::ostream& os) const;
 	std::string m_file_name;
 	std::string m_file_path; 
 	std::string m_duration; //m:ss format
@@ -33,5 +35,5 @@ public:
 	virtual void set_duration(std::string& duration);
 	virtual void set_release_date(Date release_date);
 };
-
+std::ostream& operator<<(std::ostream& os, const AudioFile& audio);
 #endif	// AUDIOFILE_H

@@ -828,18 +828,22 @@ void Library::remove_from_daily_mix(Song* song) {
 void Library::Podcasts_Menu()
 {
 	// This declares a lambda, which can be called just like a function
-	auto print_message = []()
+	auto print_message = [](Server* server)
 	{
+		std::unordered_map<std::string, Podcast*>::iterator itr; //prints all podcasts
+		for (const auto& podcast_pair : *server->get_podcasts()) {
+			std::cout << podcast_pair.second << "\n";
+		}
 		std::cout << "\nPlay <podcast name>" << "\n";
 		std::cout << "Delete <podcast name>" << "\n";
-		std::cout << "Back" << "\n" << "\n";
+		std::cout << "Back\n" << "\n";
 	};
 	bool repeat = true;
 	//ignore has to be OUTSIDE the loop!
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
-		print_message();
+		print_message(m_server);
 		string input;
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
