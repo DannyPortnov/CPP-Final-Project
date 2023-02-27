@@ -243,7 +243,7 @@ ostream& operator<<(ostream& os, const Playlist& playlist) {
 	int i = 1;
 	os << "List of songs in " << playlist.m_playlist_name << " playlist:" << std::endl;
 	for (it = playlist.m_songs.begin(); it != playlist.m_songs.end(); it++) {
-		os << "(" << i << "). " << *(it) << std::endl; // it->second contains Song*
+		os << "(" << i << "). " << **(it) << std::endl; // *it is *Song, so **it is Song!
 		i++;
 	}
 	return os;
