@@ -31,16 +31,19 @@ void Playlist::Play() {
 		std::cout << "There are no songs in the this playlist." << std::endl;
 		return;
 	}
-	std::cout << "Playing" << m_playlist_name << ":" << std::endl;
+	std::cout << "Playing " << m_playlist_name << ":" << std::endl;
 	std::multiset<Song*>::iterator it;
+	bool first_play = true;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
+		if (!first_play && !check_if_continue_playing()) { //asks after first play
+			return;
+		}
 		auto song_to_play = *it;
 		//std::cout << "Now playing: " << song_to_play << std::endl;
 		//song_to_play->update_plays_counter();
 		m_library->play_song(song_to_play); //todo: check if works
+		first_play = false;
 		//m_player.play((it->second)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
-		if (check_if_continue_playing() == false)
-			return;
 	}
 }
 
