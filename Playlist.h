@@ -53,7 +53,7 @@ public:
 	std::string get_name() const { return m_playlist_name; }
 	void Play();
 	void Play_Random();
-	void Print();
+//	void Print();
 	multiset<Song*> get_songs();
 	bool check_if_song_exist_in_playlist_by_id(int id); //works
 	Song* get_song_by_name(std::string song_name);
