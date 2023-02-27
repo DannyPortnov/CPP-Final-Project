@@ -1250,7 +1250,7 @@ void Library::Print_Playlists_Menu() {
 void Library::Playlists_Menu() {
 	std::cout << "Library Menu:" << std::endl;
 	std::cout << *this << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
-	Print_Library_Menu();
+	Print_Playlists_Menu();
 	std::cout << std::endl;
 	std::string answer, command, playlist_name;
 	// Create a regex pattern to match the input string and capture the command and the rest of the string
