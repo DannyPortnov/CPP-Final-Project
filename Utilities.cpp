@@ -31,9 +31,11 @@ string_code Utilities::hashit(std::string const& inString) {
 	//if (inString == "Play song by using id") return ePlaySongById;
 	if (inString == "Play") return ePlay;
 	if (inString == "PlayAll") return ePlayAll;
+	if (inString == "Play") return ePlay;
 	if (inString == "PlayRandom") return ePlayRandom;
 	if (inString == "Help") return eHelp;
 	if (inString == "Back") return eBack;
+	return eError;
 }
 
 //todo: put regex and use refs

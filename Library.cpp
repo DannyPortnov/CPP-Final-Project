@@ -13,8 +13,8 @@
 
 #define user_playlists_file_name "playlists"
 
-Library::Library() : m_server(new Server()), m_favorites(new Favorites(this, m_server)), m_deleted(new Trash(this, m_server)), 
-m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m_server)), m_daily_mix(new DailyMix(this, m_server)) 
+Library::Library() : m_server(new Server()), m_favorites(new Favorites(this, m_server)), m_deleted(new Trash(this, m_server)),
+m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m_server)), m_daily_mix(new DailyMix(this, m_server))
 {
 	m_playlists.emplace(m_favorites->get_name(), m_favorites);
 	m_playlists.emplace(m_daily_mix->get_name(), m_daily_mix);
@@ -26,7 +26,7 @@ m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m
 
 //todo: add getters for each playlists
 Library::~Library() {
-	Begin_Deserialization();	
+	Begin_Deserialization();
 	if (m_playlists.size()) {
 		unordered_map<string, Playlist*>::iterator it;
 		for (it = m_playlists.begin(); it != m_playlists.end(); it++) {
@@ -85,12 +85,12 @@ bool Library::check_if_user_playlist(const std::string& playlist_name) {
 	}
 	return false;
 
-	#pragma region Previous implementation
+#pragma region Previous implementation
 	//if (playlist_name == m_recent->get_name() || playlist_name == m_most_played->get_name()) { //todo: if daily mix is a different class, needs to change implementation
 	//	return false;
 	//}
 	//return true;  
-	#pragma endregion
+#pragma endregion
 
 }
 
@@ -121,11 +121,11 @@ void Library::delete_playlist(std::string playlist_name) {
 			//std::cout << "Playlist Was Successfully Deleted!" << std::endl; //in dialog
 			return;
 		}
-	} 
-	
+	}
 
 
-	#pragma region Previous implementation
+
+#pragma region Previous implementation
 	//// if m_deleted was selected, we need to empty this playlist. all songs need to be permanently deleted!
 	//else if (playlist->get_name() == m_deleted->get_name()) { //todo: move to Deleted class
 	//	multimap<string, Song*>::iterator it;
@@ -141,7 +141,7 @@ void Library::delete_playlist(std::string playlist_name) {
 	//}
 	//else
 	//	std::cout << "This Playlist Cannot Be Deleted!" << std::endl;  
-	#pragma endregion
+#pragma endregion
 
 }
 
@@ -180,7 +180,7 @@ void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabl
 		playlist->add_song_to_playlist(song_to_add); // we check if a song exist in playlist in add_song_to_playlist
 		return;
 	}
-	#pragma region Previous implementation
+#pragma region Previous implementation
 	//if (check_if_user_playlist(playlist_name)) { //todo: check that goes to right method for each playlist
 	//	m_saved_playlist_names.find(playlist_name)->second->add_song_to_playlist(song_to_add);
 	//	
@@ -205,7 +205,7 @@ void Library::RemoveFromPL(const std::string& song_name, const std::string& play
 	if (playlist != nullptr) {
 		playlist->remove_song_from_playlist(song_name); //if its one song, we want to make sure if the user want to delete
 	}
-	#pragma region Previous Implementation
+#pragma region Previous Implementation
 	//if (check_if_user_playlist(playlist_name) && m_deleted->get_name() != playlist_name) {
 	//	if (check_if_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
 	//		auto playlist = m_user_playlists.find(playlist_name)->second;
@@ -222,7 +222,7 @@ void Library::RemoveFromPL(const std::string& song_name, const std::string& play
 	//}
 	//else
 	//	std::cout << "This Playlist Cannot Be Edited!" << std::endl;
-	#pragma endregion
+#pragma endregion
 
 }
 
@@ -538,7 +538,7 @@ void Library::PlayPlaylistShuffled(std::string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
 	if (playlist_to_play != nullptr)
 		playlist_to_play->Play_Random();
-	
+
 }
 
 
@@ -552,7 +552,7 @@ void Library::Add_Song(std::string song_name, std::string file_path, std::string
 	}
 	m_server->Upload_Song(song_name, file_path, artist, album, genre, duration, release_date);
 
-	#pragma region Algorithm to find all songs by that name and choosing specific one
+#pragma region Algorithm to find all songs by that name and choosing specific one
 	//auto all_songs = Server::get_songs_by_name();
 	//multiset<Song*>::iterator start_of_songs_set; //iterator for any/all songs with that name
 	//multiset<Song*>::iterator end_of_songs_set;
@@ -650,7 +650,7 @@ void Library::Begin_Deserialization()
 	//	}
 	//}
 
-	
+
 }
 
 
@@ -824,47 +824,62 @@ void Library::remove_from_daily_mix(Song* song) {
 	m_daily_mix->remove_song_from_playlist(song);
 }
 
-void Library::Podcasts_Menu(const std::string& input)
+void Library::Podcasts_Menu()
 {
+	// This declares a lambda, which can be called just like a function
+	auto print_message = []()
+	{
+		std::cout << "\nPlay <podcast name>" << "\n";
+		std::cout << "Delete <podcast name>" << "\n";
+		std::cout << "Back" << "\n" << "\n";
+	};
 	bool repeat = true;
+	//ignore has to be OUTSIDE the loop!
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 	while (repeat)
 	{
+		print_message();
+		string input;
+		// Clear the input buffer before reading the command input
+		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		//printing all podcasts in alphabet order
 		std::string command, podcast_name;
-		regex pattern("(delete|play|back)\\s*(\\S*)"); //matches a std::string that starts with either "delete", 
-		//"play", or "back", followed by zero or more whitespace characters
+		regex pattern("(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
+			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
 		smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
 			std::string podcast_name = match[2];
 			switch (Utilities::hashit(command))
 			{
-			case(ePlay): {
-				try
-				{
-					auto podcast_choosen= m_server->find_podcast_by_name(podcast_name); //add a check inside 
-					podcast_choosen->Play();
+				case(ePlay): {
+					try
+					{
+						auto podcast_choosen = m_server->find_podcast_by_name(podcast_name);
+						podcast_choosen->Play();
+					}
+					catch (const std::exception&)
+					{
+						std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
+					}
+					break;
+				}
+				case(eDelete): {
+					try
+					{
+						auto podcast_choosen = m_server->find_podcast_by_name(podcast_name); //add a check inside 
+						m_server->Permanent_Delete_Podcast(podcast_choosen);
+					}
+					catch (const std::exception&)
+					{
+						std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
+					}
+					break;
+				}
+				default: {
 					repeat = false;
+					break;
 				}
-				catch (const std::exception&)
-				{
-					std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
-				}
-			}
-			case(eDelete): {
-				try
-				{
-					auto podcast_choosen = m_server->find_podcast_by_name(podcast_name); //add a check inside 
-					m_server->Permanent_Delete_Podcast(podcast_choosen);
-					repeat = false;
-				}
-				catch (const std::exception&)
-				{
-					std::cout << podcast_name << " Isn't a correct podcast name. Try again and check for misspellings." << std::endl;
-				}
-			}
-			default:
-				break;
 			}
 		}
 	}
@@ -887,12 +902,12 @@ void Library::Podcasts_Menu(const std::string& input)
 	//else {
 	//	std::cout << "Invalid command" << std::endl;
 	//}  
-	#pragma endregion
+#pragma endregion
 }
 
 
-void Library::update_most_played() { 
-	
+void Library::update_most_played() {
+
 	m_most_played->Update_Most_Played();
 	//Server::update_most_played_songs();
 	//auto most_played = Server::get_most_played();
@@ -925,6 +940,15 @@ ostream& Library::Print(ostream& os, int begin, int end) const
 ostream& operator<<(ostream& os, const Library& lib)
 {
 	return lib.Print(os, 0, lib.num_of_songs_to_print);
+}
+
+void Library::Example_Func_For_MethodMap() {}
+void Library::Example_Func_For_MethodMap(std::string temp) {
+
+}
+
+void Library::Example2_Func_For_MethodMap(std::string temp) {
+
 }
 
 //todo: move this to class Menu

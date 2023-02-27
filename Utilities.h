@@ -12,6 +12,7 @@
 using namespace std;
 
 enum string_code {
+	eError,
 	eDailyMix,
 	eSearch,
 	ePodcast,
