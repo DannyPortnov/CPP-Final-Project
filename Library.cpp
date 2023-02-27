@@ -165,7 +165,7 @@ void Library::PrintPL() { //todo: make overload?
 }
 
 //todo: check if implementation needed, if so, change implementation
-//set<Playlist*>* Library::get_user_playlists()
+//std::set<Playlist*>* Library::get_user_playlists()
 //{
 //	return &user_playlists;
 //}
@@ -490,13 +490,13 @@ void Library::PlayRandom() {
 		return;
 	}
 	// Create a vector of iterators to the elements in the multimap
-	vector<multimap<string, Song*>::iterator> songs_vector;
+	std::vector<std::multimap<string, Song*>::iterator> songs_vector;
 	for (auto it = songs_to_play->begin(); it != songs_to_play->end(); ++it) {
 		songs_vector.push_back(it);
 	}
 	// Shuffle the keys of the multimap randomly
-	random_device rd;
-	mt19937 generator(rd());
+	std::random_device rd;
+	std::mt19937 generator(rd());
 	shuffle(songs_vector.begin(), songs_vector.end(), generator);
 
 	std::cout << "Playing all library songs, shuffled: " << std::endl;
@@ -639,7 +639,7 @@ void Library::Begin_Deserialization()
 		}
 	}
 
-	//unordered_map<string, Playlist*>::iterator itr;
+	//std::unordered_map<string, Playlist*>::iterator itr;
 	//for (itr = m_playlists.begin(); itr != m_playlists.end(); itr++)
 	//{
 	//	std::string playlist_name = itr->first;
@@ -915,7 +915,7 @@ void Library::update_most_played() {
 	//int most_played_size = most_played->size();
 	//m_most_played->clear_all_playlist();
 	//int minimum = min(most_played_size, max_most_played); // using c++ algorithm
-	//multimap<int, Song*>::iterator it = most_played->end();
+	//std::multimap<int, Song*>::iterator it = most_played->end();
 	//for (int i = 0; i < minimum; i++) {
 	//	it--;
 	//	m_most_played->add_song_to_playlist(it->second);
@@ -1125,7 +1125,7 @@ void Library::Print_Menu() {
 //Library::Library() : m_songs_by_name(Server::get_songs_by_name()), m_playlists()
 //{
 //	// = new set<Song*>*; //is initialization needed here?
-//	//m_playlists_map= &map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
+//	//m_playlists_map= &std::map<string, Playlist*>(m_playlists->get_user_playlists()->begin(), m_playlists->get_user_playlists()->end()); //map of playlists
 //}
 
 //void Library::Are_All_Parameters_Empty(std::string& artist, std::string& album, std::string& genre, std::string& duration)

@@ -25,8 +25,6 @@
 #endif
 #endif  // _DEBUG
 
-using namespace std;
-
 class Playlist;
 class Favorites;
 class DailyMix;
@@ -44,15 +42,15 @@ class Library //: Server //todo: remove inheritance
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
 	Server* m_server;
-	set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
-	unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
-													   // better comlexity when using un_ordered_map.
+	std::set<string> m_user_playlist_names; // in order to print playlist names in alphabetical order.
+	std::unordered_map<string, Playlist*> m_playlists; // store the user playlists, sorted by name of the playlist.
+													   // better comlexity when using unordered_map.
 	Favorites* m_favorites;
 	DailyMix* m_daily_mix;
 	Most_Recent* m_recent;
 	Most_Played* m_most_played;
 	Trash* m_deleted;
-	//unordered_map<string, Playlist*> m_saved_playlist_names;
+	//std::unordered_map<string, Playlist*> m_saved_playlist_names;
 
 	const int num_of_songs_to_print = 10;
 
@@ -121,8 +119,8 @@ public:
 	void PrintSong(int id);
 	void PrintSong(std::string song_name);
 
-	void Update_Song(std::string song_name, std::string new_name = "",
- std::string artist = "", std::string album = "", std::string genre = "", std::string duration = "", std::string release_date ="");
+	void Update_Song(std::string song_name, std::string new_name = "", std::string artist = "",
+	 std::string album = "", std::string genre = "", std::string duration = "", std::string release_date ="");
 	void Update_Song(int song_id, std::string new_name = "", std::string artist = "",
 		std::string album = "", std::string genre = "", std::string duration = "", std::string release_date="");
 	//Update podcast's name
@@ -145,7 +143,7 @@ public:
 	//gets the data structure from Server!
 	void PlayAll();
 	template <template<typename, typename> class MapType>
-	void PlayAll(MapType<string, Song*>*);
+	void PlayAll(MapType<std::string, Song*>*);
 	//gets the data structure from Server!
 	void PlayRandom();
 	//play song and update song data
