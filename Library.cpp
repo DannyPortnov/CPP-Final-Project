@@ -525,6 +525,15 @@ Playlist* Library::get_playlist_by_name(std::string playlist_name) {
 	return nullptr;
 }
 
+// print a specific playlist data
+void Library::PrintPlaylist(std::string playlist_name) {
+	auto playlist_to_play = get_playlist_by_name(playlist_name);
+	if (playlist_to_play != nullptr) {
+		std::cout << playlist_to_play;
+		std:cout << endl;
+	}
+}
+
 //play a playlist by its name 
 void Library::PlayPlaylist(std::string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
@@ -952,10 +961,10 @@ void Library::Example2_Func_For_MethodMap(std::string temp) {
 }
 
 //todo: move this to class Menu
-void Library::Menu() {
+void Library::Library_Menu() {
 	std::cout << "Library Menu:" << std::endl;
 	std::cout << *this << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
-	Print_Menu();
+	Print_Library_Menu();
 	std::cout << std::endl;
 	std::string answer, command, parameters;
 	// Create a regex pattern to match the input string and capture the command and the rest of the string
@@ -967,8 +976,8 @@ void Library::Menu() {
 		smatch matches; // Match the input string against the regex pattern
 		if (regex_match(answer, matches, pattern)) {
 			// Extract the command and the rest of the input string
-			string command = matches[1];
-			string rest_of_string = matches[2];
+			command = matches[1];
+			parameters = matches[2];
 			switch (Utilities::hashit(command))
 			{
 			case(eMore): {
@@ -1169,7 +1178,7 @@ void Library::Menu() {
 				break;
 			}
 			case(eHelp): {
-				Print_Menu();
+				Print_Library_Menu();
 				break;
 			}
 			case(eBack): {
@@ -1181,7 +1190,7 @@ void Library::Menu() {
 	}
 }
 
-void Library::Print_Menu() {
+void Library::Print_Library_Menu() {
 	std::cout << "> More" << std::endl;
 	std::cout << "> List" << std::endl;
 	std::cout << "> AddSong filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
@@ -1203,6 +1212,75 @@ void Library::Print_Menu() {
 	std::cout << "> Back" << std::endl;
 
 }
+
+
+
+void Library::Print_Playlists_Menu() {
+	std::cout << "> Add <playlist_name>" << std::endl;
+	std::cout << "> Delete <playlist_name>" << std::endl;
+	std::cout << "> Play <playlist_name>" << std::endl;
+	std::cout << "> PlayRandom <playlist_name>" << std::endl;
+	std::cout << "> Print <playlist_name>" << std::endl;
+	std::cout << "> Help" << std::endl;
+	std::cout << "> Back" << std::endl;
+}
+
+void Library::Playlists_Menu() {
+	std::cout << "Library Menu:" << std::endl;
+	std::cout << *this << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
+	Print_Library_Menu();
+	std::cout << std::endl;
+	std::string answer, command, playlist_name;
+	// Create a regex pattern to match the input string and capture the command and the rest of the string
+	regex pattern("^\\s*(\\w+)\\s+(.*)$");
+	bool invalid_answer = true;
+	while (invalid_answer) {
+		std::cout << "Type your selection:" << std::endl;
+		std::getline(std::cin, answer);
+		smatch matches; // Match the input string against the regex pattern
+		if (regex_match(answer, matches, pattern)) {
+			// Extract the command and the rest of the input string
+			command = matches[1];
+			playlist_name = matches[2];
+			switch (Utilities::hashit(command))
+			{
+			// the parameter is the name of the playlist in all cases
+			case(eAdd): {
+				create_playlist(playlist_name);
+				break;
+			}
+			case(eDelete): {
+				delete_playlist(playlist_name);
+				break;
+			}
+			case(ePlay): {
+				PlayPlaylist(playlist_name);
+				break;
+			}
+			case(ePlayRandom): {
+				PlayPlaylistShuffled(playlist_name);
+			}
+			case(ePrint): {
+				PrintPlaylist(playlist_name); // this function uses operator overload << for playlist, check if the playlist exist
+			}
+			case(eHelp): {
+				Print_Playlists_Menu();
+				break;
+			}
+			case(eBack): {
+				return;
+				break;
+			}
+			}
+		}
+	}
+}
+
+
+
+
+
+
 
 
 
