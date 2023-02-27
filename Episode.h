@@ -20,7 +20,7 @@ public:
     Episode(std::string file_path, std::string episode_name, Podcast* podcast, std::string release_date = "", std::string duration = "");
     Podcast* Get_Podcast() const;
     //Plays the episode
-    void Play();
+    //void Play();
 };
 ostream& operator<<(ostream& os, const Episode& episode);
 #endif
