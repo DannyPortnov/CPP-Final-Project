@@ -52,7 +52,7 @@ void AudioFile::set_name(std::string& name)
 }
 
 //works
-void AudioFile::set_duration(std::string& duration) //only allow m:ss ?
+void AudioFile::set_duration(std::string& duration) //only allows mm:ss ?
 {
     int minutes, seconds;
     char delimiter;
@@ -77,7 +77,7 @@ void AudioFile::set_release_date(Date release_date)
 
 std::ostream& operator<<(std::ostream& os, const AudioFile& audio)
 {
-    os << "Name:" << audio.m_file_name << std::endl;
+    os << "Name: " << audio.m_file_name << std::endl;
     os << "ID code: " << audio.m_id_code << std::endl;
     if (!(audio.m_release_date == Date(""))) {
         os << "Release date: " << audio.m_release_date << std::endl;
