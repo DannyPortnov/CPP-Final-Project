@@ -1224,7 +1224,7 @@ void Library::Print_Library_Menu() {
 	std::cout << "> PrintSong <unique_id>" << std::endl;
 	std::cout << "> PrintSong <song_name>" << std::endl;
 	std::cout << "> Add2PL <unique_id> <playlist_name>" << std::endl;
-	std::cout << "> RemoveFromPL <song_name> <playlist_name>" << std::endl;
+	std::cout << "> RemoveFromPL song=<song_name> playlist=<playlist_name>" << std::endl;
 	std::cout << "> PrintPL" << std::endl;
 	std::cout << "> Play <song_name>" << std::endl;
 	std::cout << "> Play <song_id>" << std::endl;
