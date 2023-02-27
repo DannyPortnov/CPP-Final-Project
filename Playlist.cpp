@@ -18,7 +18,7 @@ Playlist::~Playlist() {
 bool Playlist::check_if_continue_playing() {
 	std::string prompt = "Would you like to continue playing " + m_playlist_name + "? y/n: ";
 	std::string reject_message = "Stopped playing " + m_playlist_name;
-	std::string accept_message = "Continue playing " + m_playlist_name; // or empty std::string "";
+	std::string accept_message = "Continue playing " + m_playlist_name; // or empty string "";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		return true;
 	}
@@ -32,7 +32,7 @@ void Playlist::Play() {
 		return;
 	}
 	std::cout << "Playing" << m_playlist_name << ":" << std::endl;
-	multiset<Song*>::iterator it;
+	std::multiset<Song*>::iterator it;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
 		auto song_to_play = *it;
 		//std::cout << "Now playing: " << song_to_play << std::endl;
@@ -47,14 +47,14 @@ void Playlist::Play() {
 // play the songs randomly
 void Playlist::Play_Random() {
 	// Create a vector of iterators to the elements in the multimap
-	vector<multiset<Song*>::iterator> songs_vector;
+	std::vector<std::multiset<Song*>::iterator> songs_vector;
 	for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
 		songs_vector.push_back(it);
 	}
 
 	// Shuffle the keys of the multimap randomly
-	random_device rd;
-	mt19937 generator(rd());
+	std::random_device rd;
+	std::mt19937 generator(rd());
 	shuffle(songs_vector.begin(), songs_vector.end(), generator);
 
 	std::cout << "Playing" << m_playlist_name << ", shuffled: " << std::endl;
@@ -92,7 +92,7 @@ void Playlist::Play_Random() {
 
 //print the playlist's content - songs in the playlist (organized alphabetically)
 void Playlist::Print() {
-	multiset<Song*>::iterator it;
+	std::multiset<Song*>::iterator it;
 	int i = 1;
 	std::cout << "List of songs in " << m_playlist_name << " playlist:" << std::endl;
 	for (it = m_songs.begin(); it != m_songs.end(); it++) {
@@ -102,7 +102,7 @@ void Playlist::Print() {
 }
 
 //returns the playlist
-multiset<Song*> Playlist::get_songs() {
+std::multiset<Song*> Playlist::get_songs() {
 	return m_songs;
 }
 
@@ -180,14 +180,14 @@ void Playlist::save_playlist(std::string file_name, ios_base::openmode mode) {
 	if (!Utilities::Is_File_Valid(write_playlist)) {
 		return;
 	}
-	vector<string*> params = { &m_playlist_name };
+	std::vector<std::string*> params = { &m_playlist_name };
 	Utilities::Replace_All(params, false);
 	for (auto& song : m_songs) {
 		write_playlist << m_playlist_name << " " << song->get_id() << std::endl;
 	}
 }
 void Playlist::restore_playlist(std::string file_name) {
-	ifstream read_user_playlists("c:\\temp\\" + file_name + ".dat", ios::in);
+	std::ifstream read_user_playlists("c:\\temp\\" + file_name + ".dat", ios::in);
 	if (!Utilities::Is_File_Valid(read_user_playlists)) {
 		return;
 	}
@@ -195,7 +195,7 @@ void Playlist::restore_playlist(std::string file_name) {
 		std::string playlist_name;
 		int song_id;
 		read_user_playlists >> playlist_name >> song_id;
-		vector<string*> params = { &playlist_name };
+		std::vector<std::string*> params = { &playlist_name };
 		Utilities::Replace_All(params, true);
 		add_song_to_playlist(m_server->find_song_by_id(song_id), false);
 		if (Utilities::Is_End_Of_File(read_user_playlists)) {
@@ -214,7 +214,7 @@ bool operator<(const Playlist& a, const Playlist& b) {
 // get a specific song, even if there are few songs with the same name
 Song* Playlist::get_song_by_name(std::string song_name)
 {
-	unordered_multimap<string, Song*> filtered_songs;
+	std::unordered_multimap<string, Song*> filtered_songs;
 	for (auto& song : m_songs) {
 		filtered_songs.emplace(song->get_name(), song);
 	}
@@ -226,7 +226,7 @@ Song* Playlist::get_song_by_name(std::string song_name)
 		return filtered_songs.find(song_name)->second;
 	}
 	int i = 1;//can't define 2 variables of different type in for (you can but it's less readable)
-	unordered_multimap<string, Song*>::iterator iterator;
+	std::unordered_multimap<std::string, Song*>::iterator iterator;
 	for (iterator = filtered_songs.begin(); iterator != filtered_songs.end(); ++iterator, ++i) {//loops over all podcasts
 		std::cout << i << " - " << iterator->second << std::endl;//prints numbered songs
 	}
