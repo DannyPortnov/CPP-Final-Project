@@ -74,7 +74,7 @@ void mp3player() {
 				continue;
 			}
 			case(eSearch): {
-
+				lib.Search_Menu();
 				continue;
 			}
 			case(ePodcast): {
@@ -82,7 +82,7 @@ void mp3player() {
 				continue;
 			}
 			case(eLibrary): {
-
+				lib.Library_Menu();
 				continue;
 			}
 			case(ePlaylists): {

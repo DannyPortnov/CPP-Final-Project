@@ -169,6 +169,7 @@ public:
 	void Print_Playlists_Menu();
 	void Podcasts_Menu();
 	void DailyMix_Menu();
+	void Search_Menu();
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 
