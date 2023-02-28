@@ -64,13 +64,22 @@ public:
 	
 	//Returns vector of all values inside Map (which is a map of any kind)
 	template <typename Map>
-	static inline auto* Values(Map* map) {
-		auto* values = new std::vector<decltype(map->begin()->second)>();
+	static inline std::vector<typename Map::mapped_type>* Values(Map* map) {
+		std::vector<typename Map::mapped_type>* values = new std::vector<typename Map::mapped_type>();
 		values->reserve(map->size());
 		std::transform(map->begin(), map->end(), std::back_inserter(*values),
 			[](const auto& pair) { return pair.second; });
 		return values;
 	}
+
+	//template <typename Map>
+	//static inline auto* Values(Map* map) {
+	//	auto* values = new std::vector<decltype(map->begin()->second)>();
+	//	values->reserve(map->size());
+	//	std::transform(map->begin(), map->end(), std::back_inserter(*values),
+	//		[](const auto& pair) { return pair.second; });
+	//	return values;
+	//}
 	//static std::vector<Song*> Values(std::multimap<std::string, Song*>* map);
 };
 #endif
