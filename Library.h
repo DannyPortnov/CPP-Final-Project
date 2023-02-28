@@ -78,7 +78,6 @@ private:
 	
 	
 	//void add_to_most_recent(int id);
-	//todo: maybe move to private, no one needs to use this methods
 	//void update_most_recent();	
 	// the update of most recent happans in remove_from_most_recent() method.
 
@@ -136,7 +135,7 @@ public:
 	void Update_Episode(std::string episode_name, std::string new_name = "", std::string duration = "", int release_date = 0); //maybe later
 	
 	//return the playlist that needs to be played
-	Playlist* get_playlist_by_name(std::string playlist_name);
+	Playlist* get_playlist_by_name(std::string playlist_name, bool prints_enable = true);
 	//play a playlist by its name 
 	void PlayPlaylist(std::string playlist_name);
 	//play a playlist shuffled by its name 

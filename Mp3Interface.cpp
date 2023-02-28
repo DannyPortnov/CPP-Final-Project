@@ -160,10 +160,12 @@ void Mp3Interface::Library_Menu() {
 					end += 10;
 					std::cout << " here are another 10 songs from library:" << std::endl;
 					m_lib->Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
 					continue;
 				}
 				case(eList): {
 					//todo: check if need this, it's doing an operation that has to be done when we enter to this menu 
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eAdd): {
@@ -192,6 +194,7 @@ void Mp3Interface::Library_Menu() {
 						//todo: add ecxeption here maybe, for invalid input parameter
 					}
 					m_lib->Add_Song(song_name, file_path, artist, album, genre, duration, release_date);//todo: maybe nove inside the if
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eUpdate): {
@@ -221,6 +224,7 @@ void Mp3Interface::Library_Menu() {
 					else {
 						//todo: add ecxeption here maybe, for invalid input parameter
 					}
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eDelete): {
@@ -241,6 +245,7 @@ void Mp3Interface::Library_Menu() {
 							m_lib->Delete_Song(delete_by_name_or_id);
 						}
 					}
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(ePrintSong): {
@@ -261,6 +266,7 @@ void Mp3Interface::Library_Menu() {
 							m_lib->PrintSong(print_by_name_or_id);
 						}
 					}
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eAdd2PL): { 
@@ -286,6 +292,7 @@ void Mp3Interface::Library_Menu() {
 						// Handle the exception if the input string is not a valid integer
 						std::cout << "Invalid argument: " << e.what() << std::endl;
 					}
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eRemoveFromPL): {

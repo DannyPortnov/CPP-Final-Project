@@ -39,7 +39,7 @@ Most_Played::Most_Played(Library* library, Server* server) : Automatic_Playlist(
 //}
 
 // update most played song using the server method.
-void Most_Played::Update_Most_Played() //todo: make maybe another parent class
+void Most_Played::Update_Most_Played() 
 {
 	m_server->update_most_played_songs();
 	auto most_played = m_server->get_most_played();

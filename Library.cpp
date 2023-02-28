@@ -171,7 +171,7 @@ void Library::PrintPL() {
 void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabled)
 {
 	auto song_to_add = m_server->find_song_by_id(id);
-	Playlist* playlist = get_playlist_by_name(playlist_name);
+	Playlist* playlist = get_playlist_by_name(playlist_name, prints_enabled);
 	if (playlist != nullptr) {
 		playlist->add_song_to_playlist(song_to_add, prints_enabled); // we check if a song exist in playlist in add_song_to_playlist
 		return;
@@ -197,7 +197,7 @@ void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabl
 
 // remove a song from the playlist by song's name.
 void Library::RemoveFromPL(const std::string& song_name, const std::string& playlist_name, bool make_sure) {
-	auto playlist = get_playlist_by_name(playlist_name);
+	auto playlist = get_playlist_by_name(playlist_name, make_sure);
 	if (playlist != nullptr) {
 		playlist->remove_song_from_playlist(song_name, make_sure); //if its one song, we want to make sure if the user want to delete
 	}
@@ -523,7 +523,7 @@ void Library::PlayRandom() { //todo: remove this
 }
 
 //return the playlist that needs to be played. return nullptr if no playlist was found
-Playlist* Library::get_playlist_by_name(std::string playlist_name) {
+Playlist* Library::get_playlist_by_name(std::string playlist_name, bool prints_enable ) {
 	if (check_if_playlist_exist(playlist_name)) {
 		auto playlist = m_playlists.find(playlist_name);
 		return playlist->second;
@@ -532,7 +532,10 @@ Playlist* Library::get_playlist_by_name(std::string playlist_name) {
 	//if (playlist != m_saved_playlist_names.end()) {
 	//	return playlist->second;
 	//}
-	std::cout << "Playlist " << playlist_name << " doesn't exist!" << std::endl; //todo: make printing optional
+	if (prints_enable)
+	{
+		std::cout << "Playlist " << playlist_name << " doesn't exist!" << std::endl;
+	}
 	return nullptr;
 }
 
@@ -695,9 +698,9 @@ Song* Library::Pick_Media(std::string media_name, unordered_multimap<string, Son
 	}
 	int answer;
 	do {
-		std::cout << "Please choose a number between 1 and " << number_of_media_items << " (0 to cancel): ";
-		cin >> answer;
-	} while (answer < 0 || answer > number_of_media_items); //todo: check std::string input
+		std::cout << "Please choose a number between 1 and " << number_of_media_items << " (0 or anything else to cancel): ";
+		cin >> answer; //inputs 0 in case of strings
+	} while (answer < 0 || answer > number_of_media_items);
 	if (answer == 0) {
 		throw exception();
 	}
@@ -706,30 +709,9 @@ Song* Library::Pick_Media(std::string media_name, unordered_multimap<string, Son
 	return iterator->second;
 }
 
-//todo: we have a method like this in library, check if needed here also.
-// double checks with the user if the song should be deleted, if yes- returns true.
-bool Library::make_sure_to_delete_song(Song* song) {
-	std::cout << "You chose to delete the song: " << std::endl;
-	std::cout << "The song details are:" << std::endl;
-	std::cout << *song << std::endl;
-	while (true) { // when the user enter y/n, there is a return
-		std::cout << "Are you sure you want to remove this song from library?" << std::endl;
-		std::cout << "Press y/n: ";
-		char answer;
-		cin >> answer; std::cout << std::endl;
-		if (answer == 'y') {
-			return true;
-		}
-		if (answer == 'n') {
-			return false;
-		}
-		std::cout << "Invalid answer! try again." << std::endl;
-	}
-}
-
 //Adds song to m_deleted playlist
 // method removes a specific song, used by the two Delete_Song methods
-void Library::delete_song(Song* song_to_delete) { //todo: too many messages?
+void Library::delete_song(Song* song_to_delete) {
 	auto trash_name = m_deleted->get_name();
 	std::string prompt = "Are you sure that you want to move this song to trash? y/n: ";
 	std::string reject_message = "The song wasn't added to " + trash_name + "!";
@@ -788,7 +770,7 @@ void Library::Delete_Episode(int id)
 {
 	try
 	{
-		//todo: add check before delete
+		//todo: add check before delete - from Utilities
 		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_id(id));
 	}
 	catch (const std::exception&)
