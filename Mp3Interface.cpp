@@ -74,8 +74,8 @@ void Mp3Interface::Playlists_Menu() {
 	regex pattern("^\\s*(\\w+)\\s+(.*)$");
 	//ignore has to be OUTSIDE the loop!
 	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
-	bool invalid_answer = true;
-	while (invalid_answer) {
+	bool repeat = true;
+	while (repeat) {
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -111,7 +111,7 @@ void Mp3Interface::Playlists_Menu() {
 					continue;
 				}
 				case(eBack): {
-					invalid_answer = false;
+				repeat = false;
 					continue;
 				}
 			}
@@ -139,11 +139,12 @@ void Mp3Interface::Library_Menu() {
 	int begin = 0, end = begin + 10; //todo: make them data members of library
 	std::string answer, command, parameters;
 	// Create a regex pattern to match the input string and capture the command and the rest of the string
-	regex pattern("^\\s*(\\w+)\\s+(.*)$");
+	regex pattern(R"(^\s*(\w+)\s*(.*)$)");//Match zero or more spaces,
+	//captures one or more word chars, then match zero or more spaces and capture everything untill the end
 	//ignore has to be OUTSIDE the loop!
 	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
-	bool invalid_answer = true;
-	while (invalid_answer) {
+	bool repeat = true;
+	while (repeat) {
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -342,7 +343,7 @@ void Mp3Interface::Library_Menu() {
 					continue;
 				}
 				case(eBack): {
-					invalid_answer = false;
+				repeat = false;
 					continue;
 				}
 			}
