@@ -51,8 +51,8 @@ public:
 	virtual void restore_playlist(std::string file_name); //todo: implementation is needed! even a simple one
 	virtual void save_playlist(std::string file_name, std::ios_base::openmode mode = ios::out);
 	std::string get_name() const { return m_playlist_name; }
-	void Play();
-	void Play_Random();
+	void Play(bool shuffle);
+	//void Play_Random();
 //	void Print();
 	std::multiset<Song*> get_songs();
 	bool check_if_song_exist_in_playlist_by_id(int id); //works
