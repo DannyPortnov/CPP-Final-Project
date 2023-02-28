@@ -16,7 +16,7 @@ protected:
 	std::string m_file_name;
 	std::string m_file_path; 
 	std::string m_duration; //m:ss format
-	Date m_release_date; //todo: make Date
+	Date m_release_date;
 	int m_id_code;
 	Player m_player;
 	AudioFile(std::string file_name, std::string file_path, std::string duration="", std::string release_date = "");

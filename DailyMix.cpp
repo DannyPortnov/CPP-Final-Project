@@ -19,7 +19,7 @@
 #define DailyMix_Name "DailyMix"
 
 DailyMix::DailyMix(Library* library, Server* server) : Playlist(DailyMix_Name, library, server),
-	m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in)
+	m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in) //todo: make file name const
 {
 	restore_playlist(); //todo: add try-catch for when trying to initialize m_dailymix_file 
 }
@@ -47,7 +47,6 @@ void DailyMix::restore_playlist() //todo: make maybe another parent class
 			return;
 		}
 	}
-	
 }
 
 //Works
@@ -70,8 +69,6 @@ bool DailyMix::check_if_date_changed(Date& new_date) {
 	return false;
 }
 
-
-//todo: need to delete a song from here when we delete from library.
 
 // removes a song from the mix if it was permanently deleted from the libarary.
 // add a feature that lets the user to chose if he wants to remix the playlist after removing a song,
@@ -111,7 +108,6 @@ void DailyMix::save_playlist(std::string file_name, ios_base::openmode mode) {
 }
 
 // generate a random mix of 10 songs from the library/server
-//todo: maybe add a feature to let the user to remix the daily mix.
 void DailyMix::generate_daily_mix(){
 	auto songs_to_shuffle = m_server->get_songs_by_id();
 	if (songs_to_shuffle == nullptr) {

@@ -9,7 +9,7 @@ class Playlist;
 class Automatic_Playlist :
     public Playlist
 {
-    protected: //todo: continue here
+    protected: 
         inline void Print_Cannot_Edit_Error();
         /*template <typename TCollection >
         void Update_Most(TCollection songs_collection, int max_items, bool is_reverse);*/
@@ -20,7 +20,6 @@ class Automatic_Playlist :
     public:
         Automatic_Playlist(std::string name, Library* library, Server* server);
         void save_playlist(std::string file_name, ios_base::openmode mode = ios::out);
-        //todo: think of an implementation ffor all of Playlist's virtual methods
 };
 
 #endif// AUTOMATICPLAYLIST_H

@@ -9,7 +9,7 @@ Date::Date() {
     create_formated_date_string(m_date);
 }
 
-//todo: maybe check if the date that was entered is valid (main or here).
+
 //constructor that creates an instance by std::string
 Date::Date(std::string date) {
     if (date.empty()) {
@@ -43,7 +43,7 @@ void Date::set_date_from_string(std::string date) {
 }
 
 // change date, return true if date was changed successfully
-void Date::set_date() {
+void Date::set_date() { //todo: check if works
     bool invalid_answer = true;
     while (invalid_answer) {
         std::cout << "Enter the date in the following format- dd/mm/yyyy: ";

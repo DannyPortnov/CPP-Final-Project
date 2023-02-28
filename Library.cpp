@@ -13,6 +13,9 @@
 
 #define user_playlists_file_name "playlists"
 
+
+mt19937 Library::m_gen((random_device())()); //static so initialization happens only once
+
 Library::Library() : m_server(new Server()), m_favorites(new Favorites(this, m_server)), m_deleted(new Trash(this, m_server)),
 m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m_server)), m_daily_mix(new DailyMix(this, m_server))
 {
@@ -24,7 +27,6 @@ m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m
 	Begin_Serialization();
 }
 
-//todo: add getters for each playlists
 Library::~Library() {
 	Begin_Deserialization();
 	if (m_playlists.size()) {
@@ -99,13 +101,13 @@ void Library::create_playlist(const std::string& playlist_name, bool prints_enab
 
 	if (check_if_playlist_exist(playlist_name)) {
 		if (prints_enabled)
-			std::cout << "A playlist with the name: " << playlist_name << " is already exists!" << std::endl; // todo: change to try, throw
+			std::cout << "A playlist with the name: " << playlist_name << " is already exists!" << std::endl;
 		return;
 	}
 	if (prints_enabled)
 		std::cout << "A playlist with the name: " << playlist_name << " was created!" << std::endl;
 	m_user_playlist_names.insert(playlist_name);
-	Playlist* new_playlist = new Playlist(playlist_name, this, m_server); // need to delete!
+	Playlist* new_playlist = new Playlist(playlist_name, this, m_server); // dynamic allocation (need to free memory)!
 	m_playlists[playlist_name] = new_playlist;
 }
 
@@ -146,7 +148,7 @@ void Library::delete_playlist(std::string playlist_name) {
 }
 
 // print all exisiting playlists (names only)
-void Library::PrintPL() { //todo: make overload?
+void Library::PrintPL() { 
 
 	int i = 1;
 	std::cout << "List Of Playlists:" << std::endl;
@@ -163,12 +165,6 @@ void Library::PrintPL() { //todo: make overload?
 	}
 	std::cout << "(" << i << "). " << m_deleted->get_name() << std::endl;
 }
-
-//todo: check if implementation needed, if so, change implementation
-//std::set<Playlist*>* Library::get_user_playlists()
-//{
-//	return &user_playlists;
-//}
 
 
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
@@ -442,7 +438,6 @@ bool Library::check_if_continue_playing() {
 	return false;
 }
 
-//todo: check if this function works
 // Play all of the songs given
 void Library::PlayAll(std::vector<Song*>* songs_to_play, const std::string& message, bool shuffle, bool delete_ptr) {
 	if (songs_to_play->empty()) {
@@ -452,9 +447,7 @@ void Library::PlayAll(std::vector<Song*>* songs_to_play, const std::string& mess
 		std::cout << message << std::endl;
 		bool first_play = true;
 		if (shuffle) {
-			std::random_device rd;
-			std::mt19937 generator(rd()); //todo: maybe move this to be a static data member
-			std::shuffle(songs_to_play->begin(), songs_to_play->end(), generator);
+			std::shuffle(songs_to_play->begin(), songs_to_play->end(), m_gen);
 		}
 		for (auto it : *songs_to_play) {
 			if (!first_play && !check_if_continue_playing()) { //asks after first play
@@ -500,7 +493,7 @@ void Library::PlayAll() {
 }
 
 // Play all of the songs in the library, shuffled
-void Library::PlayRandom() {
+void Library::PlayRandom() { //todo: remove this
 	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
 	if (songs_to_play->size() == 0) {
 		std::cout << "There are no songs in the library." << std::endl;
@@ -902,6 +895,21 @@ void Library::Example2_Func_For_MethodMap(std::string temp) {
 
 }
 
+Favorites* Library::Get_Favorites() {
+	return m_favorites;
+}
+
+Most_Played* Library::Get_Most_Played() {
+	return m_most_played;
+}
+
+Most_Recent* Library::Get_Most_Recent() {
+	return m_recent;
+}
+
+Trash* Library::Get_Deleted() {
+	return m_deleted;
+}
 
 Server* Library::Get_Server() {
 	return m_server;

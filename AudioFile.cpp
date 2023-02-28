@@ -19,8 +19,8 @@ AudioFile::AudioFile(int id, std::string file_name, std::string file_path, std::
 
 void AudioFile::Play()
 {
-    //todo: implement
-    //m_player.play(m_file_path);
+    //todo: see that this works
+    m_player.play(m_file_path);
     std::cout << "Now playing: " << m_file_name << std::endl;
 }
 

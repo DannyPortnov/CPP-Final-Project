@@ -20,6 +20,7 @@
 #include <limits> 
 #include <regex>
 #include <optional>
+#include <random>
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -56,7 +57,7 @@ private:
 	//std::unordered_map<string, Playlist*> m_saved_playlist_names;
 
 	const int num_of_songs_to_print = 10;
-
+	static mt19937 m_gen;
 	template<class T>
 	T* Update_Media_By_Id(int episode_id, T* (Server::* methodPtr)(int), std::string new_name, std::string duration, std::string release_date);
 	//Returns the choosen song. If wrong name returns nullptr!
@@ -170,6 +171,10 @@ public:
 	void Example2_Func_For_MethodMap(std::string temp);
 
 	DailyMix* Get_DailyMix();
+	Favorites* Get_Favorites();
+	Most_Played* Get_Most_Played();
+	Most_Recent* Get_Most_Recent();
+	Trash* Get_Deleted();
 	Server* Get_Server();
 
 };

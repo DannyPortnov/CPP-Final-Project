@@ -25,11 +25,10 @@
 class Library;
 //class Song;
 
-class Playlist { //todo: make deleted, recent, favorites classes which derive from playlist
-	//todo: make a library pointer inside playlist
+class Playlist { 
 private:
-	Player m_player;
-	void Play_Songs(const std::string& message, bool shuffle);
+	/*Player m_player;*/
+	//void Play_Songs(const std::string& message, bool shuffle);
 protected:
 	Server* m_server;
 	Library* m_library;
