@@ -92,7 +92,7 @@ void Mp3Interface::Playlists_Menu() {
 		if (regex_match(answer, matches, pattern)) {
 			// Extract the command and the rest of the input string
 			command = matches[1];
-			playlist_name = matches[5];
+			playlist_name = matches[2];
 			switch (Utilities::hashit(command))
 			{
 					// the parameter is the name of the playlist in all cases
