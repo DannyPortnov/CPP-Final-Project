@@ -506,11 +506,11 @@ void Mp3Interface::Search_Menu() {
 		string input;
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, value_to_search;
-		std::regex pattern(R"(^(Search by \w+)\s(.*)$)"); //todo: add check for 'or Back' here
+		std::regex pattern(R"(^(Search by \w+\s|(Back$)?)(.*)$)"); //todo: add check for 'or Back' here
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
-			std::string value_to_search = match[2];
+			std::string value_to_search = match[3];
 			std::string message = "Playing all found songs";
 			switch (Utilities::hashit(command))
 			{
