@@ -172,7 +172,7 @@ void Library::PrintPL() { //todo: make overload?
 
 
 //Add a song by its ID to a playlist. Creates it if it doesn't exist
-void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabled) //todo: COMPLETED! parameter for prints was added
+void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabled)
 {
 	auto song_to_add = m_server->find_song_by_id(id);
 	Playlist* playlist = get_playlist_by_name(playlist_name);
@@ -180,7 +180,7 @@ void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabl
 		playlist->add_song_to_playlist(song_to_add, prints_enabled); // we check if a song exist in playlist in add_song_to_playlist
 		return;
 	}
-#pragma region Previous implementation
+	#pragma region Previous implementation
 	//if (check_if_user_playlist(playlist_name)) { //todo: check that goes to right method for each playlist
 	//	m_saved_playlist_names.find(playlist_name)->second->add_song_to_playlist(song_to_add);
 	//	
@@ -443,42 +443,60 @@ bool Library::check_if_continue_playing() {
 }
 
 //todo: check if this function works
-// Play all of the songs in the library
-template <template<typename, typename> class MapType>
-void Library::PlayAll(MapType<string, Song*>* songs_to_play) {
-	if (songs_to_play->size() == 0) {
-		std::cout << "There are no songs in the library." << std::endl;
-		return;
+// Play all of the songs given
+void Library::PlayAll(std::vector<Song*>* songs_to_play, const std::string& message, bool shuffle, bool delete_ptr) {
+	if (songs_to_play->empty()) {
+		std::cout << "There are no songs to play." << std::endl;
 	}
-	std::cout << "Playing all library songs: " << std::endl;
-	typename MapType<string, Song*>::iterator it;
-	for (it = songs_to_play->begin(); it != songs_to_play->end(); it++) {
-		std::cout << "Now playing: " << *it->second << std::endl;
-		int id = it->second->get_id();
-		Play(id);
-		if (check_if_continue_playing() == false)
-			return;
+	else {
+		std::cout << message << std::endl;
+		bool first_play = true;
+		if (shuffle) {
+			std::random_device rd;
+			std::mt19937 generator(rd()); //todo: maybe move this to be a static data member
+			std::shuffle(songs_to_play->begin(), songs_to_play->end(), generator);
+		}
+		for (auto it : *songs_to_play) {
+			if (!first_play && !check_if_continue_playing()) { //asks after first play
+				break;
+			}
+			//int id = it->second->get_id();
+			play_song(it);
+			first_play = false;
+		}
+		std::cout << "Finished playing all songs" << std::endl;
 	}
-	std::cout << "Finished playing all songs in the library." << std::endl;
+	if (delete_ptr) {
+		delete songs_to_play;
+	}
 }
 
-// PlayAll with no function template
-void Library::PlayAll() { //todo: don't ask after last song
+//Plays all songs in library unshuffled
+void Library::PlayAll() { 
 	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
-	if (songs_to_play->size() == 0) {
-		std::cout << "There are no songs in the library." << std::endl;
-		return;
-	}
-	std::cout << "Playing all library songs: " << std::endl;
-	multimap<string, Song*>::iterator it;
-	for (it = songs_to_play->begin(); it != songs_to_play->end(); it++) {
-		std::cout << "Now playing: " << *it->second << std::endl;
-		int id = it->second->get_id();
-		Play(id);
-		if (check_if_continue_playing() == false)
-			return;
-	}
-	std::cout << "Finished playing all songs in the library." << std::endl;
+	const std::string message = "Playing all songs in the library: ";
+	PlayAll(Utilities::Values(songs_to_play), message, false, true);
+	//for (auto& pair : *songs_to_play) {
+	//	songs_vector.push_back(pair.second);
+	//}
+	//Utilities::Values(nullptr);
+	#pragma region Previous implementation
+	//if (songs_to_play->size() == 0) {
+	//	std::cout << "There are no songs in the library." << std::endl;
+	//	return;
+	//}
+	//std::cout << "Playing all library songs: " << std::endl;
+	//multimap<string, Song*>::iterator it;
+	//for (it = songs_to_play->begin(); it != songs_to_play->end(); it++) {
+	//	std::cout << "Now playing: " << *it->second << std::endl;
+	//	int id = it->second->get_id();
+	//	Play(id);
+	//	if (check_if_continue_playing() == false)
+	//		return;
+	//}
+	//std::cout << "Finished playing all songs in the library." << std::endl;  
+	#pragma endregion
+
 }
 
 // Play all of the songs in the library, shuffled
@@ -530,7 +548,7 @@ void Library::PrintPlaylist(std::string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
 	if (playlist_to_play != nullptr) {
 		std::cout << playlist_to_play;
-		std:cout << endl;
+	std:cout << endl;
 	}
 }
 
@@ -538,7 +556,7 @@ void Library::PrintPlaylist(std::string playlist_name) {
 void Library::PlayPlaylist(std::string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
 	if (playlist_to_play != nullptr) {
-		playlist_to_play->Play();
+		playlist_to_play->Play(false);
 	}
 }
 
@@ -546,7 +564,7 @@ void Library::PlayPlaylist(std::string playlist_name) {
 void Library::PlayPlaylistShuffled(std::string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
 	if (playlist_to_play != nullptr)
-		playlist_to_play->Play_Random();
+		playlist_to_play->Play(true);
 
 }
 

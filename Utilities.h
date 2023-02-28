@@ -8,6 +8,7 @@
 #include <iostream>
 #include <regex>
 #include <sstream>
+#include <map>
 
 enum string_code {
 	eError,
@@ -60,6 +61,17 @@ public:
 		std::string& accept_message);// create general prompt function for dialog with user- maybe move to utilities
 	//Returns true if finished reading file/empty.
 	static bool Is_End_Of_File_Or_Empty(std::ifstream& fileToCheck);
+	
+	//Returns vector of all values inside Map (which is a map of any kind)
+	template <typename Map>
+	static inline auto* Values(Map* map) {
+		auto* values = new std::vector<decltype(map->begin()->second)>();
+		values->reserve(map->size());
+		std::transform(map->begin(), map->end(), std::back_inserter(*values),
+			[](const auto& pair) { return pair.second; });
+		return values;
+	}
+	//static std::vector<Song*> Values(std::multimap<std::string, Song*>* map);
 };
 #endif
 

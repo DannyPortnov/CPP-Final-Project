@@ -1,6 +1,7 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 #define NOMINMAX //HAS TO BE FIRST
+#include "Utilities.h"
 #include "Song.h"
 #define   _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -146,8 +147,7 @@ public:
 	void Play(int id);
 	//gets the data structure from Server!
 	void PlayAll();
-	template <template<typename, typename> class MapType>
-	void PlayAll(MapType<std::string, Song*>*);
+	void PlayAll(std::vector<Song*>* songs_to_play, const std::string& message, bool shuffle, bool delete_ptr);
 	//gets the data structure from Server!
 	void PlayRandom();
 	//play song and update song data
