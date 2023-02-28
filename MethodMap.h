@@ -11,6 +11,7 @@
 #include <map>
 #include <cassert>
 
+
 struct member_base_ptr {
 	virtual ~member_base_ptr() = default;
 };
@@ -28,6 +29,7 @@ struct member_ptr : public member_base_ptr {
 		return m_ptr(instance, std::forward<Args>(methodArgs)...);
 	}
 };
+
 //todo: seperate to cpp
 class MethodMap {
 private:
@@ -39,8 +41,9 @@ public:
 		m_method_map.emplace(key, std::move(ptr));
 	}
 
-	template <typename RT, typename T, typename... Args>
-	RT Call(const std::string& key, T* instance, Args&&... methodArgs) const {
+
+	template<typename RT, typename T, typename ...Args>
+	RT Call(const std::string& key, T* instance, Args && ...methodArgs) const {
 		auto it = m_method_map.find(key);
 		if (it != m_method_map.end()) {
 			member_base_ptr* base_ptr = it->second.get();
@@ -51,6 +54,9 @@ public:
 			return test->call(instance, std::forward<Args>(methodArgs)...);
 		}
 		throw std::runtime_error("not found");
+	}
+	void Clear() {
+		m_method_map.clear();
 	}
 };
 #endif 
