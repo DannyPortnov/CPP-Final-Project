@@ -1,5 +1,6 @@
 #ifndef MP3INTERFACE_H
 #define MP3INTERFACE_H
+#define NOMINMAX //HAS TO BE FIRST
 #include "Utilities.h"
 #include "MethodMap.h"
 #include "Library.h"

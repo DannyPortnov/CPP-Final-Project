@@ -468,12 +468,12 @@ void Mp3Interface::DailyMix_Menu()
 		switch (Utilities::hashit(command))
 		{
 		case(ePlay): {
-			m_daily_mix->Play();
+			m_daily_mix->Play(false);
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			continue;
 		}
 		case(eRandom): {
-			m_daily_mix->Play_Random();
+			m_daily_mix->Play(true);
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			continue;
 		}
@@ -511,29 +511,33 @@ void Mp3Interface::Search_Menu() {
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
 			std::string value_to_search = match[2];
+			std::string message = "Playing all found songs";
 			switch (Utilities::hashit(command))
 			{
-			case(eSearchByAlbum): {
-				auto collection = m_server->find_by_album(value_to_search);
-				//todo: use PlayAll here????
-				continue;
-			}
-			case(eSearchByGenre): {
-				auto collection = m_server->find_by_genre(value_to_search);
-				continue;
-			}
-			case(eSearchByName): {
-				auto collection = m_server->find_by_name(value_to_search);
-				continue;
-			}
-			case(eSearchBySinger): {
-				auto collection = m_server->find_by_artist(value_to_search);
-				continue;
-			}
-			case(eBack): {
-				repeat = false;
-				continue;
-			}
+				case(eSearchByAlbum): { //todo: make one method
+					auto collection = m_server->find_by_album(value_to_search);
+					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+					continue;
+				}
+				case(eSearchByGenre): {
+					auto collection = m_server->find_by_genre(value_to_search);
+					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+					continue;
+				}
+				case(eSearchByName): {
+					auto collection = m_server->find_by_name(value_to_search);
+					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+					continue;
+				}
+				case(eSearchBySinger): {
+					auto collection = m_server->find_by_artist(value_to_search);
+					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+					continue;
+				}
+				case(eBack): {
+					repeat = false;
+					continue;
+				}
 			}
 		}
 		Print_Invalid_Command_Error(input);
