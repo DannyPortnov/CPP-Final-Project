@@ -46,7 +46,7 @@ Server::~Server()
 {
 	Save_Songs(); //Do serialization in destructor (before removing all songs)
 	Save_Podcasts();
-	Save_Most_Recent(); //todo: maybe move to saving inside Playlist
+	Save_Most_Recent(); 
 	Destroy_All_Allocations();
 }
 
@@ -229,8 +229,8 @@ void Server::Save_Songs()
 	}
 	write.close();
 }
-
-void Server::Save_Most_Recent() {
+//Saves the whole list of songs in order of last time played (could be more than 10 songs)
+void Server::Save_Most_Recent() { 
 	ofstream write("c:\\temp\\most_recent.dat", ios::out);
 	if (!Utilities::Is_File_Valid(write)) {
 		return;
@@ -247,7 +247,6 @@ void Server::Save_Most_Recent() {
 	write.close();
 }
 
-//todo: delete from all off the collections
 void Server::Permanent_Delete_Song(Song* song)
 {
 	#pragma region loop for m_songs_by_alphabet_order 
@@ -268,8 +267,12 @@ void Server::Permanent_Delete_Song(Song* song)
 	remove_song_from_collection(m_all_songs_by_name, song);
 	remove_song_from_collection(m_songs_by_alphabet_order, song);
 	remove_song_from_collection(m_all_songs_by_id, song);
-	//todo: mabye move remove_from_recently_played to here (move from delete_playlist in Library)
-	delete song; //???
+	remove_song_from_collection(m_most_played, song); 
+	remove_from_recently_played(song->get_id());
+	m_songs_file_paths->erase(song->get_path());
+	
+	
+	delete song; 
 }
 
 void Server::Permanent_Delete_Podcast_Episode(Episode* episode)

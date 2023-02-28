@@ -43,7 +43,6 @@ public:
 	void Set_Podcast_Name(const std::string& new_name);
 	unordered_set<Episode*>* get_podcast() { return &m_podcast_episodes; } // getter
 	void Play();
-	//todo: check if a setter is needed (podcast should be set only by admin and not by user)
 };
 std::ostream& operator<<(std::ostream& os, const Podcast& podcast);
 

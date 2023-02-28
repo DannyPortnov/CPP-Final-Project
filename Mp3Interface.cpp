@@ -3,7 +3,7 @@
 #include "Playlist.h"
 #include "DailyMix.h"
 
-Mp3Interface::Mp3Interface(Library* lib) 
+Mp3Interface::Mp3Interface(Library* lib)
 	: m_lib(lib), m_server(lib->Get_Server()), m_daily_mix(lib->Get_DailyMix()) {}
 
 
@@ -29,34 +29,34 @@ void Mp3Interface::Run_Program() {
 		std::getline(std::cin, answer, '\n');
 		switch (Utilities::hashit(answer))
 		{
-			case(eDailyMix): {
-				DailyMix_Menu();
-				continue;
-			}
-			case(eSearch): {
-				Search_Menu();
-				continue;
-			}
-			case(ePodcast): {
-				Podcasts_Menu();
-				continue;
-			}
-			case(eLibrary): {
-				Library_Menu();
-				continue;
-			}
-			case(ePlaylists): {
-				Playlists_Menu();
-				continue;
-			}
-			case(eHelp): {
-				Main_Menu();
-				continue;
-			}
-			case(eExit): {
-				run_program = false;
-				continue;
-			}
+		case(eDailyMix): {
+			DailyMix_Menu();
+			continue;
+		}
+		case(eSearch): {
+			Search_Menu();
+			continue;
+		}
+		case(ePodcast): {
+			Podcasts_Menu();
+			continue;
+		}
+		case(eLibrary): {
+			Library_Menu();
+			continue;
+		}
+		case(ePlaylists): {
+			Playlists_Menu();
+			continue;
+		}
+		case(eHelp): {
+			Main_Menu();
+			continue;
+		}
+		case(eExit): {
+			run_program = false;
+			continue;
+		}
 		}
 		std::cout << answer << " isn't a valid command." << std::endl;
 		std::cout << std::endl;
@@ -95,35 +95,35 @@ void Mp3Interface::Playlists_Menu() {
 			playlist_name = matches[2];
 			switch (Utilities::hashit(command))
 			{
-					// the parameter is the name of the playlist in all cases
-				case(eAdd): {
-					m_lib->create_playlist(playlist_name);
-					continue;
-				}
-				case(eDelete): {
-					m_lib->delete_playlist(playlist_name);
-					continue;
-				}
-				case(ePlay): {
-					m_lib->PlayPlaylist(playlist_name);
-					continue;
-				}
-				case(ePlayRandom): {
-					m_lib->PlayPlaylistShuffled(playlist_name);
-					continue;
-				}
-				case(ePrint): {
-					m_lib->PrintPlaylist(playlist_name); // this function uses operator overload << for playlist, check if the playlist exist
-					continue;
-				}
-				case(eHelp): {
-					Print_Playlists_Menu();
-					continue;
-				}
-				case(eBack): {
+				// the parameter is the name of the playlist in all cases
+			case(eAdd): {
+				m_lib->create_playlist(playlist_name);
+				continue;
+			}
+			case(eDelete): {
+				m_lib->delete_playlist(playlist_name);
+				continue;
+			}
+			case(ePlay): {
+				m_lib->PlayPlaylist(playlist_name);
+				continue;
+			}
+			case(ePlayRandom): {
+				m_lib->PlayPlaylistShuffled(playlist_name);
+				continue;
+			}
+			case(ePrint): {
+				m_lib->PrintPlaylist(playlist_name); // this function uses operator overload << for playlist, check if the playlist exist
+				continue;
+			}
+			case(eHelp): {
+				Print_Playlists_Menu();
+				continue;
+			}
+			case(eBack): {
 				repeat = false;
-					continue;
-				}
+				continue;
+			}
 			}
 		}
 		Print_Invalid_Command_Error(answer);
@@ -179,205 +179,197 @@ void Mp3Interface::Library_Menu() {
 			parameters = matches[2];
 			switch (Utilities::hashit(command))
 			{
-				case(eMore): {
-					begin += 10;
-					end += 10;
-					std::cout << " here are another 10 songs from library:" << std::endl;
-					m_lib->Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
-					continue;
+			case(eMore): {
+				begin += 10;
+				end += 10;
+				std::cout << " here are another 10 songs from library:" << std::endl;
+				m_lib->Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
+				continue;
+			}
+			case(eList): {
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eAdd): {
+				std::string rest_of_string, song_name, file_path, artist, album, genre, duration, release_date;
+				// Define the regular expression pattern
+				std::regex pattern("^(.+\\.mp3)\\s(.+)$");// works for seperatring file path from rest of the string
+				// Extract the different parts of the input string using regex
+				smatch matches;
+				if (regex_match(parameters, matches, pattern)) {
+					file_path = matches[1].str();
+					rest_of_string = matches[2].str();
 				}
-				case(eList): {
-					//todo: check if need this, it's doing an operation that has to be done when we enter to this menu 
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
+				// extract artist name
+				regex pattern1("^(.*?)\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
+				//matches;
+				if (regex_match(rest_of_string, matches, pattern1)) {
+					song_name = matches[1].str();
+					artist = matches[3].str();
+					album = matches[5].str();
+					genre = matches[7].str();
+					duration = matches[9].str();
+					release_date = matches[11].str();
+					m_lib->Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
 				}
-				case(eAdd): {
-					std::string rest_of_string, song_name, file_path, artist, album, genre, duration, release_date;
-					// Define the regular expression pattern
-					std::regex pattern("^(.+\\.mp3)\\s(.+)$");// works for seperatring file path from rest of the string
-					// Extract the different parts of the input string using regex
-					smatch matches;
-					if (regex_match(parameters, matches, pattern)) {
-						file_path = matches[1].str();
-						rest_of_string = matches[2].str();
-					}
-					// extract artist name
-					regex pattern1("^(.*?)\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
-					//matches;
-					if (regex_match(rest_of_string, matches, pattern1)) {
-						song_name = matches[1].str();
-						artist = matches[3].str();
-						album = matches[5].str();
-						genre = matches[7].str();
-						duration = matches[9].str();
-						release_date = matches[11].str();
-					}
-					//todo: add check for valid release date format and valid duration format
-					else {
-						//todo: add ecxeption here maybe, for invalid input parameter
-					}
-					m_lib->Add_Song(song_name, file_path, artist, album, genre, duration, release_date);//todo: maybe nove inside the if
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
-				}
-				case(eUpdate): {
-					std::string update_by_name_or_id, new_name, file_path, artist, album, genre, duration, release_date;
-					// Define regex pattern
-					std::regex pattern("^(.*?)\\s*(name=\\s*(.*?))?\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
-					// Create regex match object
-					std::smatch match;
-					// Execute regex search
-					if (regex_match(parameters, matches, pattern)) {
-						update_by_name_or_id = matches[1].str();
-						new_name = matches[3].str();
-						artist = matches[5].str();
-						album = matches[7].str();
-						genre = matches[9].str();
-						duration = matches[11].str();
-						release_date = matches[13].str();
-						try {
-							int id = std::stoi(update_by_name_or_id);
-							m_lib->Update_Song(id, new_name, artist, album, genre, duration, release_date);
-						}
-						catch (std::invalid_argument& e) {
-							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
-						}
-					}
-					else {
-						//todo: add ecxeption here maybe, for invalid input parameter
-					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
-				}
-				case(eDelete): {
-					// Define regex pattern
-					std::regex pattern("^([a-zA-Z0-9 _]+)$");
-					// Create regex match object
-					std::smatch match;
-
-					// Execute regex search
-					if (std::regex_search(parameters, match, pattern)) {
-						std::string delete_by_name_or_id = match[1]; // Extract command
-						try {
-							int id = std::stoi(delete_by_name_or_id);
-							m_lib->Delete_Song(id);
-						}
-						catch (std::invalid_argument& e) {
-							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->Delete_Song(delete_by_name_or_id);
-						}
-					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
-				}
-				case(ePrintSong): {
-					// Define regex pattern
-					std::regex pattern("^([a-zA-Z0-9 _]+)$");
-					// Create regex match object
-					std::smatch match;
-
-					// Execute regex search
-					if (std::regex_search(parameters, match, pattern)) {
-						std::string print_by_name_or_id = match[1]; // Extract command
-						try {
-							int id = std::stoi(print_by_name_or_id);
-							m_lib->PrintSong(id);
-						}
-						catch (std::invalid_argument& e) {
-							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->PrintSong(print_by_name_or_id);
-						}
-					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
-				}
-				case(eAdd2PL): { 
-					std::string song_id, playlist_name;
-					// Define the regular expression to match the song ID and name
-					std::regex pattern(R"((\d+)\s+(.*))");
-					// Match the input string against the regular expression
-					std::smatch match;
-					if (std::regex_match(parameters, match, pattern)) {
-						// Extract the song ID and name from the match results
-						song_id = match[1].str();
-						playlist_name = match[2].str();
-					}
-					else {
-						//todo: add exception here maybe, for invalid unput
-					}
-					// Attempt to convert the string to an integer using stoi
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eUpdate): {
+				std::string update_by_name_or_id, new_name, file_path, artist, album, genre, duration, release_date;
+				// Define regex pattern
+				std::regex pattern("^(.*?)\\s*(name=\\s*(.*?))?\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
+				// Create regex match object
+				std::smatch match;
+				// Execute regex search
+				if (regex_match(parameters, matches, pattern)) {
+					update_by_name_or_id = matches[1].str();
+					new_name = matches[3].str();
+					artist = matches[5].str();
+					album = matches[7].str();
+					genre = matches[9].str();
+					duration = matches[11].str();
+					release_date = matches[13].str();
 					try {
-						int id = std::stoi(song_id);
-						m_lib->Add2PL(id, playlist_name);
+						int id = std::stoi(update_by_name_or_id);
+						m_lib->Update_Song(id, new_name, artist, album, genre, duration, release_date);
 					}
 					catch (std::invalid_argument& e) {
-						// Handle the exception if the input string is not a valid integer
-						std::cout << "Invalid argument: " << e.what() << std::endl;
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						m_lib->Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
 					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
 				}
-				case(eRemoveFromPL): {
-					// Initialize variables to store the song and playlist names
-					std::string song_name, playlist_name;
-					// Define the regular expression pattern to extract the song and playlist names
-					std::regex pattern("(song)=\\s*(.*?)\\s*(playlist)=\\s*(.*?)\\s*$");
-					// Search for the song name using the regular expression pattern
-					std::smatch match;
-					std::regex_search(parameters, match, pattern);
-					// Extract the song name from the match object
-					if (std::regex_match(parameters, match, pattern)) {
-						song_name = match[2];
-						playlist_name = match[4];
-						m_lib->RemoveFromPL(song_name, playlist_name);
-					}
-					else {
-						//todo: add exception here maybe, for invalid input
-					}
-					continue;
+				else {
+					//todo: add ecxeption here maybe, for invalid input parameter
 				}
-				case(ePrintPL): { 
-					m_lib->PrintPL();
-					continue;
-				}
-				case(ePlay): {
-					// Define regex pattern
-					std::regex pattern("^([a-zA-Z0-9 _]+)$");
-					// Create regex match object
-					std::smatch match;
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eDelete): {
+				// Define regex pattern
+				std::regex pattern("^([a-zA-Z0-9 _]+)$");
+				// Create regex match object
+				std::smatch match;
 
-					// Execute regex search
-					if (std::regex_search(parameters, match, pattern)) {
-						std::string play_by_name_or_id = match[1]; // Extract command
-						try {
-							int id = std::stoi(play_by_name_or_id);
-							m_lib->Play(id);
-						}
-						catch (std::invalid_argument& e) {
-							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->Play(play_by_name_or_id);
-						}
+				// Execute regex search
+				if (std::regex_search(parameters, match, pattern)) {
+					std::string delete_by_name_or_id = match[1]; // Extract command
+					try {
+						int id = std::stoi(delete_by_name_or_id);
+						m_lib->Delete_Song(id);
 					}
-					continue;
+					catch (std::invalid_argument& e) {
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						m_lib->Delete_Song(delete_by_name_or_id);
+					}
 				}
-				case(ePlayAll): {
-					m_lib->PlayAll();
-					continue;
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(ePrintSong): {
+				// Define regex pattern
+				std::regex pattern("^([a-zA-Z0-9 _]+)$");
+				// Create regex match object
+				std::smatch match;
+
+				// Execute regex search
+				if (std::regex_search(parameters, match, pattern)) {
+					std::string print_by_name_or_id = match[1]; // Extract command
+					try {
+						int id = std::stoi(print_by_name_or_id);
+						m_lib->PrintSong(id);
+					}
+					catch (std::invalid_argument& e) {
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						m_lib->PrintSong(print_by_name_or_id);
+					}
 				}
-				case(ePlayRandom): {
-					m_lib->PlayRandom();
-					continue;
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eAdd2PL): {
+				std::string song_id, playlist_name;
+				// Define the regular expression to match the song ID and name
+				std::regex pattern(R"((\d+)\s+(.*))");
+				// Match the input string against the regular expression
+				std::smatch match;
+				if (std::regex_match(parameters, match, pattern)) {
+					// Extract the song ID and name from the match results
+					song_id = match[1].str();
+					playlist_name = match[2].str();
 				}
-				case(eHelp): {
-					Print_Library_Menu();
-					continue;
+				else {
+					//todo: add exception here maybe, for invalid unput
 				}
-				case(eBack): {
+				// Attempt to convert the string to an integer using stoi
+				try {
+					int id = std::stoi(song_id);
+					m_lib->Add2PL(id, playlist_name);
+				}
+				catch (std::invalid_argument& e) {
+					// Handle the exception if the input string is not a valid integer
+					std::cout << "Invalid argument: " << e.what() << std::endl;
+				}
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			case(eRemoveFromPL): {
+				// Initialize variables to store the song and playlist names
+				std::string song_name, playlist_name;
+				// Define the regular expression pattern to extract the song and playlist names
+				std::regex pattern("(song)=\\s*(.*?)\\s*(playlist)=\\s*(.*?)\\s*$");
+				// Search for the song name using the regular expression pattern
+				std::smatch match;
+				std::regex_search(parameters, match, pattern);
+				// Extract the song name from the match object
+				if (std::regex_match(parameters, match, pattern)) {
+					song_name = match[2];
+					playlist_name = match[4];
+					m_lib->RemoveFromPL(song_name, playlist_name);
+				}
+				continue;
+			}
+			case(ePrintPL): {
+				m_lib->PrintPL();
+				continue;
+			}
+			case(ePlay): {
+				// Define regex pattern
+				std::regex pattern("^([a-zA-Z0-9 _]+)$");
+				// Create regex match object
+				std::smatch match;
+
+				// Execute regex search
+				if (std::regex_search(parameters, match, pattern)) {
+					std::string play_by_name_or_id = match[1]; // Extract command
+					try {
+						int id = std::stoi(play_by_name_or_id);
+						m_lib->Play(id);
+					}
+					catch (std::invalid_argument& e) {
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						m_lib->Play(play_by_name_or_id);
+					}
+				}
+				continue;
+			}
+			case(ePlayAll): {
+				m_lib->PlayAll();
+				continue;
+			}
+			case(ePlayRandom): {
+				m_lib->PlayRandom();
+				continue;
+			}
+			case(eHelp): {
+				Print_Library_Menu();
+				continue;
+			}
+			case(eBack): {
 				repeat = false;
-					continue;
-				}
+				continue;
+			}
 			}
 		}
 		Print_Invalid_Command_Error(answer);
@@ -420,23 +412,23 @@ void Mp3Interface::Podcasts_Menu()
 			std::string podcast_name = match[2];
 			switch (Utilities::hashit(command))
 			{
-				case(ePlay): {
-					m_lib->Play_Podcast(podcast_name);
-					continue;
-				}
-				case(eDelete): {
-					m_lib->Delete_Podcast(podcast_name);
-					continue;
-				}
-				case(eBack): {
-					repeat = false;
-					continue;
-				}
+			case(ePlay): {
+				m_lib->Play_Podcast(podcast_name);
+				continue;
+			}
+			case(eDelete): {
+				m_lib->Delete_Podcast(podcast_name);
+				continue;
+			}
+			case(eBack): {
+				repeat = false;
+				continue;
+			}
 			}
 		}
 		Print_Invalid_Command_Error(input); //if no match found or command doesn't fit switch case
 	}
-	#pragma region Without regex
+#pragma region Without regex
 	//size_t space_pos = input.find(' ');
 	//if (space_pos != std::string::npos) { //if found 
 	//	command = input.substr(0, space_pos);
@@ -455,7 +447,7 @@ void Mp3Interface::Podcasts_Menu()
 	//else {
 	//	std::cout << "Invalid command" << std::endl;
 	//}  
-	#pragma endregion
+#pragma endregion
 }
 
 void Mp3Interface::DailyMix_Menu()
@@ -518,7 +510,7 @@ void Mp3Interface::Search_Menu() {
 		string input;
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, value_to_search;
-		std::regex pattern(R"(^(Search by \w+\s|(Back$)|(Help$)?)(.*)$)"); //todo: add check for 'or Back' here
+		std::regex pattern(R"(^(Search by \w+\s|(Back$)|(Help$)?)(.*)$)");
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
@@ -526,30 +518,30 @@ void Mp3Interface::Search_Menu() {
 			std::string message = "Playing all found songs";
 			switch (Utilities::hashit(command))
 			{
-				case(eSearchByAlbum): { //todo: make one method
-					auto collection = m_server->find_by_album(value_to_search);
-					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
-					continue;
-				}
-				case(eSearchByGenre): {
-					auto collection = m_server->find_by_genre(value_to_search);
-					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
-					continue;
-				}
-				case(eSearchByName): {
-					auto collection = m_server->find_by_name(value_to_search);
-					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
-					continue;
-				}
-				case(eSearchBySinger): {
-					auto collection = m_server->find_by_artist(value_to_search);
-					m_lib->PlayAll(Utilities::Values(collection), message, false, true);
-					continue;
-				}
-				case(eBack): {
-					repeat = false;
-					continue;
-				}
+			case(eSearchByAlbum): { //todo: make one method
+				auto collection = m_server->find_by_album(value_to_search);
+				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				continue;
+			}
+			case(eSearchByGenre): {
+				auto collection = m_server->find_by_genre(value_to_search);
+				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				continue;
+			}
+			case(eSearchByName): {
+				auto collection = m_server->find_by_name(value_to_search);
+				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				continue;
+			}
+			case(eSearchBySinger): {
+				auto collection = m_server->find_by_artist(value_to_search);
+				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				continue;
+			}
+			case(eBack): {
+				repeat = false;
+				continue;
+			}
 			}
 		}
 		Print_Invalid_Command_Error(input);

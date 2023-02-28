@@ -45,9 +45,9 @@ public:
 	virtual ~Playlist();
 	virtual void add_song_to_playlist(Song* song, bool prints_enabled = true); //works
 	virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
-	void remove_song_from_playlist(std::string song_name, bool make_sure = true); //todo: check
+	void remove_song_from_playlist(std::string song_name, bool make_sure = true); 
 	virtual void clear_all_playlist(bool prints_enabled = true);
-	virtual void restore_playlist(std::string file_name); //todo: implementation is needed! even a simple one
+	virtual void restore_playlist(std::string file_name);
 	virtual void save_playlist(std::string file_name, std::ios_base::openmode mode = ios::out);
 	std::string get_name() const { return m_playlist_name; }
 	void Play(bool shuffle);
@@ -63,7 +63,7 @@ public:
 	//std::unordered_multimap<string, Song*>* get_songs_with_same_name(const std::string& song_name);
 //friend bool operator<(Playlist* a, Playlist* b);
 
-friend bool operator<(const Playlist& a, const Playlist& b); //todo: check if we need this
+//friend bool operator<(const Playlist& a, const Playlist& b); 
 friend std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
 
 //friend bool operator!=(const Playlist& a, const Playlist& b);
@@ -71,9 +71,8 @@ friend std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
 
 };
 
-// todo: implement operator < in order std::set stl will be able to sort
 //bool operator<(Playlist* a, Playlist* b);
-bool operator<(const Playlist& a, const Playlist& b);
+//bool operator<(const Playlist& a, const Playlist& b);
 std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
 
 //bool operator!=(const Playlist& a, const Playlist& b);

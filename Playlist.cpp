@@ -123,7 +123,6 @@ void Playlist::Play(bool shuffle) {
 //	for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
 //		m_player.play((*it)->get_path(), true); //todo: check if true is needed (not sure what is the purpose of wait)
 //	}
-//	 todo: check if necessary
 //	 Free the dynamically allocated objects
 //	/.for (it = audio_files_vector.begin(); it != audio_files_vector.end(); it++) {
 //		delete* it;
@@ -183,7 +182,7 @@ void Playlist::remove_song_from_playlist(Song* song, bool make_sure) {
 	// the printing of the results of the operation happans in make_sure_to_remove
 }
 
-//todo: check if overriden properly
+
 void Playlist::remove_song_from_playlist(std::string song_name, bool make_sure) {
 	auto song = get_song_by_name(song_name);
 	remove_song_from_playlist(song, make_sure);
@@ -236,15 +235,15 @@ void Playlist::restore_playlist(std::string file_name) {
 	}
 }
 
-//returns true if the playlists name are in the right order.
-bool operator<(const Playlist& a, const Playlist& b) {
-	return (a.get_name() < b.get_name());
-}
+////returns true if the playlists name are in the right order.
+//bool operator<(const Playlist& a, const Playlist& b) {
+//	return (a.get_name() < b.get_name());
+//}
 
 
 //todo: merge later with pick media
 // get a specific song, even if there are few songs with the same name
-Song* Playlist::get_song_by_name(std::string song_name)
+Song* Playlist::get_song_by_name(std::string song_name) 
 {
 	std::unordered_multimap<string, Song*> filtered_songs;
 	for (auto& song : m_songs) {
@@ -266,7 +265,7 @@ Song* Playlist::get_song_by_name(std::string song_name)
 	do {
 		std::cout << "Please choose a number between 1 and " << number_of_media_items << " (0 to cancel): ";
 		cin >> answer;
-	} while (answer < 0 || answer > number_of_media_items); //todo: check std::string input
+	} while (answer < 0 || answer > number_of_media_items); 
 	if (answer == 0) {
 		throw exception();
 	}
@@ -311,7 +310,6 @@ ostream& operator<<(ostream& os, const Playlist& playlist) {
 //	return false;
 //}
 
-//todo: use pick media instea of get_ong_by_name and count_song_name_appearences
 // get how many songs have the same name
 /*
 int Playlist::count_song_name_appearences(std::string song_name) {
@@ -319,7 +317,6 @@ int Playlist::count_song_name_appearences(std::string song_name) {
 	return m_songs.count(song_name);
 }
 
-//todo: maybe to chabge to pick media
 // get a specific song, even if there are few songs with the same name
 Song* Playlist::get_song_by_name(std::string song_name)
 {
