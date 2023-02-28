@@ -44,6 +44,21 @@ string_code Utilities::hashit(std::string const& inString) {
 	return eError;
 }
 
+//template <typename Map>
+//inline vector<typename Map::mapped_type>& Utilities::Values(Map& map) {
+////std::vector<Song*> Utilities::Values(std::multimap<std::string, Song*>* map) {
+//	//std::vector<typename Map::mapped_type>* values = new std::vector<typename Map::mapped_type>();
+//
+//}
+
+//template<typename STLContainer>
+//inline auto Utilities::CopyContanerKeyToSet(const STLContainer& cont)
+//{
+//	std::set<decltype(cont.begin()->first)> lset;
+//	std::transform(cont.begin(), cont.end(), std::inserter(lset, lset.end()), [](const  auto it) { return it.first; });
+//	return lset
+//}
+
 //todo: put regex and use refs
 void Utilities::Replace_All(std::vector<std::string*>& params, bool is_serialization)
 {
