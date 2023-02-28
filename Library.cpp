@@ -199,9 +199,9 @@ void Library::Add2PL(int id, const std::string& playlist_name, bool prints_enabl
 void Library::RemoveFromPL(const std::string& song_name, const std::string& playlist_name, bool make_sure) {
 	auto playlist = get_playlist_by_name(playlist_name);
 	if (playlist != nullptr) {
-		playlist->remove_song_from_playlist(song_name); //if its one song, we want to make sure if the user want to delete
+		playlist->remove_song_from_playlist(song_name, make_sure); //if its one song, we want to make sure if the user want to delete
 	}
-#pragma region Previous Implementation
+	#pragma region Previous Implementation
 	//if (check_if_user_playlist(playlist_name) && m_deleted->get_name() != playlist_name) {
 	//	if (check_if_playlist_exist(playlist_name) || playlist_name == m_favorites->get_name()) {
 	//		auto playlist = m_user_playlists.find(playlist_name)->second;
@@ -673,6 +673,11 @@ void Library::Begin_Deserialization()
 
 }
 
+mt19937 Library::Get_Gen()
+{
+	return m_gen;
+}
+
 
 
 Song* Library::Pick_Media(std::string media_name, unordered_multimap<string, Song*>* collection_to_search) {
@@ -725,10 +730,18 @@ bool Library::make_sure_to_delete_song(Song* song) {
 //Adds song to m_deleted playlist
 // method removes a specific song, used by the two Delete_Song methods
 void Library::delete_song(Song* song_to_delete) { //todo: too many messages?
-	auto playlist_appearances = song_to_delete->get_playlist_appearances(); //todo: check this
+	auto trash_name = m_deleted->get_name();
+	std::string prompt = "Are you sure that you want to move this song to trash? y/n: ";
+	std::string reject_message = "The song wasn't added to " + trash_name + "!";
+	std::string accept_message = "";
+	if (!Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+		return;
+	}
+	auto playlist_appearances = song_to_delete->get_playlist_appearances(); 
 	if (playlist_appearances->size() > 0) {
 		unordered_set<string>::iterator it;
-		for (it = playlist_appearances->begin(); it != playlist_appearances->end(); it++) {
+		std::unordered_set<std::string> copy(*playlist_appearances);
+		for (it = copy.begin(); it != copy.end(); it++) {
 			RemoveFromPL(song_to_delete->get_name(), *it, false);// don't need to check with user here
 			// false- don't need to make sure with the user if he wants to delete from this playlist
 		}

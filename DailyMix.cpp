@@ -70,23 +70,23 @@ bool DailyMix::check_if_date_changed(Date& new_date) {
 }
 
 
-// removes a song from the mix if it was permanently deleted from the libarary.
-// add a feature that lets the user to chose if he wants to remix the playlist after removing a song,
-// or to leave the mix with less songs until the next day
-void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
-
-	std::cout << "A song was deleted from " << m_playlist_name << "." << std::endl;
-	std::string prompt = "Would you like to regenerate " + m_playlist_name + "? y/n: ";
-	std::string reject_message = m_playlist_name + " wasn't regenerated!";
-	std::string accept_message = m_playlist_name + " was regenerated successfully!";
-	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
-		Playlist::clear_all_playlist(false); // don't add prints
-		generate_daily_mix();
-		return;
-	}
-	Playlist::remove_song_from_playlist(song, false);
-	return;
-}
+//// removes a song from the mix if it was permanently deleted from the libarary.
+//// add a feature that lets the user to chose if he wants to remix the playlist after removing a song,
+//// or to leave the mix with less songs until the next day
+//void DailyMix::remove_song_from_playlist(Song* song, bool make_sure) {
+//
+//	std::cout << "A song was deleted from " << m_playlist_name << "." << std::endl;
+//	std::string prompt = "Would you like to regenerate " + m_playlist_name + "? y/n: ";
+//	std::string reject_message = m_playlist_name + " wasn't regenerated!";
+//	std::string accept_message = m_playlist_name + " was regenerated successfully!";
+//	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+//		Playlist::clear_all_playlist(false); // don't add prints
+//		generate_daily_mix();
+//		return;
+//	}
+//	Playlist::remove_song_from_playlist(song, false);
+//	return;
+//}
 
 
 // deserialization for daily mix
@@ -119,9 +119,7 @@ void DailyMix::generate_daily_mix(){
 		shuffled_songs_vector.push_back(it);
 	}
 	// Shuffle the keys of the multimap randomly
-	std::random_device rd;
-	std::mt19937 generator(rd());
-	shuffle(shuffled_songs_vector.begin(), shuffled_songs_vector.end(), generator);
+	shuffle(shuffled_songs_vector.begin(), shuffled_songs_vector.end(), Library::Get_Gen());
 
 	//add 10 songs from shuffled_songs_vector to m_daily_mix 
 	for (int i = 0; i < max_songs && i < shuffled_songs_vector.size(); i++) { // if library has less than 10 songs, mix them also.

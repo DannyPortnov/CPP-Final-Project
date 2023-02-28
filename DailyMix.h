@@ -34,7 +34,7 @@ public:
 	//void Play_Random(); from playlist
 	void generate_daily_mix(); //works // generate a random mix of 10 songs from the library/server
 	void set_date(); // sets the date- checks if day was changed.
-	void remove_song_from_playlist(Song* song, bool make_sure = true);
+	//void remove_song_from_playlist(Song* song, bool make_sure = true);
 	//void save_dailymix();
 	void save_playlist(std::string file_name, ios_base::openmode mode = ios::out);
 	void restore_playlist();

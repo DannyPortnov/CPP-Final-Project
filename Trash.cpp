@@ -49,19 +49,16 @@ void Trash::clear_all_playlist() {
 }
 
 // called when we want to add song to the Trash
-void Trash::add_to_trash(Song* song, bool add_print) { //todo: add boolean
-	if (add_print == false) {
-		Playlist::add_song_to_playlist(song);
-		return;
-	}
+void Trash::add_to_trash(Song* song) {
+	Playlist::add_song_to_playlist(song);
 
-	std::string prompt = "Are you sure that you want to move this song to trash? y/n: ";
+	/*std::string prompt = "Are you sure that you want to move this song to trash? y/n: ";
 	std::string reject_message = "The song wasn't added to " + m_playlist_name + "!";
-	std::string accept_message = "The song was successfully added to " + m_playlist_name + "!";
+	std::string accept_message = "";
 	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
-		Playlist::add_song_to_playlist(song);
+		Playlist::add_song_to_playlist(song, add_print);
 		return;
-	}
+	}*/
 }
 //
 //void Trash::restore_playlist() //todo: make maybe another parent class

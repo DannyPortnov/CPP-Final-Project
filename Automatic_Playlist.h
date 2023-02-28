@@ -10,7 +10,7 @@ class Automatic_Playlist :
     public Playlist
 {
     protected: 
-        inline void Print_Cannot_Edit_Error();
+        inline void Print_Cannot_Edit_Error(bool make_sure);
         /*template <typename TCollection >
         void Update_Most(TCollection songs_collection, int max_items, bool is_reverse);*/
         //virtual void restore_playlist(); //todo: implement here, even a simple implementation

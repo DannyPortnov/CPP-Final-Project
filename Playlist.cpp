@@ -155,12 +155,12 @@ void Playlist::add_song_to_playlist(Song* song, bool prints_enabled) {
 
 // double checks with the user if the song should be deleted, if yes- returns true.
 bool Playlist::make_sure_to_remove_song(Song* song, bool make_sure) {
-	std::cout << "You chose to remove the song: " << std::endl;
-	//std::cout << "The song details are:" << std::endl;
-	std::cout << *song << std::endl;
 	if (make_sure == false) {
 		return true;
 	}
+	std::cout << "You chose to remove the song: " << std::endl;
+	//std::cout << "The song details are:" << std::endl;
+	std::cout << *song << std::endl;
 	std::string prompt = "Are you sure you want to remove this song from: " + m_playlist_name + "? y/n: ";
 	std::string reject_message = "The song wasn't removed from playlist: " + m_playlist_name + "!";
 	std::string accept_message = "Song was successfully removed from playlist: " + m_playlist_name + "!";

@@ -100,6 +100,7 @@ public:
 	void Begin_Serialization();//works
 	void Begin_Deserialization();
 
+	static mt19937 Get_Gen();
 
 	//Deletes a song from the library
 	void Delete_Song(int id);
