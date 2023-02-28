@@ -65,18 +65,27 @@ void Mp3Interface::Run_Program() {
 	}
 }
 
-void Mp3Interface::Playlists_Menu() {
+void Mp3Interface::Print_Playlists_Menu() {
 	std::cout << "Playlist Menu:" << std::endl;
-	m_lib->PrintPL();
-	Print_Playlists_Menu();
-	std::cout << std::endl;
-	std::string answer, command, playlist_name;
-	// Create a regex pattern to match the input string and capture the command and the rest of the string
-	regex pattern("^\\s*(\\w+)\\s+(.*)$");
-	//ignore has to be OUTSIDE the loop!
-	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
+	std::cout << "> Add <playlist_name>" << std::endl;
+	std::cout << "> Delete <playlist_name>" << std::endl;
+	std::cout << "> Play <playlist_name>" << std::endl;
+	std::cout << "> PlayRandom <playlist_name>" << std::endl;
+	std::cout << "> Print <playlist_name>" << std::endl;
+	std::cout << "> Help" << std::endl;
+	std::cout << "> Back" << std::endl;
+}
+
+void Mp3Interface::Playlists_Menu() {
 	bool repeat = true;
 	while (repeat) {
+		Print_Playlists_Menu();
+		std::cout << std::endl;
+		std::string answer, command, playlist_name;
+		// Create a regex pattern to match the input string and capture the command and the rest of the string
+		std::regex pattern(R"(^(Back$|Help$|Add|Delete|Print|Play|PlayRandom)\s*(.*)$)");
+		//ignore has to be OUTSIDE the loop!
+		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -122,30 +131,45 @@ void Mp3Interface::Playlists_Menu() {
 }
 
 
-void Mp3Interface::Print_Playlists_Menu() {
-	std::cout << "> Add <playlist_name>" << std::endl;
-	std::cout << "> Delete <playlist_name>" << std::endl;
-	std::cout << "> Play <playlist_name>" << std::endl;
-	std::cout << "> PlayRandom <playlist_name>" << std::endl;
-	std::cout << "> Print <playlist_name>" << std::endl;
+void Mp3Interface::Print_Library_Menu() {
+	std::cout << "Library Menu:" << std::endl;
+	std::cout << *m_lib << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
+	std::cout << "> More" << std::endl;
+	std::cout << "> List" << std::endl;
+	std::cout << "> AddSong filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
+	//std::cout << "> AddEpisode filename_fullpath episode_name podcast_name duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
+	std::cout << "> Update song_name name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
+	std::cout << "> Update song_id name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
+	std::cout << "> Delete <unique_id>" << std::endl;
+	std::cout << "> Delete <song_name>" << std::endl;
+	std::cout << "> PrintSong <unique_id>" << std::endl;
+	std::cout << "> PrintSong <song_name>" << std::endl;
+	std::cout << "> Add2PL <unique_id> <playlist_name>" << std::endl;
+	std::cout << "> RemoveFromPL song=<song_name> playlist=<playlist_name>" << std::endl;
+	std::cout << "> PrintPL" << std::endl;
+	std::cout << "> Play <song_name>" << std::endl;
+	std::cout << "> Play <song_id>" << std::endl;
+	std::cout << "> PlayAll" << std::endl;
+	std::cout << "> PlayRandom" << std::endl;
 	std::cout << "> Help" << std::endl;
 	std::cout << "> Back" << std::endl;
+
 }
 
 void Mp3Interface::Library_Menu() {
-	std::cout << "Library Menu:" << std::endl;
-	std::cout << *m_lib << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
-	Print_Library_Menu();
-	std::cout << std::endl;
-	int begin = 0, end = begin + 10; //todo: make them data members of library
-	std::string answer, command, parameters;
-	// Create a regex pattern to match the input string and capture the command and the rest of the string
-	regex pattern(R"(^\s*(\w+)\s*(.*)$)");//Match zero or more spaces,
-	//captures one or more word chars, then match zero or more spaces and capture everything untill the end
-	//ignore has to be OUTSIDE the loop!
-	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 	bool repeat = true;
 	while (repeat) {
+		Print_Library_Menu();
+		std::cout << std::endl;
+		int begin = 0, end = begin + 10; //todo: make them data members of library
+		std::string answer, command, parameters;
+		// Create a regex pattern to match the input string and capture the command and the rest of the string
+		//std::regex pattern(R"(^((Back$)|(Help$)|([^Back\s)][^(Help\s)]\w+))\s+(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|More|List|AddSong|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
+		//regex pattern(R"(^\s*(\w+)\s*(.*)$)");//Match zero or more spaces,
+		//captures one or more word chars, then match zero or more spaces and capture everything untill the end
+		//ignore has to be OUTSIDE the loop!
+		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -360,28 +384,6 @@ void Mp3Interface::Library_Menu() {
 	}
 }
 
-void Mp3Interface::Print_Library_Menu() {
-	std::cout << "> More" << std::endl;
-	std::cout << "> List" << std::endl;
-	std::cout << "> AddSong filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
-	//std::cout << "> AddEpisode filename_fullpath episode_name podcast_name duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
-	std::cout << "> Update song_name name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
-	std::cout << "> Update song_id name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
-	std::cout << "> Delete <unique_id>" << std::endl;
-	std::cout << "> Delete <song_name>" << std::endl;
-	std::cout << "> PrintSong <unique_id>" << std::endl;
-	std::cout << "> PrintSong <song_name>" << std::endl;
-	std::cout << "> Add2PL <unique_id> <playlist_name>" << std::endl;
-	std::cout << "> RemoveFromPL song=<song_name> playlist=<playlist_name>" << std::endl;
-	std::cout << "> PrintPL" << std::endl;
-	std::cout << "> Play <song_name>" << std::endl;
-	std::cout << "> Play <song_id>" << std::endl;
-	std::cout << "> PlayAll" << std::endl;
-	std::cout << "> PlayRandom" << std::endl;
-	std::cout << "> Help" << std::endl;
-	std::cout << "> Back" << std::endl;
-
-}
 
 //todo: add AddEpisode and UpdateEpisode
 void Mp3Interface::Podcasts_Menu()
@@ -408,7 +410,9 @@ void Mp3Interface::Podcasts_Menu()
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, podcast_name;
-		std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); /*matches a string that starts with "Delete", "Play", or "Back", followed by
+		std::regex pattern(R"(^(Back$|Help$|Delete|Play)\s*(.*)$)");
+		//std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); 
+		/*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
@@ -514,11 +518,11 @@ void Mp3Interface::Search_Menu() {
 		string input;
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, value_to_search;
-		std::regex pattern(R"(^(Search by \w+\s|(Back$)?)(.*)$)"); //todo: add check for 'or Back' here
+		std::regex pattern(R"(^(Search by \w+\s|(Back$)|(Help$)?)(.*)$)"); //todo: add check for 'or Back' here
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
-			std::string value_to_search = match[3];
+			std::string value_to_search = match[4];
 			std::string message = "Playing all found songs";
 			switch (Utilities::hashit(command))
 			{
