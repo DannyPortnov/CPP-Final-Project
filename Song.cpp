@@ -6,7 +6,6 @@ Song::Song(std::string song_name, std::string file_path,
 	std::string album, std::string singer, std::string genre, std::string release_date, std::string duration)
 	: AudioFile(song_name, file_path, duration, release_date), m_album(album), m_artist(singer), m_genre(genre), m_plays_counter(0)
 {
-	//to add duration calculation
 	m_id_code = song_id;
 	song_id++;
 }
@@ -70,7 +69,6 @@ void Song::Play()
 {
 	update_plays_counter();
 	AudioFile::Play();
-	//m_player.play(m_file_path);
 	//the most_played, and most_recent update is made in Library and Server
 }
 

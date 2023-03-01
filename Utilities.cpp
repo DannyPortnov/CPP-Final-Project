@@ -24,18 +24,15 @@ string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "Add") return eAdd;
 	if (inString == "Update") return eUpdate;
 	if (inString == "Delete") return eDelete;
-	if (inString == "PrintSong") return ePrintSong;
+	if (inString == "Print") return ePrint;
 	if (inString == "PrintSong") return ePrintSong;
 	if (inString == "Add2PL") return eAdd2PL;
 	if (inString == "RemoveFromPL") return eRemoveFromPL;
 	if (inString == "PrintPL") return ePrintPL;
-	if (inString == "Play") return ePlay;
 	if (inString == "PlayAll") return ePlayAll;
 	if (inString == "Play") return ePlay;
 	if (inString == "PlayRandom") return ePlayRandom;
 	if (inString == "Random") return eRandom;
-	if (inString == "Help") return eHelp;
-	if (inString == "Back") return eBack;
 	return eError;
 }
 

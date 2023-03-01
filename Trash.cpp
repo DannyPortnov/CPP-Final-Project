@@ -39,7 +39,6 @@ void Trash::clear_all_playlist() {
 		multiset<Song*>::iterator it;
 		for (it = m_songs.begin(); it != m_songs.end(); it++) {
 			m_server->Permanent_Delete_Song(*it);
-			//m_library->remove_from_most_recent((*it)->get_id());
 			m_library->remove_from_daily_mix(*it);
 			
 		}
@@ -54,38 +53,4 @@ void Trash::clear_all_playlist() {
 void Trash::add_to_trash(Song* song) {
 	Playlist::add_song_to_playlist(song);
 
-	/*std::string prompt = "Are you sure that you want to move this song to trash? y/n: ";
-	std::string reject_message = "The song wasn't added to " + m_playlist_name + "!";
-	std::string accept_message = "";
-	if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
-		Playlist::add_song_to_playlist(song, add_print);
-		return;
-	}*/
 }
-//
-//void Trash::restore_playlist() //todo: make maybe another parent class
-//{
-//	ifstream read_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
-//	if (!Utilities::Is_File_Valid(read_playlist)) {
-//		return;
-//	}
-//	while (!read_playlist.eof()) {
-//		int song_id;
-//		read_playlist >> song_id;
-//		m_library->Add2PL(song_id, m_playlist_name);
-//		if (Utilities::Is_End_Of_File(read_playlist)) {
-//			break;
-//		}
-//	}
-//}
-
-//void Trash::save_playlist() //todo: make maybe another parent class
-//{
-//	ofstream write_playlist("c:\\temp\\" + m_playlist_name + ".dat", ios::in);
-//	if (!Utilities::Is_File_Valid(write_playlist)) {
-//		return;
-//	}
-//	for (auto& song : m_songs) {
-//		write_playlist << song->get_id() << std::endl;
-//	}
-//}

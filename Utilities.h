@@ -34,18 +34,11 @@ enum string_code {
 	eList,
 	eAdd,
 	eUpdate,
-	/*eUpdateSongByName,
-	eUpdateSongById,
-	eDeleteSongByName,
-	eDeleteSongById,
-	ePrintSongByName,*/
 	ePrint,
 	ePrintSong, 
 	eAdd2PL,
 	eRemoveFromPL,
 	ePrintPL,
-	/*ePlaySongByName,
-	ePlaySongById,*/
 	ePlayAll,
 	ePlayRandom,
 	eRandom,
@@ -77,16 +70,6 @@ public:
 			[](const auto& pair) { return pair.second; });
 		return values;
 	}
-
-	//template <typename Map>
-	//static inline auto* Values(Map* map) {
-	//	auto* values = new std::vector<decltype(map->begin()->second)>();
-	//	values->reserve(map->size());
-	//	std::transform(map->begin(), map->end(), std::back_inserter(*values),
-	//		[](const auto& pair) { return pair.second; });
-	//	return values;
-	//}
-	//static std::vector<Song*> Values(std::multimap<std::string, Song*>* map);
 };
 
 #endif

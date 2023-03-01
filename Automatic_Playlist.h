@@ -1,20 +1,14 @@
 #ifndef AUTOMATICPLAYLIST_H
 #define AUTOMATICPLAYLIST_H
 
-//#include "Playlist.h"
 class Playlist;
-//class Most_Recent;
-//class Most_Played;
 
 class Automatic_Playlist :
     public Playlist
 {
     protected: 
         inline void Print_Cannot_Edit_Error(bool make_sure);
-        /*template <typename TCollection >
-        void Update_Most(TCollection songs_collection, int max_items, bool is_reverse);*/
-        //virtual void restore_playlist(); //todo: implement here, even a simple implementation
-        virtual void add_song_to_playlist(Song* song, bool add_print = true); //works
+        virtual void add_song_to_playlist(Song* song, bool add_print = true); 
         virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
         virtual void clear_all_playlist(bool add_print = true);
         virtual void Update_Automatic_Playlist() = 0;

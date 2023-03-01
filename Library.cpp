@@ -392,7 +392,7 @@ Playlist* Library::get_playlist_by_name(std::string playlist_name, bool prints_e
 void Library::PrintPlaylist(std::string playlist_name) {
 	auto playlist_to_play = get_playlist_by_name(playlist_name);
 	if (playlist_to_play != nullptr) {
-		std::cout << playlist_to_play;
+		std::cout << *playlist_to_play;
 	std:cout << endl;
 	}
 }

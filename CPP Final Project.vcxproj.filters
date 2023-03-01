@@ -119,9 +119,6 @@
     <ClCompile Include="Automatic_Playlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MethodMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mp3Interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

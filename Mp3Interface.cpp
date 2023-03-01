@@ -67,6 +67,8 @@ void Mp3Interface::Run_Program() {
 
 void Mp3Interface::Print_Playlists_Menu() {
 	std::cout << std::endl;
+	m_lib.PrintPL();
+	std::cout << std::endl;
 	std::cout << "Playlist Menu:" << std::endl;
 	std::cout << "> Add <playlist_name>" << std::endl;
 	std::cout << "> Delete <playlist_name>" << std::endl;

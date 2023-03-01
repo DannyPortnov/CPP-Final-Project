@@ -10,16 +10,12 @@
 #endif
 #endif  // _DEBUG
 
-//#include "Playlist.h"
 class Playlist;
 class Favorites :
     public Playlist
 {
 public:
     Favorites(Library* library, Server* server);
-
-    //void restore_playlist();
-    //void save_playlist();
 };
 
 #endif// FAVORITES_H

@@ -23,7 +23,9 @@
 #define podcasts_file_name "podcasts"
 #define most_recent_file_name "Most_Recent"
 
-
+//	The Server class represents a music server that can storeand manage songs,
+//  podcasts, and episodes. The class has several data structures 
+//	for sorting, searching, and storing the data.
 class Server {
 	
 private:
@@ -46,7 +48,7 @@ private:
 	list<Song*>* m_recently_played; // good complexity for insertion/deletion O(1)
 	unordered_map<int, Song*>* m_recently_played_by_id; // good complexity for searching song in playlist O(1) (search by id)
 
-	multimap<int, Song*>* m_most_played; // songs in an oreder from least played to most played
+	multimap<int, Song*>* m_most_played; // songs in an order from least played to most played
 
 	std::unordered_multimap<std::string, Song*>* find_all(std::string& key, std::unordered_multimap<std::string, Song*>* collection);
 
@@ -105,7 +107,7 @@ public:
 		std::string duration, std::string release_Date);
 
 	//Loads all songs saved on file (serialization)
-	void Restore_Songs(); //works
+	void Restore_Songs(); 
 	void Restore_Podcasts();
 	void Restore_Most_Recent();
 
@@ -129,10 +131,6 @@ public:
 	void Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure = false, bool delete_from_podcast = true);
 	//Deletes a podcast and each episode in it
 	void Permanent_Delete_Podcast(Podcast* podcast, bool make_sure = false);
-
-	//updates an existing song - did that in Library
-//static void Update(std::string song_name, std::string new_name = "", std::string artist = "", std::string album = ""
-//	, std::string genre = "", std::string duration = "");
 };
 #endif
 

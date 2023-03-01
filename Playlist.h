@@ -2,10 +2,8 @@
 #define PLAYLIST_H
 #define   _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
-//#include "AudioCollection.h"
 #include "Song.h"
 #include "Server.h"
-//#include "Library.h"
 #include <algorithm>
 #include <random>
 #include <ctime>
@@ -21,22 +19,14 @@
 #endif  // _DEBUG
 
 
-//class Server;
 class Library;
-//class Song;
 
 class Playlist { 
-private:
-	/*Player m_player;*/
-	//void Play_Songs(const std::string& message, bool shuffle);
 protected:
 	Server* m_server;
 	Library* m_library;
-	std::multiset<Song*> m_songs; // uses to store all songs in the playlist in alphabetical order (use it for play). 
-	//std::unordered_map<int, Song*> m_songs_by_id; // uses to store all songs by id. 
-	// chose to use multimap because if we would choose to store in unordered_multimap and use another data structure
-	// for the names of the song (oredered alphabeticaly), we will still need to search the song inside the multimap,
-	// the implementation will be complicated.
+	using CompareSongsByName = decltype([](const Song* a, const Song* b) { return a->get_name() < b->get_name(); }); //Custom comparator for m_songs
+	std::multiset<Song*, CompareSongsByName> m_songs; // uses to store all songs in the playlist in alphabetical order (use it for play). 
 	std::string m_playlist_name;
 	bool check_if_continue_playing();
 	bool make_sure_to_remove_song(Song* song, bool make_sure = true); // double checks with the user if the song should be deleted, if yes- removes the song.
@@ -51,31 +41,13 @@ public:
 	virtual void save_playlist(std::string file_name, std::ios_base::openmode mode = ios::out);
 	std::string get_name() const { return m_playlist_name; }
 	void Play(bool shuffle);
-	//void Play_Random();
-//	void Print();
-	std::multiset<Song*> get_songs();
-	bool check_if_song_exist_in_playlist_by_id(int id); //works
+	std::multiset<Song*, Playlist::CompareSongsByName> get_songs();
 	Song* get_song_by_name(std::string song_name);
-	int count_song_name_appearences(std::string song_name); // count the number of songs with the same name
-	//void remove_song_from_playlist_by_name(const std::string& song_name);
-	//bool check_if_songs_have_same_names(const std::string& song_name);
-	//bool check_if_song_exist_in_playlist_by_name(const std::string& song_name);
-	//std::unordered_multimap<string, Song*>* get_songs_with_same_name(const std::string& song_name);
-//friend bool operator<(Playlist* a, Playlist* b);
 
-//friend bool operator<(const Playlist& a, const Playlist& b); 
 friend std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
-
-//friend bool operator!=(const Playlist& a, const Playlist& b);
-
-
 };
 
-//bool operator<(Playlist* a, Playlist* b);
-//bool operator<(const Playlist& a, const Playlist& b);
 std::ostream& operator<<(std::ostream& os, const Playlist& playlist);
-
-//bool operator!=(const Playlist& a, const Playlist& b);
 
 
 #endif// PLAYER_H

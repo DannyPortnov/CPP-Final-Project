@@ -67,7 +67,7 @@ private:
 	bool Are_All_Parameters_Empty(const std::string & param1, const std::string & param2, const std::string & param3, const std::string & param4, const std::string & param5);
 
 public:
-	Library(); //works
+	Library();
 	~Library();
 	//Creates a song and adds it to the library.
 	void Add_Song(std::string song_name, std::string file_path, std::string artist, std::string album, std::string genre, std::string duration, std::string release_date);
@@ -75,7 +75,7 @@ public:
 	void Add_Podcast_Episode(std::string episode_name, std::string podcast_name,
 	std::string file_path, std::string duration = "", std::string release_Date="");
 
-	void Begin_Deserialization();//works
+	void Begin_Deserialization();
 	void Begin_Serialization();
 
 	static mt19937 Get_Gen();

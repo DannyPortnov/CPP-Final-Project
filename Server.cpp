@@ -1,23 +1,6 @@
 #include "Server.h"
 
 
-
-//std::multimap<string, Song*>* Server::m_songs_by_alphabet_order;
-//std::list<Song*>* Server::m_recently_played ;
-//std::map<std::string, Podcast*>* Server::m_podcasts_by_alphabet_order ;
-//std::unordered_map<int, Episode*>* Server::m_all_episodes_by_id;
-//std::unordered_map<std::string, Episode*>* Server::m_all_episodes_by_name;
-//std::unordered_map<std::string, Podcast*>* Server::m_all_podcasts;
-//
-//std::unordered_map<int, Song*>* Server::m_all_songs_by_id;
-//std::unordered_set<std::string>* Server::m_songs_file_paths;
-//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_artist;
-//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_name ;
-//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_album;
-//std::unordered_multimap<std::string, Song*>* Server::m_all_songs_by_genre ;
-//std::unordered_map<int, Song*>* Server::m_recently_played_by_id;
-//std::multimap<int, Song*>* Server::m_most_played ;
-
 Server::Server()
 {
 	m_songs_by_alphabet_order = new std::multimap<std::string, Song*>();
@@ -64,13 +47,6 @@ void Server::Destroy_All_Allocations()
 	Clear_And_Delete(m_all_songs_by_genre);
 	Clear_And_Delete(m_recently_played_by_id);
 	Clear_And_Delete(m_most_played);
-
-	//if (m_recently_played != nullptr)
-	//{
-	//	for (auto elem : *m_recently_played) {
-	//		delete elem;
-	//	}
-	//}
 	Clear_And_Delete(m_recently_played);
 	Clear_And_Delete(m_songs_file_paths);
 }
@@ -178,8 +154,6 @@ void Server::Restore_Most_Recent()
 	}
 	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
 		int song_id;
-		//std::string playlist_name;
-		//read >> playlist_name >> song_id;
 		read >> song_id;
 		add_to_recently_played(song_id);
 		if (Utilities::Is_End_Of_File(read)) {
@@ -242,41 +216,24 @@ void Server::Save_Songs()
 	}
 	write.close();
 }
+
 //Saves the whole list of songs in order of last time played (could be more than 10 songs)
 void Server::Save_Most_Recent() { 
 	std::string address = most_recent_file_name;
 	Utilities::Format_Address(address);
 	ofstream write(address, ios::out);
-	//if (!Utilities::Is_File_Valid(write, most_recent_file_name)) {
-	//	return;
-	//}
 	std::list<Song*>::reverse_iterator itr;
 	for (itr = m_recently_played->rbegin();itr != m_recently_played->rend();itr++)
 	{
 		auto song = *itr;
 		write << song->get_id() << std::endl;
 	}
-	//for (auto& song : *m_recently_played) {
-	//	write << song->get_id() << std::endl;
-	//}
 	write.close();
 }
 
 void Server::Permanent_Delete_Song(Song* song)
 {
-	#pragma region loop for m_songs_by_alphabet_order 
-	//// Find the range of songs with the same name as the given song
-//auto range = m_songs_by_alphabet_order.equal_range(song->get_name());
-
-//// Loop through relevant songs in m_songs_by_alphabet_order 
-//for (auto& iterator = range.first; iterator != range.second; ++iterator) {
-//	if (iterator->second == song) {  // Check if the song pointer matches
-//		m_songs_by_alphabet_order.erase(iterator);  // Erase the song from the multimap
-//		break;  // Exit the loop once the song is found and removed
-//	}
-//}  
-#pragma endregion
-	remove_song_from_collection(m_all_songs_by_album, song); //check that that works
+	remove_song_from_collection(m_all_songs_by_album, song); 
 	remove_song_from_collection(m_all_songs_by_genre, song);
 	remove_song_from_collection(m_all_songs_by_artist, song);
 	remove_song_from_collection(m_all_songs_by_name, song);
@@ -323,10 +280,6 @@ void Server::Permanent_Delete_Podcast(Podcast* podcast, bool make_sure)
 		return;
 	}
 	m_podcasts_by_alphabet_order->erase(podcast->Get_Podcast_Name()); //removes once the podcast
-	//auto copy = *m_podcasts_by_alphabet_order; //a copy is required to iterate over the collection
-	//for (auto& name_podcast_pair : copy) {
-	//	m_podcasts_by_alphabet_order->erase(name_podcast_pair.first); //removes listing of podcast
-	//}
 
 	auto all_episodes = podcast->get_podcast();
 	for (auto itr = all_episodes->begin(); itr != all_episodes->end(); itr++) {
@@ -339,7 +292,6 @@ void Server::Permanent_Delete_Podcast(Podcast* podcast, bool make_sure)
 
 template <typename T>
 void Server::remove_song_from_collection(T* songs_by_field, Song* song) {
-	//typename T::iterator
 	for (auto iter = songs_by_field->begin(); iter != songs_by_field->end(); ++iter)
 	{
 		if (iter->second == song) {
@@ -397,10 +349,10 @@ Podcast* Server::find_podcast_by_name(std::string name)
 
 template < class TKey, class TValue>
 TValue* Server::Find_Unique(TKey param, std::unordered_map<TKey, TValue*>* collection_to_Search) {
-	if (collection_to_Search->count(param) > 0) {
-		return collection_to_Search->at(param);
+	if (collection_to_Search->count(param) > 0) { 
+		return collection_to_Search->at(param); //Returns element if found
 	}
-	throw exception();
+	throw exception(); //If not throws exception
 }
 
 std::unordered_multimap<std::string, Song*>* Server::find_by_name(std::string& name)
@@ -431,7 +383,8 @@ bool Server::Does_Podcast_Exist(std::string& podcast_name)
 {
 	return m_all_podcasts->count(podcast_name) > 0;
 }
-//Searches in given collection based on key, and returns filtered unordered_multiset 
+
+//Searches in given collection based on key, and returns filtered unordered_multimap 
 std::unordered_multimap<std::string, Song*>* Server::find_all(std::string& key, std::unordered_multimap<std::string, Song*>* collection) {
 	auto range = collection->equal_range(key); // range of values that match the given name
 	std::unordered_multimap<std::string, Song*>* filtered_songs = new std::unordered_multimap<std::string, Song*>;
@@ -468,29 +421,7 @@ void Server::remove_from_recently_played(int id) {
 	auto song = find_song_by_id(id);
 	m_recently_played->remove(song); // removes the song from the list // complexity O(n)- n= number of songs in m_recently_played
 	m_recently_played_by_id->erase(id);
-	/*std::list<Song*>::iterator it;
-	for (it = m_recently_played.begin(); it != m_recently_played.end(); it++) {
-		if (*it == song) {
-			m_recently_played.erase(it);
-		}
-	}*/ // to use if m_recently_played.remove(song) doesn't work
 }
-
-/*
-void Server::update_recently_played(int id) {
-	auto song = find_song_by_id(id);
-	if (m_recently_played_by_id.find(id) != m_recently_played_by_id.end()) { //if a song is already in recents, needs to be in the front
-		remove_from_recently_played(id);
-	}
-	else if (m_recently_played.size() == max_recents) {
-		auto less_recent = m_recently_played.back();
-		m_recently_played_by_id.erase(less_recent->get_id());
-		m_recently_played.pop_back();
-	}
-	m_recently_played.push_front(song); // the most recent song will be at the front
-	m_recently_played_by_id.emplace(id, song);
-}
-*/
 
 
 
