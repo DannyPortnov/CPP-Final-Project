@@ -620,7 +620,7 @@ void Library::Add_Podcast_Episode(std::string episode_name, std::string podcast_
 
 }
 
-#define playlists_file_name "playlists"
+
 
 void Library::Begin_Deserialization()
 {
@@ -876,7 +876,7 @@ void Library::update_most_played() {
 ostream& Library::Print(ostream& os, int begin, int end) const
 {
 	if (begin > m_server->get_songs_by_name()->size()) { // check if the begin num is greater than the num of songs in server
-		os << "No more songs :(" << std::endl;
+		os << "No more songs." << std::endl;
 		return os;
 	}
 	auto itr = m_server->get_songs_by_name()->begin();
@@ -887,7 +887,7 @@ ostream& Library::Print(ostream& os, int begin, int end) const
 		std::cout << *itr->second << std::endl;
 	}
 	if (itr == m_server->get_songs_by_name()->end()) {
-		os << "No more songs :(" << std::endl;
+		os << "No more songs." << std::endl;
 	}
 	return os;
 }

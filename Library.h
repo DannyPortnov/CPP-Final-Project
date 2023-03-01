@@ -37,6 +37,8 @@ class Automatic_Playlist;
 class Most_Recent;
 class Most_Played;
 
+#define playlists_file_name "playlists"
+
 //std::string_code hashit(std::string const& instd::string) {
 //
 //}
