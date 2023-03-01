@@ -37,8 +37,9 @@
 
 
 void mp3player() {
-	Library lib;
-	Mp3Interface mp3(&lib);
+	//Library lib;
+	//Mp3Interface mp3(&lib);
+	Mp3Interface mp3;
 	mp3.Run_Program();
 	//MethodMap methodmap;
 	std::string key = "hello";

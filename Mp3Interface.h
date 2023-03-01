@@ -13,7 +13,7 @@ class Library;
 class Mp3Interface
 {
 private:
-	Library* m_lib;
+	Library m_lib;
 	Server* m_server;
 	DailyMix* m_daily_mix;
 	void Print_Invalid_Command_Error(const std::string& input);
@@ -26,7 +26,7 @@ private:
 	void Print_Playlists_Menu();
 	void Playlists_Menu();
 public:
-	Mp3Interface(Library* lib);
+	Mp3Interface();
 	void Run_Program();
 };
 #endif

@@ -3,8 +3,8 @@
 #include "Playlist.h"
 #include "DailyMix.h"
 
-Mp3Interface::Mp3Interface(Library* lib)
-	: m_lib(lib), m_server(lib->Get_Server()), m_daily_mix(lib->Get_DailyMix()) {}
+Mp3Interface::Mp3Interface()
+	: m_lib(), m_server(m_lib.Get_Server()), m_daily_mix(m_lib.Get_DailyMix()) {}
 
 
 void Mp3Interface::Main_Menu() {
@@ -97,23 +97,23 @@ void Mp3Interface::Playlists_Menu() {
 			{
 				// the parameter is the name of the playlist in all cases
 			case(eAdd): {
-				m_lib->create_playlist(playlist_name);
+				m_lib.create_playlist(playlist_name);
 				continue;
 			}
 			case(eDelete): {
-				m_lib->delete_playlist(playlist_name);
+				m_lib.delete_playlist(playlist_name);
 				continue;
 			}
 			case(ePlay): {
-				m_lib->PlayPlaylist(playlist_name);
+				m_lib.PlayPlaylist(playlist_name);
 				continue;
 			}
 			case(ePlayRandom): {
-				m_lib->PlayPlaylistShuffled(playlist_name);
+				m_lib.PlayPlaylistShuffled(playlist_name);
 				continue;
 			}
 			case(ePrint): {
-				m_lib->PrintPlaylist(playlist_name); // this function uses operator overload << for playlist, check if the playlist exist
+				m_lib.PrintPlaylist(playlist_name); // this function uses operator overload << for playlist, check if the playlist exist
 				continue;
 			}
 			case(eHelp): {
@@ -133,7 +133,7 @@ void Mp3Interface::Playlists_Menu() {
 
 void Mp3Interface::Print_Library_Menu() {
 	std::cout << "Library Menu:" << std::endl;
-	std::cout << *m_lib << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
+	std::cout << m_lib << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
 	std::cout << "> More" << std::endl;
 	std::cout << "> List" << std::endl;
 	std::cout << "> Add filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
@@ -185,7 +185,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 					begin += number_of_songs_to_print;
 					end += number_of_songs_to_print;
 					//std::cout << " here are another 10 songs from library:" << std::endl;
-					m_lib->Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
+					m_lib.Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
 					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
 					continue;
 				}
@@ -216,7 +216,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 							genre = matches[7].str();
 							duration = matches[9].str();
 							release_date = matches[11].str();
-							m_lib->Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
+							m_lib.Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
 						}
 					}
 					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -240,11 +240,11 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 						release_date = matches[13].str();
 						try {
 							int id = std::stoi(update_by_name_or_id);
-							m_lib->Update_Song(id, new_name, artist, album, genre, duration, release_date);
+							m_lib.Update_Song(id, new_name, artist, album, genre, duration, release_date);
 						}
 						catch (std::invalid_argument& e) {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
+							m_lib.Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
 						}
 					}
 					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -263,11 +263,11 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 						std::string delete_by_name_or_id = match[1]; // Extract command
 						try {
 							int id = std::stoi(delete_by_name_or_id);
-							m_lib->Delete_Song(id);
+							m_lib.Delete_Song(id);
 						}
 						catch (std::invalid_argument& e) {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->Delete_Song(delete_by_name_or_id);
+							m_lib.Delete_Song(delete_by_name_or_id);
 						}
 					}
 					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -286,11 +286,11 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 						std::string print_by_name_or_id = match[1]; // Extract command
 						try {
 							int id = std::stoi(print_by_name_or_id);
-							m_lib->PrintSong(id);
+							m_lib.PrintSong(id);
 						}
 						catch (std::invalid_argument& e) {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->PrintSong(print_by_name_or_id);
+							m_lib.PrintSong(print_by_name_or_id);
 						}
 					}
 					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -312,7 +312,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 					// Attempt to convert the string to an integer using stoi
 					try {
 						int id = std::stoi(song_id);
-						m_lib->Add2PL(id, playlist_name);
+						m_lib.Add2PL(id, playlist_name);
 					}
 					catch (std::invalid_argument& e) {
 						// Handle the exception if the input string is not a valid integer
@@ -335,14 +335,14 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 					if (std::regex_match(parameters, match, pattern)) {
 						song_name = match[2];
 						playlist_name = match[4];
-						m_lib->RemoveFromPL(song_name, playlist_name);
+						m_lib.RemoveFromPL(song_name, playlist_name);
 					}
 					continue;
 				}
 				case(ePrintPL): {
 					begin = 0;
 					end = number_of_songs_to_print;
-					m_lib->PrintPL();
+					m_lib.PrintPL();
 					continue;
 				}
 				case(ePlay): {
@@ -358,11 +358,11 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 						std::string play_by_name_or_id = match[1]; // Extract command
 						try {
 							int id = std::stoi(play_by_name_or_id);
-							m_lib->Play(id);
+							m_lib.Play(id);
 						}
 						catch (std::invalid_argument& e) {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
-							m_lib->Play(play_by_name_or_id);
+							m_lib.Play(play_by_name_or_id);
 						}
 					}
 					continue;
@@ -370,13 +370,13 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 				case(ePlayAll): {
 					begin = 0;
 					end = number_of_songs_to_print;
-					m_lib->PlayAll(false);
+					m_lib.PlayAll(false);
 					continue;
 				}
 				case(ePlayRandom): {
 					begin = 0;
 					end = number_of_songs_to_print;
-					m_lib->PlayAll(true);
+					m_lib.PlayAll(true);
 					continue;
 				}
 				case(eHelp): {
@@ -434,23 +434,23 @@ void Mp3Interface::Podcasts_Menu()
 			switch (Utilities::hashit(command))
 			{
 			case(ePlay): {
-				m_lib->Play_Podcast(parameters);
+				m_lib.Play_Podcast(parameters);
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
 			case(eDelete): { //podcast
-				m_lib->Delete_Podcast(parameters);
+				m_lib.Delete_Podcast(parameters);
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
 			case(eDeleteEpisode): {
 				try {
 					int id = std::stoi(parameters);
-					m_lib->Delete_Episode(id);
+					m_lib.Delete_Episode(id);
 				}
 				catch (std::invalid_argument& e) {
 					// Handle the exception if the input string is not a valid integer-> call the overload function
-					m_lib->Delete_Episode(parameters);
+					m_lib.Delete_Episode(parameters);
 				}
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
@@ -469,7 +469,7 @@ void Mp3Interface::Podcasts_Menu()
 					release_date = matches[7].str();
 					try {
 						int id = std::stoi(id_string);
-						m_lib->UpdateEpisode(id, new_name, duration, release_date);
+						m_lib.UpdateEpisode(id, new_name, duration, release_date);
 					}
 					catch (std::invalid_argument& e) {
 						std::cout << "id isn't a number" << std::endl;
@@ -495,7 +495,7 @@ void Mp3Interface::Podcasts_Menu()
 						podcast_name = matches[3].str();
 						duration = matches[5].str();
 						release_date = matches[7].str();
-						m_lib->Add_Podcast_Episode(episode_name, podcast_name, file_path, duration, release_date);
+						m_lib.Add_Podcast_Episode(episode_name, podcast_name, file_path, duration, release_date);
 						continue;
 					}
 				}
@@ -604,22 +604,22 @@ void Mp3Interface::Search_Menu() {
 			{
 			case(eSearchByAlbum): { //todo: make one method
 				auto collection = m_server->find_by_album(value_to_search);
-				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
 				continue;
 			}
 			case(eSearchByGenre): {
 				auto collection = m_server->find_by_genre(value_to_search);
-				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
 				continue;
 			}
 			case(eSearchByName): {
 				auto collection = m_server->find_by_name(value_to_search);
-				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
 				continue;
 			}
 			case(eSearchBySinger): {
 				auto collection = m_server->find_by_artist(value_to_search);
-				m_lib->PlayAll(Utilities::Values(collection), message, false, true);
+				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
 				continue;
 			}
 			case(eBack): {
