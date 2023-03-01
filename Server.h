@@ -126,7 +126,7 @@ public:
 	//permanently deletes a song from the database COMPLETETLY
 	void Permanent_Delete_Song(Song* song);
 	//Removes the episode from all listings and from its podcast
-	void Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure = false);
+	void Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure = false, bool delete_from_podcast = true);
 	//Deletes a podcast and each episode in it
 	void Permanent_Delete_Podcast(Podcast* podcast, bool make_sure = false);
 

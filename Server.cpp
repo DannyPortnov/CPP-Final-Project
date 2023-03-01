@@ -290,7 +290,7 @@ void Server::Permanent_Delete_Song(Song* song)
 	delete song; 
 }
 
-void Server::Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure)
+void Server::Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure, bool delete_from_podcast)
 {
 	auto& episode_name = episode->get_name();
 	std::string prompt = "Are you sure that you want to delete: " + episode_name + "? y/n: ";
@@ -301,7 +301,10 @@ void Server::Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure)
 	}
 	m_all_episodes_by_id->erase(episode->get_id());
 	m_all_episodes_by_name->erase(episode_name);
-	episode->Get_Podcast()->Delete_Episode(episode);
+	if (delete_from_podcast)
+	{
+		episode->Get_Podcast()->Delete_Episode(episode);
+	}
 }
 
 void Server::Permanent_Delete_Podcast(Podcast* podcast, bool make_sure)
@@ -313,22 +316,19 @@ void Server::Permanent_Delete_Podcast(Podcast* podcast, bool make_sure)
 	if (make_sure && !Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
 		return;
 	}
-	auto copy = *m_podcasts_by_alphabet_order; //a copy is required to iterate over the collection
-	for (auto& name_podcast_pair : copy) {
-		m_podcasts_by_alphabet_order->erase(name_podcast_pair.first); //removes listing of podcast
-	}
+	m_podcasts_by_alphabet_order->erase(podcast->Get_Podcast_Name()); //removes once the podcast
+	//auto copy = *m_podcasts_by_alphabet_order; //a copy is required to iterate over the collection
+	//for (auto& name_podcast_pair : copy) {
+	//	m_podcasts_by_alphabet_order->erase(name_podcast_pair.first); //removes listing of podcast
+	//}
 
-	//Go over each podcast in the collection
-	auto copy = *m_all_podcasts;
-	for (auto& name_podcast_pair : copy) { //deleting a nullptr is fine; has no effect.
-		auto all_episodes = name_podcast_pair.second->get_podcast();
-		for (auto itr = all_episodes->begin(); itr != all_episodes->end(); itr++) {
-			Permanent_Delete_Podcast_Episode(*itr);
-		}
-		m_all_podcasts->erase(name_podcast_pair.first);//removes listing of podcast
-
-		delete name_podcast_pair.second; //deletes a podcast, then inside deletes the episodes
+	auto all_episodes = podcast->get_podcast();
+	for (auto itr = all_episodes->begin(); itr != all_episodes->end(); itr++) {
+		Permanent_Delete_Podcast_Episode(*itr, false, false); //don't delete from podcast
 	}
+	m_all_podcasts->erase(podcast_name);//removes listing of podcast
+
+	delete podcast; //deletes a podcast with all episodes inside
 }
 
 template <typename T>
