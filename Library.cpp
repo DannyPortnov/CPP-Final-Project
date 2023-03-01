@@ -827,8 +827,16 @@ void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
 //	//	it++;
 //	//}
 //}
-void Library::remove_from_most_recent(int id) {
-	m_recent->Remove_From_Most_Recent(id);
+//void Library::remove_from_most_recent(int id) {
+//	m_recent->Remove_From_Most_Recent(id);
+//	//auto song_to_remove = Server::find_song_by_id(id);
+//	//m_recent->remove_song_from_playlist(song_to_remove, false); // removes from playlist, don't make sure to delete songs from PL
+//	//Server::remove_from_recently_played(id); // removes from the data structure
+//	//update_most_recent();
+//}
+
+void Library::update_most_recent() {
+	m_recent->Update_Most_Recent();
 	//auto song_to_remove = Server::find_song_by_id(id);
 	//m_recent->remove_song_from_playlist(song_to_remove, false); // removes from playlist, don't make sure to delete songs from PL
 	//Server::remove_from_recently_played(id); // removes from the data structure

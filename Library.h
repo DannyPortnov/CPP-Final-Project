@@ -161,6 +161,7 @@ public:
 	
 	void remove_from_most_recent(int id);
 	void update_most_played(); 
+	void update_most_recent();
 	void remove_from_daily_mix(Song* song);
 
 	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
