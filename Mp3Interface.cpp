@@ -419,6 +419,22 @@ void Mp3Interface::Podcasts_Menu()
 				}
 				continue;
 			}
+			case(eDeleteEpisode): {
+				std::string prompt = "Are you sure that you want to Delete: " + podcast_name + "? y/n: "; //todo: need to change name of variable
+				std::string reject_message = podcast_name + " wasn't removed!";
+				std::string accept_message = podcast_name + " was successfully removed!";
+				if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message) == false) {
+					try {
+						int id = std::stoi(podcast_name);
+						m_lib->Delete_Episode(id);
+					}
+					catch (std::invalid_argument& e) {
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						m_lib->Delete_Episode(podcast_name);
+					}
+				}
+				continue;
+			}
 			case(eBack): {
 				repeat = false;
 				continue;

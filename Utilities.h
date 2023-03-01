@@ -26,6 +26,7 @@ enum string_code {
 	ePlaylists,
 	ePlay,
 	eDelete,
+	eDeleteEpisode,
 	eHelp,
 	eBack,
 	eExit,
