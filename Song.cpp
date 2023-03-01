@@ -108,7 +108,7 @@ std::ostream& operator<<(std::ostream& os, const Song& song)
 {
 	os << static_cast<const AudioFile&>(song); // call AudioFile's operator<<
 	if (song.m_artist != "") {
-		os<< "Artist: " << song.m_artist << ", ";
+		os<< ", Artist: " << song.m_artist << ", ";
 	}
 	if (song.m_album != "") {
 		os<< "Album: " << song.m_album << ", ";

@@ -8,20 +8,20 @@ AudioFile::AudioFile(std::string file_name, std::string file_path, std::string d
 {
 	//m_id_code = id_code;
 	//id_code++;
-    set_duration(duration);
+	set_duration(duration);
 }
 
 AudioFile::AudioFile(int id, std::string file_name, std::string file_path, std::string duration, std::string release_date)
-    : m_id_code(id), m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
+	: m_id_code(id), m_file_name(file_name), m_file_path(file_path), m_release_date(release_date)
 {
-    set_duration(duration);
+	set_duration(duration);
 }
 
 void AudioFile::Play()
 {
-    //todo: see that this works
-    m_player.play(m_file_path);
-    std::cout << "Now playing: " << m_file_name << std::endl;
+	//todo: see that this works
+	m_player.play(m_file_path);
+	std::cout << "Now playing: " << m_file_name << std::endl;
 }
 
 const std::string& AudioFile::get_name() const {
@@ -38,12 +38,12 @@ const int AudioFile::get_id() const {
 
 const Date& AudioFile::get_release_date() const
 {
-    return m_release_date;
+	return m_release_date;
 }
 
 const std::string& AudioFile::get_duration() const
 {
-    return m_duration;
+	return m_duration;
 }
 
 void AudioFile::set_name(std::string& name)
@@ -52,22 +52,23 @@ void AudioFile::set_name(std::string& name)
 }
 
 //works
-void AudioFile::set_duration(std::string& duration) //only allows mm:ss ?
+void AudioFile::set_duration(std::string& duration) //only allows mm:ss or m:ss
 {
-    int minutes, seconds;
-    char delimiter;
-    istringstream time_stream(duration);
-
-    time_stream >> minutes;
-    if (time_stream.fail() || time_stream.get() != ':') {
-        throw exception();
-    }
-
-    time_stream >> seconds;
-    if (time_stream.fail() || time_stream.get() != EOF || seconds >= 60) {
-        throw exception();
-    }
-    m_duration = duration;
+	do {
+		if (duration.empty()) {
+			break;
+		}
+		std::regex validTime("^([0-5][0-9]):([0-5][0-9])$");
+		if (std::regex_match(duration, validTime)) {
+			break;
+		}
+		std::cout << "Duration is invalid, please enter again in the format mm:ss (press enter to cancel)" << std::endl;
+		std::cin >> duration;
+	} while (true);
+	if (duration == "00:00") { //same as no duration
+		duration = "";
+	}
+	m_duration = duration;
 }
 
 void AudioFile::set_release_date(Date release_date)
@@ -77,13 +78,16 @@ void AudioFile::set_release_date(Date release_date)
 
 std::ostream& operator<<(std::ostream& os, const AudioFile& audio)
 {
-    os << "ID code: " << audio.m_id_code << ", ";
-    os << "Name: " << audio.m_file_name << ", ";
-    if (!(audio.m_release_date == Date(""))) {
-        os << "Release date: " << audio.m_release_date << ", ";
-    }
-    //song.print_playlists();
-    return os;
+	os << "ID code: " << audio.m_id_code << ", ";
+	os << "Name: " << audio.m_file_name;
+	if (audio.m_release_date != Date("")) {
+		os << ", Release date: " << audio.m_release_date;
+	}
+	if (!audio.m_duration.empty()) {
+		os << ", Duration: " << audio.m_duration;
+	}
+	//song.print_playlists();
+	return os;
 }
 
 //std::ostream& AudioFile::Print(std::ostream& os) const
