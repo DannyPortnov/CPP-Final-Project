@@ -161,7 +161,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 	while (repeat) {
 		Print_Library_Menu();
 		std::cout << std::endl;
-		int begin = 0, end = begin + 10; //todo: make them data members of library
+		int begin = 0, end = begin + 10;
 		std::string answer, command, parameters;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
 		//std::regex pattern(R"(^((Back$)|(Help$)|([^Back\s)][^(Help\s)]\w+))\s+(.*)$)");
