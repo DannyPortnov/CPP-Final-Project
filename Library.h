@@ -5,12 +5,6 @@
 #include "Song.h"
 #define   _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
-//#include "Playlist.h"
-//#include "DailyMix.h"
-//#include "Favorites.h"
-//#include "Most_Played.h"
-//#include "Most_Recent.h"
-//#include "Trash.h"
 #include "Server.h"
 #include <string>
 #include <map>
@@ -39,11 +33,8 @@ class Most_Played;
 
 #define playlists_file_name "playlists"
 
-//std::string_code hashit(std::string const& instd::string) {
-//
-//}
 
-class Library //: Server //todo: remove inheritance
+class Library 
 {
 	friend ostream& operator<<(ostream& os, const Library& lib) ;
 private:
@@ -56,7 +47,6 @@ private:
 	Most_Recent* m_recent;
 	Most_Played* m_most_played;
 	Trash* m_deleted;
-	//std::unordered_map<string, Playlist*> m_saved_playlist_names;
 
 	const int num_of_songs_to_print = 10;
 	static mt19937 m_gen;
@@ -65,10 +55,9 @@ private:
 	//Returns the choosen song. If wrong name returns nullptr!
 	Song* Pick_Media(std::string media_name, unordered_multimap<string, Song*>* collection_to_search);
 	
-	bool check_if_playlist_exist(const std::string& playlist_name); //works
+	bool check_if_playlist_exist(const std::string& playlist_name);
 	bool check_if_user_playlist(const std::string& playlist_name);
 	bool check_if_continue_playing();
-	bool make_sure_to_delete_song(Song* song);
 
 	void Print_Not_Found_By_Id_Error(int song_id, std::string item_type);
 	void Print_No_Input_Parameters_Error();
@@ -76,18 +65,6 @@ private:
 	void Print_Media_Exists_Error(std::string& new_name, const std::string & media_type);
 	
 	bool Are_All_Parameters_Empty(const std::string & param1, const std::string & param2, const std::string & param3, const std::string & param4, const std::string & param5);
-
-	
-	
-	//void add_to_most_recent(int id);
-	//void update_most_recent();	
-	// the update of most recent happans in remove_from_most_recent() method.
-
-	
-	
-	// void ask_user_to_remove_song(Song* song, Playlist* playlist); // was implemented in playlist instead
-	//Song* Pick_Song(std::string song_name);
-	//Podcast* Pick_Podcast(std::string episode_name);
 
 public:
 	Library(); //works
@@ -117,9 +94,8 @@ public:
 	void Delete_Podcast(std::string podcast_name);
 
 
-	void Add2PL(int id, const std::string& playlist_name, bool prints_enabled = true); //works
+	void Add2PL(int id, const std::string& playlist_name, bool prints_enabled = true); 
 	void RemoveFromPL(const std::string& song_name, const std::string& playlist_name, bool make_sure = true); // added element that checks if we want to make sure if the user want to remove a song
-	//void add_to_favorites(Song* song);
 
 	ostream& Print(ostream& os, int begin, int end) const;
 	void PrintPL();
@@ -134,7 +110,6 @@ public:
 	//Update podcast's name
 	void UpdatePodcast(std::string podcast_name, std::string new_name);
 	void UpdateEpisode(int episode_id, std::string new_name = "", std::string duration = "", std::string release_date="");
-	void Update_Episode(std::string episode_name, std::string new_name = "", std::string duration = "", int release_date = 0); //maybe later
 	
 	//return the playlist that needs to be played
 	Playlist* get_playlist_by_name(std::string playlist_name, bool prints_enable = true);
@@ -144,34 +119,20 @@ public:
 	void PlayPlaylistShuffled(std::string playlist_name);
 
 
-	//gets the data structure from Server!
 	void Play(std::string song_name);
-	//gets the data structure from Server!
 	void Play(int id);
-	//gets the data structure from Server!
 	void PlayAll(bool shuffle);
 	void PlayAll(std::vector<Song*>* songs_to_play, const std::string& message, bool shuffle, bool delete_ptr);
-	//gets the data structure from Server!
-	//void PlayRandom();
 	//play song and update song data
 	void play_song(Song* song);
 	void Play_Podcast(std::string podcast_name);
 
-	//void print_all_playlists(); // print all playlists in library
-	void create_playlist(const std::string& playlist_name, bool prints_enabled = true); // create a new playlist //works
+	void create_playlist(const std::string& playlist_name, bool prints_enabled = true); // create a new playlist 
 	void delete_playlist(std::string playlist_name); // delete a playlist
 	
-	void remove_from_most_recent(int id);
 	void update_most_played(); 
 	void update_most_recent();
 	void remove_from_daily_mix(Song* song);
-
-	/*void Add(std::string path, std::string song_name, std::string artist = "", std::string album = "",
-	std::string genre = "", std::string duration = "", int release_date =0);*/
-
-	void Example_Func_For_MethodMap();
-	void Example_Func_For_MethodMap(std::string Begin_Deserialization);
-	void Example2_Func_For_MethodMap(std::string Begin_Deserialization);
 
 	DailyMix* Get_DailyMix();
 	Favorites* Get_Favorites();
@@ -181,7 +142,6 @@ public:
 	Server* Get_Server();
 
 };
-
 
 ostream& operator<<(ostream& os, const Library& lib);
 

@@ -61,7 +61,6 @@ void Mp3Interface::Run_Program() {
 		std::cout << answer << " isn't a valid command." << std::endl;
 		std::cout << std::endl;
 		std::cout << std::endl;
-		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 }
 
@@ -84,8 +83,6 @@ void Mp3Interface::Playlists_Menu() {
 		std::string answer, command, playlist_name;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
 		std::regex pattern(R"(^(Back$|Help$|Add|Delete|Print|Play|PlayRandom)\s*(.*)$)");
-		//ignore has to be OUTSIDE the loop!
-		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -137,7 +134,6 @@ void Mp3Interface::Print_Library_Menu() {
 	std::cout << "> More" << std::endl;
 	std::cout << "> List" << std::endl;
 	std::cout << "> Add filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
-	//std::cout << "> AddEpisode filename_fullpath episode_name podcast_name duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
 	std::cout << "> Update song_name name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
 	std::cout << "> Update song_id name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
 	std::cout << "> Delete <unique_id>" << std::endl;
@@ -158,7 +154,7 @@ void Mp3Interface::Print_Library_Menu() {
 
 #define number_of_songs_to_print 10
 
-void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
+void Mp3Interface::Library_Menu() { 
 	bool repeat = true;
 	int begin = 0, end = number_of_songs_to_print;
 	while (repeat) {
@@ -166,12 +162,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 		std::cout << std::endl;
 		std::string answer, command, parameters;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
-		//std::regex pattern(R"(^((Back$)|(Help$)|([^Back\s)][^(Help\s)]\w+))\s+(.*)$)");
 		std::regex pattern(R"(^(Back$|Help$|More$|List$|Add|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
-		//regex pattern(R"(^\s*(\w+)\s*(.*)$)");//Match zero or more spaces,
-		//captures one or more word chars, then match zero or more spaces and capture everything untill the end
-		//ignore has to be OUTSIDE the loop!
-		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header (good practice)
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -184,9 +175,8 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 				case(eMore): {
 					begin += number_of_songs_to_print;
 					end += number_of_songs_to_print;
-					//std::cout << " here are another 10 songs from library:" << std::endl;
 					m_lib.Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
 					continue;
 				}
 				case(eList): {
@@ -396,7 +386,6 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 }
 
 
-//todo: add AddEpisode and UpdateEpisode
 void Mp3Interface::Podcasts_Menu()
 {
 	// This declares a lambda, which can be called just like a function
@@ -421,10 +410,8 @@ void Mp3Interface::Podcasts_Menu()
 	{
 		print_message();
 		std::string input;
-		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::regex pattern(R"(^(Back$|Help$|DeleteEpisode|Delete|Play|AddEpisode|UpdateEpisode)\s*(.*)$)");
-		//std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); 
 		/*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
 		std::smatch match;
@@ -512,26 +499,6 @@ void Mp3Interface::Podcasts_Menu()
 		}
 		Print_Invalid_Command_Error(input); //if no match found or command doesn't fit switch case
 	}
-#pragma region Without regex
-	//size_t space_pos = input.find(' ');
-	//if (space_pos != std::string::npos) { //if found 
-	//	command = input.substr(0, space_pos);
-	//	podcast_name = input.substr(space_pos + 1);
-	//}
-	//else {
-	//	return;
-	//}
-	//// call the appropriate function based on the command
-	//if (command == "delete") {
-	//	deletePodcast(podcast_name);
-	//}
-	//else if (command == "play") {
-	//	playPodcast(podcast_name);
-	//}
-	//else {
-	//	std::cout << "Invalid command" << std::endl;
-	//}  
-#pragma endregion
 }
 
 void Mp3Interface::DailyMix_Menu()
@@ -545,9 +512,6 @@ void Mp3Interface::DailyMix_Menu()
 		std::cout << "Back\n" << std::endl;
 	};
 	bool repeat = true;
-	//ignore has to be OUTSIDE the loop!
-	// Clear the input buffer before reading the command input
-	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
 		print_message();
@@ -557,7 +521,7 @@ void Mp3Interface::DailyMix_Menu()
 		{
 		case(ePlay): {
 			m_daily_mix->Play(false);
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');// Clear the input buffer before reading the command input
 			continue;
 		}
 		case(eRandom): {
@@ -585,9 +549,6 @@ void Mp3Interface::Search_Menu() {
 		std::cout << "Back\n" << std::endl;
 	};
 	bool repeat = true;
-	//ignore has to be OUTSIDE the loop!
-	// Clear the input buffer before reading the command input
-	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
 		print_message();
@@ -602,7 +563,7 @@ void Mp3Interface::Search_Menu() {
 			std::string message = "Playing all found songs";
 			switch (Utilities::hashit(command))
 			{
-			case(eSearchByAlbum): { //todo: make one method
+			case(eSearchByAlbum): {  //Create a collection for each case and play it
 				auto collection = m_server->find_by_album(value_to_search);
 				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
 				continue;

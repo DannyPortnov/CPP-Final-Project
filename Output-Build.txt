@@ -1,0 +1,39 @@
+﻿Build started...
+1>------ Build started: Project: CPP Final Project, Configuration: Debug x64 ------
+1>AudioFile.cpp
+1>Automatic_Playlist.cpp
+1>DailyMix.cpp
+1>Date.cpp
+1>MethodMap.cpp
+1>Mp3Interface.cpp
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Mp3Interface.cpp(245,37): warning C4101: 'e': unreferenced local variable
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Mp3Interface.cpp(268,37): warning C4101: 'e': unreferenced local variable
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Mp3Interface.cpp(291,37): warning C4101: 'e': unreferenced local variable
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Mp3Interface.cpp(363,37): warning C4101: 'e': unreferenced local variable
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Mp3Interface.cpp(451,35): warning C4101: 'e': unreferenced local variable
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Mp3Interface.cpp(474,36): warning C4101: 'e': unreferenced local variable
+1>Trash.cpp
+1>Episode.cpp
+1>Favorites.cpp
+1>Library.cpp
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Library.cpp(547,5): warning C4102: 'std': unreferenced label
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Library.cpp(693,69): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+1>main.cpp
+1>Most_Played.cpp
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Most_Played.cpp(49,44): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+1>Most_Recent.cpp
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Most_Recent.cpp(48,44): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+1>Player.cpp
+1>Playlist.cpp
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Playlist.cpp(256,61): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+1>Podcast.cpp
+1>Server.cpp
+1>Song.cpp
+1>Utilities.cpp
+1>Generating Code...
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\Date.cpp(117): warning C4172: returning address of local variable or temporary: array_of_days
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\DailyMix.cpp(56): warning C4172: returning address of local variable or temporary: default_date
+1>C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\DailyMix.cpp(61): warning C4172: returning address of local variable or temporary: saved_date
+1>CPP Final Project.vcxproj -> C:\Users\danih\OneDrive - ort braude college of engineering\Desktop\OOP\פרויקטים\CPP Final Project\x64\Debug\CPP Final Project.lib
+1>Done building project "CPP Final Project.vcxproj".
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

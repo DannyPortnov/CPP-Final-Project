@@ -63,9 +63,6 @@
     <ClInclude Include="Automatic_Playlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MethodMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mp3Interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
