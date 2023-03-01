@@ -85,5 +85,6 @@ public:
 	//}
 	//static std::vector<Song*> Values(std::multimap<std::string, Song*>* map);
 };
+
 #endif
 

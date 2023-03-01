@@ -411,7 +411,12 @@ void Mp3Interface::Podcasts_Menu()
 				continue;
 			}
 			case(eDelete): {
-				m_lib->Delete_Podcast(podcast_name);
+				std::string prompt = "Are you sure that you want to Delete: " + podcast_name + "? y/n: ";
+				std::string reject_message = podcast_name + " wasn't removed!";
+				std::string accept_message = podcast_name + " was successfully removed!";
+				if (Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message) == false) {
+					m_lib->Delete_Podcast(podcast_name);
+				}
 				continue;
 			}
 			case(eBack): {
