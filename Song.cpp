@@ -58,7 +58,10 @@ void Song::print_playlists() const {
 	}
 	std::unordered_set<std::string>::iterator it;
 	for (it = m_playlist_appearances.begin(); it != m_playlist_appearances.end(); it++) {
-		std::cout << *it << ", ";
+		std::cout << *it;
+		if (it!= --m_playlist_appearances.end()) { //don't print ',' after the last element
+			std::cout << ", ";
+		}
 	}
 	std::cout << std::endl;
 }
@@ -104,11 +107,11 @@ bool operator<(const Song& a, const Song& b) {
 std::ostream& operator<<(std::ostream& os, const Song& song) //todo: make all prints in the same line (except for playlists, those are seperate line)
 {
 	os << static_cast<const AudioFile&>(song); // call AudioFile's operator<<
-	if (song.m_album != "") {
-		os<< "Album: " << song.m_album << "\n";
-	}
 	if (song.m_artist != "") {
-		os<< "Artist: " << song.m_artist << "\n";
+		os<< "Artist: " << song.m_artist << ", ";
+	}
+	if (song.m_album != "") {
+		os<< "Album: " << song.m_album << ", ";
 	}
 	if (song.m_genre != "") {
 		os << "Genre: " << song.m_genre << std::endl;

@@ -66,7 +66,7 @@ public:
 
 	void Destroy_All_Allocations();
 	//getters
-	std::unordered_map<int, Song*>* get_songs_by_id(); //todo: implement
+	std::unordered_map<int, Song*>* get_songs_by_id(); 
 	std::unordered_multimap<std::string, Song*>* get_songs_by_name(); //default comparison (by name)
 	//Returns the unique episode with given name
 	multimap<std::string, Song*>* get_songs_sorted_by_alphabet(); //default comparison (by name)

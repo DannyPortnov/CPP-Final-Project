@@ -156,7 +156,7 @@ void Mp3Interface::Print_Library_Menu() {
 
 }
 
-void Mp3Interface::Library_Menu() {
+void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 	bool repeat = true;
 	while (repeat) {
 		Print_Library_Menu();
