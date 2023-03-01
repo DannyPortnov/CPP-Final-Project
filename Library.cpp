@@ -465,10 +465,10 @@ void Library::PlayAll(std::vector<Song*>* songs_to_play, const std::string& mess
 }
 
 //Plays all songs in library unshuffled
-void Library::PlayAll() { 
+void Library::PlayAll(bool shuffle) { 
 	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
 	const std::string message = "Playing all songs in the library: ";
-	PlayAll(Utilities::Values(songs_to_play), message, false, true);
+	PlayAll(Utilities::Values(songs_to_play), message, shuffle, true);
 	//for (auto& pair : *songs_to_play) {
 	//	songs_vector.push_back(pair.second);
 	//}
@@ -492,35 +492,35 @@ void Library::PlayAll() {
 
 }
 
-// Play all of the songs in the library, shuffled
-void Library::PlayRandom() { //todo: remove this
-	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
-	if (songs_to_play->size() == 0) {
-		std::cout << "There are no songs in the library." << std::endl;
-		return;
-	}
-	// Create a vector of iterators to the elements in the multimap
-	std::vector<std::multimap<string, Song*>::iterator> songs_vector;
-	for (auto it = songs_to_play->begin(); it != songs_to_play->end(); ++it) {
-		songs_vector.push_back(it);
-	}
-	// Shuffle the keys of the multimap randomly
-	std::random_device rd;
-	std::mt19937 generator(rd());
-	shuffle(songs_vector.begin(), songs_vector.end(), generator);
-
-	std::cout << "Playing all library songs, shuffled: " << std::endl;
-
-	// Play the songs of the multimap in the shuffled order
-	for (auto const& song : songs_vector) {
-		std::cout << "Now playing: " << *(song->second) << std::endl;
-		int id = song->second->get_id();
-		Play(id);
-		if (check_if_continue_playing() == false)
-			return;
-	}
-
-}
+//// Play all of the songs in the library, shuffled
+//void Library::PlayRandom() {
+//	auto songs_to_play = m_server->get_songs_sorted_by_alphabet();
+//	if (songs_to_play->size() == 0) {
+//		std::cout << "There are no songs in the library." << std::endl;
+//		return;
+//	}
+//	// Create a vector of iterators to the elements in the multimap
+//	std::vector<std::multimap<string, Song*>::iterator> songs_vector;
+//	for (auto it = songs_to_play->begin(); it != songs_to_play->end(); ++it) {
+//		songs_vector.push_back(it);
+//	}
+//	// Shuffle the keys of the multimap randomly
+//	std::random_device rd;
+//	std::mt19937 generator(rd());
+//	shuffle(songs_vector.begin(), songs_vector.end(), generator);
+//
+//	std::cout << "Playing all library songs, shuffled: " << std::endl;
+//
+//	// Play the songs of the multimap in the shuffled order
+//	for (auto const& song : songs_vector) {
+//		std::cout << "Now playing: " << *(song->second) << std::endl;
+//		int id = song->second->get_id();
+//		Play(id);
+//		if (check_if_continue_playing() == false)
+//			return;
+//	}
+//
+//}
 
 //return the playlist that needs to be played. return nullptr if no playlist was found
 Playlist* Library::get_playlist_by_name(std::string playlist_name, bool prints_enable ) {

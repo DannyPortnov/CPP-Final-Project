@@ -355,11 +355,11 @@ void Mp3Interface::Library_Menu() {
 				continue;
 			}
 			case(ePlayAll): {
-				m_lib->PlayAll();
+				m_lib->PlayAll(false);
 				continue;
 			}
 			case(ePlayRandom): {
-				m_lib->PlayRandom();
+				m_lib->PlayAll(true);
 				continue;
 			}
 			case(eHelp): {

@@ -147,10 +147,10 @@ public:
 	//gets the data structure from Server!
 	void Play(int id);
 	//gets the data structure from Server!
-	void PlayAll();
+	void PlayAll(bool shuffle);
 	void PlayAll(std::vector<Song*>* songs_to_play, const std::string& message, bool shuffle, bool delete_ptr);
 	//gets the data structure from Server!
-	void PlayRandom();
+	//void PlayRandom();
 	//play song and update song data
 	void play_song(Song* song);
 	void Play_Podcast(std::string podcast_name);
