@@ -88,7 +88,6 @@ void Mp3Interface::Playlists_Menu() {
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
 		std::regex pattern(R"(^(Back$|Help$|Add|Delete|Print|PlayRandom|Play)\s*(.*)$)");
 		std::cout << "Type your selection:" << std::endl;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
 		if (regex_match(answer, matches, pattern)) {
