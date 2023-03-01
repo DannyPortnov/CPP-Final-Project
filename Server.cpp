@@ -290,21 +290,37 @@ void Server::Permanent_Delete_Song(Song* song)
 	delete song; 
 }
 
-void Server::Permanent_Delete_Podcast_Episode(Episode* episode)
+void Server::Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure)
 {
+	auto& episode_name = episode->get_name();
+	std::string prompt = "Are you sure that you want to delete: " + episode_name + "? y/n: ";
+	std::string reject_message = episode_name + " wasn't removed!";
+	std::string accept_message = episode_name + " was successfully removed!";
+	if (make_sure && !Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+		return;
+	}
 	m_all_episodes_by_id->erase(episode->get_id());
-	m_all_episodes_by_name->erase(episode->get_name());
+	m_all_episodes_by_name->erase(episode_name);
 	episode->Get_Podcast()->Delete_Episode(episode);
 }
 
-void Server::Permanent_Delete_Podcast(Podcast* podcast)
+void Server::Permanent_Delete_Podcast(Podcast* podcast, bool make_sure)
 {
-	for (auto& name_podcast_pair : *m_podcasts_by_alphabet_order) {
+	auto& podcast_name = podcast->Get_Podcast_Name();
+	std::string prompt = "Are you sure that you want to delete: " + podcast_name + "? y/n: ";
+	std::string reject_message = podcast_name + " wasn't removed!";
+	std::string accept_message = podcast_name + " was successfully removed!";
+	if (make_sure && !Utilities::user_prompts_and_dialog(prompt, reject_message, accept_message)) {
+		return;
+	}
+	auto copy = *m_podcasts_by_alphabet_order; //a copy is required to iterate over the collection
+	for (auto& name_podcast_pair : copy) {
 		m_podcasts_by_alphabet_order->erase(name_podcast_pair.first); //removes listing of podcast
 	}
 
 	//Go over each podcast in the collection
-	for (auto& name_podcast_pair : *m_all_podcasts) { //deleting a nullptr is fine; has no effect.
+	auto copy = *m_all_podcasts;
+	for (auto& name_podcast_pair : copy) { //deleting a nullptr is fine; has no effect.
 		auto all_episodes = name_podcast_pair.second->get_podcast();
 		for (auto itr = all_episodes->begin(); itr != all_episodes->end(); itr++) {
 			Permanent_Delete_Podcast_Episode(*itr);
@@ -336,11 +352,7 @@ void Server::Destory_Allocations(T* collection)
 	if (collection != nullptr)
 	{
 		for (typename T::iterator it = collection->begin(); it != collection->end(); ++it) {
-			try
-			{
-				delete it->second;
-			}
-			catch (const std::exception&) {} //do nothing, pointer was already deleted probably
+			delete it->second;
 		}
 	}
 	Clear_And_Delete(collection);
@@ -418,7 +430,7 @@ std::unordered_multimap<std::string, Song*>* Server::find_all(std::string& key, 
 	auto range = collection->equal_range(key); // range of values that match the given name
 	std::unordered_multimap<std::string, Song*>* filtered_songs = new std::unordered_multimap<std::string, Song*>;
 	for (auto& it = range.first; it != range.second; ++it) {
-		filtered_songs->insert(make_pair(it->first, it->second)); //inserts each value into the filtered set.
+		filtered_songs->emplace(it->first, it->second); //inserts each value into the filtered set.
 	}
 	return filtered_songs;
 }

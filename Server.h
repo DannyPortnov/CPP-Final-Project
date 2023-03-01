@@ -126,9 +126,9 @@ public:
 	//permanently deletes a song from the database COMPLETETLY
 	void Permanent_Delete_Song(Song* song);
 	//Removes the episode from all listings and from its podcast
-	void Permanent_Delete_Podcast_Episode(Episode* episode);
+	void Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure = false);
 	//Deletes a podcast and each episode in it
-	void Permanent_Delete_Podcast(Podcast* podcast);
+	void Permanent_Delete_Podcast(Podcast* podcast, bool make_sure = false);
 
 	//updates an existing song - did that in Library
 //static void Update(std::string song_name, std::string new_name = "", std::string artist = "", std::string album = ""
