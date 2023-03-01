@@ -86,8 +86,9 @@ void Mp3Interface::Playlists_Menu() {
 		std::cout << std::endl;
 		std::string answer, command, playlist_name;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
-		std::regex pattern(R"(^(Back$|Help$|Add|Delete|Print|Play|PlayRandom)\s*(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|Add|Delete|Print|PlayRandom|Play)\s*(.*)$)");
 		std::cout << "Type your selection:" << std::endl;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
 		if (regex_match(answer, matches, pattern)) {
@@ -103,6 +104,7 @@ void Mp3Interface::Playlists_Menu() {
 			}
 			case(eDelete): {
 				m_lib.delete_playlist(playlist_name);
+
 				continue;
 			}
 			case(ePlay): {
@@ -168,7 +170,7 @@ void Mp3Interface::Library_Menu() {
 		std::cout << std::endl;
 		std::string answer, command, parameters;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
-		std::regex pattern(R"(^(Back$|Help$|More$|List$|Add|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|More$|List$|Add2PL|Update|Delete|PrintSong|Add|PrintPL|RemoveFromPL|PlayAll|PlayRandom|Play)\s*(.*)$)");
 		std::cout << "Type your selection:" << std::endl;
 		std::getline(std::cin, answer);
 		smatch matches; // Match the input string against the regex pattern
@@ -213,10 +215,11 @@ void Mp3Interface::Library_Menu() {
 							duration = matches[9].str();
 							release_date = matches[11].str();
 							m_lib.Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
+							std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+							continue;
 						}
 					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
+				
 				}
 				case(eUpdate): {
 					begin = 0;
@@ -242,9 +245,10 @@ void Mp3Interface::Library_Menu() {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
 							m_lib.Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
 						}
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
 					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
+				
 				}
 				case(eDelete): {
 					begin = 0;
@@ -265,9 +269,10 @@ void Mp3Interface::Library_Menu() {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
 							m_lib.Delete_Song(delete_by_name_or_id);
 						}
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
 					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
+				
 				}
 				case(ePrintSong): {
 					begin = 0;
@@ -288,9 +293,10 @@ void Mp3Interface::Library_Menu() {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
 							m_lib.PrintSong(print_by_name_or_id);
 						}
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
 					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
+					
 				}
 				case(eAdd2PL): {
 					begin = 0;
@@ -304,18 +310,19 @@ void Mp3Interface::Library_Menu() {
 						// Extract the song ID and name from the match results
 						song_id = match[1].str();
 						playlist_name = match[2].str();
+						// Attempt to convert the string to an integer using stoi
+						try {
+							int id = std::stoi(song_id);
+							m_lib.Add2PL(id, playlist_name);
+						}
+						catch (std::invalid_argument& e) {
+							// Handle the exception if the input string is not a valid integer
+							std::cout << "Invalid argument: " << e.what() << std::endl;
+						}
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
 					}
-					// Attempt to convert the string to an integer using stoi
-					try {
-						int id = std::stoi(song_id);
-						m_lib.Add2PL(id, playlist_name);
-					}
-					catch (std::invalid_argument& e) {
-						// Handle the exception if the input string is not a valid integer
-						std::cout << "Invalid argument: " << e.what() << std::endl;
-					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					continue;
+					
 				}
 				case(eRemoveFromPL): {
 					begin = 0;
@@ -332,13 +339,16 @@ void Mp3Interface::Library_Menu() {
 						song_name = match[2];
 						playlist_name = match[4];
 						m_lib.RemoveFromPL(song_name, playlist_name);
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
 					}
-					continue;
+					
 				}
 				case(ePrintPL): {
 					begin = 0;
 					end = number_of_songs_to_print;
 					m_lib.PrintPL();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(ePlay): {
@@ -360,25 +370,29 @@ void Mp3Interface::Library_Menu() {
 							// Handle the exception if the input string is not a valid integer-> call the overload function
 							m_lib.Play(play_by_name_or_id);
 						}
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
 					}
-					continue;
 				}
 				case(ePlayAll): {
 					begin = 0;
 					end = number_of_songs_to_print;
 					m_lib.PlayAll(false);
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(ePlayRandom): {
 					begin = 0;
 					end = number_of_songs_to_print;
 					m_lib.PlayAll(true);
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eHelp): {
 					begin = 0;
 					end = number_of_songs_to_print;
 					Print_Library_Menu();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eBack): {
@@ -488,6 +502,7 @@ void Mp3Interface::Podcasts_Menu()
 						duration = matches[5].str();
 						release_date = matches[7].str();
 						m_lib.Add_Podcast_Episode(episode_name, podcast_name, file_path, duration, release_date);
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 						continue;
 					}
 				}
@@ -561,7 +576,7 @@ void Mp3Interface::Search_Menu() {
 		string input;
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, value_to_search;
-		std::regex pattern(R"(^(Search by \w+\s|(Back$)|(Help$)?)(.*)$)");
+		std::regex pattern(R"(^(Search by \w+|(Back$)|(Help$)?)\s*(.*)$)");
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
@@ -572,21 +587,25 @@ void Mp3Interface::Search_Menu() {
 			case(eSearchByAlbum): {  //Create a collection for each case and play it
 				auto collection = m_server->find_by_album(value_to_search);
 				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
 			case(eSearchByGenre): {
 				auto collection = m_server->find_by_genre(value_to_search);
 				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
 			case(eSearchByName): {
 				auto collection = m_server->find_by_name(value_to_search);
 				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
 			case(eSearchBySinger): {
 				auto collection = m_server->find_by_artist(value_to_search);
 				m_lib.PlayAll(Utilities::Values(collection), message, false, true);
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
 			case(eBack): {
