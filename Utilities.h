@@ -48,6 +48,8 @@ enum string_code {
 	ePlayAll,
 	ePlayRandom,
 	eRandom,
+	eUpdateEpisode,
+	eAddEpisode
 };
 
 class Utilities

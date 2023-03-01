@@ -200,18 +200,18 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 				if (regex_match(parameters, matches, pattern)) {
 					file_path = matches[1].str();
 					rest_of_string = matches[2].str();
-				}
-				// extract artist name
-				regex pattern1("^(.*?)\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
-				//matches;
-				if (regex_match(rest_of_string, matches, pattern1)) {
-					song_name = matches[1].str();
-					artist = matches[3].str();
-					album = matches[5].str();
-					genre = matches[7].str();
-					duration = matches[9].str();
-					release_date = matches[11].str();
-					m_lib->Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
+					// extract artist name
+					regex pattern1("^(.*?)\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
+					//matches;
+					if (regex_match(rest_of_string, matches, pattern1)) {
+						song_name = matches[1].str();
+						artist = matches[3].str();
+						album = matches[5].str();
+						genre = matches[7].str();
+						duration = matches[9].str();
+						release_date = matches[11].str();
+						m_lib->Add_Song(song_name, file_path, artist, album, genre, duration, release_date);
+					}
 				}
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
@@ -221,7 +221,6 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 				// Define regex pattern
 				std::regex pattern("^(.*?)\\s*(name=\\s*(.*?))?\\s*(singer=\\s*(.*?))?\\s*(album=\\s*(.*?))?\\s*(genre=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
 				// Create regex match object
-				std::smatch match;
 				// Execute regex search
 				if (regex_match(parameters, matches, pattern)) {
 					update_by_name_or_id = matches[1].str();
@@ -382,13 +381,14 @@ void Mp3Interface::Podcasts_Menu()
 		for (const auto& podcast_pair : *m_server->get_podcasts()) {
 			std::cout << *podcast_pair.second;
 		}
-		std::cout << "\nPlay <podcast name>" << "\n";
-		std::cout << "Delete <podcast name>" << "\n";
+		std::cout << "\nDelete <podcast name>" << "\n";
+		std::cout << "AddEpisode filename_fullpath episode_name podcast name=<podcast_name> duration=<mm:ss> release_date=<dd/mm/yyyy>" << "\n";
+		std::cout << "Path and names are required, duration and release date are optional" << "\n";
+		std::cout << "UpdateEpisode episode_id episode name=<episode name> duration=<duration> release date=<release_date>" << "\n";
+		std::cout << "Play <podcast name>" << "\n";
 		std::cout << "Back\n" << std::endl;
 	};
 	bool repeat = true;
-	//ignore has to be OUTSIDE the loop!
-	//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //Add #define NOMINMAX first thing in header
 	while (repeat)
 	{
 		print_message();
@@ -396,28 +396,75 @@ void Mp3Interface::Podcasts_Menu()
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
 		std::string command, podcast_name;
-		std::regex pattern(R"(^(Back$|Help$|Delete|Play)\s*(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|Delete|Play|AddEpisode|UpdateEpisode)\s*(.*)$)");
 		//std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); 
 		/*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
 		std::smatch match;
 		if (regex_search(input, match, pattern)) {
 			std::string command = match[1];
-			std::string podcast_name = match[2];
+			std::string parameters = match[2];
 			switch (Utilities::hashit(command))
 			{
-			case(ePlay): {
-				m_lib->Play_Podcast(podcast_name);
-				continue;
-			}
-			case(eDelete): {
-				m_lib->Delete_Podcast(podcast_name);
-				continue;
-			}
-			case(eBack): {
-				repeat = false;
-				continue;
-			}
+				case(ePlay): {
+					m_lib->Play_Podcast(parameters);
+					continue;
+				}
+				case(eDelete): {
+					m_lib->Delete_Podcast(parameters);
+					continue;
+				}
+				case(eUpdateEpisode): {
+					std::string id_string, new_name, duration, release_date;
+					// Define regex pattern
+					std::regex pattern("^(.*?)\\s+(episode name=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
+					// Create regex match object
+					std::smatch matches;
+					// Execute regex search
+					if (regex_match(parameters, matches, pattern)) {
+						id_string = matches[1].str();
+						new_name = matches[3].str();
+						duration = matches[11].str();
+						release_date = matches[13].str();
+						try {
+							int id = std::stoi(id_string);
+							m_lib->UpdateEpisode(id, new_name, duration, release_date);
+						}
+						catch (std::invalid_argument& e) {
+							std::cout << "id isn't a number" << std::endl;
+						}
+					}
+					continue;
+				}
+				case(eAddEpisode): {
+					std::string rest_of_string, episode_name, file_path, podcast_name, duration, release_date;
+					// Define the regular expression pattern
+					std::regex pattern("^(.+\\.mp3)\\s(.+)$");// works for seperatring file path from rest of the string
+					// Extract the different parts of the input string using regex
+					smatch matches;
+					if (regex_match(parameters, matches, pattern)) {
+						file_path = matches[1].str();
+						rest_of_string = matches[2].str();
+						regex pattern1("^(.*?)\\s+(podcast name=\\s*(.*?))\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
+						//matches;
+						if (regex_match(rest_of_string, matches, pattern1)) {
+							episode_name = matches[1].str();
+							podcast_name = matches[3].str();
+							duration = matches[9].str();
+							release_date = matches[11].str();
+							m_lib->Add_Podcast_Episode(episode_name,podcast_name, file_path, duration, release_date);
+						}
+					}
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					continue;
+				}
+				case(eHelp): {
+					continue;
+				}
+				case(eBack): {
+					repeat = false;
+					continue;
+				}
 			}
 		}
 		Print_Invalid_Command_Error(input); //if no match found or command doesn't fit switch case
