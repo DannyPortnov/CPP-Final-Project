@@ -449,8 +449,9 @@ void Mp3Interface::Podcasts_Menu()
 							std::cout << "id isn't a number" << std::endl;
 							std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 						}
+						continue;
 					}
-					continue;
+					break;
 				}
 				case(eAddEpisode): {
 					std::string rest_of_string, episode_name, file_path, podcast_name, duration, release_date;
@@ -461,7 +462,7 @@ void Mp3Interface::Podcasts_Menu()
 					if (regex_match(parameters, matches, pattern)) {
 						file_path = matches[1].str();
 						rest_of_string = matches[2].str();
-						regex pattern1("^(.*?)\\s*(podcast name=\\s*(.*?))\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
+						regex pattern1("^(.*?)\\s*(podcast name=\\s*(.+?))\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
 						//matches;
 						if (regex_match(rest_of_string, matches, pattern1)) {
 							episode_name = matches[1].str();
@@ -469,9 +470,10 @@ void Mp3Interface::Podcasts_Menu()
 							duration = matches[5].str();
 							release_date = matches[7].str();
 							m_lib->Add_Podcast_Episode(episode_name,podcast_name, file_path, duration, release_date);
+							continue;
 						}
 					}
-					continue;
+					break;
 				}
 				case(eHelp): {
 					continue;
