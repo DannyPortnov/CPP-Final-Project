@@ -39,7 +39,7 @@ enum string_code {
 	eDeleteSongById,
 	ePrintSongByName,*/
 	ePrint,
-	ePrintSong, //todo: need to think if we should use ePrint only
+	ePrintSong, 
 	eAdd2PL,
 	eRemoveFromPL,
 	ePrintPL,

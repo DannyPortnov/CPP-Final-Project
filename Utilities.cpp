@@ -123,7 +123,7 @@ bool Utilities::Is_End_Of_File_Or_Empty(std::ifstream& fileToCheck)
 
 bool Utilities::Is_File_Valid(std::ios& fileToCheck, const std::string& file_name) 
 {
-	if (!fileToCheck) { //todo: pass the file name also
+	if (!fileToCheck) { 
 		std::cout << "Couldn't open file " << file_name << " for serialization or deserialization" << std::endl;
 		return false;
 	}
@@ -134,7 +134,7 @@ bool Utilities::Is_File_Valid(std::ios& fileToCheck, const std::string& file_nam
 bool Utilities::user_prompts_and_dialog(std::string& prompt_message, std::string& reject_message, std::string& accept_message) {
 	while (true) {
 		std::cout << prompt_message << " "; // answer is y/n
-		std::string answer; //todo: mabye switch back to char
+		std::string answer;
 		std::cin >> answer; std::cout << std::endl;
 		if (answer == "n") {
 			std::cout << reject_message << std::endl;

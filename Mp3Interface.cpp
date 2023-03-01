@@ -240,9 +240,6 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 						m_lib->Update_Song(update_by_name_or_id, new_name, artist, album, genre, duration, release_date);
 					}
 				}
-				else {
-					//todo: add ecxeption here maybe, for invalid input parameter
-				}
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				continue;
 			}
@@ -298,9 +295,6 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 					// Extract the song ID and name from the match results
 					song_id = match[1].str();
 					playlist_name = match[2].str();
-				}
-				else {
-					//todo: add exception here maybe, for invalid unput
 				}
 				// Attempt to convert the string to an integer using stoi
 				try {
