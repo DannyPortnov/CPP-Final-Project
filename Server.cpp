@@ -301,14 +301,20 @@ void Server::Permanent_Delete_Podcast_Episode(Episode* episode, bool make_sure, 
 	}
 	m_all_episodes_by_id->erase(episode->get_id());
 	m_all_episodes_by_name->erase(episode_name);
-	if (delete_from_podcast)
+	if (!delete_from_podcast)
 	{
-		episode->Get_Podcast()->Delete_Episode(episode);
+		return;
+	}
+	auto podcast = episode->Get_Podcast();
+	podcast->Delete_Episode(episode);
+	if (podcast->get_podcast()->size() == 0) {//deletes empty podcast
+		Permanent_Delete_Podcast(podcast);
 	}
 }
 
 void Server::Permanent_Delete_Podcast(Podcast* podcast, bool make_sure)
 {
+
 	auto& podcast_name = podcast->Get_Podcast_Name();
 	std::string prompt = "Are you sure that you want to delete: " + podcast_name + "? y/n: ";
 	std::string reject_message = podcast_name + " wasn't removed!";
