@@ -44,7 +44,7 @@ Library::~Library() {
 void Library::PrintSong(int id)
 {
 	std::cout << "The song details are:" << std::endl;
-	std::cout << m_server->find_song_by_id(id) << std::endl;
+	std::cout << *m_server->find_song_by_id(id) << std::endl;
 }
 
 // print all songs with this name.
@@ -57,7 +57,7 @@ void Library::PrintSong(std::string song_name)
 		return;
 	}
 	if (count > 1) {
-		std::cout << "Few songs with the name: " << song_name << " were found: ";
+		std::cout << "Few songs with the name: " << song_name << " were found: " << std::endl;
 	}
 	unordered_multimap<string, Song*>::iterator it;
 	int i = 1;
@@ -283,7 +283,7 @@ void Library::Print_Not_Found_By_Id_Error(int item_id, std::string item_type)
 
 void Library::Print_No_Input_Parameters_Error()
 {
-	std::cout << "No paramters to updated" << std::endl;
+	std::cout << "No paramters to update" << std::endl;
 }
 
 //this method plays a song, updates most_played, most_recent stats 
