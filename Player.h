@@ -74,8 +74,8 @@ public:
 
 	void playList(vector<string>& playlist) {
 		stop();
-		DWORD temp;
-		m_pthread = CreateThread(0, 0, threadedPlay, &playlist, 0, &temp);
+		DWORD Begin_Deserialization;
+		m_pthread = CreateThread(0, 0, threadedPlay, &playlist, 0, &Begin_Deserialization);
 	}
 
 };

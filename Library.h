@@ -96,8 +96,8 @@ public:
 	void Add_Podcast_Episode(std::string episode_name, std::string podcast_name,
 	std::string file_path, std::string duration = "", std::string release_Date="");
 
-	void Begin_Serialization();//works
-	void Begin_Deserialization();
+	void Begin_Deserialization();//works
+	void Begin_Serialization();
 
 	static mt19937 Get_Gen();
 
@@ -168,8 +168,8 @@ public:
 	std::string genre = "", std::string duration = "", int release_date =0);*/
 
 	void Example_Func_For_MethodMap();
-	void Example_Func_For_MethodMap(std::string temp);
-	void Example2_Func_For_MethodMap(std::string temp);
+	void Example_Func_For_MethodMap(std::string Begin_Deserialization);
+	void Example2_Func_For_MethodMap(std::string Begin_Deserialization);
 
 	DailyMix* Get_DailyMix();
 	Favorites* Get_Favorites();

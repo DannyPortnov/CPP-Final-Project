@@ -24,11 +24,11 @@ m_recent(new Most_Recent(this, m_server)), m_most_played(new Most_Played(this, m
 	m_playlists.emplace(m_recent->get_name(), m_recent);
 	m_playlists.emplace(m_most_played->get_name(), m_most_played);
 	m_playlists.emplace(m_deleted->get_name(), m_deleted);
-	Begin_Serialization();
+	Begin_Deserialization();
 }
 
 Library::~Library() {
-	Begin_Deserialization();
+	Begin_Serialization();
 	if (m_playlists.size()) {
 		unordered_map<string, Playlist*>::iterator it;
 		for (it = m_playlists.begin(); it != m_playlists.end(); it++) {
@@ -622,7 +622,7 @@ void Library::Add_Podcast_Episode(std::string episode_name, std::string podcast_
 
 #define playlists_file_name "playlists"
 
-void Library::Begin_Serialization()
+void Library::Begin_Deserialization()
 {
 	//Server::Restore_Songs();
 	//for (auto& special_playlist : m_playlists) {
@@ -649,7 +649,7 @@ void Library::Begin_Serialization()
 	m_most_played->Update_Most_Played();*/
 }
 
-void Library::Begin_Deserialization()
+void Library::Begin_Serialization()
 {
 
 	bool is_started_writing_user_playlists = false;
@@ -898,11 +898,11 @@ ostream& operator<<(ostream& os, const Library& lib)
 }
 
 void Library::Example_Func_For_MethodMap() {}
-void Library::Example_Func_For_MethodMap(std::string temp) {
+void Library::Example_Func_For_MethodMap(std::string Begin_Deserialization) {
 
 }
 
-void Library::Example2_Func_For_MethodMap(std::string temp) {
+void Library::Example2_Func_For_MethodMap(std::string Begin_Deserialization) {
 
 }
 
