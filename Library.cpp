@@ -775,7 +775,6 @@ void Library::Delete_Episode(int id)
 {
 	try
 	{
-		//todo: add check before delete - from Utilities
 		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_id(id));
 	}
 	catch (const std::exception&)
