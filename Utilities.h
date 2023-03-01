@@ -26,6 +26,7 @@ enum string_code {
 	ePlaylists,
 	ePlay,
 	eDelete,
+	eDeleteEpisode,
 	eHelp,
 	eBack,
 	eExit,
@@ -87,5 +88,6 @@ public:
 	//}
 	//static std::vector<Song*> Values(std::multimap<std::string, Song*>* map);
 };
+
 #endif
 

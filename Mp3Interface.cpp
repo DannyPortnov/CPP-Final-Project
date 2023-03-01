@@ -136,7 +136,7 @@ void Mp3Interface::Print_Library_Menu() {
 	std::cout << *m_lib << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
 	std::cout << "> More" << std::endl;
 	std::cout << "> List" << std::endl;
-	std::cout << "> AddSong filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
+	std::cout << "> Add filename_fullpath song_name singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
 	//std::cout << "> AddEpisode filename_fullpath episode_name podcast_name duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
 	std::cout << "> Update song_name name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
 	std::cout << "> Update song_id name = <name> singer=<singer> album=<album> genre=<genre> duration=<mm:ss> release_date=<dd/mm/yyyy>" << std::endl;
@@ -161,11 +161,11 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 	while (repeat) {
 		Print_Library_Menu();
 		std::cout << std::endl;
-		int begin = 0, end = begin + 10; //todo: make them data members of library
+		int begin = 0, end = begin + 10;
 		std::string answer, command, parameters;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
 		//std::regex pattern(R"(^((Back$)|(Help$)|([^Back\s)][^(Help\s)]\w+))\s+(.*)$)");
-		std::regex pattern(R"(^(Back$|Help$|More|List|AddSong|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|More$|List$|Add|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
 		//regex pattern(R"(^\s*(\w+)\s*(.*)$)");//Match zero or more spaces,
 		//captures one or more word chars, then match zero or more spaces and capture everything untill the end
 		//ignore has to be OUTSIDE the loop!
@@ -182,7 +182,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 			case(eMore): {
 				begin += 10;
 				end += 10;
-				std::cout << " here are another 10 songs from library:" << std::endl;
+				//std::cout << " here are another 10 songs from library:" << std::endl;
 				m_lib->Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
 				continue;
@@ -382,9 +382,11 @@ void Mp3Interface::Podcasts_Menu()
 			std::cout << *podcast_pair.second;
 		}
 		std::cout << "\nDelete <podcast name>" << "\n";
-		std::cout << "AddEpisode filename_fullpath episode_name podcast name=<podcast_name> duration=<mm:ss> release_date=<dd/mm/yyyy>" << "\n";
+		std::cout << "AddEpisode filename_fullpath episode_name podcast name=<podcast_name> duration=<mm:ss> release date=<dd/mm/yyyy>" << "\n";
 		std::cout << "Path and names are required, duration and release date are optional" << "\n";
-		std::cout << "UpdateEpisode episode_id episode name=<episode name> duration=<duration> release date=<release_date>" << "\n";
+		std::cout << "UpdateEpisode episode_id episode name=<episode name> duration=<mm:ss> release date=<dd/mm/yyyy>" << "\n";
+		std::cout << "DeleteEpisode episode_id" << "\n";
+		std::cout << "DeleteEpisode episode_name" << "\n";
 		std::cout << "Play <podcast name>" << "\n";
 		std::cout << "Back\n" << std::endl;
 	};
@@ -395,8 +397,7 @@ void Mp3Interface::Podcasts_Menu()
 		std::string input;
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
-		std::string command, podcast_name;
-		std::regex pattern(R"(^(Back$|Help$|Delete|Play|AddEpisode|UpdateEpisode)\s*(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|Delete|DeleteEpisode|Play|AddEpisode|UpdateEpisode)\s+(.*)$)");
 		//std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); 
 		/*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
@@ -408,30 +409,45 @@ void Mp3Interface::Podcasts_Menu()
 			{
 				case(ePlay): {
 					m_lib->Play_Podcast(parameters);
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
-				case(eDelete): {
+				case(eDelete): { //podcast
 					m_lib->Delete_Podcast(parameters);
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					continue;
+				}
+				case(eDeleteEpisode): {
+					try {
+						int id = std::stoi(parameters);
+						m_lib->Delete_Episode(id);
+					}
+					catch (std::invalid_argument& e) {
+						// Handle the exception if the input string is not a valid integer-> call the overload function
+						m_lib->Delete_Episode(parameters);
+					}
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eUpdateEpisode): {
 					std::string id_string, new_name, duration, release_date;
 					// Define regex pattern
-					std::regex pattern("^(.*?)\\s+(episode name=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
+					std::regex pattern("^(.*?)\\s*(episode name=\\s*(.*?))?\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
 					// Create regex match object
 					std::smatch matches;
 					// Execute regex search
 					if (regex_match(parameters, matches, pattern)) {
 						id_string = matches[1].str();
 						new_name = matches[3].str();
-						duration = matches[11].str();
-						release_date = matches[13].str();
+						duration = matches[5].str();
+						release_date = matches[7].str();
 						try {
 							int id = std::stoi(id_string);
 							m_lib->UpdateEpisode(id, new_name, duration, release_date);
 						}
 						catch (std::invalid_argument& e) {
 							std::cout << "id isn't a number" << std::endl;
+							std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 						}
 					}
 					continue;
@@ -445,17 +461,16 @@ void Mp3Interface::Podcasts_Menu()
 					if (regex_match(parameters, matches, pattern)) {
 						file_path = matches[1].str();
 						rest_of_string = matches[2].str();
-						regex pattern1("^(.*?)\\s+(podcast name=\\s*(.*?))\\s*(duration=\\s*(.*?))?\\s*(release_date=\\s*(.*?))?$");
+						regex pattern1("^(.*?)\\s*(podcast name=\\s*(.*?))\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
 						//matches;
 						if (regex_match(rest_of_string, matches, pattern1)) {
 							episode_name = matches[1].str();
 							podcast_name = matches[3].str();
-							duration = matches[9].str();
-							release_date = matches[11].str();
+							duration = matches[5].str();
+							release_date = matches[7].str();
 							m_lib->Add_Podcast_Episode(episode_name,podcast_name, file_path, duration, release_date);
 						}
 					}
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					continue;
 				}
 				case(eHelp): {

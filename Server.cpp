@@ -299,7 +299,6 @@ void Server::Permanent_Delete_Podcast_Episode(Episode* episode)
 
 void Server::Permanent_Delete_Podcast(Podcast* podcast)
 {
-	//todo: add text here
 	for (auto& name_podcast_pair : *m_podcasts_by_alphabet_order) {
 		m_podcasts_by_alphabet_order->erase(name_podcast_pair.first); //removes listing of podcast
 	}

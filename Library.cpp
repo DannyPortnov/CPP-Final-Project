@@ -775,7 +775,6 @@ void Library::Delete_Episode(int id)
 {
 	try
 	{
-		//todo: add check before delete - from Utilities
 		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_id(id));
 	}
 	catch (const std::exception&)
@@ -876,6 +875,10 @@ void Library::update_most_played() {
 
 ostream& Library::Print(ostream& os, int begin, int end) const
 {
+	if (begin > m_server->get_songs_by_name()->size()) { // check if the begin num is greater than the num of songs in server
+		os << "No more songs :(" << std::endl;
+		return os;
+	}
 	auto itr = m_server->get_songs_by_name()->begin();
 	advance(itr, begin);//if begin!=0, inc itr untill reached begin
 	//for (int i = 0; i < begin && itr != Server::get_songs_by_name()->end(); i++, itr++) {} 
