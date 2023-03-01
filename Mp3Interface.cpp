@@ -165,7 +165,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 		std::string answer, command, parameters;
 		// Create a regex pattern to match the input string and capture the command and the rest of the string
 		//std::regex pattern(R"(^((Back$)|(Help$)|([^Back\s)][^(Help\s)]\w+))\s+(.*)$)");
-		std::regex pattern(R"(^(Back$|Help$|More|List|AddSong|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|More$|List$|AddSong|Update|Delete|PrintSong|Add2PL|PrintPL|RemoveFromPL|Play|PlayAll|PlayRandom)\s*(.*)$)");
 		//regex pattern(R"(^\s*(\w+)\s*(.*)$)");//Match zero or more spaces,
 		//captures one or more word chars, then match zero or more spaces and capture everything untill the end
 		//ignore has to be OUTSIDE the loop!
@@ -182,7 +182,7 @@ void Mp3Interface::Library_Menu() { //todo: move some make_sure text to here
 			case(eMore): {
 				begin += 10;
 				end += 10;
-				std::cout << " here are another 10 songs from library:" << std::endl;
+				//std::cout << " here are another 10 songs from library:" << std::endl;
 				m_lib->Print(std::cout, begin, end); // print the first 10 songs in alphabetically order using operator overload <<
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //add bool for first print and add to the beginning of loop
 				continue;
