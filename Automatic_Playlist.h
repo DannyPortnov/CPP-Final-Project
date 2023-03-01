@@ -17,6 +17,7 @@ class Automatic_Playlist :
         virtual void add_song_to_playlist(Song* song, bool add_print = true); //works
         virtual void remove_song_from_playlist(Song* song, bool make_sure = true);
         virtual void clear_all_playlist(bool add_print = true);
+        virtual void Update_Automatic_Playlist() = 0;
     public:
         Automatic_Playlist(std::string name, Library* library, Server* server);
         void save_playlist(std::string file_name, ios_base::openmode mode = ios::out);

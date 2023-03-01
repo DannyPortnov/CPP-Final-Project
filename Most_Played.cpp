@@ -10,7 +10,7 @@
 Most_Played::Most_Played(Library* library, Server* server) : Automatic_Playlist(Most_Played_Name, library, server)
 {
 	//restore_playlist();
-	Update_Most_Played();
+	Update_Automatic_Playlist();
 }
 // all 3 methods do exactly the same thing that happens in Automatic_Playlist
 //void Most_Played::add_song_to_playlist(Song* song)
@@ -39,7 +39,7 @@ Most_Played::Most_Played(Library* library, Server* server) : Automatic_Playlist(
 //}
 
 // update most played song using the server method.
-void Most_Played::Update_Most_Played() 
+void Most_Played::Update_Automatic_Playlist() 
 {
 	m_server->update_most_played_songs();
 	auto most_played = m_server->get_most_played();

@@ -9,7 +9,7 @@
 
 Most_Recent::Most_Recent(Library* library, Server* server) : Automatic_Playlist(Most_Recent_Name, library, server)
 {
-	Update_Most_Recent();
+	Update_Automatic_Playlist();
 }
 
 //void Most_Recent::add_song_to_playlist(Song* song)
@@ -39,7 +39,7 @@ Most_Recent::Most_Recent(Library* library, Server* server) : Automatic_Playlist(
 // 
 // 
 //update recent songs playlist 
-void Most_Recent::Update_Most_Recent()
+void Most_Recent::Update_Automatic_Playlist()
 {
 	auto recently_played = m_server->get_recently_played();
 	if (recently_played == nullptr) {
@@ -69,14 +69,14 @@ void Most_Recent::Remove_From_Most_Recent(int id)
 	auto song_to_remove = m_server->find_song_by_id(id);
 	//Playlist::remove_song_from_playlist(song_to_remove, false); // Playlist is already cleared in Update_Most_Recent
 	m_server->remove_from_recently_played(id); // removes from the data structure
-	Update_Most_Recent();
+	Update_Automatic_Playlist();
 
 }
 
 void Most_Recent::Add_To_Most_Recent(int id)
 {
 	m_server->add_to_recently_played(id);
-	Update_Most_Recent();
+	Update_Automatic_Playlist();
 }
 
 //void Most_Recent::restore_playlist() //todo: make maybe another parent class

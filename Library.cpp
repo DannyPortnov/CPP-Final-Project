@@ -389,7 +389,7 @@ void Library::play_song(Song* song) {
 	song->Play(); // here plays_counter updates
 	//m_recent->Update_Most_Recent();
 	m_recent->Add_To_Most_Recent(song->get_id());
-	m_most_played->Update_Most_Played();
+	m_most_played->Update_Automatic_Playlist();
 }
 
 void Library::Play_Podcast(std::string podcast_name)
@@ -840,7 +840,7 @@ void Library::Print_Not_Found_By_Name_Error(std::string& media_name)
 //}
 
 void Library::update_most_recent() {
-	m_recent->Update_Most_Recent();
+	m_recent->Update_Automatic_Playlist();
 	//auto song_to_remove = Server::find_song_by_id(id);
 	//m_recent->remove_song_from_playlist(song_to_remove, false); // removes from playlist, don't make sure to delete songs from PL
 	//Server::remove_from_recently_played(id); // removes from the data structure
@@ -859,7 +859,7 @@ DailyMix* Library::Get_DailyMix() {
 
 void Library::update_most_played() {
 
-	m_most_played->Update_Most_Played();
+	m_most_played->Update_Automatic_Playlist();
 	//Server::update_most_played_songs();
 	//auto most_played = Server::get_most_played();
 	//int most_played_size = most_played->size();

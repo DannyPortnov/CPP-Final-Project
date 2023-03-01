@@ -1,84 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="AudioCollection&lt;T&gt;" Collapsed="true">
-    <Position X="15.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAgAAAAA=</HashCode>
-      <FileName>AudioCollection.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="AudioFile" Collapsed="true">
-    <Position X="5" Y="4.5" Width="1.5" />
+    <Position X="4.5" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQBCAAQAIAAAAAAAAAEAQABAEAYAAAAgAAACIAAQBA=</HashCode>
+      <HashCode>AAQBCAAQAIAAAAAAAAAEAQABAEAYAAAAgAAACIAEQBA=</HashCode>
       <FileName>AudioFile.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Automatic_Playlist" Collapsed="true">
-    <Position X="7.5" Y="1.75" Width="1.5" />
+    <Position X="9.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAEAAA=</HashCode>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAgAAAAAAAAAAAkAAAABEAAA=</HashCode>
       <FileName>Automatic_Playlist.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DailyMix" Collapsed="true">
-    <Position X="12" Y="1.75" Width="1.5" />
+    <Position X="13.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEABAAEAAEAAAAAAAAIgAEIAAAAABAAAAgAAAAAAA=</HashCode>
+      <HashCode>AAAAABAAEAQEAAAAAAAAIAAEIAAAAABAAAAgAAAAAAA=</HashCode>
       <FileName>DailyMix.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Date" Collapsed="true">
-    <Position X="17.25" Y="0.5" Width="1.5" />
+    <Position X="13.5" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAQAAAAAEAAAQAICAAAAAEAAAAAIBAAAgAEAgAAA=</HashCode>
+      <HashCode>CAAAAQAAAAAEAAAQAICAAQAAEAAAAAIBAAAgAEAgAAA=</HashCode>
       <FileName>Date.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Trash" Collapsed="true">
     <Position X="5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAAAAAAgAEAAAIAAAAAgAAgABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAgAAgABAAAA=</HashCode>
       <FileName>Trash.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Episode" Collapsed="true">
-    <Position X="6" Y="5.75" Width="1.5" />
+    <Position X="5.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgABAAAAIAAAAAAAQAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgABAAAAIAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Episode.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Favorites" Collapsed="true">
-    <Position X="10" Y="1.75" Width="1.5" />
+    <Position X="12" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAEAAAAAAAAAACAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
       <FileName>Favorites.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Library" Collapsed="true">
-    <Position X="8.75" Y="5.75" Width="1.5" />
+    <Position X="7.25" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>SgCAEIAAGUAYgCAAmACBAAKCKAOiAUBRhAooIBAOoCM=</HashCode>
+      <HashCode>ShCAEICAGUAYhCAA2ACAAAKCqAPmA0hRhAooIBQu4CM=</HashCode>
       <FileName>Library.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Most_Played" Collapsed="true">
-    <Position X="8.5" Y="3.25" Width="1.5" />
+    <Position X="11.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAAAAAAgAEgAAAAIAICgAAAABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAIAAAAAAAAAAA=</HashCode>
       <FileName>Most_Played.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Most_Recent" Collapsed="true">
-    <Position X="6.25" Y="3.25" Width="1.5" />
+    <Position X="9.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAQAAgAAAgAAAgAEAAAAAAAQAgAAAABAAAA=</HashCode>
+      <HashCode>CAAAAAAAAAAAAAAAAgAAAQAAAAAAAAAQAAAAAAAAAAA=</HashCode>
       <FileName>Most_Recent.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Player" Collapsed="true">
-    <Position X="19" Y="0.5" Width="1.5" />
+    <Position X="15.25" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAAAAAAAAAAAAAAAAAIAAAIAACgUAAAAAEAAQAAABA=</HashCode>
       <FileName>Player.h</FileName>
@@ -87,35 +80,35 @@
   <Class Name="Playlist" Collapsed="true">
     <Position X="8.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAwAEAAAAQAAAAgAAAEAgAEAAAAAgAAhkFEAIBVAAA=</HashCode>
+      <HashCode>AAAQAEAAAAQAAAAgAAAAAgAEAAAAAgAAhkFEAIBRQAA=</HashCode>
       <FileName>Playlist.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Podcast" Collapsed="true">
-    <Position X="15.5" Y="1.5" Width="1.5" />
+    <Position X="13.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gABAAIAEAAAAAAgAAAAAAAAAAAAAAAGAgCAAAAAABAA=</HashCode>
       <FileName>Podcast.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Server" Collapsed="true">
-    <Position X="8.75" Y="4.5" Width="1.5" />
+    <Position X="7.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CUcEYCEwAIxAYQAEAkQCCWQRUhAyAxAEAACQAwKFAQA=</HashCode>
+      <HashCode>CUcEYCEwAIxAYQAEAkQCCWQRUhAyAxAEACCQAwKFAQA=</HashCode>
       <FileName>Server.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Song" Collapsed="true">
-    <Position X="3.75" Y="5.75" Width="1.5" />
+    <Position X="3.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BxAAACAAAIACACggABACAAgEAgAAIBEAkAABAAAAAAA=</HashCode>
       <FileName>Song.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Utilities" Collapsed="true">
-    <Position X="17.25" Y="1.5" Width="1.5" />
+    <Position X="15.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AJAAAAACAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AJAAAAACAARAAAAAAAAAAAAAAAAACAAAAAAgAAAAAAA=</HashCode>
       <FileName>Utilities.h</FileName>
     </TypeIdentifier>
   </Class>
