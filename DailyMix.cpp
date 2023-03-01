@@ -16,12 +16,18 @@
 //	
 //	
 //}
-#define DailyMix_Name "DailyMix"
+
 
 DailyMix::DailyMix(Library* library, Server* server) : Playlist(DailyMix_Name, library, server),
-	m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in) //todo: make file name const
+	m_last_date_saved(get_date_from_file()), m_dailymix_file(get_address(), ios::in) //todo: make file name const
 {
 	restore_playlist(); //todo: add try-catch for when trying to initialize m_dailymix_file 
+}
+
+std::string& DailyMix::get_address() {
+	std::string address = DailyMix_Name;
+	Utilities::Format_Address(address);
+	return address;
 }
 
 void DailyMix::restore_playlist() //todo: make maybe another parent class
@@ -52,7 +58,7 @@ void DailyMix::restore_playlist() //todo: make maybe another parent class
 //Works
 Date& DailyMix::get_date_from_file() {
 	Date default_date("");
-	if (!Utilities::Is_File_Valid(m_dailymix_file) || Utilities::Is_End_Of_File_Or_Empty(m_dailymix_file)) {
+	if (!Utilities::Is_File_Valid(m_dailymix_file, DailyMix_Name) || Utilities::Is_End_Of_File_Or_Empty(m_dailymix_file)) {
 		return default_date;
 	}
 	std::string date;
@@ -93,7 +99,7 @@ bool DailyMix::check_if_date_changed(Date& new_date) {
 void DailyMix::save_playlist(std::string file_name, ios_base::openmode mode) {
 
 	ofstream write("c:\\temp\\" + m_playlist_name + ".dat", ios::out);
-	if (!Utilities::Is_File_Valid(write)) {
+	if (!Utilities::Is_File_Valid(write, m_playlist_name)) {
 		return;
 	}
 	// Write the std::string to the file first

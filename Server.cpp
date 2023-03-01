@@ -118,10 +118,13 @@ void Server::Upload_Episode_To_Podcast(Podcast* podcast, std::string episode_nam
 	m_podcasts_by_alphabet_order->emplace(podcast_name, podcast);
 }
 
+
 void Server::Restore_Songs()
 {
-	ifstream read("c:\\temp\\songs.dat", ios::in);
-	if (!Utilities::Is_File_Valid(read)) {
+	std::string address = songs_file_name;
+	Utilities::Format_Address(address);
+	ifstream read(address, ios::in);
+	if (!Utilities::Is_File_Valid(read, songs_file_name)) {
 		return;
 	}
 	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
@@ -139,9 +142,13 @@ void Server::Restore_Songs()
 	read.close();
 }
 
+
+
 void Server::Restore_Podcasts() {
-	ifstream read("c:\\temp\\podcasts.dat", ios::in);
-	if (!Utilities::Is_File_Valid(read)) {
+	std::string address = podcasts_file_name;
+	Utilities::Format_Address(address);
+	ifstream read(address, ios::in);
+	if (!Utilities::Is_File_Valid(read, podcasts_file_name)) {
 		return;
 	}
 	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
@@ -163,8 +170,10 @@ void Server::Restore_Podcasts() {
 
 void Server::Restore_Most_Recent()
 {
-	ifstream read("c:\\temp\\Most_Recent.dat", ios::in);
-	if (!Utilities::Is_File_Valid(read)) {
+	std::string address = most_recent_file_name;
+	Utilities::Format_Address(address);
+	ifstream read(address, ios::in);
+	if (!Utilities::Is_File_Valid(read, most_recent_file_name)) {
 		return;
 	}
 	while (!Utilities::Is_End_Of_File_Or_Empty(read)) {
@@ -192,7 +201,9 @@ std::unordered_map<std::string, Podcast*>* Server::get_podcasts()
 
 void Server::Save_Podcasts()
 {
-	ofstream write("c:\\temp\\podcasts.dat", ios::out);
+	std::string address = podcasts_file_name;
+	Utilities::Format_Address(address);
+	ofstream write(address, ios::out);
 	std::unordered_map<int, Episode*>::iterator itr;
 	auto all_episodes = Server::get_episodes_by_id();
 	for (itr = all_episodes->begin(); itr != all_episodes->end(); itr++)
@@ -211,7 +222,9 @@ void Server::Save_Podcasts()
 
 void Server::Save_Songs()
 {
-	ofstream write("c:\\temp\\songs.dat", ios::out);
+	std::string address = songs_file_name;
+	Utilities::Format_Address(address);
+	ofstream write(address, ios::out);
 	std::unordered_map<int, Song*>::iterator itr;
 	auto all_songs = Server::get_songs_by_id();
 	for (itr = all_songs->begin(); itr != all_songs->end(); itr++)
@@ -231,10 +244,12 @@ void Server::Save_Songs()
 }
 //Saves the whole list of songs in order of last time played (could be more than 10 songs)
 void Server::Save_Most_Recent() { 
-	ofstream write("c:\\temp\\most_recent.dat", ios::out);
-	if (!Utilities::Is_File_Valid(write)) {
-		return;
-	}
+	std::string address = most_recent_file_name;
+	Utilities::Format_Address(address);
+	ofstream write(address, ios::out);
+	//if (!Utilities::Is_File_Valid(write, most_recent_file_name)) {
+	//	return;
+	//}
 	std::list<Song*>::reverse_iterator itr;
 	for (itr = m_recently_played->rbegin();itr != m_recently_played->rend();itr++)
 	{

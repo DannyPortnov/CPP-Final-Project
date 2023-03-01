@@ -59,7 +59,14 @@ string_code Utilities::hashit(std::string const& inString) {
 //	return lset
 //}
 
-//todo: put regex and use refs
+
+//Returns the full adress of the file specified
+void Utilities::Format_Address(std::string& file_name)
+{
+	std::string full_address = address_template;
+	file_name = std::regex_replace(full_address, std::regex(name_to_replace), file_name); //replace name_to_replace with file_name
+}
+
 void Utilities::Replace_All(std::vector<std::string*>& params, bool is_serialization)
 {
 	// REGEX IMPLEMENTATION:
@@ -86,7 +93,7 @@ void Utilities::Replace_All(std::vector<std::string*>& params, bool is_serializa
 	#pragma endregion
 
 }
-
+//Assumes folder exists
 bool Utilities::Is_End_Of_File(std::ios_base& fileToCheck)
 {
 	std::istream* input = dynamic_cast<std::istream*>(&fileToCheck);
@@ -106,18 +113,18 @@ bool Utilities::Is_End_Of_File(std::ios_base& fileToCheck)
 bool Utilities::Is_End_Of_File_Or_Empty(std::ifstream& fileToCheck)
 {
 	//first condition: file is empty, second: finished reading
-	auto first = fileToCheck.peek(); //todo: temporary, to be removed after testing
-	auto second = fileToCheck.eof();
+	//auto first = fileToCheck.peek(); 
+	//auto second = fileToCheck.eof();
 	if (fileToCheck.peek() == std::ifstream::traits_type::eof() || fileToCheck.eof()) {
 		return true;
 	}
 	return false;
 }
 
-bool Utilities::Is_File_Valid(std::ios& fileToCheck) //todo: add promt to create folder if doesn't exist, or check for a command that creates the folder
+bool Utilities::Is_File_Valid(std::ios& fileToCheck, const std::string& file_name) 
 {
 	if (!fileToCheck) { //todo: pass the file name also
-		std::cout << "Couldn't open file for serialization or deserialization" << std::endl;
+		std::cout << "Couldn't open file " << file_name << " for serialization or deserialization" << std::endl;
 		return false;
 	}
 	return true;

@@ -104,7 +104,7 @@ bool operator<(const Song& a, const Song& b) {
 }
 
 
-std::ostream& operator<<(std::ostream& os, const Song& song) //todo: make all prints in the same line (except for playlists, those are seperate line)
+std::ostream& operator<<(std::ostream& os, const Song& song) 
 {
 	os << static_cast<const AudioFile&>(song); // call AudioFile's operator<<
 	if (song.m_artist != "") {

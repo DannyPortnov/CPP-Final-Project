@@ -19,8 +19,9 @@
 #endif
 #endif  // _DEBUG
 
-//Why do we need this??
-//#define max_recents 30 // 30 and not 10 because we want to save some spare songs 
+#define songs_file_name "songs"
+#define podcasts_file_name "podcasts"
+#define most_recent_file_name "Most_Recent"
 
 
 class Server {

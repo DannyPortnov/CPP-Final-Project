@@ -620,14 +620,18 @@ void Library::Add_Podcast_Episode(std::string episode_name, std::string podcast_
 
 }
 
+#define playlists_file_name "playlists"
+
 void Library::Begin_Serialization()
 {
 	//Server::Restore_Songs();
 	//for (auto& special_playlist : m_playlists) {
 	//	special_playlist.second->restore_playlist();
 	//}
-	ifstream read_user_playlists("c:\\temp\\playlists.dat", ios::in);
-	if (!Utilities::Is_File_Valid(read_user_playlists)) {
+	std::string address = playlists_file_name;
+	Utilities::Format_Address(address);
+	ifstream read_user_playlists(address, ios::in);
+	if (!Utilities::Is_File_Valid(read_user_playlists, playlists_file_name)) {
 		return;
 	}
 	while (!Utilities::Is_End_Of_File_Or_Empty(read_user_playlists)) {
@@ -647,6 +651,7 @@ void Library::Begin_Serialization()
 
 void Library::Begin_Deserialization()
 {
+
 	bool is_started_writing_user_playlists = false;
 	ios_base::openmode mode = ios::out;
 	for (auto& playlist_pair : m_playlists) {

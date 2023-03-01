@@ -41,7 +41,7 @@ void Trash::clear_all_playlist() {
 			m_server->Permanent_Delete_Song(*it);
 			//m_library->remove_from_most_recent((*it)->get_id());
 			m_library->remove_from_daily_mix(*it);
-			//todo: need to remove song from most_played, moset_recent playlists
+			
 		}
 		m_library->update_most_recent();
 		m_library->update_most_played();

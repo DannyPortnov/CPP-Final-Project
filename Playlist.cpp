@@ -207,8 +207,10 @@ void Playlist::clear_all_playlist(bool prints_enabled) { // favorites will also 
 }
 
 void Playlist::save_playlist(std::string file_name, ios_base::openmode mode) {
-	ofstream write_playlist("c:\\temp\\" + file_name + ".dat", mode);
-	if (!Utilities::Is_File_Valid(write_playlist)) {
+	std::string address = file_name;
+	Utilities::Format_Address(address);
+	ofstream write_playlist(address, mode);
+	if (!Utilities::Is_File_Valid(write_playlist, file_name)) {
 		return;
 	}
 	std::vector<std::string*> params = { &m_playlist_name };
@@ -218,8 +220,10 @@ void Playlist::save_playlist(std::string file_name, ios_base::openmode mode) {
 	}
 }
 void Playlist::restore_playlist(std::string file_name) {
-	std::ifstream read_user_playlists("c:\\temp\\" + file_name + ".dat", ios::in);
-	if (!Utilities::Is_File_Valid(read_user_playlists)) {
+	std::string address = file_name;
+	Utilities::Format_Address(address);
+	std::ifstream read_user_playlists(address, ios::in);
+	if (!Utilities::Is_File_Valid(read_user_playlists, file_name)) {
 		return;
 	}
 	while (!Utilities::Is_End_Of_File_Or_Empty(read_user_playlists)) {
