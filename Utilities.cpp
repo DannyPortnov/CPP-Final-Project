@@ -19,6 +19,7 @@ string_code Utilities::hashit(std::string const& inString) {
 	if (inString == "More") return eMore;
 	if (inString == "AddEpisode") return eAddEpisode;
 	if (inString == "UpdateEpisode") return eUpdateEpisode;
+	if (inString == "DeleteEpisode") return eDeleteEpisode;
 	if (inString == "List") return eList;
 	if (inString == "Add") return eAdd;
 	if (inString == "Update") return eUpdate;
