@@ -47,6 +47,7 @@ void Trash::clear_all_playlist() {
 		m_library->update_most_played();
 		return;
 	}
+	m_songs.clear();
 }
 
 // called when we want to add song to the Trash
