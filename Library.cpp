@@ -775,7 +775,7 @@ void Library::Delete_Episode(int id)
 {
 	try
 	{
-		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_id(id));
+		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_id(id), true);
 	}
 	catch (const std::exception&)
 	{
@@ -787,7 +787,7 @@ void Library::Delete_Episode(std::string episode_name)
 {
 	try
 	{
-		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_name(episode_name)); //if episode doesn't exist, throws exception
+		m_server->Permanent_Delete_Podcast_Episode(m_server->find_episode_by_name(episode_name), true); //if episode doesn't exist, throws exception
 	}
 	catch (const std::exception&)
 	{
@@ -799,7 +799,7 @@ void Library::Delete_Podcast(std::string podcast_name)
 {
 	try
 	{
-		m_server->Permanent_Delete_Podcast(m_server->find_podcast_by_name(podcast_name)); //if podcast doesn't exist, throws exception
+		m_server->Permanent_Delete_Podcast(m_server->find_podcast_by_name(podcast_name), true); //if podcast doesn't exist, throws exception
 	}
 	catch (const std::exception&)
 	{
