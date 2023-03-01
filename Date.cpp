@@ -49,7 +49,7 @@ void Date::set_date() { //todo: check if works
     while (invalid_answer) {
         std::cout << "Enter the date in the following format- dd/mm/yyyy: ";
         std::string answer; std::cin >> answer; std::cout << std::endl;
-        if (is_date_valid(answer) == true) {
+        if (is_date_valid(answer)) {
             set_date_from_string(answer);
             create_formated_date_string(m_date);
             std::cout << "Date was successfully set!" << std::endl;
