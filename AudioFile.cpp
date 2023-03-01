@@ -71,9 +71,19 @@ void AudioFile::set_duration(std::string& duration) //only allows mm:ss or m:ss
 	m_duration = duration;
 }
 
-void AudioFile::set_release_date(Date release_date)
+void AudioFile::set_release_date(string& release_date)
 {
-	m_release_date = release_date;
+	auto date = Date(release_date);
+	std::string answer;
+	if (date == Date("")) {
+		std::cout << "Do you want to erase previous release_date? If so enter y, anything else cancels the operation" << std::endl;
+		std::cin >> answer;
+		if (answer == "y") {
+			m_release_date = Date("");
+		}
+		return;
+	}
+	m_release_date = date;
 }
 
 std::ostream& operator<<(std::ostream& os, const AudioFile& audio)

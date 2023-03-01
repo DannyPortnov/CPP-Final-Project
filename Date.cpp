@@ -10,11 +10,12 @@ Date::Date() {
     //m_date = 
 }
 
+#define empty_date "00/00/1900"
 
 //constructor that creates an instance by std::string
 Date::Date(std::string date) {
     if (date.empty()) {
-        set_date_from_string("00/00/1900");
+        set_date_from_string(empty_date);
         return;
     }
     if (is_date_valid(date)) {
@@ -48,7 +49,9 @@ void Date::set_date() { //todo: check if works
     bool invalid_answer = true;
     while (invalid_answer) {
         std::cout << "Enter the date in the following format- dd/mm/yyyy: ";
-        std::string answer; std::cin >> answer; std::cout << std::endl;
+        std::string answer;
+        std::cin >> answer; 
+        std::cout << std::endl;
         if (is_date_valid(answer)) {
             set_date_from_string(answer);
             create_formated_date_string(m_date);
@@ -62,6 +65,7 @@ void Date::set_date() { //todo: check if works
                 char answer; std::cin >> answer; std::cout << std::endl;
                 if (answer == 'n') {
                     std::cout << "Date was not set." << std::endl;
+                    set_date_from_string(empty_date);
                     return;
                 }
                 else if (answer == 'y') {

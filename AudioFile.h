@@ -33,7 +33,7 @@ public:
 
 	virtual void set_name(std::string& name);
 	virtual void set_duration(std::string& duration);
-	virtual void set_release_date(Date release_date);
+	virtual void set_release_date(string& release_date);
 };
 std::ostream& operator<<(std::ostream& os, const AudioFile& audio);
 #endif	// AUDIOFILE_H

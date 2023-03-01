@@ -365,7 +365,7 @@ T* Library::Update_Media_By_Id(int media_id, T* (Server::* methodPtr)(int), std:
 		picked_media->set_duration(duration);
 	}
 	if (release_date != "") {
-		picked_media->set_release_date(Date(release_date));
+		picked_media->set_release_date(release_date);
 	}
 	return picked_media;
 }
