@@ -17,11 +17,10 @@
 
 
 #define max_songs 10
-#define DailyMix_Name "DailyMix"
 
 // use time.h, date classes in order to check the current date 
 class Playlist;
-class DailyMix : public Playlist 
+class DailyMix : public Playlist
 {
 private:
 	//std::unordered_map<int, Song*> m_daily_mix; //first: id, second: song
@@ -29,7 +28,6 @@ private:
 	Date m_last_date_saved; // stores the last saved date (will change if the program will run in a different day)
 	bool check_if_date_changed(Date& new_date); // checks if the date has changed.
 	Date& get_date_from_file();
-	std::string& get_address();
 public:
 	DailyMix(Library* library, Server* server); // Partially tested and works
 	//void Play(); from playlist

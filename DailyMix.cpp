@@ -16,18 +16,12 @@
 //	
 //	
 //}
-
+#define DailyMix_Name "DailyMix"
 
 DailyMix::DailyMix(Library* library, Server* server) : Playlist(DailyMix_Name, library, server),
-	m_last_date_saved(get_date_from_file()), m_dailymix_file(get_address(), ios::in) //todo: make file name const
+m_last_date_saved(get_date_from_file()), m_dailymix_file("c:\\temp\\DailyMix.dat", ios::in) //todo: make file name const
 {
 	restore_playlist(); //todo: add try-catch for when trying to initialize m_dailymix_file 
-}
-
-std::string& DailyMix::get_address() {
-	std::string address = DailyMix_Name;
-	Utilities::Format_Address(address);
-	return address;
 }
 
 void DailyMix::restore_playlist() //todo: make maybe another parent class
@@ -114,7 +108,7 @@ void DailyMix::save_playlist(std::string file_name, ios_base::openmode mode) {
 }
 
 // generate a random mix of 10 songs from the library/server
-void DailyMix::generate_daily_mix(){
+void DailyMix::generate_daily_mix() {
 	auto songs_to_shuffle = m_server->get_songs_by_id();
 	if (songs_to_shuffle == nullptr) {
 		return;
