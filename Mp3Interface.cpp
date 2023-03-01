@@ -9,13 +9,13 @@ Mp3Interface::Mp3Interface()
 
 void Mp3Interface::Main_Menu() {
 	std::cout << "Main Menu: " << std::endl;
-	std::cout << " Daily Mix" << std::endl;
-	std::cout << " Search" << std::endl;
-	std::cout << " Podcast" << std::endl;
-	std::cout << " Library" << std::endl;
-	std::cout << " Playlists" << std::endl;
-	std::cout << " Help" << std::endl;
-	std::cout << " Exit\n" << std::endl;
+	std::cout << "> Daily Mix" << std::endl;
+	std::cout << "> Search" << std::endl;
+	std::cout << "> Podcast" << std::endl;
+	std::cout << "> Library" << std::endl;
+	std::cout << "> Playlists" << std::endl;
+	std::cout << "> Help" << std::endl;
+	std::cout << "> Exit\n" << std::endl;
 }
 
 
@@ -23,6 +23,7 @@ void Mp3Interface::Run_Program() {
 	std::string answer;
 	bool run_program = true;
 	while (run_program) {
+		std::cout << std::endl;
 		std::cout << "Welcome To mp3player :)" << std::endl;
 		std::cout << std::endl;
 		Main_Menu();
@@ -65,6 +66,7 @@ void Mp3Interface::Run_Program() {
 }
 
 void Mp3Interface::Print_Playlists_Menu() {
+	std::cout << std::endl;
 	std::cout << "Playlist Menu:" << std::endl;
 	std::cout << "> Add <playlist_name>" << std::endl;
 	std::cout << "> Delete <playlist_name>" << std::endl;
@@ -119,6 +121,7 @@ void Mp3Interface::Playlists_Menu() {
 			}
 			case(eBack): {
 				repeat = false;
+				std::cout << std::endl;
 				continue;
 			}
 			}
@@ -129,6 +132,7 @@ void Mp3Interface::Playlists_Menu() {
 
 
 void Mp3Interface::Print_Library_Menu() {
+	std::cout << std::endl;
 	std::cout << "Library Menu:" << std::endl;
 	std::cout << m_lib << std::endl; // print the first 10 songs in alphabetically order using operator overload <<
 	std::cout << "> More" << std::endl;
@@ -396,14 +400,14 @@ void Mp3Interface::Podcasts_Menu()
 		for (const auto& podcast_pair : *m_server->get_podcasts()) {
 			std::cout << *podcast_pair.second;
 		}
-		std::cout << "\nDelete <podcast name>" << "\n";
-		std::cout << "AddEpisode filename_fullpath episode_name podcast name=<podcast_name> duration=<mm:ss> release date=<dd/mm/yyyy>" << "\n";
-		std::cout << "Path and names are required, duration and release date are optional" << "\n";
-		std::cout << "UpdateEpisode episode_id episode name=<episode name> duration=<mm:ss> release date=<dd/mm/yyyy>" << "\n";
-		std::cout << "DeleteEpisode episode_id" << "\n";
-		std::cout << "DeleteEpisode episode_name" << "\n";
-		std::cout << "Play <podcast name>" << "\n";
-		std::cout << "Back\n" << std::endl;
+		std::cout << "\n> Delete <podcast name>" << "\n";
+		std::cout << "> AddEpisode filename_fullpath episode_name podcast name=<podcast_name> duration=<mm:ss> release date=<dd/mm/yyyy>" << "\n";
+		std::cout << "> Path and names are required, duration and release date are optional" << "\n";
+		std::cout << "> UpdateEpisode episode_id episode name=<episode name> duration=<mm:ss> release date=<dd/mm/yyyy>" << "\n";
+		std::cout << "> DeleteEpisode episode_id" << "\n";
+		std::cout << "> DeleteEpisode episode_name" << "\n";
+		std::cout << "> Play <podcast name>" << "\n";
+		std::cout << "> Back\n" << std::endl;
 	};
 	bool repeat = true;
 	while (repeat)
@@ -476,7 +480,6 @@ void Mp3Interface::Podcasts_Menu()
 					file_path = matches[1].str();
 					rest_of_string = matches[2].str();
 					regex pattern1("^(.*?)\\s*(podcast name=\\s*(.+?))\\s*(duration=\\s*(.*?))?\\s*(release date=\\s*(.*?))?$");
-					//matches;
 					if (regex_match(rest_of_string, matches, pattern1)) {
 						episode_name = matches[1].str();
 						podcast_name = matches[3].str();
@@ -506,10 +509,11 @@ void Mp3Interface::DailyMix_Menu()
 	// This declares a lambda, which can be called just like a function
 	auto print_message = [this]()
 	{
+		std::cout << std::endl;
 		std::cout << *m_daily_mix;
-		std::cout << "\nPlay" << "\n";
-		std::cout << "Random" << "\n";
-		std::cout << "Back\n" << std::endl;
+		std::cout << "\n> Play" << "\n";
+		std::cout << "> Random" << "\n";
+		std::cout << "> Back\n" << std::endl;
 	};
 	bool repeat = true;
 	while (repeat)
@@ -542,11 +546,11 @@ void Mp3Interface::Search_Menu() {
 	// This declares a lambda, which can be called just like a function
 	auto print_message = []()
 	{
-		std::cout << "\nSearch by name <search_text>" << "\n";
-		std::cout << "Search by singer <search_text>" << "\n";
-		std::cout << "Search by album <search_text>" << "\n";
-		std::cout << "Search by genre <search_text>" << "\n";
-		std::cout << "Back\n" << std::endl;
+		std::cout << "\n> Search by name <search_text>" << "\n";
+		std::cout << "> Search by singer <search_text>" << "\n";
+		std::cout << "> Search by album <search_text>" << "\n";
+		std::cout << "> Search by genre <search_text>" << "\n";
+		std::cout << "> Back\n" << std::endl;
 	};
 	bool repeat = true;
 	while (repeat)
