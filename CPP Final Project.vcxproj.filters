@@ -21,9 +21,6 @@
     <ClInclude Include="Library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioCollection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Playlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>

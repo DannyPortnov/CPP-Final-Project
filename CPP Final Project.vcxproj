@@ -129,7 +129,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AudioCollection.h" />
     <ClInclude Include="AudioFile.h" />
     <ClInclude Include="Automatic_Playlist.h" />
     <ClInclude Include="DailyMix.h" />
