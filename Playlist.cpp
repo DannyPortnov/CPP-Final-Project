@@ -33,7 +33,7 @@ void Playlist::Play(bool shuffle) {
 }
 
 //returns the playlist
-std::multiset<Song*, Playlist::CompareSongsByName> Playlist::get_songs() {
+std::set<Song*, Playlist::CompareSongsByName> Playlist::get_songs() {
 	return m_songs;
 }
 
