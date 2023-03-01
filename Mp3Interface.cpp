@@ -397,7 +397,7 @@ void Mp3Interface::Podcasts_Menu()
 		std::string input;
 		// Clear the input buffer before reading the command input
 		std::getline(std::cin, input, '\n'); //We need to use getline and '\n' in the end!
-		std::regex pattern(R"(^(Back$|Help$|Delete|DeleteEpisode|Play|AddEpisode|UpdateEpisode)\s+(.*)$)");
+		std::regex pattern(R"(^(Back$|Help$|DeleteEpisode|Delete|Play|AddEpisode|UpdateEpisode)\s*(.*)$)");
 		//std::regex pattern("^(Delete|Play|Back)\\s*(.*)"); 
 		/*matches a string that starts with "Delete", "Play", or "Back", followed by
 			zero or more whitespace characters, and then any characters(including whitespace characters) until the end of the string.*/
