@@ -133,6 +133,7 @@ std::string& Date::get_date_as_string() {
 
 // assign one date to another
 Date& Date::operator=(const Date& otherDate) {
+    m_date = otherDate.m_date; //update the m_date also
 	return init(otherDate.m_day, otherDate.m_month, otherDate.m_year);
 }
 
