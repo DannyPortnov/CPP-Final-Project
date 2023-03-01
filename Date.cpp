@@ -7,14 +7,14 @@ Date::Date() {
 	localtime_s(&newtime, &now);
 	init(newtime.tm_mday, newtime.tm_mon + 1, newtime.tm_year + 1900);
     create_formated_date_string(m_date);
+    //m_date = 
 }
 
 
 //constructor that creates an instance by std::string
 Date::Date(std::string date) {
     if (date.empty()) {
-        m_date = "00/00/1900";
-        set_date_from_string(m_date);
+        set_date_from_string("00/00/1900");
         return;
     }
     if (is_date_valid(date)) {
@@ -39,6 +39,7 @@ void Date::set_date_from_string(std::string date) {
     char delimiter = '/'; // we do not need to explicitly define the delimiter variable as "/" 
     // because it is the default delimiter used by the '>>' operator.
     ss >> day >> delimiter >> month >> delimiter >> year;
+    m_date = date;
     init(day, month, year);
 }
 
@@ -137,12 +138,7 @@ Date& Date::operator=(const Date& otherDate) {
 
 // operator overload << to show the date
 std::ostream& operator<<(std::ostream& os, const Date& a) {
-    if (a.m_month < 10 && a.m_day < 10)
-        os << "0" << a.m_day <<"/0"  << a.m_month <<"/"  << a.m_year;
-    if (a.m_month < 10)
-        os << a.m_day << "/0" << a.m_month << "/"  << a.m_year;
-    if (a.m_day < 10)
-        os << "0" << a.m_day << "/" << a.m_month << "/"  << a.m_year;
+    os << a.m_date;
 	return os;
 }
 
