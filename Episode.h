@@ -8,7 +8,7 @@ class Episode :
 {
 
 private:
-    friend ostream& operator<<(ostream& os, const Episode& episode);
+  //  friend ostream& operator<<(ostream& os, const Episode& episode);
     static int episode_code;
     //The podcast to which the episode belongs
     Podcast* m_podcast;
@@ -22,6 +22,6 @@ public:
     //Plays the episode
     //void Play();
 };
-ostream& operator<<(ostream& os, const Episode& episode);
+//ostream& operator<<(ostream& os, const Episode& episode);
 #endif
 
